@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${title} + ' · Ping'">Ping</title>
+  <link th:href="@{/vendor/bootstrap/bootstrap.min.css}" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link th:href="@{/css/brand.css}" rel="stylesheet">
+</head>
+<body>
+<nav th:fragment="nav" class="navbar navbar-dark mb-4" aria-label="Navegación principal"><div class="container d-flex flex-wrap gap-3">
+  <a class="navbar-brand fw-bold" th:href="@{/}" aria-label="Ping, inicio"><img th:if="${brandLogoAvailable}" class="ping-navbar-logo" th:src="@{/images/ping-logo-official.jpg}" alt="Ping — logo oficial"><span th:unless="${brandLogoAvailable}">PING</span></a><div class="d-flex gap-3"><a class="text-white" th:href="@{/events}">Eventos</a></div>
+  <span class="text-white-50 small">Demo académica</span>
+</div></nav>
+<div th:fragment="message" th:if="${message}" class="alert alert-success" role="status" th:text="${message}"></div>
+<footer th:fragment="footer" class="container py-4 text-secondary small">Ping · Samuel Riveros y Julián Caicedo · Proyecto académico</footer>
+</body></html>
