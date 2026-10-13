@@ -1,0 +1,36 @@
+# Contexto compartido para IA — Ping
+
+**Estado:** PREDEV v1.1, sin aplicación implementada. **Equipo:** Samuel Riveros y Julián Caicedo. **Objetivo:** MVP universitario funcional y defendible ante un profesor, sin operación comercial compleja.
+
+## Qué es y cómo funciona
+
+Ping conecta a dos personas dentro de un evento. Evento abierto → alias e intereses → disponibilidad → propuesta → aceptación bilateral → punto público + palabra/símbolo temporal + actividad → confirmación bilateral → puntos → feedback opcional → nueva búsqueda si sigue abierto.
+
+La actividad ocurre después del match. No es una plataforma general de actividades grupales.
+
+## Reglas esenciales
+
+- Matching: mayor cantidad de intereses comunes; empate por mayor tiempo esperando. Respetar bloqueos, rechazos e indisponibilidad. Un solo match activo por persona.
+- Match alternativo voluntario: mostrar intereses del candidato y preguntar a ambos; solo se conecta si ambos aceptan. Si no resulta, puede ofrecerse actividad del anfitrión.
+- Palabra temporal: tras aceptación, inspirada en interés común o catálogo neutral del evento; reducir colisiones (ejemplo `PIXEL-27`). Sustituye pistas físicas y QR como mecanismo principal.
+- Actividades breves de catálogo predefinido; sin IA generativa.
+- Confirmación de ambos tras interacción; +10 puntos por conexión/actividad completada y recompensa equivalente para actividad del anfitrión. Saldo visible nunca negativo. Beneficio/canje básico opcional (snack de 20 puntos); entrega `ENTREGADO`, `NO_ENTREGADO`, `INCIDENCIA`.
+- Feedback opcional 👍/😐/👎, sin puntos.
+- Evento: `BORRADOR`, `ABIERTO`, `PAUSADO`, `CERRADO`. Pausa/cierre impiden nuevos matches; activos terminan controladamente.
+- Match: `ESPERANDO`, `OFRECIDO`, `ACTIVO`, `COMPLETADO`, `CANCELADO`.
+
+## Alcance
+
+Dentro: eventos, participantes/alias, intereses, disponibilidad, matching, aceptación bilateral, alternativa voluntaria, punto/palabra, actividades, confirmación, puntos, feedback, cancelar, bloqueo/reporte básico, administración y estadísticas. Canje opcional para demo.
+
+Fuera: GPS continuo, Bluetooth, pistas físicas, menores en el escenario inicial, chat, fotos, perfiles sociales persistentes, grupos de 3+, IA/ML para matching, pagos, sponsors, Tiked real, Tiks, app nativa, microservicios, RabbitMQ, Kubernetes y Redis obligatorio.
+
+## Tecnología y autoridad
+
+Java + Spring Boot; MVC/Thymeleaf/Bootstrap/JS básico; JPA/Hibernate; MySQL o MariaDB; Maven/IntelliJ/Git/GitHub. Monolito modular web, una aplicación y una base de datos. Versiones **PENDIENTES DE FIJAR AL CREAR EL PROYECTO**.
+
+Fuente funcional principal: [PING_PREDEV_v1.1.md](PING_PREDEV_v1.1.md). Leer también [DECISION_LOG.md](DECISION_LOG.md), [AGENTS.md](../AGENTS.md), Issue y código relacionado. GitHub es la memoria compartida; los chats no.
+
+**Si una petición contradice PING_PREDEV_v1.1.md, detente y solicita decisión humana.**
+
+No inventar comportamiento pendiente. Los cambios deben registrarse, aceptarse por Samuel y Julián y documentarse antes de modificar código. Los pendientes están en DECISION_LOG.
