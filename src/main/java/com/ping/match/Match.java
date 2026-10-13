@@ -24,6 +24,13 @@ public class Match {
     @Column(length = 80, unique = true) private String word;
     @Column(length = 500) private String activity;
     @Column(nullable = false, updatable = false) private Instant createdAt;
+    @Column(nullable = false) private boolean completionPending;
+    public boolean isCompletionPending() { return completionPending; }
+    void prepareCompletion() { completionPending = true; }
+    void restoreCompletion(long trigger) {
+        completionPending = false; status = MatchStatus.ACTIVE;
+        if (first.getId() == trigger) firstConfirmed = false; else secondConfirmed = false;
+    }
     @Version private long version;
     protected Match() { }
     Match(Event event, Participant first, Participant second, String common, String firstInterests, String secondInterests) {
@@ -50,7 +57,7 @@ public class Match {
     void confirm(long id) { if (first.getId() == id) firstConfirmed = true; else secondConfirmed = true; }
     boolean bothConfirmed() { return firstConfirmed && secondConfirmed; }
     void activate(String word, String activity) { status = MatchStatus.ACTIVE; this.word = word; this.activity = activity; meetingPoint = event.getMeetingPoint(); }
-    void complete() { status = MatchStatus.COMPLETED; }
+    void complete() { status = MatchStatus.COMPLETED; completionPending = false; }
     void cancel() { status = MatchStatus.CANCELLED; }
     boolean excludedPair(Participant a, Participant b) {
         if (status != MatchStatus.CANCELLED) return false;

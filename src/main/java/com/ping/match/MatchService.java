@@ -13,8 +13,9 @@ public class MatchService {
     private final MatchReservationRepository reservations;
     private final FeedbackRepository feedback;
     private final EventService events;
-    public MatchService(MatchRepository matches, MatchReservationRepository reservations, FeedbackRepository feedback, EventService events) {
-        this.matches = matches; this.reservations = reservations; this.feedback = feedback; this.events = events;
+    private final MatchCompletionSaga completion;
+    public MatchService(MatchRepository matches, MatchReservationRepository reservations, FeedbackRepository feedback, EventService events, MatchCompletionSaga completion) {
+        this.matches = matches; this.reservations = reservations; this.feedback = feedback; this.events = events; this.completion = completion;
     }
     public long completedCount() { return matches.countByStatus(MatchStatus.COMPLETED); }
     public List<MatchView> list(long participantId) {
@@ -41,19 +42,13 @@ public class MatchService {
     }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void cancel(long id, long participantId) {
         Match match = locked(id, participantId);
+        if (match.isCompletionPending()) throw new BusinessRuleException("La finalización está en curso. Reintenta confirmar antes de cancelar.");
         if (match.getStatus() == MatchStatus.CANCELLED) return;
         if (match.getStatus() == MatchStatus.COMPLETED) throw new BusinessRuleException("Una conexión completada no se puede cancelar.");
         match.cancel(); reservations.deleteByMatchId(id);
     }
-    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void confirm(long id, long participantId) {
-        Match match = locked(id, participantId);
-        if (match.getStatus() == MatchStatus.COMPLETED) return;
-        if (match.getStatus() != MatchStatus.ACTIVE) throw new BusinessRuleException("Primero ambos deben aceptar la propuesta.");
-        match.confirm(participantId);
-        if (match.bothConfirmed()) {
-            match.complete(); match.getFirst().rewardCompletedMatch(); match.getSecond().rewardCompletedMatch(); reservations.deleteByMatchId(id);
-        }
-    }
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
+    public void confirm(long id, long participantId) { completion.confirm(id, participantId); }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void giveFeedback(long id, long participantId, Feedback.Rating rating) {
         Match match = locked(id, participantId);
         if (match.getStatus() != MatchStatus.COMPLETED) throw new BusinessRuleException("El feedback está disponible después de completar la conexión.");
@@ -71,6 +66,6 @@ public class MatchService {
             match.getCommonInterests(), first ? match.getSecondInterests() : match.getFirstInterests(),
             match.accepted(self), match.accepted(other), match.confirmed(self), match.confirmed(other),
             active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active ? match.getActivity() : null,
-            rating);
+            rating, match.isCompletionPending());
     }
 }

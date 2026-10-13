@@ -230,3 +230,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Elección expresa del usuario, 2026-10-13, sin atribuir aprobaciones individuales.
 - **Decisión:** B es oscuro oficial y predeterminado; D es claro oficial. Selector sencillo y preferencia local `ping-theme=dark|light`; A/C se retiran para simplificar. Variables centralizadas, superficies diferenciadas y logo original sin alterar. Sin cambios de matching ni persistencia SQL. Después se permite una mejora pequeña de UX del panel de demo.
+
+## DEC-022 — Saga local de finalización académica
+
+- **Estado:** Implementación solicitada expresamente por el usuario, 2026-10-13; sin atribuir aceptación individual adicional.
+- **Decisión:** Orquestación local con pasos transaccionales independientes, registro durable y compensaciones inversas. Match permanece ACTIVE con finalización reservada hasta completar ambos créditos; solo después pasa a COMPLETED. Ante fallo se revierten los créditos de este intento y la última confirmación, sin borrar puntos previos ni liberar la reserva. Se conserva el monolito y una base; sin broker ni servicios distribuidos. Serialización del coordinador en el único proceso de aplicación, con bloqueo por evento en cada paso. Recuperación de pendientes al iniciar y mediante reintento. PR separada en `feature/saga`, base `feature/mvp-demo`, sin merge.
