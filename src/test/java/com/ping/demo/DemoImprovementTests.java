@@ -137,4 +137,23 @@ class DemoImprovementTests {
         }
     }
 
+    @Test void adminFilterShowsOnlySelectedEventAndKeepsItOnRefresh() throws Exception {
+        var scenario = preparation.prepare(); EventForm form = new EventForm(); form.setName("Otro evento de prueba");
+        long other = eventService.create(form).getId();
+        try(var browser = new TestBrowser(port)) {
+            var all = browser.get("/admin"); assertThat(all.body()).contains("data-event-id=\""+scenario.eventId()+"\"", "data-event-id=\""+other+"\"");
+            var filtered = browser.get("/admin?eventId="+scenario.eventId());
+            assertThat(filtered.statusCode()).isEqualTo(200);
+            assertThat(filtered.body()).contains("data-event-id=\""+scenario.eventId()+"\"", "/admin?eventId="+scenario.eventId());
+            assertThat(filtered.body()).doesNotContain("data-event-id=\""+other+"\"");
+            assertThat(browser.get("/admin?eventId=").body()).contains("data-event-id=\""+other+"\"");
+        }
+    }
+    @Test void adminFilterHandlesUnknownAndMalformedEventIds() throws Exception {
+        try(var browser = new TestBrowser(port)) {
+            assertThat(browser.get("/admin?eventId=999999").statusCode()).isEqualTo(404);
+            assertThat(browser.get("/admin?eventId=incorrecto").statusCode()).isEqualTo(400);
+        }
+    }
+
 }

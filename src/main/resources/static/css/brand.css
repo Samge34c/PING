@@ -139,3 +139,5 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (prefers-reduced-motion: no-preference) { body, .card, .navbar, .form-control, .form-select { transition: background-color .12s ease, color .12s ease, border-color .12s ease; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
 @media (max-width: 576px) { .display-3 { font-size: 3rem; } .card { padding: 1.25rem; } }
+
+.ping-event-filter { flex-basis: 16rem; width: auto; min-width: 0; max-width: 100%; }

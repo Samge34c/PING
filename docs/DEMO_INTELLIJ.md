@@ -58,3 +58,5 @@ Si falla el arranque, comprobar JDK completo, MySQL, variables y el historial Fl
 - `/demo/themes`: B oscuro y D claro oficiales con contraste calculado. El selector de navbar conserva la elección en localStorage; oscuro es predeterminado.
 - Mi Ping guía el siguiente paso, muestra historial personal y recibe cambios automáticamente cada cinco segundos mientras la pestaña está visible. Los enlaces de actualización manual siguen disponibles.
 - V7 agrega únicamente el marcador del escenario manual. No genera participantes al iniciar ni reinicia saldos.
+
+El panel permite elegir un evento concreto; «Actualizar métricas» conserva el filtro. Se puede volver a «Todos los eventos» sin alterar datos.
