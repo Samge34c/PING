@@ -1,10 +1,10 @@
 # Backlog inicial — PREDEV v1.1
 
-Plan de implementación, **no funcionalidades implementadas ni tareas completadas**. Fuente: [PREDEV](PING_PREDEV_v1.1.md). La fase 0 tiene una base técnica verificada y espera revisión/merge; las fases 1–13 están pendientes. Ninguna fase tiene responsable asignado. La secuencia indica dependencias; no estima fechas ni atribuye trabajo a Samuel o Julián.
+Backlog y estado de las propuestas de implementación; **ningún estado equivale a aprobación humana ni cierre manual de Issues**. Fuente: [PREDEV](PING_PREDEV_v1.1.md). Las fases 0–3 tienen implementación probada en PRs apiladas pendientes de revisión/merge; las fases 4–13 siguen sin implementación. Ninguna fase tiene responsable asignado. La secuencia indica dependencias; no estima fechas ni atribuye trabajo a Samuel o Julián.
 
 Cada sección sirve como cuerpo preparado para su Issue GitHub, usando el título indicado. Antes de crear Issues remotos revisar duplicados. Registrar enlaces reales cuando existan; no inventar números. Los enlaces de las fases corresponden a Issues remotos verificados; todos permanecen abiertos.
 
-La preparación documental inicial ya fue integrada. La fase 0 añade únicamente el esqueleto técnico, con versiones y fuentes en DEC-015; su implementación se entrega para revisión mediante PR. No incluye lógica de negocio ni inicia fase 1.
+La preparación documental inicial fue integrada; PR #16 contiene solo el bootstrap. #17 agrega Eventos, #18 Participantes y #19 Intereses, cada una sobre su base anterior. Matching (fase 4 / Issue #5) requiere nueva revisión humana y no se ha iniciado.
 
 ## Fase 0 — Bootstrap Spring Boot
 
@@ -19,7 +19,7 @@ La preparación documental inicial ya fue integrada. La fase 0 añade únicament
 ## Fase 1 — Implementar modelo Evento
 
 - **Título del Issue:** Implementar modelo Evento.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/2.
+- **Estado:** IMPLEMENTADO Y PROBADO; pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/2; PR apilada: https://github.com/Samge34c/PING/pull/17.
 - **Objetivo:** Crear eventos y estados BORRADOR/ABIERTO/PAUSADO/CERRADO.
 - **Dependencias:** Fase 0; PEND-006.
 - **Resultado esperado:** Modelo y gestión básica del evento.
@@ -29,7 +29,7 @@ La preparación documental inicial ya fue integrada. La fase 0 añade únicament
 ## Fase 2 — Implementar participantes
 
 - **Título del Issue:** Implementar participantes.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/3.
+- **Estado:** IMPLEMENTADO Y PROBADO; pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/3; PR apilada: https://github.com/Samge34c/PING/pull/18.
 - **Objetivo:** Ingreso, alias, pertenencia y disponibilidad.
 - **Dependencias:** Fase 1; PEND-007.
 - **Resultado esperado:** Participantes vinculados al evento.
@@ -39,7 +39,7 @@ La preparación documental inicial ya fue integrada. La fase 0 añade únicament
 ## Fase 3 — Implementar catálogo de intereses
 
 - **Título del Issue:** Implementar catálogo de intereses.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/4.
+- **Estado:** IMPLEMENTADO Y PROBADO; pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/4; PR apilada: https://github.com/Samge34c/PING/pull/19.
 - **Objetivo:** Catálogo y selección por participante.
 - **Dependencias:** Fase 2.
 - **Resultado esperado:** Intereses disponibles para afinidad.
