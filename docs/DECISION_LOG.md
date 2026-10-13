@@ -203,3 +203,13 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 - **Impacto:** V2 crea `participants` con FK a `events`. La disponibilidad se guarda por POST con token y control de versión; no crea matches ni sustituye `Event.canStartNewMatches()`.
 
 **PENDIENTE HUMANO — PEND-007:** reglas definitivas de ingreso en otros estados, identidad/autenticación, acceso administrativo y bloqueo/reporte. El registro de demo en OPEN delimita el camino implementado, no decide políticas para PAUSED/CLOSED. No se impone unicidad de alias ni se atribuye identidad real a los nombres usados en la demostración.
+
+## DEC-018 — Catálogo técnico de intereses para demostración
+
+- **Estado:** Implementado por autorización explícita del usuario para Issue #4; no decide matching.
+- **Fecha:** 2026-10-13.
+- **Decisión:** Catálogo de intereses y selección múltiple por participante. V3 crea `interests` y `participant_interests`; V4 inserta los ocho ejemplos DEMO suministrados por el usuario, marcados con `demo=true` y visibles como datos de demostración.
+- **Motivo:** Permitir mostrar Samuel y Julián con intereses guardados, sin construir matching ni crear datos que aparenten producción.
+- **Impacto:** FK y clave compuesta evitan enlaces inválidos/duplicados. El formulario permite modificar o limpiar la selección; se valida el catálogo completo antes de cambiarla y se rechaza una versión obsoleta. No impone cantidad mínima para matching, afinidad suficiente ni políticas futuras. El límite de 80 caracteres y unicidad del nombre son restricciones técnicas del catálogo, no una lista definitiva del producto.
+
+**PENDIENTE HUMANO:** PEND-002/PEND-003 y revisión de Samuel antes de Issue #5. No se implementa matching, participantes adicionales fuera del alcance definido, puntos ni feedback.

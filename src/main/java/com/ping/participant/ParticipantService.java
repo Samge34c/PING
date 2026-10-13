@@ -33,6 +33,6 @@ public class ParticipantService {
     }
     private Participant require(long id) { return repository.findById(id).orElseThrow(() -> new NotFoundException("No encontramos ese participante.")); }
     private ParticipantView view(Participant participant) {
-        return new ParticipantView(participant.getId(), participant.getAlias(), participant.getEvent().getId(), participant.getEvent().getName(), participant.isAvailable(), participant.getVersion());
+        return new ParticipantView(participant.getId(), participant.getAlias(), participant.getEvent().getId(), participant.getEvent().getName(), participant.isAvailable(), participant.getVersion(), participant.getInterests().stream().map(com.ping.interest.Interest::getName).sorted().toList());
     }
 }

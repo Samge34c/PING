@@ -20,9 +20,14 @@ public class TestBrowser implements AutoCloseable {
         return response;
     }
     public HttpResponse<String> post(String path, Map<String, String> values) throws Exception {
+        var fields = new LinkedHashMap<String, List<String>>();
+        values.forEach((key, value) -> fields.put(key, List.of(value)));
+        return postMulti(path, fields);
+    }
+    public HttpResponse<String> postMulti(String path, Map<String, List<String>> values) throws Exception {
         var fields = new LinkedHashMap<>(values);
-        if (csrf != null) fields.put("_csrf", csrf);
-        String body = fields.entrySet().stream().map(entry -> encode(entry.getKey()) + "=" + encode(entry.getValue()))
+        if (csrf != null) fields.put("_csrf", List.of(csrf));
+        String body = fields.entrySet().stream().flatMap(entry -> entry.getValue().stream().map(value -> encode(entry.getKey()) + "=" + encode(value)))
                 .collect(java.util.stream.Collectors.joining("&"));
         return client.send(HttpRequest.newBuilder(URI.create(base).resolve(path))
                 .header("Content-Type", "application/x-www-form-urlencoded")
