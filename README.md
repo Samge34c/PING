@@ -2,7 +2,7 @@
 
 Proyecto académico de **Samuel Riveros y Julián Caicedo**. Ping conecta a dos asistentes de un evento según sus intereses y facilita una interacción breve y voluntaria.
 
-**Demo funcional en `feature/mvp-demo`, pendiente de merge:** eventos, participantes, intereses, matching, sesión demo, aceptación bilateral, encuentro/palabra/actividad, confirmación, +10 puntos y feedback opcional. [Guion y ejecución para mañana](docs/DEMO_INTELLIJ.md).
+**Demo funcional en `feature/mvp-demo`, pendiente de merge:** eventos, participantes, intereses, matching, sesión demo, aceptación bilateral, encuentro/palabra/actividad, confirmación, +10 puntos y feedback opcional. [Guion y ejecución para mañana](docs/DEMO_INTELLIJ.md). Demo rápida: `/demo/prepare`; métricas por evento: `/admin`; comparación de paletas: `/demo/themes`.
 
 ## Flujo previsto
 

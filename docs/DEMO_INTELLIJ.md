@@ -50,3 +50,11 @@ Si falla el arranque, comprobar JDK completo, MySQL, variables y el historial Fl
 ## Verificación del incremento
 
 `clean test` y `clean verify`: 60 pruebas aprobadas, cero fallos/errores/omitidas. MySQL 8.4.11 con TLS VERIFY_CA y Chromium: actualización real V1–V4→V6 preservando datos; dos sesiones completaron el flujo y feedback/omitir; acciones simultáneas no duplicaron reservas ni puntos. Segundo encuentro: 20 puntos por persona. Rechazo, alternativa de cero coincidencias, cancelación y móvil sin desbordamiento comprobados. Reiniciar el JAR conservó eventos, participantes, intereses, matches completados, saldos y feedback. La base temporal de validación se retira al terminar; para mañana se necesita la base local del equipo.
+
+## Atajo de preparación y mejoras visibles
+
+- `/demo/prepare`: preparación manual de feria + Samuel/Julián/Ana/Carlos; repetir conserva los datos. Elegir Samuel y Julián en sesiones separadas y marcar solo a ambos disponibles para el primer recorrido.
+- `/admin`: métricas reales por evento, propuestas/activos/completados, puntos entregados y feedback; acceso académico sin autenticación definitiva.
+- `/demo/themes`: cuatro muestras aisladas A/B/C/D con contraste calculado. A permanece predeterminado; no cambia el tema del sistema.
+- Mi Ping guía el siguiente paso, muestra historial personal y recibe cambios automáticamente cada cinco segundos mientras la pestaña está visible. Los enlaces de actualización manual siguen disponibles.
+- V7 agrega únicamente el marcador del escenario manual. No genera participantes al iniciar ni reinicia saldos.

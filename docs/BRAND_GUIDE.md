@@ -27,3 +27,7 @@ Todos los colores se centralizan en [brand.css](../src/main/resources/static/css
 Bootstrap 5.3.8 se conserva como CSS oficial local en `static/vendor/bootstrap/`, con su licencia MIT, para no depender de Internet durante la demo. Se comparó con la distribución oficial de `twbs/bootstrap` v5.3.8. Está personalizado desde este único CSS. Superficies y texto secundario se derivan de la paleta con `color-mix`; no dispersar valores de color por templates. Mantener blanco suave sobre morado para legibilidad. El amarillo es acento, no fondo dominante.
 
 Usar labels visibles, foco de teclado amarillo, tablas con desplazamiento en móvil y mensajes comprensibles. No cambiar la paleta principal ni sustituir el logo sin autorización.
+
+## Propuestas de desarrollo
+
+`/demo/themes` compara A (actual), B (grafito/violeta/dorado), C (morado dominante/blanco cálido) y D (claro/morado). A sigue predeterminado. Variables semánticas y variantes aisladas viven en brand.css; el JPG nunca se recolorea. La página calcula contraste de texto, botones y bordes. D usa morado en texto/enlaces/foco porque amarillo sobre claro no ofrece contraste suficiente. La recomendación técnica provisional es B por separación de superficies y legibilidad; requiere elección del usuario antes de adoptarse.

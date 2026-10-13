@@ -9,6 +9,8 @@
   --ping-bg: var(--ping-black);
   --ping-primary: var(--ping-purple);
   --ping-primary-hover: var(--ping-purple-2);
+  --ping-focus: var(--ping-yellow);
+  --ping-error-text: var(--ping-yellow-light);
   --ping-primary-text: var(--ping-text-light);
   --ping-accent: var(--ping-yellow);
   --ping-accent-text: var(--ping-black);
@@ -36,7 +38,7 @@ main { max-width: 1100px; }
 .ping-navbar-logo { width: 128px; height: 70px; object-fit: contain; }
 .ping-home-logo { max-width: 100%; width: 440px; max-height: 300px; object-fit: contain; background: var(--ping-black); }
 .form-control, .form-select { background-color: var(--ping-bg); color: var(--ping-text); border-color: var(--ping-control-border); }
-.form-control:focus, .form-select:focus { background-color: var(--ping-bg); color: var(--ping-text); border-color: var(--ping-yellow); box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--ping-purple-2) 45%, transparent); }
+.form-control:focus, .form-select:focus { background-color: var(--ping-bg); color: var(--ping-text); border-color: var(--ping-focus); box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--ping-focus) 30%, transparent); }
 .form-control::placeholder { color: var(--ping-muted); }
 .btn-primary, .btn-success, .btn-warning {
   --bs-btn-color: var(--ping-primary-text); --bs-btn-bg: var(--ping-primary); --bs-btn-border-color: var(--ping-primary);
@@ -53,11 +55,11 @@ main { max-width: 1100px; }
 .badge.bg-primary { background: var(--ping-badge-bg) !important; color: var(--ping-badge-text); border: 1px solid var(--ping-purple-2); }
 .text-primary { color: var(--ping-highlight-text) !important; }
 .text-secondary { color: var(--ping-muted) !important; }
-.text-danger { color: var(--ping-yellow-light) !important; }
+.text-danger { color: var(--ping-error-text) !important; }
 .alert-success { background: var(--ping-surface); color: var(--ping-text); border-color: var(--ping-purple-2); }
 .description { white-space: pre-wrap; overflow-wrap: anywhere; }
 .form-check-input:checked { background-color: var(--ping-purple); border-color: var(--ping-purple-2); }
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--ping-yellow); outline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--ping-focus); outline-offset: 3px; }
 @media (max-width: 576px) { .display-3 { font-size: 3rem; } .card { padding: 1.25rem; } }
 a { color: var(--ping-link); }
 a:hover { color: var(--ping-yellow-light); }
@@ -78,18 +80,21 @@ a:hover { color: var(--ping-yellow-light); }
   --ping-bg: #111218; --ping-surface: #1C1B26; --ping-primary: #7C3AED; --ping-primary-hover: #6D28D9;
   --ping-accent: #F5D547; --ping-text: #F5F3FF; --ping-muted: #C2BED1; --ping-border: #514663;
   --ping-control-border: #A594BA; --ping-link: var(--ping-accent); --ping-highlight-text: var(--ping-accent);
+  --ping-focus: var(--ping-accent); --ping-error-text: var(--ping-accent);
   --ping-primary-text: var(--ping-text); --ping-badge-bg: #392251; --ping-badge-text: var(--ping-accent);
 }
 [data-ping-theme="C"] {
   --ping-bg: #1A0D24; --ping-surface: #281337; --ping-primary: var(--ping-purple-2); --ping-primary-hover: var(--ping-purple);
   --ping-accent: var(--ping-yellow-light); --ping-text: #F7F3ED; --ping-muted: #D4C5DD; --ping-border: #654875;
   --ping-control-border: #AE8FC8; --ping-link: var(--ping-accent); --ping-highlight-text: var(--ping-accent);
+  --ping-focus: var(--ping-accent); --ping-error-text: var(--ping-accent);
   --ping-primary-text: var(--ping-text); --ping-badge-bg: var(--ping-purple-dark); --ping-badge-text: var(--ping-accent);
 }
 [data-ping-theme="D"] {
   --ping-bg: #F7F6FA; --ping-surface: #FFFFFF; --ping-primary: var(--ping-purple); --ping-primary-hover: var(--ping-purple-dark);
   --ping-accent: var(--ping-yellow); --ping-text: #24182D; --ping-muted: #655B6E; --ping-border: #D8CEDF;
   --ping-control-border: #8A7696; --ping-link: var(--ping-purple); --ping-highlight-text: var(--ping-purple-dark);
+  --ping-focus: var(--ping-purple); --ping-error-text: var(--ping-purple-dark);
   --ping-primary-text: var(--ping-text-light); --ping-badge-bg: #F0E6F5; --ping-badge-text: var(--ping-purple-dark);
 }
 .ping-theme-preview { background: var(--ping-bg); color: var(--ping-text); border: 1px solid var(--ping-control-border); border-radius: 1rem; padding: 1.25rem; }
@@ -112,3 +117,5 @@ a:hover { color: var(--ping-yellow-light); }
 .ping-notice { background: var(--ping-surface); color: var(--ping-text); border: 1px solid var(--ping-control-border); border-left: 4px solid var(--ping-accent); }
 .ping-theme-preview *, .ping-state { overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
+
+.btn:focus-visible { box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--ping-focus) 30%, transparent); }
