@@ -27,7 +27,7 @@ test: agrega pruebas de MatchService
 
 Issue → rama → trabajo → commit → push → Pull Request → revisión → merge autorizado.
 
-Usar la plantilla de PR, vincular el Issue, explicar cómo se verificó y declarar cambios de base de datos y producto. No presentar pruebas no ejecutadas como aprobadas. Hoy no existe aplicación ni suite; para documentación revisar enlaces, coherencia con PREDEV y `git diff --check`.
+Usar la plantilla de PR, vincular el Issue, explicar cómo se verificó y declarar cambios de base de datos y producto. No presentar pruebas no ejecutadas como aprobadas. Las pruebas técnicas del bootstrap se ejecutan con Maven Wrapper (`./mvnw clean test` en Unix, `.\mvnw.cmd clean test` en PowerShell), sin MySQL mediante perfil de prueba `bootstrap`; para documentación revisar enlaces, coherencia con PREDEV y `git diff --check`.
 
 No subir secretos, archivos de IntelliJ ni salidas Maven. Revisar `git status` y el diff antes de cada commit. No programar simultáneamente el mismo módulo sin coordinación en el Issue. No asignar tareas a otro sin acuerdo.
 

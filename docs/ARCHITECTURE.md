@@ -2,7 +2,7 @@
 
 Diseño conceptual para pre-implementación basado en [PREDEV, §§14–15](PING_PREDEV_v1.1.md). No representa componentes ya construidos.
 
-Una aplicación web Spring Boot y una base de datos MySQL **o** MariaDB. Monolito modular; Spring MVC y Thymeleaf renderizan la interfaz responsive con Bootstrap/JavaScript básico. Spring Data JPA/Hibernate gestiona persistencia.
+Una aplicación web Spring Boot y una base de datos MySQL **8.4.11 LTS**. Monolito modular; Spring MVC y Thymeleaf renderizan la interfaz responsive con Bootstrap/JavaScript básico. Spring Data JPA/Hibernate gestiona persistencia.
 
 ```mermaid
 flowchart TD
@@ -13,7 +13,7 @@ flowchart TD
         S --> R[repository: Spring Data JPA]
         R --> E[model/entity: Hibernate]
     end
-    E --> DB[(Una base de datos: MySQL o MariaDB)]
+    E --> DB[(Una base de datos: MySQL)]
 ```
 
 ## Módulos conceptuales
@@ -33,8 +33,8 @@ Capas sugeridas: `controller` (HTTP), `service` (reglas), `repository` (persiste
 
 La aplicación deberá proteger las reglas de un match activo, aceptación y confirmación bilaterales y acreditación coherente de puntos. La estrategia concreta de transacciones y concurrencia deberá definirse y probarse en su Issue; no está decidida aquí.
 
-## Pendiente de bootstrap
+## Bootstrap técnico confirmado
 
-Versiones compatibles de Java, Spring Boot, Maven y motor SQL; elección MySQL/MariaDB; identificadores del proyecto; configuración local sin secretos versionados. Ver [decisiones y pendientes](DECISION_LOG.md).
+Java 21 y Spring Boot 4.1.1; Maven 3.9.16 con Wrapper 3.3.4; MySQL 8.4.11 LTS. Proyecto `com.ping:ping:0.0.1-SNAPSHOT`, paquete `com.ping`, JAR. La base técnica ya existe; los módulos de la tabla siguen siendo conceptuales, sin implementación. Perfil `bootstrap` para arranque web sin persistencia; perfil predeterminado `mysql` con variables de entorno y DDL `none`. Ver [DEC-015](DECISION_LOG.md#dec-015--bootstrap-técnico-spring-boot) y [desarrollo local](../README.md#desarrollo-local).
 
 No requiere microservicios, Redis, RabbitMQ, Kubernetes, Docker obligatorio ni integración Tiked. Una modificación arquitectónica requiere decisión humana documentada.
