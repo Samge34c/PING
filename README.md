@@ -81,7 +81,7 @@ El perfil predeterminado es `mysql`. Requiere servidor MySQL disponible, base cr
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql
 ```
 
-El comando Maven de arranque es el mismo verificado con `bootstrap`; la conexión/arranque con MySQL real **no se ha validado** en Codex, donde no hay servidor ni credenciales. Ejecutar sin variables/servidor en el perfil `mysql` debe fallar; no equivale a una falla del perfil técnico.
+El perfil `mysql` se verificó en Codex contra un MySQL 8.4.11 temporal: conexión JDBC, inicialización JPA, respuesta HTTP y ausencia de tablas creadas. La conexión utilizó TLS `VERIFY_CA` con la CA del servidor en un almacén temporal. Esa instancia de validación y sus credenciales fueron retiradas; cada desarrollador debe configurar su servidor y variables locales. Docker solo se utilizó para esta comprobación, no es un requisito del proyecto. Ejecutar sin variables/servidor en el perfil `mysql` debe fallar; no equivale a una falla del perfil técnico.
 
 ### IntelliJ IDEA
 
@@ -96,4 +96,10 @@ Las carpetas `src/main/resources/static/` y `templates/` quedan listas para futu
 
 ### Verificación del bootstrap en Codex
 
-`clean test` y `clean package` completados: 2 pruebas, 0 fallos, 0 errores, 0 omitidas en cada ejecución. Arranque Maven y JAR con `bootstrap` comprobados mediante petición HTTP real (404 JSON esperado). El arranque predeterminado sin variables MySQL falló, como se esperaba; no se verificó conexión SQL real. Windows e IntelliJ quedan pendientes de verificación local.
+`clean test` y `clean package` completados: 2 pruebas, 0 fallos, 0 errores, 0 omitidas en cada ejecución. Arranque Maven y JAR con `bootstrap` comprobados mediante petición HTTP real (404 JSON esperado). El arranque predeterminado sin variables MySQL falló, como se esperaba; el perfil `mysql` también arrancó contra MySQL 8.4.11 real con JDBC/JPA y TLS verificados; la base permaneció sin tablas. Windows e IntelliJ quedan pendientes de verificación local.
+
+### Integración continua
+
+[Bootstrap CI](.github/workflows/bootstrap.yml) ejecuta `clean verify` con JDK 21 y Maven Wrapper en Ubuntu y Windows, tanto en PR hacia `main` como al enviar cambios a `main` o a la rama de bootstrap. Usa acciones oficiales fijadas por SHA, permisos de lectura y verificación de la firma del JDK. No requiere MySQL ni secretos: las dos pruebas técnicas activan `bootstrap`.
+
+El flujo está preparado; sus resultados deben comprobarse en los checks de la PR. La configuración no constituye por sí sola una ejecución aprobada ni verifica IntelliJ.

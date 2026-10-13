@@ -157,7 +157,7 @@ En la máquina auditada: OpenJDK **21.0.12.1**, Git **2.52.0**; `mvn` no disponi
 - **Decisión:** Java 21 (línea LTS); Spring Boot 4.1.1 estable; Maven 3.9.16 mediante Wrapper oficial 3.3.4, tipo `only-script`; MySQL 8.4.11 LTS como referencia del servidor. Coordenadas `com.ping:ping:0.0.1-SNAPSHOT`, nombre PING, paquete `com.ping`, empaquetado JAR.
 - **Motivo:** Java 21 instalado y compatible con el rango Java 17–26 documentado por Spring Boot 4.1.1; Maven 3.9.16 supera su mínimo 3.6.3. El Wrapper evita instalación global y MySQL concreta la alternativa SQL permitida por PREDEV, según instrucción del usuario.
 - **Dependencias:** Web MVC (`spring-boot-starter-webmvc` en Boot 4), Thymeleaf, JPA, Validation, Connector/J en runtime y Boot Test solo para pruebas. Versiones gestionadas por el parent/BOM 4.1.1; Connector/J resuelto a 9.7.0. No se añaden Security, Lombok, bases alternativas ni infraestructura adicional.
-- **Impacto:** Perfil `mysql` predeterminado con `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` sin valores versionados, DDL `none`; perfil técnico `bootstrap` excluye autoconfiguración JDBC/JPA para pruebas y arranque web sin SQL. No hay entidades, tablas ni lógica de negocio. El arranque con MySQL queda pendiente de un servidor local configurado.
+- **Impacto:** Perfil `mysql` predeterminado con `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` sin valores versionados, DDL `none`; perfil técnico `bootstrap` excluye autoconfiguración JDBC/JPA para pruebas y arranque web sin SQL. No hay entidades, tablas ni lógica de negocio. El perfil MySQL se verificó contra un servidor temporal 8.4.11; cada desarrollador debe configurar su servidor y variables locales.
 - **Integridad:** Distribución Maven contrastada con SHA-512 de Maven Central; se fija su SHA-256 en `maven-wrapper.properties`. Scripts oficiales generados por plugin Wrapper 3.3.4, sin binario wrapper versionado. No se deshabilitan TLS ni verificaciones.
 
 ### Fuentes oficiales efectivamente consultadas
@@ -171,8 +171,14 @@ Los portales start.spring.io, docs.spring.io, maven.apache.org, openjdk.org y de
 - [Apache Maven 3.9.16](https://github.com/apache/maven/tree/maven-3.9.16) y [distribución con checksum oficial](https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.16/).
 - [Apache Maven Wrapper 3.3.4](https://github.com/apache/maven-wrapper/tree/maven-wrapper-3.3.4) y [plugin publicado](https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-wrapper-plugin/3.3.4/).
 - [MySQL 8.4.11: versión y madurez LTS en fuente oficial](https://github.com/mysql/mysql-server/blob/mysql-8.4.11/MYSQL_VERSION).
-- [Connector/J 9.7.0 oficial](https://github.com/mysql/mysql-connector-j/blob/9.7.0/README), versionado por el BOM Spring Boot. Su integración con servidor real queda por verificar.
+- [Connector/J 9.7.0 oficial](https://github.com/mysql/mysql-connector-j/blob/9.7.0/README), versionado por el BOM Spring Boot. Integración JDBC/JPA verificada contra MySQL 8.4.11 temporal, con TLS `VERIFY_CA`.
 
 ### Estado técnico actual
 
 La observación de ausencia de Maven/proyecto anterior se conserva como antecedente. Ahora existe Wrapper y base Spring Boot. PEND-001 queda resuelto por esta elección técnica; PEND-002 a PEND-009 mantienen su carácter pendiente. PREDEV y DEC-001 a DEC-014 no cambian.
+
+### Validación adicional de fase 0
+
+Arranque real del JAR con perfil `mysql` contra MySQL 8.4.11: conexión JDBC establecida, EntityManagerFactory JPA inicializado y respuesta HTTP 404 esperada. Se verificaron cero tablas antes y después del arranque (`ddl-auto=none`). La conexión validó la CA del servidor mediante un almacén temporal; no se desactivó TLS. La imagen oficial usada fue `mysql@sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70`.
+
+Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versionaron. Contenedor, volumen, procesos y archivos temporales se eliminaron al terminar. Docker fue una herramienta puntual de validación, no una dependencia del MVP. El workflow Bootstrap CI queda preparado para verificar el Wrapper en Ubuntu y Windows; la disponibilidad y resultados de Actions deben comprobarse en GitHub.

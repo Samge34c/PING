@@ -1,0 +1,40 @@
+name: Bootstrap CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, chore/bootstrap-spring-boot]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Java 21 / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - name: Install JDK 21
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          verify-signature: true
+          overwrite-settings: false
+      - name: Verify with Unix Wrapper
+        if: runner.os != 'Windows'
+        shell: bash
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify
+      - name: Verify with Windows Wrapper
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\mvnw.cmd --batch-mode --no-transfer-progress clean verify
