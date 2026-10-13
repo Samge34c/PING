@@ -103,3 +103,21 @@ Las carpetas `src/main/resources/static/` y `templates/` quedan listas para futu
 [Bootstrap CI](.github/workflows/bootstrap.yml) ejecuta `clean verify` con JDK 21 y Maven Wrapper en Ubuntu y Windows, tanto en PR hacia `main` como al enviar cambios a `main` o a la rama de bootstrap. Usa acciones oficiales fijadas por SHA, permisos de lectura y verificación de la firma del JDK. No requiere MySQL ni secretos: las dos pruebas técnicas activan `bootstrap`.
 
 El flujo está preparado; sus resultados deben comprobarse en los checks de la PR. La configuración no constituye por sí sola una ejecución aprobada ni verifica IntelliJ.
+
+## Demo de Eventos (Issue #2)
+
+La rama `feature/eventos` se apila sobre `chore/bootstrap-spring-boot` mientras #16 espera revisión. No requiere fusionar las PRs para probar la rama completa.
+
+1. Seleccionar `feature/eventos` en IntelliJ y abrir `pom.xml` con JDK 21 y Maven Wrapper.
+2. Preparar una base MySQL local vacía, por ejemplo `CREATE DATABASE ping CHARACTER SET utf8mb4;`, y un usuario local con permisos de migración/lectura/escritura. No borrar una base existente.
+3. Configurar `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` en la configuración de `PingApplication`. Usar perfil `mysql` (predeterminado), no `bootstrap`, para la demo.
+4. Ejecutar `PingApplication`. Flyway aplica V1; Hibernate solo valida el esquema.
+5. Abrir la ruta `/`, entrar en Eventos, crear «Feria Universitaria 2026», abrirla, editarla, pausar, reanudar y cerrar. Un evento cerrado permanece almacenado y no puede reabrirse.
+
+Rutas: `/`, `/events`, `/events/new`, `/events/{id}`, `/events/{id}/edit`. Las acciones de estado son POST desde los botones de detalle; no se cambian estados por GET. Formularios inválidos, evento inexistente y transiciones rechazadas tienen mensajes comprensibles.
+
+Las pruebas usan H2 **solo para testing**, con migraciones Flyway y validación JPA. `mvnw.cmd clean verify` en Windows, `./mvnw clean verify` en Unix. No requieren MySQL externo. La validación de MySQL real se realiza adicionalmente.
+
+Marca y pendiente del JPG original: [BRAND_GUIDE](docs/BRAND_GUIDE.md). Bootstrap 5.3.8 se incluye localmente con licencia MIT; la identidad se centraliza en `brand.css`. El módulo aún no tiene autenticación: esta demo se ejecuta localmente, con datos de demostración.
+
+Validación Issue #2: `clean test` y `clean verify` con 25 pruebas aprobadas, cero fallos/errores/omitidas. En Chromium y MySQL 8.4.11 se comprobó crear/abrir/pausar/reanudar/editar/consultar, con V1 aplicada y TLS verificado. La vista móvil de 390 px no presentó desbordamiento horizontal. Cierre y rechazo de reapertura también están cubiertos por las pruebas de ciclo de vida. El archivo del logo oficial sigue pendiente de recepción.

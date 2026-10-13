@@ -182,3 +182,14 @@ La observación de ausencia de Maven/proyecto anterior se conserva como antecede
 Arranque real del JAR con perfil `mysql` contra MySQL 8.4.11: conexión JDBC establecida, EntityManagerFactory JPA inicializado y respuesta HTTP 404 esperada. Se verificaron cero tablas antes y después del arranque (`ddl-auto=none`). La conexión validó la CA del servidor mediante un almacén temporal; no se desactivó TLS. La imagen oficial usada fue `mysql@sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70`.
 
 Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versionaron. Contenedor, volumen, procesos y archivos temporales se eliminaron al terminar. Docker fue una herramienta puntual de validación, no una dependencia del MVP. El workflow Bootstrap CI queda preparado para verificar el Wrapper en Ubuntu y Windows; la disponibilidad y resultados de Actions deben comprobarse en GitHub.
+
+## DEC-016 — Base técnica y ciclo de vida de Eventos
+
+- **Estado:** Aplicado por instrucción explícita del usuario para Issue #2; sin atribuir aprobación individual adicional.
+- **Fecha:** 2026-10-13.
+- **Decisión:** Entidad Event con estados DRAFT/OPEN/PAUSED/CLOSED. Solo DRAFT→OPEN, OPEN→PAUSED, PAUSED→OPEN, OPEN→CLOSED y PAUSED→CLOSED. CLOSED no se reabre. `canStartNewMatches()` solo devuelve true en OPEN.
+- **Motivo:** Implementar las reglas definidas para una demo web persistente; no adelantar matching.
+- **Impacto:** Migración V1 crea `events`; Flyway 12.4.0 y su módulo MySQL se gestionan por el BOM Boot 4.1.1. Hibernate valida el esquema, sin crear ni borrar tablas. Longitudes técnicas de formulario/SQL: nombre 120 y descripción 2000; control de versión para ediciones concurrentes. POST con token de formulario y escape Thymeleaf; sin autenticación completa.
+- **Fuentes técnicas:** [Inicialización de datos oficial Spring Boot 4.1.1](https://github.com/spring-projects/spring-boot/blob/v4.1.1/documentation/spring-boot-docs/src/docs/antora/modules/how-to/pages/data-initialization.adoc) y BOM existente. Starter Flyway y `flyway-mysql` compatibles según esa fuente. H2 se añade solo en alcance `test`, para ejecutar migraciones y pruebas reproducibles sin servidor externo; no es una base productiva.
+
+**PENDIENTE HUMANO — PEND-006:** plazos de cierre controlado, cancelaciones, canje y ventanas temporales siguen sin decidir. No se implementan. La gestión de estado no termina ni altera matches porque todavía no existe matching.
