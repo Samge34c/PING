@@ -193,3 +193,13 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 - **Fuentes técnicas:** [Inicialización de datos oficial Spring Boot 4.1.1](https://github.com/spring-projects/spring-boot/blob/v4.1.1/documentation/spring-boot-docs/src/docs/antora/modules/how-to/pages/data-initialization.adoc) y BOM existente. Starter Flyway y `flyway-mysql` compatibles según esa fuente. H2 se añade solo en alcance `test`, para ejecutar migraciones y pruebas reproducibles sin servidor externo; no es una base productiva.
 
 **PENDIENTE HUMANO — PEND-006:** plazos de cierre controlado, cancelaciones, canje y ventanas temporales siguen sin decidir. No se implementan. La gestión de estado no termina ni altera matches porque todavía no existe matching.
+
+## DEC-017 — Demo mínima de Participantes
+
+- **Estado:** Implementación técnica autorizada por la solicitud del usuario para Issue #3; no cierra PEND-007.
+- **Fecha:** 2026-10-13.
+- **Decisión:** Alias (límite técnico de 80 caracteres), vínculo con un evento y disponibilidad declarada. El formulario de demo cubre el camino documentado de registro en evento OPEN. Sin cuenta, email, contraseña, identificación física ni autenticación.
+- **Motivo:** Mostrar Samuel y Julián dentro de la feria, con persistencia y disponibilidad modificable, sin inventar perfiles sociales.
+- **Impacto:** V2 crea `participants` con FK a `events`. La disponibilidad se guarda por POST con token y control de versión; no crea matches ni sustituye `Event.canStartNewMatches()`.
+
+**PENDIENTE HUMANO — PEND-007:** reglas definitivas de ingreso en otros estados, identidad/autenticación, acceso administrativo y bloqueo/reporte. El registro de demo en OPEN delimita el camino implementado, no decide políticas para PAUSED/CLOSED. No se impone unicidad de alias ni se atribuye identidad real a los nombres usados en la demostración.
