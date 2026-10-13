@@ -2,7 +2,7 @@
 
 Proyecto académico de **Samuel Riveros y Julián Caicedo**. Ping conecta a dos asistentes de un evento según sus intereses y facilita una interacción breve y voluntaria.
 
-**Estado: PREDEV v1.1 — preparación técnica / pre-implementación.** La rama de demo incorpora Eventos, Participantes e Intereses funcionales. Matching y el resto del flujo todavía no están implementados.
+**Demo funcional en `feature/mvp-demo`, pendiente de merge:** eventos, participantes, intereses, matching, sesión demo, aceptación bilateral, encuentro/palabra/actividad, confirmación, +10 puntos y feedback opcional. [Guion y ejecución para mañana](docs/DEMO_INTELLIJ.md).
 
 ## Flujo previsto
 
@@ -30,6 +30,8 @@ Bootstrap: **Java 21**, **Spring Boot 4.1.1**, **Maven 3.9.16** mediante Wrapper
 Leer las fuentes, seleccionar un Issue y crear una rama propia desde `main` actualizada. Entregar cambios pequeños mediante Pull Request para revisión del compañero. GitHub es la memoria compartida; los chats individuales no. Ver [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Desarrollo local
+
+Para la demo actual de `feature/mvp-demo`, seguir [DEMO_INTELLIJ.md](docs/DEMO_INTELLIJ.md). Las secciones siguientes conservan la preparación y verificación por incrementos; los resultados del bootstrap no describen el alcance funcional actual.
 
 Requisitos: JDK **21** y acceso a Maven Central para la primera descarga. Maven global no es necesario: se incluye Wrapper oficial con checksum SHA-256. MySQL **8.4.11 LTS** es la referencia para persistencia; no se instala ni es obligatorio para probar el perfil técnico `bootstrap`.
 
@@ -132,7 +134,7 @@ El registro de demo implementa el camino de evento OPEN; las políticas de ingre
 
 Validación Issue #3: `clean test` y `clean verify`, 32 pruebas aprobadas, sin fallos/errores/omitidas. Chromium registró Samuel y Julián en MySQL, alternó disponibilidad y verificó el listado. V2 conservó el evento de V1; se comprobó que el checkbox es accesible por su etiqueta y que el listado móvil no desborda la página.
 
-## Demo completa: Eventos → Participantes → Intereses
+## Antecedente Issue #4: Eventos → Participantes → Intereses
 
 Seleccionar **`feature/intereses`** para disponer de los tres módulos antes del merge. La cadena de revisión es #16 → Eventos → Participantes → Intereses; cada PR tiene su base temporal anterior.
 

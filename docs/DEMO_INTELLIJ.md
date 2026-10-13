@@ -2,61 +2,51 @@
 
 ## Preparación
 
-1. Clonar `https://github.com/Samge34c/PING.git`. Seleccionar la rama **feature/intereses**: incluye Eventos, Participantes e Intereses sin requerir merges. Abrir la raíz que contiene `pom.xml` en IntelliJ.
-2. Usar un **JDK 21 completo** como Project SDK y para Maven. Importar el proyecto con **Maven Wrapper**; no requiere Maven global.
-3. Tener MySQL **8.4.11 LTS** disponible. En una instalación local propia, preparar una base vacía, por ejemplo `CREATE DATABASE ping CHARACTER SET utf8mb4;`. Usar un usuario local con permisos para migraciones y datos de esa base. No borrar una base existente ni copiar credenciales al repositorio.
-4. En la configuración de ejecución de `com.ping.PingApplication`, configurar `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`. Formato de URL local: `jdbc:mysql://localhost:3306/ping`. Si el servidor exige TLS, configurar la confianza correspondiente; no desactivar verificación para resolver errores.
-5. Argumento de ejecución: `--spring.profiles.active=mysql` (también es el perfil predeterminado). **No usar bootstrap para la demo funcional**: ese perfil excluye persistencia y los módulos.
-6. Ejecutar `PingApplication` y esperar `Started PingApplication`. Flyway aplica V1–V4, crea el esquema y catálogo demo; Hibernate solo valida. Detener y volver a ejecutar no borra datos.
+1. Clonar `https://github.com/Samge34c/PING.git` y seleccionar **feature/mvp-demo**, que contiene todo el flujo sin hacer merge. Abrir la raíz con `pom.xml`.
+2. Elegir un **JDK 21 completo** como SDK del proyecto y de Maven; importar con Maven Wrapper.
+3. Preparar MySQL **8.4.11 LTS** y una base local propia, por ejemplo `CREATE DATABASE ping CHARACTER SET utf8mb4;`, con usuario que pueda aplicar migraciones. Si ya tienes datos de Ping, conservar esa base.
+4. En la configuración de `com.ping.PingApplication`, definir `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`. URL local: `jdbc:mysql://localhost:3306/ping`. Configurar confianza TLS cuando corresponda; no desactivar verificación ni versionar secretos. Spring no carga `.env` automáticamente.
+5. Ejecutar con `--spring.profiles.active=mysql` (predeterminado). **No usar bootstrap para la demo**. Flyway aplica V1–V6; si V1–V4 ya existen, agrega V5/V6 sin borrar los datos. Hibernate valida el esquema.
+6. El JPG visible en el chat no está disponible como archivo del entorno. Copiar el original sin modificar a `src/main/resources/static/img/ping-logo.jpg` antes de compilar/ejecutar para verlo en navbar, inicio y selección demo. Las vistas detectan su presencia; no hay logo generado ni imagen rota.
 
-## Pruebas y ejecución por terminal en Windows
+## Terminal
 
-Desde la raíz, con JDK 21 configurado:
+Windows, variables de base configuradas en el entorno de la terminal:
 
 ```powershell
+.\mvnw.cmd clean test
 .\mvnw.cmd clean verify
 .\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=mysql"
 ```
 
-En Unix: `./mvnw clean verify` y `./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql`.
+Unix: `./mvnw clean test`, `./mvnw clean verify`, `./mvnw spring-boot:run -Dspring-boot.run.profiles=mysql`.
+Las pruebas usan H2 únicamente en test y no requieren MySQL externo. Bootstrap CSS está incluido localmente.
 
-Las pruebas usan H2 solo en alcance de test, aplican las migraciones y no necesitan MySQL externo. La aplicación normal usa MySQL; no incorpora H2 como base de demo/productiva. Bootstrap CSS está incluido localmente y no requiere Internet al mostrar las páginas, una vez descargadas las dependencias Maven.
+## Guion exacto para el profesor
 
-## Guion para mostrar al profesor
+1. Iniciar `PingApplication` y abrir la aplicación local del puerto 8080, ruta `/`.
+2. **Eventos → Crear evento**: «Feria Universitaria 2026», punto «Entrada principal». Guardar y **Abrir evento**.
+3. **Participantes → Registrar participante**: Samuel en esa feria, inicialmente no disponible. **Elegir intereses**: Videojuegos y Tecnología; guardar.
+4. Repetir para Julián en la misma feria con Videojuegos y Música.
+5. En navegador normal, **Entrar como participante** (ruta `/demo`), seleccionar Samuel. En incógnito o segundo navegador, seleccionar Julián. Dos pestañas normales comparten sesión: no sirven para esta prueba.
+6. En **Mi Ping** (`/me`), ambos pulsan **Marcar disponible**. Samuel pulsa **Buscar conexión**.
+7. Samuel ve `OFFERED` con Julián e interés Videojuegos. Julián pulsa **Actualizar** en Mi Ping y abre su tarjeta de conexión. Todavía no se muestra el encuentro.
+8. Samuel pulsa **Aceptar conexión**. Una aceptación conserva `OFFERED`. Julián pulsa **Actualizar estado** y **Aceptar conexión**. Samuel pulsa **Actualizar estado**.
+9. Ambos ven `ACTIVE`, «Entrada principal», la misma palabra `PIXEL-…` y «Descubran un videojuego que ambos conozcan». El sufijo es el ID único del match en base 36; no se espera un número fijo.
+10. Samuel pulsa **Confirmar encuentro y actividad**: permanece `ACTIVE`, saldo 0. Julián confirma. Samuel actualiza: ambos ven `COMPLETED`, cada saldo es 10.
+11. Samuel deja **Útil / agradable**; Julián pulsa **Omitir**. No se suman puntos por feedback. Volver a **Mi Ping** muestra el saldo y la conexión completada.
+12. Opcional: repetir búsqueda para sumar otros 10, rechazar una propuesta para mostrar cancelación o reiniciar la aplicación con la misma base para demostrar persistencia. Reintentar una confirmación completada no duplica puntos.
 
-1. Abrir el navegador en la dirección local del puerto 8080, ruta `/`.
-2. Mostrar el inicio de PING y entrar en **Eventos**.
-3. Crear **Feria Universitaria 2026**, con descripción «Datos de demostración».
-4. Abrir el evento. Mostrar detalle y estado **Abierto**. Opcionalmente pausar y reanudar; no cerrar todavía para poder registrar participantes en el camino de demo implementado.
-5. Entrar en **Participantes** y pulsar **Registrar participante**.
-6. Escribir **Samuel**, elegir la feria y marcar **Estoy disponible para conectar**. Registrar.
-7. Pulsar **Elegir intereses**. Marcar **Videojuegos**, **Tecnología** y **Música**; guardar y mostrar su detalle.
-8. Repetir para **Julián**, con la misma feria y sus intereses.
-9. Mostrar el catálogo etiquetado como **Datos de demostración** y los participantes registrados.
-10. Detener `PingApplication`, volver a ejecutar con la misma base y mostrar que evento, participantes e intereses permanecen almacenados.
+Las respuestas se actualizan mediante los enlaces **Actualizar / Actualizar estado**; no hay chat ni tiempo de expiración automático.
 
-## Rutas y clases principales
+## Reglas de la demo
 
-| Función | Ruta | Clase |
-| --- | --- | --- |
-| Inicio | `/` | `HomeController` |
-| Eventos | `/events` | `EventController` / `EventService` |
-| Crear evento | `/events/new` | `EventForm` |
-| Detalle / editar | `/events/{id}` / `/events/{id}/edit` | `Event` |
-| Participantes | `/participants` | `ParticipantController` / `ParticipantService` |
-| Registro | `/participants/new` | `ParticipantForm` |
-| Detalle | `/participants/{id}` | `ParticipantView` |
-| Catálogo | `/interests` | `InterestController` / `InterestService` |
-| Selección | `/participants/{id}/interests` | `InterestSelectionForm` |
+Matching solo en OPEN, mismo evento y disponibles; prioridad por más intereses comunes, mayor espera e ID ascendente. Cero coincidencias ofrece alternativa claramente etiquetada, también bilateral. Oferta y activo reservan ambos participantes. Antes de cambiar disponibilidad se debe cancelar/terminar la conexión. Un rechazo/cancelación evita repetir la pareja en el ciclo actual; marcar no disponible y disponible inicia otro ciclo. Activos pueden finalizar tras pausa/cierre; propuestas no pueden activarse hasta reabrir un evento pausado.
 
-## Alcance y pendientes humanos
+Punto, palabra, actividad e intereses se guardan como instantánea; palabra visible/válida durante ACTIVE. Cancelar no entrega puntos. COMPLETED acredita +10 a cada participante una vez. Feedback opcional y persistente, sin puntos. El selector de sesión es explícitamente académico: no acredita identidad ni protege administración. Autenticación definitiva, bloqueo/reporte general, actividad del anfitrión premiada y canje quedan pendientes.
 
-Demo académica local sin autenticación. Los nombres y catálogo son de demostración. La disponibilidad no genera conexiones. No hay matching, puntos ni feedback. Se detiene el avance antes de Issue #5.
+Si falla el arranque, comprobar JDK completo, MySQL, variables y el historial Flyway. No limpiar una base ajena ni usar `ddl-auto=create` o `create-drop`.
 
-PEND-006 (cierre controlado/plazos/canje) y PEND-007 (identidad, ingreso fuera del camino OPEN, permisos/bloqueos) siguen abiertos. Los detalles de matching necesitan revisión humana. El JPG oficial debe adjuntarse como archivo para copiarlo a `static/images/ping-logo-official.jpg`; no se redibuja ni reemplaza el logo. Ver [BRAND_GUIDE](BRAND_GUIDE.md).
+## Verificación del incremento
 
-Si falla el arranque: comprobar JDK 21 completo, servidor/base MySQL y presencia de variables (sin imprimir contraseñas). Una base ajena no debe limpiarse para resolver un error Flyway; utilizar una base nueva o revisar su historial. No ejecutar `ddl-auto=create` ni `create-drop`.
-
-## Evidencia de esta sesión
-
-40 pruebas ejecutadas en `clean test` y `clean verify`: cero fallos, errores u omitidas. Navegador Chromium contra MySQL 8.4.11 real con TLS y CA verificada: feria creada/abierta/editada/pausada/reanudada; Samuel y Julián registrados y disponibles; tres intereses guardados por cada uno. Tras reiniciar el JAR se conservaron datos y selecciones. El cierre de otro evento fue comprobado por la interfaz. V1–V4 presentes en el historial Flyway; únicamente las cuatro tablas del módulo y su historial. El servidor/volumen de validación es temporal y se retira al concluir, no reemplaza el MySQL local del equipo.
+`clean test` y `clean verify`: 60 pruebas aprobadas, cero fallos/errores/omitidas. MySQL 8.4.11 con TLS VERIFY_CA y Chromium: actualización real V1–V4→V6 preservando datos; dos sesiones completaron el flujo y feedback/omitir; acciones simultáneas no duplicaron reservas ni puntos. Segundo encuentro: 20 puntos por persona. Rechazo, alternativa de cero coincidencias, cancelación y móvil sin desbordamiento comprobados. Reiniciar el JAR conservó eventos, participantes, intereses, matches completados, saldos y feedback. La base temporal de validación se retira al terminar; para mañana se necesita la base local del equipo.

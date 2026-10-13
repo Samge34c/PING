@@ -27,7 +27,7 @@ Fuera: GPS continuo, Bluetooth, pistas físicas, menores en el escenario inicial
 
 ## Tecnología y autoridad
 
-Java + Spring Boot; MVC/Thymeleaf/Bootstrap/JS básico; JPA/Hibernate; MySQL o MariaDB; Maven/IntelliJ/Git/GitHub. Monolito modular web, una aplicación y una base de datos. DEC-015 fija Java 21, Spring Boot 4.1.1, Maven 3.9.16/Wrapper 3.3.4 y MySQL 8.4.11 LTS para el bootstrap. Perfil técnico sin SQL: `bootstrap`; perfil predeterminado: `mysql`. Eventos, alias/pertenencia/disponibilidad y selección de intereses están implementados en la rama de demo. Matching y el resto del flujo siguen pendientes.
+Java + Spring Boot; MVC/Thymeleaf/Bootstrap/JS básico; JPA/Hibernate; MySQL o MariaDB; Maven/IntelliJ/Git/GitHub. Monolito modular web, una aplicación y una base de datos. DEC-015 fija Java 21, Spring Boot 4.1.1, Maven 3.9.16/Wrapper 3.3.4 y MySQL 8.4.11 LTS para el bootstrap. Perfil técnico sin SQL: `bootstrap`; perfil predeterminado: `mysql`. `feature/mvp-demo`, basada en `feature/intereses`, implementa eventos, participantes, intereses y el flujo bilateral hasta puntos/feedback. DEC-019 registra la autorización del usuario para Issues #5–#11 y las reglas de demo. PR única sin merge; ejecución en DEMO_INTELLIJ.md.
 
 Fuente funcional principal: [PING_PREDEV_v1.1.md](PING_PREDEV_v1.1.md). Leer también [DECISION_LOG.md](DECISION_LOG.md), [AGENTS.md](../AGENTS.md), Issue y código relacionado. GitHub es la memoria compartida; los chats no.
 

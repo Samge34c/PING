@@ -51,3 +51,12 @@ a { color: var(--ping-yellow); }
 a:hover { color: var(--ping-yellow-light); }
 .text-white, .navbar-brand { color: var(--ping-text-light) !important; }
 .text-white-50 { color: var(--ping-muted) !important; }
+
+.ping-narrow { max-width: 880px; }
+.ping-callout { border-left: 4px solid var(--ping-yellow); background: var(--ping-surface); padding: 1.25rem; border-radius: .5rem; }
+.ping-word { color: var(--ping-yellow); font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 800; letter-spacing: .08em; overflow-wrap: anywhere; }
+.ping-balance { display: flex; flex-direction: column; color: var(--ping-yellow); }
+.ping-balance strong { font-size: 2.5rem; line-height: 1.2; }
+.ping-balance span { color: var(--ping-text-light); font-size: .9rem; }
+
+.badge.bg-warning { background: var(--ping-yellow) !important; color: var(--ping-black); }

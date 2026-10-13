@@ -19,22 +19,27 @@ public class EventService {
     public Event get(long id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("No encontramos ese evento."));
     }
-    @Transactional
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public Event lock(long id) { return repository.lockById(id).orElseThrow(() -> new NotFoundException("No encontramos ese evento.")); }
+    private String point(EventForm form) { String value = Objects.requireNonNullElse(form.getMeetingPoint(), "").strip(); return value.isBlank() ? "Punto Ping del evento" : value; }
+    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public Event create(@Valid EventForm form) {
-        return repository.save(new Event(normalizedName(form), Objects.requireNonNullElse(form.getDescription(), "").strip()));
+        Event event = new Event(normalizedName(form), Objects.requireNonNullElse(form.getDescription(), "").strip());
+        event.changeMeetingPoint(point(form)); return repository.save(event);
     }
-    @Transactional
+    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public Event update(long id, @Valid EventForm form) {
-        Event event = get(id);
+        Event event = lock(id);
         if (form.getVersion() == null || form.getVersion() != event.getVersion()) {
             throw new BusinessRuleException("El evento cambió mientras lo editabas. Vuelve a abrir el formulario.");
         }
+        event.changeMeetingPoint(point(form));
         event.changeDetails(normalizedName(form), Objects.requireNonNullElse(form.getDescription(), "").strip());
         return event;
     }
-    @Transactional
+    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public Event transition(long id, EventStatus target) {
-        Event event = get(id);
+        Event event = lock(id);
         boolean allowed = switch (event.getStatus()) {
             case DRAFT -> target == EventStatus.OPEN;
             case OPEN -> target == EventStatus.PAUSED || target == EventStatus.CLOSED;

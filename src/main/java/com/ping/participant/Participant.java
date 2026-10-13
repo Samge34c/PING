@@ -13,13 +13,19 @@ public class Participant {
     @ManyToOne(fetch = FetchType.LAZY, optional = false) @JoinColumn(name = "event_id", nullable = false) private Event event;
     @Column(nullable = false) private boolean available;
     @Column(name = "created_at", nullable = false, updatable = false) private Instant createdAt;
+    @Column(name = "waiting_since") private Instant waitingSince;
+    @Column(nullable = false) private long points;
+    public Instant getWaitingSince() { return waitingSince; }
+    public long getPoints() { return points; }
+    public void rewardCompletedMatch() { points = Math.addExact(points, 10); restartWaiting(); }
+    public void restartWaiting() { waitingSince = available ? Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS) : null; }
     @Version private long version;
     @ManyToMany
     @JoinTable(name = "participant_interests", joinColumns = @JoinColumn(name = "participant_id"), inverseJoinColumns = @JoinColumn(name = "interest_id"))
     private Set<Interest> interests = new LinkedHashSet<>();
     protected Participant() { }
     public Participant(String alias, Event event, boolean available) { this.alias = alias; this.event = event; this.available = available; }
-    @PrePersist void onCreate() { createdAt = Instant.now(); }
+    @PrePersist void onCreate() { createdAt = Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS); if (available) waitingSince = createdAt; }
     public Long getId() { return id; }
     public String getAlias() { return alias; }
     public Event getEvent() { return event; }
@@ -28,5 +34,5 @@ public class Participant {
     public long getVersion() { return version; }
     public Set<Interest> getInterests() { return Collections.unmodifiableSet(interests); }
     public void replaceInterests(Collection<Interest> selected) { interests.clear(); interests.addAll(selected); }
-    void changeAvailability(boolean available) { this.available = available; }
+    void changeAvailability(boolean available) { if (this.available != available) { this.available = available; restartWaiting(); } }
 }

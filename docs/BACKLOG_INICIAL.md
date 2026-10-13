@@ -1,6 +1,6 @@
 # Backlog inicial — PREDEV v1.1
 
-Backlog y estado de las propuestas de implementación; **ningún estado equivale a aprobación humana ni cierre manual de Issues**. Fuente: [PREDEV](PING_PREDEV_v1.1.md). Las fases 0–3 tienen implementación probada en PRs apiladas pendientes de revisión/merge; las fases 4–13 siguen sin implementación. Ninguna fase tiene responsable asignado. La secuencia indica dependencias; no estima fechas ni atribuye trabajo a Samuel o Julián.
+Backlog y estado de las propuestas de implementación; **ningún estado equivale a aprobación humana ni cierre manual de Issues**. Fuente: [PREDEV](PING_PREDEV_v1.1.md). Las fases 0–3 tienen implementación probada en PRs apiladas pendientes de revisión/merge; las fases 4–10 tienen el flujo de demo implementado en `feature/mvp-demo` (DEC-019), pendiente de revisión/merge; las fases 11–13 siguen pendientes. Actividad del anfitrión, canje y bloqueos definitivos no forman parte de este incremento. Ninguna fase tiene responsable asignado. La secuencia indica dependencias; no estima fechas ni atribuye trabajo a Samuel o Julián.
 
 Cada sección sirve como cuerpo preparado para su Issue GitHub, usando el título indicado. Antes de crear Issues remotos revisar duplicados. Registrar enlaces reales cuando existan; no inventar números. Los enlaces de las fases corresponden a Issues remotos verificados; todos permanecen abiertos.
 
@@ -49,7 +49,7 @@ La preparación documental inicial fue integrada; PR #16 contiene solo el bootst
 ## Fase 4 — Implementar matching por afinidad
 
 - **Título del Issue:** Implementar matching por afinidad.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/5.
+- **Estado:** FLUJO DE DEMO IMPLEMENTADO (DEC-019); pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/5.
 - **Objetivo:** Ordenar por intereses comunes y espera; respetar disponibilidad, bloqueos y rechazos; ofrecer alternativa voluntaria.
 - **Dependencias:** Fases 1–3; PEND-002 y PEND-003; detalle de bloqueos PEND-007.
 - **Resultado esperado:** Propuestas compatibles sin más de un match activo por persona.
@@ -59,7 +59,7 @@ La preparación documental inicial fue integrada; PR #16 contiene solo el bootst
 ## Fase 5 — Implementar aceptación bilateral
 
 - **Título del Issue:** Implementar aceptación bilateral.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/6.
+- **Estado:** FLUJO DE DEMO IMPLEMENTADO (DEC-019); pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/6.
 - **Objetivo:** Registrar aceptación de ambos, rechazo y cancelación.
 - **Dependencias:** Fase 4; PEND-003.
 - **Resultado esperado:** OFRECIDO pasa a ACTIVO solo con ambos; cancelación disponible.
@@ -69,7 +69,7 @@ La preparación documental inicial fue integrada; PR #16 contiene solo el bootst
 ## Fase 6 — Implementar punto y palabra temporal
 
 - **Título del Issue:** Implementar punto y palabra temporal.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/7.
+- **Estado:** FLUJO DE DEMO IMPLEMENTADO (DEC-019); pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/7.
 - **Objetivo:** Mostrar punto público y palabra/símbolo tras aceptación.
 - **Dependencias:** Fase 5; PEND-004.
 - **Resultado esperado:** Palabra por interés común o catálogo neutral, con riesgo de colisión reducido.
@@ -79,7 +79,7 @@ La preparación documental inicial fue integrada; PR #16 contiene solo el bootst
 ## Fase 7 — Implementar catálogo de actividades
 
 - **Título del Issue:** Implementar catálogo de actividades.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/8.
+- **Estado:** FLUJO DE DEMO IMPLEMENTADO (DEC-019); pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/8.
 - **Objetivo:** Ofrecer actividad breve tras match y alternativa del anfitrión cuando corresponda.
 - **Dependencias:** Fase 6; PEND-005.
 - **Resultado esperado:** Catálogo predefinido relacionado con interés o evento.
@@ -89,7 +89,7 @@ La preparación documental inicial fue integrada; PR #16 contiene solo el bootst
 ## Fase 8 — Implementar confirmación
 
 - **Título del Issue:** Implementar confirmación.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/9.
+- **Estado:** FLUJO DE DEMO IMPLEMENTADO (DEC-019); pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/9.
 - **Objetivo:** Confirmación bilateral tras interacción.
 - **Dependencias:** Fase 7; PEND-005.
 - **Resultado esperado:** Match completado tras confirmación de ambos.
@@ -99,7 +99,7 @@ La preparación documental inicial fue integrada; PR #16 contiene solo el bootst
 ## Fase 9 — Implementar puntos
 
 - **Título del Issue:** Implementar puntos.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/10.
+- **Estado:** FLUJO DE DEMO IMPLEMENTADO (DEC-019); pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/10.
 - **Objetivo:** Acreditar +10 por conexión/actividad completada y equivalente del anfitrión; canje básico solo si se decide.
 - **Dependencias:** Fase 8; PEND-005 y PEND-008.
 - **Resultado esperado:** Saldo visible no negativo; entrega opcional ENTREGADO/NO_ENTREGADO/INCIDENCIA.
@@ -109,7 +109,7 @@ La preparación documental inicial fue integrada; PR #16 contiene solo el bootst
 ## Fase 10 — Implementar feedback
 
 - **Título del Issue:** Implementar feedback.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/11.
+- **Estado:** FLUJO DE DEMO IMPLEMENTADO (DEC-019); pendiente revisión/merge; sin responsable; Issue abierto: https://github.com/Samge34c/PING/issues/11.
 - **Objetivo:** Opinión opcional posterior a completar interacción.
 - **Dependencias:** Fase 8.
 - **Resultado esperado:** Opciones 👍 útil/agradable, 😐 neutral, 👎 no me sirvió.

@@ -4,9 +4,9 @@ Fuente: instrucciones e imagen oficial aportadas por el usuario el 13 de octubre
 
 ## Logo oficial
 
-Archivo original: `Gemini_Generated_Image_tun5w3tun5w3tun5.jpg`. Ubicación prevista de la copia sin modificar: `src/main/resources/static/images/ping-logo-official.jpg`.
+Archivo original: `Gemini_Generated_Image_tun5w3tun5w3tun5.jpg`. Ubicación prevista de la copia sin modificar: `src/main/resources/static/img/ping-logo.jpg`.
 
-**PENDIENTE HUMANO — archivo:** la imagen es visible en el chat, pero no hay un JPG accesible en los adjuntos del entorno. La ruta Windows del usuario no está disponible aquí. Hace falta adjuntar el JPG como archivo; copiarlo sin redibujar, recolorear ni sustituir el isotipo. Las vistas ya detectan su presencia y lo muestran en navbar e inicio. Hasta recibirlo muestran únicamente el nombre textual PING, sin logo alternativo ni enlace de imagen roto.
+**PENDIENTE HUMANO — archivo:** la imagen es visible en el chat, pero no hay un JPG accesible en los adjuntos del entorno. La ruta Windows del usuario no está disponible aquí. Hace falta adjuntar el JPG como archivo; copiarlo sin redibujar, recolorear ni sustituir el isotipo. Las vistas ya detectan su presencia y lo muestran en navbar, inicio y selección de participante demo. Hasta recibirlo muestran únicamente el nombre textual PING, sin logo alternativo ni enlace de imagen roto.
 
 Conservar proporción, fondo y colores originales. No recortar ni estirar; usar `object-fit: contain`. Texto alternativo: «Ping — logo oficial».
 

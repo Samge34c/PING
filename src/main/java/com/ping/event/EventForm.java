@@ -8,6 +8,10 @@ public class EventForm {
     private String name = "";
     @Size(max = 2000, message = "La descripción puede tener hasta 2000 caracteres.")
     private String description = "";
+    @Size(max = 160, message = "El punto puede tener hasta 160 caracteres.")
+    private String meetingPoint = "Punto Ping del evento";
+    public String getMeetingPoint() { return meetingPoint; }
+    public void setMeetingPoint(String value) { meetingPoint = value; }
     @PositiveOrZero private Long version;
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -17,7 +21,7 @@ public class EventForm {
     public void setVersion(Long version) { this.version = version; }
     public static EventForm from(Event event) {
         EventForm form = new EventForm();
-        form.name = event.getName(); form.description = event.getDescription(); form.version = event.getVersion();
+        form.meetingPoint = event.getMeetingPoint(); form.name = event.getName(); form.description = event.getDescription(); form.version = event.getVersion();
         return form;
     }
 }
