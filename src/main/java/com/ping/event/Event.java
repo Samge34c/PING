@@ -21,6 +21,10 @@ public class Event {
     private Instant createdAt;
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
+    @Column(name = "meeting_point", nullable = false, length = 160)
+    private String meetingPoint = "Punto Ping del evento";
+    public String getMeetingPoint() { return meetingPoint; }
+    void changeMeetingPoint(String value) { meetingPoint = value; }
     @Version
     private long version;
 

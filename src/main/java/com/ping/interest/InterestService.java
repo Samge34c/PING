@@ -14,7 +14,8 @@ import com.ping.web.*;
 public class InterestService {
     private final InterestRepository repository;
     private final ParticipantRepository participants;
-    public InterestService(InterestRepository repository, ParticipantRepository participants) { this.repository = repository; this.participants = participants; }
+    private final com.ping.event.EventService events;
+    public InterestService(InterestRepository repository, ParticipantRepository participants, com.ping.event.EventService events) { this.repository = repository; this.participants = participants; this.events = events; }
     public List<Interest> catalog() { return repository.findAllByOrderByNameAsc(); }
     public InterestSelectionForm selection(long participantId) {
         Participant participant = require(participantId);
@@ -23,7 +24,8 @@ public class InterestService {
         form.setVersion(participant.getVersion());
         return form;
     }
-    @Transactional public void save(long participantId, @Valid InterestSelectionForm form) {
+    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void save(long participantId, @Valid InterestSelectionForm form) {
+        events.lock(participants.eventId(participantId).orElseThrow(() -> new NotFoundException("No encontramos ese participante.")));
         Participant participant = require(participantId);
         if (form.getVersion() != participant.getVersion()) throw new BusinessRuleException("El participante cambió. Recarga sus intereses antes de guardar.");
         var ids = new LinkedHashSet<>(form.getInterestIds());

@@ -1,8 +1,9 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Datos del evento')}"></head><body>
-<nav th:replace="~{fragments/layout :: nav}"></nav><main class="container"><h1 th:text="${editing} ? 'Editar evento' : 'Crear evento'"></h1>
+<nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container"><h1 th:text="${editing} ? 'Editar evento' : 'Crear evento'"></h1>
 <form class="card p-4 mt-3" method="post" th:action="${editing} ? @{/events/{id}/edit(id=${eventId})} : @{/events}" th:object="${eventForm}">
 <input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" th:field="*{version}">
 <div class="mb-3"><label for="name" class="form-label">Nombre del evento</label><input class="form-control" th:field="*{name}" required maxlength="120" aria-describedby="name-error" th:attr="aria-invalid=${#fields.hasErrors('name')}"><div id="name-error" class="text-danger" th:errors="*{name}"></div></div>
 <div class="mb-3"><label for="description" class="form-label">Descripción <span class="text-secondary">(opcional)</span></label><textarea class="form-control" th:field="*{description}" rows="4" maxlength="2000" aria-describedby="description-error"></textarea><div id="description-error" class="text-danger" th:errors="*{description}"></div></div>
+<div class="mb-3"><label for="meetingPoint" class="form-label">Punto público de encuentro</label><input class="form-control" th:field="*{meetingPoint}" maxlength="160" placeholder="Entrada principal"><div class="text-danger" th:errors="*{meetingPoint}"></div><p class="small text-secondary mt-2">Lo verán los participantes después de que ambos acepten.</p></div>
 <p th:unless="${editing}" class="text-secondary">El evento comenzará en borrador. Podrás abrirlo desde su detalle.</p><div class="d-flex gap-2"><button class="btn btn-primary" type="submit">Guardar evento</button><a class="btn btn-outline-secondary" th:href="@{/events}">Cancelar</a></div>
 </form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
