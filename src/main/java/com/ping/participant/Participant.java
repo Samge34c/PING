@@ -17,7 +17,11 @@ public class Participant {
     @Column(nullable = false) private long points;
     public Instant getWaitingSince() { return waitingSince; }
     public long getPoints() { return points; }
-    public void rewardCompletedMatch() { points = Math.addExact(points, 10); restartWaiting(); }
+    public void rewardCompletedMatch() { points = Math.addExact(points, 10); }
+    public void reverseCompletionReward() {
+        if (points < 10) throw new IllegalStateException("Cannot reverse a reward without its balance");
+        points -= 10;
+    }
     public void restartWaiting() { waitingSince = available ? Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS) : null; }
     @Version private long version;
     @ManyToMany

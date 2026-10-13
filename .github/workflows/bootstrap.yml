@@ -2,9 +2,9 @@ name: Bootstrap CI
 
 on:
   pull_request:
-    branches: [main, chore/bootstrap-spring-boot, feature/eventos, feature/participantes, feature/intereses]
-  push:
     branches: [main, chore/bootstrap-spring-boot, feature/eventos, feature/participantes, feature/intereses, feature/mvp-demo]
+  push:
+    branches: [main, chore/bootstrap-spring-boot, feature/eventos, feature/participantes, feature/intereses, feature/mvp-demo, feature/saga]
 
 permissions:
   contents: read

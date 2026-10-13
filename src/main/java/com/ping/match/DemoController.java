@@ -33,7 +33,7 @@ public class DemoController {
         return history.stream().filter(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE).findFirst().orElse(null);
     }
     private String signature(ParticipantView p, com.ping.event.EventStatus status, MatchView m) {
-        return p.id() + ":" + p.version() + ":" + status.name() + ":" + (m == null ? "waiting" : m.id() + ":" + m.status().name() + ":" + m.accepted() + ":" + m.otherAccepted() + ":" + m.confirmed() + ":" + m.otherConfirmed());
+        return p.id() + ":" + p.version() + ":" + status.name() + ":" + (m == null ? "waiting" : m.id() + ":" + m.status().name() + ":" + m.accepted() + ":" + m.otherAccepted() + ":" + m.confirmed() + ":" + m.otherConfirmed() + ":" + m.completionPending());
     }
     @GetMapping("/me/state") @ResponseBody
     public java.util.Map<String, String> state(HttpSession session, jakarta.servlet.http.HttpServletResponse response) {

@@ -31,7 +31,7 @@ flowchart TD
 
 Capas sugeridas: `controller` (HTTP), `service` (reglas), `repository` (persistencia), `model/entity` (dominio), `dto` (datos de entrada/salida), `config` (configuración). La organización de paquetes se fijará al crear el proyecto; no es obligatorio duplicar carpetas globales y por módulo.
 
-La aplicación deberá proteger las reglas de un match activo, aceptación y confirmación bilaterales y acreditación coherente de puntos. DEC-019 fija transacciones de escritura READ_COMMITTED, bloqueo pesimista de evento y reservas persistentes con PK por participante para OFFERED/ACTIVE. Completar y acreditar ambos saldos ocurre en la misma transacción, con reintentos idempotentes.
+La aplicación deberá proteger las reglas de un match activo, aceptación y confirmación bilaterales y acreditación coherente de puntos. DEC-019 fija transacciones de escritura READ_COMMITTED, bloqueo pesimista de evento y reservas persistentes con PK por participante para OFFERED/ACTIVE. La base MVP finaliza y acredita en una transacción. `feature/saga` (DEC-022) sustituye esa finalización por pasos locales con commits independientes, traza durable y compensaciones; el coordinador asume un único proceso de aplicación. Ver [SAGA.md](SAGA.md).
 
 ## Bootstrap técnico confirmado
 
