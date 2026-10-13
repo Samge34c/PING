@@ -80,9 +80,12 @@ class DemoImprovementTests {
         preparation.prepare(); assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(a).available()).isTrue();
     }
     @Test void pausedOrClosedScenarioIsNotSilentlyReopened() {
-        var s = preparation.prepare(); eventService.transition(s.eventId(), EventStatus.PAUSED);
+        var s = preparation.prepare(); available(id(s,"Samuel"),true); available(id(s,"Julián"),true);
+        assertThat(metrics(s.eventId()).free()).isEqualTo(2); eventService.transition(s.eventId(), EventStatus.PAUSED);
+        assertThat(metrics(s.eventId()).available()).isEqualTo(2); assertThat(metrics(s.eventId()).free()).isZero();
         assertThat(preparation.prepare().status()).isEqualTo(EventStatus.PAUSED);
         eventService.transition(s.eventId(), EventStatus.CLOSED); assertThat(preparation.prepare().status()).isEqualTo(EventStatus.CLOSED);
+        assertThat(metrics(s.eventId()).free()).isZero();
     }
     @Test void webUtilityMetricsAndThemeGalleryAreAccessibleWithoutMutatingOnGet() throws Exception {
         try(var browser = new TestBrowser(port)) {

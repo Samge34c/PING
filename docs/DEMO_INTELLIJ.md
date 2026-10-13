@@ -37,7 +37,7 @@ Las pruebas usan H2 únicamente en test y no requieren MySQL externo. Bootstrap 
 11. Samuel deja **Útil / agradable**; Julián pulsa **Omitir**. No se suman puntos por feedback. Volver a **Mi Ping** muestra el saldo y la conexión completada.
 12. Opcional: repetir búsqueda para sumar otros 10, rechazar una propuesta para mostrar cancelación o reiniciar la aplicación con la misma base para demostrar persistencia. Reintentar una confirmación completada no duplica puntos.
 
-Las respuestas se actualizan mediante los enlaces **Actualizar / Actualizar estado**; no hay chat ni tiempo de expiración automático.
+Las respuestas se actualizan automáticamente cada cinco segundos mientras la pestaña está visible; también están los enlaces **Actualizar / Actualizar estado**. No hay chat ni tiempo de expiración automático del match.
 
 ## Reglas de la demo
 
@@ -49,7 +49,7 @@ Si falla el arranque, comprobar JDK completo, MySQL, variables y el historial Fl
 
 ## Verificación del incremento
 
-`clean test` y `clean verify`: 60 pruebas aprobadas, cero fallos/errores/omitidas. MySQL 8.4.11 con TLS VERIFY_CA y Chromium: actualización real V1–V4→V6 preservando datos; dos sesiones completaron el flujo y feedback/omitir; acciones simultáneas no duplicaron reservas ni puntos. Segundo encuentro: 20 puntos por persona. Rechazo, alternativa de cero coincidencias, cancelación y móvil sin desbordamiento comprobados. Reiniciar el JAR conservó eventos, participantes, intereses, matches completados, saldos y feedback. La base temporal de validación se retira al terminar; para mañana se necesita la base local del equipo.
+`clean test` y `clean verify`: 68 pruebas aprobadas, cero fallos/errores/omitidas. MySQL 8.4.11 con TLS VERIFY_CA y Chromium: actualización real V1–V4→V6 preservando datos; dos sesiones completaron el flujo y feedback/omitir; acciones simultáneas no duplicaron reservas ni puntos. Segundo encuentro: 20 puntos por persona. Rechazo, alternativa de cero coincidencias, cancelación y móvil sin desbordamiento comprobados. Reiniciar el JAR conservó eventos, participantes, intereses, matches completados, saldos y feedback. La base temporal de validación se retira al terminar; para mañana se necesita la base local del equipo.
 
 ## Atajo de preparación y mejoras visibles
 

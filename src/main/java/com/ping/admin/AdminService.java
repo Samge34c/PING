@@ -27,7 +27,7 @@ public class AdminService {
             var p = people.get(e.getId()); var m = counts.getOrDefault(e.getId(), Map.of()); var f = ratings.getOrDefault(e.getId(), Map.of());
             long completed = m.getOrDefault(MatchStatus.COMPLETED, 0L);
             return new EventMetrics(e.getId(), e.getName(), e.getStatus(), p == null ? 0 : p.getTotal(), p == null ? 0 : p.getAvailable(),
-                free.getOrDefault(e.getId(), 0L), m.getOrDefault(MatchStatus.OFFERED, 0L), m.getOrDefault(MatchStatus.ACTIVE, 0L), completed,
+                e.canStartNewMatches() ? free.getOrDefault(e.getId(), 0L) : 0L, m.getOrDefault(MatchStatus.OFFERED, 0L), m.getOrDefault(MatchStatus.ACTIVE, 0L), completed,
                 m.getOrDefault(MatchStatus.CANCELLED, 0L), Math.multiplyExact(completed, 20), f.getOrDefault(Feedback.Rating.USEFUL, 0L),
                 f.getOrDefault(Feedback.Rating.NEUTRAL, 0L), f.getOrDefault(Feedback.Rating.NOT_USEFUL, 0L));
         }).toList();
