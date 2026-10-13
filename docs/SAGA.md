@@ -27,7 +27,7 @@ V8 añade `completion_pending`, una Saga por match y una traza con clave única 
 
 La aplicación actual tiene **un único proceso**. Su coordinador sincroniza ejecuciones; cada paso bloquea el evento en SQL. No hay una transacción externa que encierre todos los pasos. Si el proceso se detiene entre commits, el último estado persiste y `recoverPending()` lo retoma al iniciar. También se recupera al reintentar confirmar. Si falla una compensación queda `FAILED`, con recibos y reservas intactos; la siguiente recuperación solo revierte lo pendiente. Si la BD no responde tampoco puede compensarse: se conserva el último checkpoint confirmado hasta recuperar SQL.
 
-Los créditos intermedios son observables: consistencia eventual del proceso, no atomicidad global. No hay gasto/canje concurrente. Varias réplicas requerirían propiedad/lease durable del coordinador; esta implementación no promete coordinarlas.
+Los créditos intermedios son observables: consistencia eventual del proceso, no atomicidad global. El canje está prohibido mientras exista finalización pendiente; comparte el bloqueo por evento con los pasos, evitando gastar créditos compensables. Varias réplicas requerirían propiedad/lease durable del coordinador; esta implementación no promete coordinarlas.
 
 ## CAP / CA / CP
 

@@ -27,9 +27,7 @@ public class DemoController {
     }
     @PostMapping("/demo/exit") public String exit(HttpSession session) { session.removeAttribute(SELECTED); return "redirect:/demo"; }
     private long self(HttpSession session) {
-        Object id = session.getAttribute(SELECTED);
-        if (!(id instanceof Long selected)) throw new BusinessRuleException("Entra como participante desde Modo demo antes de continuar.");
-        return selected;
+        return DemoSession.participantId(session);
     }
     private MatchView current(java.util.List<MatchView> history) {
         return history.stream().filter(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE).findFirst().orElse(null);

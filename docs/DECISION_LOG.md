@@ -240,3 +240,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Solicitud explícita del usuario, 2026-10-13; no atribuye aprobaciones individuales adicionales.
 - **Decisión:** `feature/final-mvp` basada en Saga, Issues #12–#14: admin detallado, bloqueo direccional con exclusión simétrica de futuras propuestas, reporte sin sanciones automáticas, historial/UX y pruebas integrales. Reportes vinculados a interacciones terminadas/canceladas; comentario máximo 300 caracteres y uno por autor/match para reintentos. No modifica matches anteriores ni finalización Saga. Admin sigue siendo panel de demo sin autenticación definitiva. Canje opcional solo tras estabilizar el resto, sin gasto de créditos durante una Saga pendiente. Sin merge.
+
+## DEC-024 — Canje opcional autorizado y acotado
+
+- **Estado:** Aplicado tras validar admin/bloqueo/reporte/flujo en 91 tests y Chromium/MySQL, por autorización condicional del usuario.
+- **Decisión:** Snack DEMO de 20 puntos; solicitud con clave idempotente, costo guardado y descuento transaccional único. REQUESTED → DELIVERED o INCIDENT, sin stock, pagos ni devolución automática. Una incidencia registra revisión de entrega; no vuelve a descontar. El bloqueo por evento y la prohibición de canjear mientras la finalización Saga esté pendiente protegen los créditos compensables.
