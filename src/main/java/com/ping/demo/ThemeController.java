@@ -9,10 +9,8 @@ public class ThemeController {
     public record Theme(String key, String name, String description) { }
     @GetMapping("/demo/themes") public String themes(Model model) {
         model.addAttribute("themes", List.of(
-            new Theme("A", "Actual · identidad oficial", "Negro, morado Ping y amarillo. Predeterminado: conserva la marca."),
-            new Theme("B", "Dark moderno", "Grafito, violeta eléctrico y dorado. Superficies más separadas para escanear el flujo."),
-            new Theme("C", "Morado dominante", "Morado profundo, morado brillante, amarillo suave y blanco cálido."),
-            new Theme("D", "Claro opcional", "Neutros claros, morado Ping y amarillo como detalle. Enlaces morados para mantener contraste.")));
+            new Theme("B", "DARK OFICIAL", "Oscuro predeterminado: grafito, violeta y dorado. Superficies diferenciadas y foco visible."),
+            new Theme("D", "LIGHT OFICIAL", "Claro oficial: fondos neutros, morado Ping y amarillo como acento. Texto y enlaces oscuros para mantener contraste.")));
         return "demo/themes";
     }
 }

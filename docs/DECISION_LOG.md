@@ -225,3 +225,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Autorizadas por la solicitud actual del usuario, 2026-10-13; sin atribuir aprobaciones individuales.
 - **Decisión:** Mantener tema A predeterminado; comparar A/B/C/D únicamente en `/demo/themes`, mediante variables semánticas. Panel académico de métricas por evento; guía del siguiente paso e historial personal; errores de entrada comprensibles; preparación manual y reutilizable de un escenario demo sin borrar ni reiniciar datos. Sin cambios al algoritmo, recompensas, autenticación ni arquitectura. Continuar PR #20 sin merge.
+
+## DEC-021 — Identidad visual oficial oscuro/claro
+
+- **Estado:** Elección expresa del usuario, 2026-10-13, sin atribuir aprobaciones individuales.
+- **Decisión:** B es oscuro oficial y predeterminado; D es claro oficial. Selector sencillo y preferencia local `ping-theme=dark|light`; A/C se retiran para simplificar. Variables centralizadas, superficies diferenciadas y logo original sin alterar. Sin cambios de matching ni persistencia SQL. Después se permite una mejora pequeña de UX del panel de demo.

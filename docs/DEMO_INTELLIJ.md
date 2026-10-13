@@ -55,6 +55,6 @@ Si falla el arranque, comprobar JDK completo, MySQL, variables y el historial Fl
 
 - `/demo/prepare`: preparación manual de feria + Samuel/Julián/Ana/Carlos; repetir conserva los datos. Elegir Samuel y Julián en sesiones separadas y marcar solo a ambos disponibles para el primer recorrido.
 - `/admin`: métricas reales por evento, propuestas/activos/completados, puntos entregados y feedback; acceso académico sin autenticación definitiva.
-- `/demo/themes`: cuatro muestras aisladas A/B/C/D con contraste calculado. A permanece predeterminado; no cambia el tema del sistema.
+- `/demo/themes`: B oscuro y D claro oficiales con contraste calculado. El selector de navbar conserva la elección en localStorage; oscuro es predeterminado.
 - Mi Ping guía el siguiente paso, muestra historial personal y recibe cambios automáticamente cada cinco segundos mientras la pestaña está visible. Los enlaces de actualización manual siguen disponibles.
 - V7 agrega únicamente el marcador del escenario manual. No genera participantes al iniciar ni reinicia saldos.

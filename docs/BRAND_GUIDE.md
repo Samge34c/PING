@@ -1,4 +1,4 @@
-# Identidad visual provisional de Ping
+# Identidad visual oficial de Ping
 
 Fuente: instrucciones e imagen oficial aportadas por el usuario el 13 de octubre de 2026. No se ha creado ni sustituido el logo.
 
@@ -17,7 +17,7 @@ Todos los colores se centralizan en [brand.css](../src/main/resources/static/css
 | Variable | Valor | Uso |
 | --- | --- | --- |
 | `--ping-black` | `#000000` | Fondo principal |
-| `--ping-purple` | `#6A298F` | Botones principales |
+| `--ping-purple` | `#6A298F` | Base de marca; principal en claro |
 | `--ping-purple-2` | `#872EA3` | Hover y bordes |
 | `--ping-purple-dark` | `#512067` | Superficies y estados |
 | `--ping-yellow` | `#F8E836` | Enlaces, foco y acentos |
@@ -28,6 +28,8 @@ Bootstrap 5.3.8 se conserva como CSS oficial local en `static/vendor/bootstrap/`
 
 Usar labels visibles, foco de teclado amarillo, tablas con desplazamiento en móvil y mensajes comprensibles. No cambiar la paleta principal ni sustituir el logo sin autorización.
 
-## Propuestas de desarrollo
+## Temas oficiales
 
-`/demo/themes` compara A (actual), B (grafito/violeta/dorado), C (morado dominante/blanco cálido) y D (claro/morado). A sigue predeterminado. Variables semánticas y variantes aisladas viven en brand.css; el JPG nunca se recolorea. La página calcula contraste de texto, botones y bordes. D usa morado en texto/enlaces/foco porque amarillo sobre claro no ofrece contraste suficiente. La recomendación técnica provisional es B por separación de superficies y legibilidad; requiere elección del usuario antes de adoptarse.
+B es **oscuro oficial y predeterminado**: grafito, violeta y dorado. D es **claro oficial**: fondos neutros, morado Ping y acento amarillo. La navbar ofrece únicamente Oscuro/Claro; `localStorage['ping-theme']` conserva `dark` o `light`. Sin preferencia válida se usa oscuro. `/demo/themes` muestra ambos oficiales; A/C se retiraron.
+
+Variables de fondo, superficies, navbar, inputs, botones, texto, bordes y foco se centralizan en brand.css. En claro, palabras destacadas y enlaces usan morado para evitar amarillo ilegible. El logo original mantiene una superficie negra discreta en ambos temas, sin filtros ni recoloración. Se respeta movimiento reducido.
