@@ -33,6 +33,20 @@ public class WebAdvice {
     @ExceptionHandler(BusinessRuleException.class) public String conflict(BusinessRuleException error, Model model, HttpServletResponse response) {
         response.setStatus(409); model.addAttribute("errorMessage", error.getMessage()); return "errors/message";
     }
+    @ExceptionHandler(org.springframework.dao.DataAccessException.class)
+    public String storageUnavailable(Model model, HttpServletResponse response) {
+        response.setStatus(503); model.addAttribute("errorMessage", "No pudimos completar la operación con los datos guardados. Recarga y comprueba su estado antes de reintentar."); return "errors/message";
+    }
+    @ExceptionHandler(Exception.class)
+    public String unexpected(Exception error, Model model, HttpServletResponse response) {
+        if (error instanceof org.springframework.web.ErrorResponse webError) {
+            response.setStatus(webError.getStatusCode().value());
+            model.addAttribute("errorMessage", "Esta página o acción no está disponible. Vuelve a Ping y usa los enlaces y formularios de la aplicación."); return "errors/message";
+        }
+        String reference = UUID.randomUUID().toString().substring(0, 8);
+        org.slf4j.LoggerFactory.getLogger(WebAdvice.class).error("Error de Ping, referencia {}", reference, error);
+        response.setStatus(500); model.addAttribute("errorMessage", "No pudimos completar esta acción. Vuelve a Mi Ping y comprueba el estado. Referencia: " + reference); return "errors/message";
+    }
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class) public String concurrentChange(Model model, HttpServletResponse response) {
         response.setStatus(409); model.addAttribute("errorMessage", "Los datos cambiaron. Recarga la página e inténtalo otra vez."); return "errors/message";
     }

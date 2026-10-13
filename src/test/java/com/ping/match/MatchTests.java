@@ -208,7 +208,7 @@ class MatchTests {
             assertThat(julian.get("/me").body()).contains(path); assertThat(other.get(path).statusCode()).isEqualTo(404);
             assertThat(other.post(path + "/accept", Map.of("participantId", "" + pair[0])).statusCode()).isEqualTo(404);
             samuel.post(path + "/accept", Map.of("participantId", "" + pair[1]));
-            assertThat(julian.get(path).body()).contains("OFFERED", "La otra persona ya aceptó");
+            assertThat(julian.get(path).body()).contains("OFFERED", "Samuel aceptó. Falta tu aceptación.");
             julian.post(path + "/accept", Map.of());
             assertThat(samuel.get(path).body()).contains("ACTIVE", "Entrada principal", "PIXEL-", "videojuego");
             samuel.post(path + "/confirm", Map.of()); assertThat(julian.get(path).body()).contains("ACTIVE");

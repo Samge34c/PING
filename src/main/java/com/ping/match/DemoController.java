@@ -48,6 +48,7 @@ public class DemoController {
         var participant = participants.get(id); model.addAttribute("participant", participant); model.addAttribute("matches", history);
         model.addAttribute("event", events.get(participant.eventId()));
         model.addAttribute("currentMatch", current(history));
+        model.addAttribute("lastCompletion", !history.isEmpty() && history.getFirst().status() == MatchStatus.COMPLETED ? history.getFirst() : null);
         model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(history)));
         model.addAttribute("held", history.stream().anyMatch(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE));
         model.addAttribute("completedCount", history.stream().filter(m -> m.status() == MatchStatus.COMPLETED).count()); return "demo/dashboard";

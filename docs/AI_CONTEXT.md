@@ -36,3 +36,5 @@ Fuente funcional principal: [PING_PREDEV_v1.1.md](PING_PREDEV_v1.1.md). Leer tam
 No inventar comportamiento pendiente. Los cambios deben registrarse, aceptarse por Samuel y Julián y documentarse antes de modificar código. Los pendientes están en DECISION_LOG.
 
 En `feature/saga`, DEC-022 implementa finalización con orquestación local durable, transacciones independientes y compensación; base `feature/mvp-demo`, PR separada. Ver SAGA.md para pasos, límites de proceso único, pruebas y CAP.
+
+`feature/final-mvp` (DEC-023, Issues #12–#14) añade admin detallado, bloqueo simétrico en futuras propuestas, reporte sin sanciones y claridad del historial/flujo. Base temporal `feature/saga`, PR separada sin merge.
