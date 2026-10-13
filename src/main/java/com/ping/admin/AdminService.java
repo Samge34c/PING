@@ -16,6 +16,23 @@ public class AdminService {
     public AdminService(EventService events, ParticipantRepository participants, MatchRepository matches, FeedbackRepository feedback) {
         this.events = events; this.participants = participants; this.matches = matches; this.feedback = feedback;
     }
+    public EventDetails details(long eventId) {
+        var event = events.get(eventId);
+        var connections = matches.findByEventIdOrderByIdDesc(eventId);
+        Map<Long, Long> completed = new HashMap<>();
+        connections.stream().filter(m -> m.getStatus() == MatchStatus.COMPLETED).forEach(m -> {
+            completed.merge(m.getFirst().getId(), 1L, Long::sum); completed.merge(m.getSecond().getId(), 1L, Long::sum);
+        });
+        var people = participants.findByEventIdOrderByIdAsc(eventId);
+        var aliases = people.stream().collect(Collectors.toMap(p -> p.getId(), p -> p.getAlias()));
+        return new EventDetails(event.getMeetingPoint(), people.stream().map(p -> new EventDetails.Person(p.getId(), p.getAlias(),
+            p.getInterests().stream().map(i -> i.getName()).sorted().toList(), p.isAvailable(), p.getPoints(), completed.getOrDefault(p.getId(), 0L))).toList(),
+            connections.stream().map(m -> new EventDetails.Connection(m.getId(), m.getFirst().getAlias(), m.getSecond().getAlias(),
+                m.getCommonInterests().isBlank() ? "Alternativo" : "Normal", m.getStatus().getLabel(), m.getWord(), m.getActivity(), m.getCreatedAt(),
+                m.getStatus() == MatchStatus.COMPLETED ? "+10 puntos a cada persona" : m.getStatus() == MatchStatus.CANCELLED ? "Sin recompensa" : "En curso")).toList(),
+            feedback.forEvent(eventId).stream().map(f -> new EventDetails.Opinion(f.matchId(), aliases.get(f.getParticipantId()),
+                switch(f.getRating()) { case USEFUL -> "Positivo"; case NEUTRAL -> "Neutral"; case NOT_USEFUL -> "Negativo"; }, f.getCreatedAt())).toList());
+    }
     public List<EventMetrics> metrics() {
         var people = participants.eventTotals().stream().collect(Collectors.toMap(ParticipantRepository.Totals::getEventId, t -> t));
         var free = participants.freeTotals().stream().collect(Collectors.toMap(ParticipantRepository.FreeTotal::getEventId, ParticipantRepository.FreeTotal::getTotal));

@@ -76,6 +76,18 @@ class DemoImprovementTests {
         assertThat(metrics(s.eventId()).useful()).isEqualTo(1); assertThat(metrics(s.eventId()).neutral()).isZero();
         long rejected = matching.search(a); matchService.cancel(rejected,b);
         assertThat(metrics(s.eventId()).cancelled()).isEqualTo(1); assertThat(metrics(s.eventId()).points()).isEqualTo(20);
+        var detail = admin.details(s.eventId());
+        assertThat(detail.meetingPoint()).isEqualTo("Entrada principal");
+        assertThat(detail.participants()).filteredOn(p -> p.id() == a).singleElement().satisfies(p -> {
+            assertThat(p.points()).isEqualTo(10); assertThat(p.completed()).isEqualTo(1); assertThat(p.interests()).contains("Videojuegos");
+        });
+        assertThat(detail.matches()).hasSize(2);
+        assertThat(detail.feedback()).singleElement().satisfies(fb -> {
+            assertThat(fb.alias()).isEqualTo("Samuel"); assertThat(fb.rating()).isEqualTo("Positivo"); assertThat(fb.createdAt()).isNotNull();
+        });
+        assertThat(admin.details(other).matches()).isEmpty();
+        assertThat(metrics(s.eventId()).completionPercent()).isEqualTo(50);
+        assertThat(metrics(s.eventId()).unavailable()).isEqualTo(2);
         assertThat(metrics(other).participants()).isZero(); assertThat(metrics(other).points()).isZero();
         preparation.prepare(); assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(a).available()).isTrue();
     }

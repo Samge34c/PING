@@ -235,3 +235,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Implementación solicitada expresamente por el usuario, 2026-10-13; sin atribuir aceptación individual adicional.
 - **Decisión:** Orquestación local con pasos transaccionales independientes, registro durable y compensaciones inversas. Match permanece ACTIVE con finalización reservada hasta completar ambos créditos; solo después pasa a COMPLETED. Ante fallo se revierten los créditos de este intento y la última confirmación, sin borrar puntos previos ni liberar la reserva. Se conserva el monolito y una base; sin broker ni servicios distribuidos. Serialización del coordinador en el único proceso de aplicación, con bloqueo por evento en cada paso. Recuperación de pendientes al iniciar y mediante reintento. PR separada en `feature/saga`, base `feature/mvp-demo`, sin merge.
+
+## DEC-023 — Cierre funcional del MVP académico
+
+- **Estado:** Solicitud explícita del usuario, 2026-10-13; no atribuye aprobaciones individuales adicionales.
+- **Decisión:** `feature/final-mvp` basada en Saga, Issues #12–#14: admin detallado, bloqueo direccional con exclusión simétrica de futuras propuestas, reporte sin sanciones automáticas, historial/UX y pruebas integrales. Reportes vinculados a interacciones terminadas/canceladas; comentario máximo 300 caracteres y uno por autor/match para reintentos. No modifica matches anteriores ni finalización Saga. Admin sigue siendo panel de demo sin autenticación definitiva. Canje opcional solo tras estabilizar el resto, sin gasto de créditos durante una Saga pendiente. Sin merge.

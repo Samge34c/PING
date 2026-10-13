@@ -12,11 +12,13 @@ import com.ping.web.*;
 @Controller @Profile("!bootstrap")
 public class DemoController {
     private static final String SELECTED = "pingDemoParticipantId";
+    private final com.ping.moderation.ModerationService moderation;
     private final ParticipantService participants;
     private final MatchingService matching;
     private final MatchService matches;
     private final com.ping.event.EventService events;
-    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events) {
+    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation) {
+        this.moderation = moderation;
         this.participants = participants; this.matching = matching; this.matches = matches; this.events = events;
     }
     @GetMapping("/demo") public String select(@RequestParam(required = false) Long participantId, Model model) { model.addAttribute("selectedParticipantId", participantId); model.addAttribute("participants", participants.list()); return "demo/select"; }
@@ -60,6 +62,8 @@ public class DemoController {
     }
     @GetMapping("/matches/{id}") public String match(@PathVariable long id, HttpSession session, Model model) {
         long selected = self(session); var participant = participants.get(selected); model.addAttribute("participant", participant); model.addAttribute("event", events.get(participant.eventId()));
+        model.addAttribute("moderation", moderation.status(id, selected));
+        model.addAttribute("reportReasons", com.ping.moderation.ReportReason.values());
         var match = matches.get(id, selected); model.addAttribute("match", match);
         if (match.status() == MatchStatus.OFFERED || match.status() == MatchStatus.ACTIVE) model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(matches.list(selected)))); return "demo/match";
     }
@@ -67,6 +71,13 @@ public class DemoController {
     @PostMapping("/matches/{id}/reject") public String reject(@PathVariable long id, HttpSession session) { matches.cancel(id, self(session)); return "redirect:/matches/" + id; }
     @PostMapping("/matches/{id}/cancel") public String cancel(@PathVariable long id, HttpSession session) { matches.cancel(id, self(session)); return "redirect:/matches/" + id; }
     @PostMapping("/matches/{id}/confirm") public String confirm(@PathVariable long id, HttpSession session) { matches.confirm(id, self(session)); return "redirect:/matches/" + id; }
+    @PostMapping("/matches/{id}/block") public String block(@PathVariable long id, HttpSession session, RedirectAttributes flash) {
+        moderation.block(id, self(session)); flash.addFlashAttribute("message", "Bloqueo guardado. No recibirán nuevas propuestas entre sí. La conexión actual conserva su estado."); return "redirect:/matches/" + id;
+    }
+    @PostMapping("/matches/{id}/report") public String report(@PathVariable long id, @RequestParam com.ping.moderation.ReportReason reason,
+            @RequestParam(defaultValue = "") String comment, HttpSession session, RedirectAttributes flash) {
+        moderation.report(id, self(session), reason, comment); flash.addFlashAttribute("message", "Reporte guardado para revisión administrativa. No aplica sanciones ni bloqueos automáticos."); return "redirect:/matches/" + id;
+    }
     @PostMapping("/matches/{id}/feedback") public String feedback(@PathVariable long id, @RequestParam String rating, HttpSession session) {
         Feedback.Rating selected;
         try { selected = Feedback.Rating.valueOf(rating); }

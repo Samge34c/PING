@@ -8,5 +8,8 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
     @org.springframework.data.jpa.repository.Query("select f.match.event.id as eventId, f.rating as rating, count(f) as total from Feedback f group by f.match.event.id, f.rating")
     java.util.List<Total> eventTotals();
     java.util.List<Feedback> findByParticipantId(long participantId);
+    @org.springframework.data.jpa.repository.Query("select f from Feedback f where f.match.event.id = :eventId order by f.id desc")
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = "match")
+    java.util.List<Feedback> forEvent(@org.springframework.data.repository.query.Param("eventId") long eventId);
     Optional<Feedback> findByMatchIdAndParticipantId(long matchId, long participantId);
 }

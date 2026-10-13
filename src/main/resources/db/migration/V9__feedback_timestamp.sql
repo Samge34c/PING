@@ -1,0 +1,1 @@
+ALTER TABLE feedback ADD COLUMN created_at TIMESTAMP(6) NULL;

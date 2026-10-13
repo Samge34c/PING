@@ -42,6 +42,7 @@ public class Match {
     public Event getEvent() { return event; }
     public Participant getFirst() { return first; }
     public Participant getSecond() { return second; }
+    public Instant getCreatedAt() { return createdAt; }
     public MatchStatus getStatus() { return status; }
     public String getCommonInterests() { return commonInterests; }
     public String getFirstInterests() { return firstInterests; }
