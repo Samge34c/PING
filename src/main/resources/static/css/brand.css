@@ -49,3 +49,5 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 @media (max-width: 576px) { .display-3 { font-size: 3rem; } .card { padding: 1.25rem; } }
 a { color: var(--ping-yellow); }
 a:hover { color: var(--ping-yellow-light); }
+.text-white, .navbar-brand { color: var(--ping-text-light) !important; }
+.text-white-50 { color: var(--ping-muted) !important; }

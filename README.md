@@ -2,7 +2,7 @@
 
 Proyecto académico de **Samuel Riveros y Julián Caicedo**. Ping conecta a dos asistentes de un evento según sus intereses y facilita una interacción breve y voluntaria.
 
-**Estado: PREDEV v1.1 — preparación técnica / pre-implementación.** El repositorio incorpora la base técnica Spring Boot; todavía no implementa funcionalidades de Ping.
+**Estado: PREDEV v1.1 — preparación técnica / pre-implementación.** La rama de demo incorpora Eventos, Participantes e Intereses funcionales. Matching y el resto del flujo todavía no están implementados.
 
 ## Flujo previsto
 
@@ -131,3 +131,15 @@ Rutas `/participants`, `/participants/new` y `/participants/{id}`. Abrir la feri
 El registro de demo implementa el camino de evento OPEN; las políticas de ingreso de otros estados y autenticación siguen en PEND-007. La disponibilidad declara intención, no genera matches. Las pruebas no requieren MySQL externo y cubren validación, pertenencia, persistencia, cambios de disponibilidad, edición obsoleta y formularios HTTP.
 
 Validación Issue #3: `clean test` y `clean verify`, 32 pruebas aprobadas, sin fallos/errores/omitidas. Chromium registró Samuel y Julián en MySQL, alternó disponibilidad y verificó el listado. V2 conservó el evento de V1; se comprobó que el checkbox es accesible por su etiqueta y que el listado móvil no desborda la página.
+
+## Demo completa: Eventos → Participantes → Intereses
+
+Seleccionar **`feature/intereses`** para disponer de los tres módulos antes del merge. La cadena de revisión es #16 → Eventos → Participantes → Intereses; cada PR tiene su base temporal anterior.
+
+V3 crea el catálogo y la relación muchos-a-muchos; V4 inserta los ocho intereses **de demostración** suministrados por el usuario. No se crean eventos ni participantes de producción ni se borran datos al iniciar. Flyway aplica cada migración una vez y Hibernate valida el esquema.
+
+Rutas nuevas: `/interests` (catálogo) y `/participants/{id}/interests` (selección múltiple). Desde el detalle del participante, pulsar «Elegir intereses», marcar Videojuegos, Tecnología y Música y guardar. Los intereses aparecen en su detalle. La selección puede modificarse o limpiarse; no se calcula matching.
+
+Guion exacto y requisitos: [DEMO_INTELLIJ](docs/DEMO_INTELLIJ.md).
+
+Validación Issue #4: `clean test` y `clean verify`, 40 pruebas aprobadas, cero fallos/errores/omitidas. Chromium y MySQL 8.4.11 con TLS VERIFY_CA comprobaron el catálogo, selección múltiple para Samuel y Julián, vistas móvil/escritorio y persistencia tras reiniciar la aplicación. Se verificó también el cierre de otro evento real. V1–V4 aplicadas sin borrar los datos previos. No se implementó Issue #5.
