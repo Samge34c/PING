@@ -17,7 +17,10 @@ public class MatchService {
         this.matches = matches; this.reservations = reservations; this.feedback = feedback; this.events = events;
     }
     public long completedCount() { return matches.countByStatus(MatchStatus.COMPLETED); }
-    public List<MatchView> list(long participantId) { return matches.forParticipant(participantId).stream().map(m -> view(m, participantId)).toList(); }
+    public List<MatchView> list(long participantId) {
+        var ratings = feedback.findByParticipantId(participantId).stream().collect(java.util.stream.Collectors.toMap(Feedback::matchId, f -> f.getRating().name()));
+        return matches.forParticipant(participantId).stream().map(m -> view(m, participantId, ratings.get(m.getId()))).toList();
+    }
     public MatchView get(long matchId, long participantId) { return view(owned(matchId, participantId), participantId); }
     private Match owned(long id, long participantId) {
         Match match = matches.findById(id).orElseThrow(() -> new NotFoundException("No encontramos esa conexión."));
@@ -58,6 +61,9 @@ public class MatchService {
         if (feedback.findByMatchIdAndParticipantId(id, participantId).isEmpty()) feedback.save(new Feedback(match, participantId, rating));
     }
     private MatchView view(Match match, long self) {
+        return view(match, self, feedback.findByMatchIdAndParticipantId(match.getId(), self).map(f -> f.getRating().name()).orElse(null));
+    }
+    private MatchView view(Match match, long self, String rating) {
         boolean first = match.getFirst().getId() == self;
         long other = first ? match.getSecond().getId() : match.getFirst().getId();
         boolean active = match.getStatus() == MatchStatus.ACTIVE;
@@ -65,6 +71,6 @@ public class MatchService {
             match.getCommonInterests(), first ? match.getSecondInterests() : match.getFirstInterests(),
             match.accepted(self), match.accepted(other), match.confirmed(self), match.confirmed(other),
             active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active ? match.getActivity() : null,
-            feedback.findByMatchIdAndParticipantId(match.getId(), self).map(f -> f.getRating().name()).orElse(null));
+            rating);
     }
 }

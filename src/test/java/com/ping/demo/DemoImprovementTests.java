@@ -104,4 +104,34 @@ class DemoImprovementTests {
             assertThat(events.count()).isZero();
         }
     }
+    @Test void invalidDemoInputIs400WithoutChangingAvailability() throws Exception {
+        var s = preparation.prepare(); long a = id(s,"Samuel");
+        try(var browser = new TestBrowser(port)) {
+            browser.get("/demo");
+            assertThat(browser.post("/demo",Map.of("participantId","incorrecto")).statusCode()).isEqualTo(400);
+            assertThat(browser.post("/demo",Map.of()).statusCode()).isEqualTo(400);
+            browser.post("/demo",Map.of("participantId",""+a)); browser.get("/me");
+            assertThat(browser.post("/me/availability",Map.of("available","true")).statusCode()).isEqualTo(400);
+            assertThat(browser.post("/me/availability",Map.of("available","incorrecto","version",""+participants.get(a).version())).statusCode()).isEqualTo(400);
+            assertThat(participants.get(a).available()).isFalse();
+        }
+    }
+    @Test void liveStateReflectsOtherPersonsActionsAndHistoryIsPersonal() throws Exception {
+        var s = preparation.prepare(); long a = id(s,"Samuel"), b = id(s,"Julián"); available(a,true); available(b,true);
+        try(var browser = new TestBrowser(port); var anonymous = new TestBrowser(port)) {
+            assertThat(anonymous.get("/me/state").statusCode()).isEqualTo(409);
+            browser.get("/demo"); browser.post("/demo",Map.of("participantId",""+a));
+            var initial = browser.get("/me/state"); assertThat(initial.headers().firstValue("Cache-Control")).contains("no-store");
+            long match = matching.search(a); var offered = browser.get("/me/state"); assertThat(offered.body()).isNotEqualTo(initial.body());
+            matchService.accept(match,b); var accepted = browser.get("/me/state"); assertThat(accepted.body()).isNotEqualTo(offered.body());
+            assertThat(accepted.body()).doesNotContain("Entrada principal", "PIXEL", "Julián");
+            matchService.accept(match,a); matchService.confirm(match,a); matchService.confirm(match,b);
+            available(a,false); available(b,false);
+            long c = id(s,"Ana"), d = id(s,"Carlos"); available(c,true); available(d,true);
+            long other = matching.search(c); matchService.accept(other,c); matchService.accept(other,d); matchService.confirm(other,c); matchService.confirm(other,d);
+            assertThat(browser.get("/me").body()).contains("<span>1</span> conexiones completadas por ti.");
+            assertThat(metrics(s.eventId()).completed()).isEqualTo(2);
+        }
+    }
+
 }

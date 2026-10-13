@@ -9,5 +9,6 @@ public class Feedback {
     @Enumerated(EnumType.STRING) @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.VARCHAR) @Column(nullable = false, length = 16) private Rating rating;
     protected Feedback() { }
     Feedback(Match match, long participantId, Rating rating) { this.match = match; this.participantId = participantId; this.rating = rating; }
+    public long matchId() { return match.getId(); }
     public Rating getRating() { return rating; }
 }

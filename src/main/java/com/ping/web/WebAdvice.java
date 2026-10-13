@@ -21,6 +21,12 @@ public class WebAdvice {
             return token;
         }
     }
+    @ExceptionHandler({org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class,
+            org.springframework.web.bind.MissingServletRequestParameterException.class,
+            org.springframework.validation.BindException.class, jakarta.validation.ConstraintViolationException.class})
+    public String invalidInput(Exception error, Model model, HttpServletResponse response) {
+        response.setStatus(400); model.addAttribute("errorMessage", "Revisa los datos del formulario y vuelve a intentarlo desde Mi Ping. No se guardaron cambios."); return "errors/message";
+    }
     @ExceptionHandler(NotFoundException.class) public String notFound(NotFoundException error, Model model, HttpServletResponse response) {
         response.setStatus(404); model.addAttribute("errorMessage", error.getMessage()); return "errors/message";
     }
