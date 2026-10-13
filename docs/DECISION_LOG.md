@@ -136,7 +136,7 @@ No se detectó contradicción funcional entre la solicitud y PREDEV. La guía pr
 
 | ID | Tema que requiere definición | Momento |
 | --- | --- | --- |
-| PEND-001 | Versiones Java, Spring Boot, Maven y SQL; elección MySQL/MariaDB; coordenadas del proyecto | Fase 0 |
+| PEND-001 | RESUELTO por DEC-015: Java/Spring Boot/Maven/Wrapper/MySQL y coordenadas fijados | Fase 0 |
 | PEND-002 | Qué constituye coincidencia «suficiente» y cuándo ofrecer match alternativo | Antes de fase 4 |
 | PEND-003 | Empate simultáneo de afinidad y espera; duración de propuestas y tratamiento de rechazos | Antes de fases 4–5 |
 | PEND-004 | Duración, unicidad y validación de palabra temporal | Antes de fase 6 |
@@ -146,6 +146,39 @@ No se detectó contradicción funcional entre la solicitud y PREDEV. La guía pr
 | PEND-008 | Si se incluye canje opcional y cómo manejar reversión interna pendiente sin saldo visible negativo | Antes de fase 9 |
 | PEND-009 | Verificar acceso de Julián, visibilidad y protección de main en GitHub | Antes del trabajo colaborativo |
 
-### Observación del entorno, no pin del proyecto
+### Observación inicial del entorno (antecedente de la preparación documental)
 
 En la máquina auditada: OpenJDK **21.0.12.1**, Git **2.52.0**; `mvn` no disponible. No existe `pom.xml`, wrapper Maven ni aplicación. La versión instalada no fija compatibilidad del futuro proyecto. Java/Spring Boot/Maven/SQL permanecen **PENDIENTES DE FIJAR AL CREAR EL PROYECTO**. No se requiere instalar una base de datos para esta tarea documental.
+
+## DEC-015 — Bootstrap técnico Spring Boot
+
+- **Estado:** Elección técnica aplicada para PREDEV v1.1 / bootstrap académico, autorizada por la solicitud de fase 0. No atribuye una aprobación individual adicional a Samuel o Julián.
+- **Fecha:** 2026-10-12 (fecha local del usuario).
+- **Decisión:** Java 21 (línea LTS); Spring Boot 4.1.1 estable; Maven 3.9.16 mediante Wrapper oficial 3.3.4, tipo `only-script`; MySQL 8.4.11 LTS como referencia del servidor. Coordenadas `com.ping:ping:0.0.1-SNAPSHOT`, nombre PING, paquete `com.ping`, empaquetado JAR.
+- **Motivo:** Java 21 instalado y compatible con el rango Java 17–26 documentado por Spring Boot 4.1.1; Maven 3.9.16 supera su mínimo 3.6.3. El Wrapper evita instalación global y MySQL concreta la alternativa SQL permitida por PREDEV, según instrucción del usuario.
+- **Dependencias:** Web MVC (`spring-boot-starter-webmvc` en Boot 4), Thymeleaf, JPA, Validation, Connector/J en runtime y Boot Test solo para pruebas. Versiones gestionadas por el parent/BOM 4.1.1; Connector/J resuelto a 9.7.0. No se añaden Security, Lombok, bases alternativas ni infraestructura adicional.
+- **Impacto:** Perfil `mysql` predeterminado con `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` sin valores versionados, DDL `none`; perfil técnico `bootstrap` excluye autoconfiguración JDBC/JPA para pruebas y arranque web sin SQL. No hay entidades, tablas ni lógica de negocio. El perfil MySQL se verificó contra un servidor temporal 8.4.11; cada desarrollador debe configurar su servidor y variables locales.
+- **Integridad:** Distribución Maven contrastada con SHA-512 de Maven Central; se fija su SHA-256 en `maven-wrapper.properties`. Scripts oficiales generados por plugin Wrapper 3.3.4, sin binario wrapper versionado. No se deshabilitan TLS ni verificaciones.
+
+### Fuentes oficiales efectivamente consultadas
+
+Los portales start.spring.io, docs.spring.io, maven.apache.org, openjdk.org y dev.mysql.com devolvieron 403 del proxy. Se usaron sus repositorios oficiales y los artefactos publicados en Maven Central; no tutoriales.
+
+- [Requisitos de Spring Boot 4.1.1 en su fuente oficial](https://github.com/spring-projects/spring-boot/blob/v4.1.1/documentation/spring-boot-docs/src/docs/antora/modules/ROOT/pages/system-requirements.adoc): Java 17–26 y Maven 3.6.3+.
+- [Release oficial Boot 4.1.1](https://github.com/spring-projects/spring-boot/releases/tag/v4.1.1) y [BOM publicado](https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-dependencies/4.1.1/spring-boot-dependencies-4.1.1.pom).
+- [OpenJDK 21 Updates](https://github.com/openjdk/jdk21u/blob/master/README.md): línea oficial de actualizaciones Java 21. El POM fija nivel 21, no un parche específico del proveedor.
+- [JDK Eclipse Adoptium 21.0.12.1+1 oficial](https://github.com/adoptium/temurin21-binaries/releases/tag/jdk-21.0.12.1%2B1): JDK completo usado en Codex, descargado con SHA-256 oficial verificado. El runtime Debian inicial carecía de `ct.sym` y no admitía `--release 21`; se sustituyó para las verificaciones sin alterar la versión Java del POM.
+- [Apache Maven 3.9.16](https://github.com/apache/maven/tree/maven-3.9.16) y [distribución con checksum oficial](https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.16/).
+- [Apache Maven Wrapper 3.3.4](https://github.com/apache/maven-wrapper/tree/maven-wrapper-3.3.4) y [plugin publicado](https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-wrapper-plugin/3.3.4/).
+- [MySQL 8.4.11: versión y madurez LTS en fuente oficial](https://github.com/mysql/mysql-server/blob/mysql-8.4.11/MYSQL_VERSION).
+- [Connector/J 9.7.0 oficial](https://github.com/mysql/mysql-connector-j/blob/9.7.0/README), versionado por el BOM Spring Boot. Integración JDBC/JPA verificada contra MySQL 8.4.11 temporal, con TLS `VERIFY_CA`.
+
+### Estado técnico actual
+
+La observación de ausencia de Maven/proyecto anterior se conserva como antecedente. Ahora existe Wrapper y base Spring Boot. PEND-001 queda resuelto por esta elección técnica; PEND-002 a PEND-009 mantienen su carácter pendiente. PREDEV y DEC-001 a DEC-014 no cambian.
+
+### Validación adicional de fase 0
+
+Arranque real del JAR con perfil `mysql` contra MySQL 8.4.11: conexión JDBC establecida, EntityManagerFactory JPA inicializado y respuesta HTTP 404 esperada. Se verificaron cero tablas antes y después del arranque (`ddl-auto=none`). La conexión validó la CA del servidor mediante un almacén temporal; no se desactivó TLS. La imagen oficial usada fue `mysql@sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70`.
+
+Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versionaron. Contenedor, volumen, procesos y archivos temporales se eliminaron al terminar. Docker fue una herramienta puntual de validación, no una dependencia del MVP. El workflow Bootstrap CI queda preparado para verificar el Wrapper en Ubuntu y Windows; la disponibilidad y resultados de Actions deben comprobarse en GitHub.

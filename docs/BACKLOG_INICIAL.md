@@ -1,17 +1,17 @@
 # Backlog inicial — PREDEV v1.1
 
-Plan de implementación, **no funcionalidades implementadas ni tareas completadas**. Fuente: [PREDEV](PING_PREDEV_v1.1.md). Todas las fases están pendientes y sin responsable asignado. La secuencia indica dependencias; no estima fechas ni atribuye trabajo a Samuel o Julián.
+Plan de implementación, **no funcionalidades implementadas ni tareas completadas**. Fuente: [PREDEV](PING_PREDEV_v1.1.md). La fase 0 tiene una base técnica verificada y espera revisión/merge; las fases 1–13 están pendientes. Ninguna fase tiene responsable asignado. La secuencia indica dependencias; no estima fechas ni atribuye trabajo a Samuel o Julián.
 
 Cada sección sirve como cuerpo preparado para su Issue GitHub, usando el título indicado. Antes de crear Issues remotos revisar duplicados. Registrar enlaces reales cuando existan; no inventar números. Los enlaces de las fases corresponden a Issues remotos verificados; todos permanecen abiertos.
 
-La tarea actual solo organiza el repositorio. Fase 0 requiere una tarea posterior: verificar documentación oficial de versiones, decidir y documentar los pins, y recién entonces generar el esqueleto Spring Boot. No generar lógica de negocio en ese bootstrap.
+La preparación documental inicial ya fue integrada. La fase 0 añade únicamente el esqueleto técnico, con versiones y fuentes en DEC-015; su implementación se entrega para revisión mediante PR. No incluye lógica de negocio ni inicia fase 1.
 
 ## Fase 0 — Bootstrap Spring Boot
 
 - **Título del Issue:** Bootstrap Spring Boot.
-- **Estado:** PENDIENTE; sin responsable; Issue remoto: https://github.com/Samge34c/PING/issues/1.
+- **Estado:** BASE TÉCNICA VERIFICADA; pendiente revisión y merge; sin responsable; Issue remoto abierto: https://github.com/Samge34c/PING/issues/1.
 - **Objetivo:** Verificar versiones oficiales compatibles, elegir SQL y coordenadas; crear después un esqueleto sin negocio.
-- **Dependencias:** PEND-001 y documentación revisada.
+- **Dependencias:** PEND-001 resuelto por DEC-015; documentación revisada.
 - **Resultado esperado:** Proyecto Spring Boot con MVC, Thymeleaf, JPA, driver SQL y Maven; configuración local sin secretos.
 - **Criterio de terminado:** Versiones y fuentes documentadas; build Maven y arranque mínimo verificados en entorno limpio.
 - **Entrega:** PR vinculada, pruebas pertinentes y documentación; revisión antes de merge.
