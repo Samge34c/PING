@@ -121,3 +121,13 @@ Las pruebas usan H2 **solo para testing**, con migraciones Flyway y validación 
 Marca y pendiente del JPG original: [BRAND_GUIDE](docs/BRAND_GUIDE.md). Bootstrap 5.3.8 se incluye localmente con licencia MIT; la identidad se centraliza en `brand.css`. El módulo aún no tiene autenticación: esta demo se ejecuta localmente, con datos de demostración.
 
 Validación Issue #2: `clean test` y `clean verify` con 25 pruebas aprobadas, cero fallos/errores/omitidas. En Chromium y MySQL 8.4.11 se comprobó crear/abrir/pausar/reanudar/editar/consultar, con V1 aplicada y TLS verificado. La vista móvil de 390 px no presentó desbordamiento horizontal. Cierre y rechazo de reapertura también están cubiertos por las pruebas de ciclo de vida. El archivo del logo oficial sigue pendiente de recepción.
+
+## Demo de Participantes (Issue #3)
+
+Rama apilada: `feature/participantes` sobre `feature/eventos`. Incluye Eventos y aplica V2 sin borrar los eventos existentes. Para probarla, seleccionar esa rama y ejecutar con las mismas variables MySQL del apartado anterior.
+
+Rutas `/participants`, `/participants/new` y `/participants/{id}`. Abrir la feria, entrar en Participantes, registrar el alias «Samuel», elegir el evento y marcar disponibilidad. Repetir con «Julián». Desde el detalle se puede alternar disponibilidad. Son datos de demostración, no cuentas ni identidades verificadas.
+
+El registro de demo implementa el camino de evento OPEN; las políticas de ingreso de otros estados y autenticación siguen en PEND-007. La disponibilidad declara intención, no genera matches. Las pruebas no requieren MySQL externo y cubren validación, pertenencia, persistencia, cambios de disponibilidad, edición obsoleta y formularios HTTP.
+
+Validación Issue #3: `clean test` y `clean verify`, 32 pruebas aprobadas, sin fallos/errores/omitidas. Chromium registró Samuel y Julián en MySQL, alternó disponibilidad y verificó el listado. V2 conservó el evento de V1; se comprobó que el checkbox es accesible por su etiqueta y que el listado móvil no desborda la página.
