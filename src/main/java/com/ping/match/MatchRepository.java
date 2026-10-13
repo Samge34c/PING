@@ -9,5 +9,8 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     List<Match> findByEventIdAndStatus(long eventId, MatchStatus status);
     @Query("select m from Match m where m.first.id = :id or m.second.id = :id order by m.id desc")
     List<Match> forParticipant(@Param("id") long id);
+    interface Total { Long getEventId(); MatchStatus getStatus(); long getTotal(); }
+    @Query("select m.event.id as eventId, m.status as status, count(m) as total from Match m group by m.event.id, m.status")
+    List<Total> eventTotals();
     long countByStatus(MatchStatus status);
 }

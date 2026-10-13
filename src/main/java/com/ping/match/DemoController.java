@@ -18,7 +18,7 @@ public class DemoController {
     public DemoController(ParticipantService participants, MatchingService matching, MatchService matches) {
         this.participants = participants; this.matching = matching; this.matches = matches;
     }
-    @GetMapping("/demo") public String select(Model model) { model.addAttribute("participants", participants.list()); return "demo/select"; }
+    @GetMapping("/demo") public String select(@RequestParam(required = false) Long participantId, Model model) { model.addAttribute("selectedParticipantId", participantId); model.addAttribute("participants", participants.list()); return "demo/select"; }
     @PostMapping("/demo") public String enter(@RequestParam long participantId, HttpSession session) {
         participants.get(participantId); session.setAttribute(SELECTED, participantId); return "redirect:/me";
     }

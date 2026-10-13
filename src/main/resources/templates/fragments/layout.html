@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav th:fragment="nav" class="navbar navbar-dark mb-4" aria-label="Navegación principal"><div class="container d-flex flex-wrap gap-3">
-  <a class="navbar-brand fw-bold" th:href="@{/}" aria-label="Ping, inicio"><img th:if="${brandLogoAvailable}" class="ping-navbar-logo" th:src="@{/img/ping-logo.jpg}" alt="Ping — logo oficial"><span th:unless="${brandLogoAvailable}">PING</span></a><div class="ping-nav-links"><a class="text-white" th:href="@{/events}">Eventos</a><a class="text-white" th:href="@{/participants}">Participantes</a><a class="text-white" th:href="@{/interests}">Intereses</a><a class="text-white" th:href="@{/me}">Mi Ping</a></div>
+  <a class="navbar-brand fw-bold" th:href="@{/}" aria-label="Ping, inicio"><img th:if="${brandLogoAvailable}" class="ping-navbar-logo" th:src="@{/img/ping-logo.jpg}" alt="Ping — logo oficial"><span th:unless="${brandLogoAvailable}">PING</span></a><div class="ping-nav-links"><a class="text-white" th:href="@{/events}">Eventos</a><a class="text-white" th:href="@{/participants}">Participantes</a><a class="text-white" th:href="@{/interests}">Intereses</a><a class="text-white" th:href="@{/me}">Mi Ping</a><a class="text-white" th:href="@{/admin}">Panel demo</a></div>
   <span class="text-white-50 small">Demo académica</span>
 </div></nav>
 <div th:fragment="message" th:if="${message}" class="alert alert-success" role="status" th:text="${message}"></div>
