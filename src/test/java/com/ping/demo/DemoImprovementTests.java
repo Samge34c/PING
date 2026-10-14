@@ -168,4 +168,41 @@ class DemoImprovementTests {
         }
     }
 
+    @Test void viewingAnotherParticipantNeverAssignsTheirAliasToSelectedSessionInNavbar() throws Exception {
+        var scenario = preparation.prepare();
+        long samuel = id(scenario, "Samuel"), julian = id(scenario, "Julián");
+        try (var browser = new TestBrowser(port)) {
+            browser.get("/demo");
+            browser.post("/demo", Map.of("participantId", Long.toString(samuel)));
+            assertThat(browser.get("/me").body()).contains("data-session-name=\"Samuel\"");
+            for (String route : List.of("/participants/" + julian, "/participants/" + julian + "/interests")) {
+                var response = browser.get(route);
+                assertThat(response.statusCode()).isEqualTo(200);
+                var chip = java.util.regex.Pattern.compile("<div class=\"session-chip\"([^>]*)>").matcher(response.body());
+                assertThat(chip.find()).isTrue();
+                assertThat(chip.group(1)).contains("data-session-id=\"" + samuel + "\"")
+                        .doesNotContain("data-session-name=\"Julián\"");
+            }
+            assertThat(browser.get("/me/state").body()).contains(samuel + ":");
+            assertThat(browser.get("/me").body()).contains("data-session-name=\"Samuel\"");
+        }
+    }
+
+    @Test void alternativeOfferHeadingDoesNotClaimSharedAffinity() throws Exception {
+        var scenario = preparation.prepare();
+        long ana = id(scenario, "Ana"), carlos = id(scenario, "Carlos");
+        available(ana, true); available(carlos, true);
+        long match = matching.search(ana);
+        try (var browser = new TestBrowser(port)) {
+            browser.get("/demo");
+            browser.post("/demo", Map.of("participantId", Long.toString(ana)));
+            var response = browser.get("/matches/" + match);
+            assertThat(response.statusCode()).isEqualTo(200);
+            assertThat(response.body()).contains("DESCUBRE OTROS INTERESES", "Alternativa · 0 intereses compartidos")
+                    .doesNotContain("ENCONTRAMOS AFINIDAD");
+            assertThat(participants.get(ana).points()).isZero();
+            assertThat(participants.get(carlos).points()).isZero();
+        }
+    }
+
 }

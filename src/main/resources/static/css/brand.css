@@ -2744,3 +2744,63 @@ body.menu-open {
 }
 .interest-card-content{display:flex;flex-direction:column;align-items:flex-start;width:100%;cursor:pointer}
 .interest-card-content::after{content:'';position:absolute;inset:0}
+
+/* En la misión activa, punto/palabra preceden al espacio decorativo. */
+.match-mission .match-header h1 {
+  font-size:28px;
+  margin:8px 0
+}
+.match-mission .match-header p {
+  margin-bottom:0
+}
+.match-mission .match-pair {
+  padding:16px 0
+}
+.match-mission .match-person .avatar-large {
+  width:64px;
+  height:64px;
+  border-radius:20px;
+  font-size:28px
+}
+.match-mission .match-person h2 {
+  font-size:18px;
+  margin-top:8px
+}
+.match-mission .match-affinity {
+  margin-bottom:16px
+}
+.match-mission .match-affinity p {
+  margin-bottom:8px
+}
+.match-mission .ping-steps,.match-mission .mission-grid {
+  margin:16px 0
+}
+@media(max-width:767px) {
+  .match-mission .match-header h1 {
+    font-size:25px;
+    margin:4px 0
+  }
+  .match-mission .match-pair {
+    padding:8px 0;
+    gap:16px
+  }
+  .match-mission .match-person .avatar-large {
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    font-size:22px
+  }
+  .match-mission .match-person h2 {
+    font-size:17px;
+    margin-top:4px
+  }
+  .match-mission .match-affinity {
+    margin-bottom:8px
+  }
+  .match-mission .match-affinity p {
+    margin-bottom:4px
+  }
+  .match-mission .ping-steps,.match-mission .mission-grid {
+    margin:8px 0
+  }
+}
