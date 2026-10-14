@@ -1,0 +1,17 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
+<div th:fragment="art" class="event-signal-art" aria-hidden="true"><i></i><i></i><i></i><span><svg th:replace="~{fragments/layout :: icon('waves')}"></svg></span><b class="signal-star first">✦</b><b class="signal-star second">✦</b></div>
+<div th:fragment="recognition(alias)" th:if="${recognitionHint != null}" class="recognition-note">
+    <svg th:replace="~{fragments/layout :: icon('users')}"></svg><div><span class="eyebrow">PISTA PARA ENCONTRARSE · DEMO</span>
+    <p><strong th:text="${alias}"></strong>: <span th:text="${recognitionHint}"></span>.</p><small>Pista preparada de demostración. Comprueben también la palabra.</small></div>
+</div>
+<a th:fragment="mapLink(point, matchId)" th:if="${experience != null and experience.atPoint(point) != null}" class="btn btn-outline-primary btn-sm map-link"
+   th:href="@{/events/{id}/map(id=${event.id},zone=${experience.atPoint(point).id},matchId=${matchId})}"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg>Ver en mapa</a>
+<div th:fragment="badges" th:if="${badges != null and !#lists.isEmpty(badges)}" class="earned-badges"><span class="eyebrow">LO QUE YA VIVISTE</span><div class="chip-list"><span class="ping-chip" th:each="badge : ${badges}"><svg th:replace="~{fragments/layout :: icon('spark')}"></svg><span th:text="${badge}"></span></span></div></div>
+<section th:fragment="promotion" th:if="${experience != null}" class="demo-promotion">
+    <div class="section-heading"><span class="eyebrow">PROMOCIÓN DEMO</span><svg th:replace="~{fragments/layout :: icon('game')}"></svg></div><h2>Zona Gamer</h2>
+    <p>Ejemplo de promoción que podría ofrecer un patrocinador.</p>
+    <div th:if="${promoUnlocked}" class="promo-code"><small>Código demo</small><strong>PING-GAMER</strong><span>No consume puntos.</span></div>
+    <p th:unless="${promoUnlocked}" class="small">Completa tu primera conexión en SOFA para ver el código de ejemplo.</p>
+    <strong class="promo-disclaimer">NO VÁLIDO FUERA DE ESTA DEMO</strong><p class="small mb-0">Simulación académica. Sin descuento real ni vínculo comercial con SOFA.</p>
+</section>
+</body></html>

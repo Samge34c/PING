@@ -13,12 +13,13 @@ import com.ping.web.*;
 public class DemoController {
     private static final String SELECTED = "pingDemoParticipantId";
     private final com.ping.moderation.ModerationService moderation;
+    private final com.ping.experience.DemoRecognitionHints recognition;
     private final ParticipantService participants;
     private final MatchingService matching;
     private final MatchService matches;
     private final com.ping.event.EventService events;
-    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation) {
-        this.moderation = moderation;
+    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition) {
+        this.moderation = moderation; this.recognition = recognition;
         this.participants = participants; this.matching = matching; this.matches = matches; this.events = events;
     }
     @GetMapping("/demo") public String select(@RequestParam(required = false) Long participantId, Model model) { model.addAttribute("selectedParticipantId", participantId); model.addAttribute("participants", participants.list()); return "demo/select"; }
@@ -46,6 +47,10 @@ public class DemoController {
         var participant = participants.get(id); model.addAttribute("participant", participant); model.addAttribute("matches", history);
         model.addAttribute("event", events.get(participant.eventId()));
         model.addAttribute("currentMatch", current(history));
+        var experience = com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName());
+        model.addAttribute("experience", experience);
+        model.addAttribute("recognitionHint", recognition.forMatch(participant.eventId(), id, current(history)));
+        if (experience != null) model.addAttribute("badges", com.ping.experience.EventExperienceCatalog.badges(history));
         model.addAttribute("lastCompletion", !history.isEmpty() && history.getFirst().status() == MatchStatus.COMPLETED ? history.getFirst() : null);
         model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(history)));
         model.addAttribute("held", history.stream().anyMatch(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE));
@@ -64,6 +69,14 @@ public class DemoController {
         model.addAttribute("moderation", moderation.status(id, selected));
         model.addAttribute("reportReasons", com.ping.moderation.ReportReason.values());
         var match = matches.get(id, selected); model.addAttribute("match", match);
+        var experience = com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName());
+        model.addAttribute("experience", experience);
+        model.addAttribute("recognitionHint", recognition.forMatch(participant.eventId(), selected, match));
+        if (experience != null && match.status() == MatchStatus.COMPLETED) {
+            var history = matches.list(selected);
+            model.addAttribute("badges", com.ping.experience.EventExperienceCatalog.badges(history));
+            model.addAttribute("promoUnlocked", com.ping.experience.EventExperienceCatalog.promoUnlocked(history));
+        }
         if (match.status() == MatchStatus.OFFERED || match.status() == MatchStatus.ACTIVE) model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(matches.list(selected)))); return "demo/match";
     }
     @PostMapping("/matches/{id}/accept") public String accept(@PathVariable long id, HttpSession session) { matches.accept(id, self(session)); return "redirect:/matches/" + id; }

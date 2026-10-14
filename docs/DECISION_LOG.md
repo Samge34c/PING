@@ -265,3 +265,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Autorizado explícitamente por la solicitud del usuario, 2026-10-14; sin atribuir aprobación individual adicional.
 - **Decisión:** Preparar SOFA 2026 (simulación académica, Corferias Bogotá, 8–12 de octubre), con intereses indicados para Samuel/Julián/Ana/Carlos y catálogo de encuentro SOFA por afinidad. Al preparar la antigua Feria Universitaria, actualizar el mismo evento y los intereses demo una sola vez; conservar estado, disponibilidad, puntos e historial. Los otros eventos mantienen su catálogo y punto configurado. Sin cambiar matching, Saga, puntos, seguridad, esquema ni dependencias; PR #23, sin merge.
+
+## DEC-029 — Orientación y reconocimiento en la experiencia SOFA
+
+- **Estado:** Segunda pasada autorizada explícitamente por el usuario, 2026-10-14; no atribuye aprobación individual adicional.
+- **Decisión:** Añadir portada de evento, guía interna offline por zonas, enlace desde el encuentro y pistas preparadas de ropa/accesorios exclusivamente para participantes demo y solo durante ACTIVE. Las pistas complementan la palabra; no sustituyen su mecanismo ni introducen datos sensibles, GPS o perfiles. Promoción ficticia claramente marcada y badges derivados de conexiones, sin alterar saldos. Composición propia de Ping; fuentes públicas se registran sin atribuir derechos/licencias no comprobados. Sin cambiar matching, Saga, puntos, bloqueos, reportes, migraciones ni dependencias. Commits separados, PR #23, sin merge.
