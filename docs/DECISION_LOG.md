@@ -250,3 +250,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Autorización explícita del usuario, 2026-10-14; sin atribuir aprobaciones individuales adicionales.
 - **Decisión:** Correcciones de errores/recuperación de actualización automática, entrada/navegación de demo, presentación y guía IntelliJ vigente. Misma rama/PR #23; no cambia matching, Saga, recompensas ni esquema. No se reinician datos ni bloqueos de los ensayos.
+
+## DEC-026 — Dirección visual App Social Dark
+
+- **Estado:** Dirección visual explícita del usuario, 2026-10-14.
+- **Decisión:** Sidebar desktop, navegación inferior móvil, paleta Work B/D, Manrope local y componentes de ondas/afinidad. Solo templates, CSS, recursos locales y JS de presentación; matching, Saga, puntos, services, repositorios y migraciones intactos. PR #23 sin merge.

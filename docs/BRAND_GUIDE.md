@@ -33,3 +33,7 @@ Usar labels visibles, foco de teclado amarillo, tablas con desplazamiento en mó
 B es **oscuro oficial y predeterminado**: grafito, violeta y dorado. D es **claro oficial**: fondos neutros, morado Ping y acento amarillo. La navbar ofrece únicamente Oscuro/Claro; `localStorage['ping-theme']` conserva `dark` o `light`. Sin preferencia válida se usa oscuro. `/demo/themes` muestra ambos oficiales; A/C se retiraron.
 
 Variables de fondo, superficies, navbar, inputs, botones, texto, bordes y foco se centralizan en brand.css. En claro, palabras destacadas y enlaces usan morado para evitar amarillo ilegible. El logo original mantiene una superficie negra discreta en ambos temas, sin filtros ni recoloración. Se respeta movimiento reducido.
+
+## Dirección App Social Dark
+
+La dirección Work usa B oscuro `#0E0D14` / superficies `#181620` y `#211E2D`, morado `#B6A0FF` y amarillo `#F5DC70`; D claro `#F5F3FA`, superficies blancas y morado `#6941BE`. La paleta original del JPG se conserva. Sidebar de 224 px, navegación inferior móvil, SVG propios y Manrope variable local (licencia SIL OFL incluida en `static/fonts/OFL.txt`). Sin CDN. Las ondas son ilustraciones de conexión; no sustituyen el logo oficial.
