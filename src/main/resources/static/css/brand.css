@@ -148,3 +148,6 @@ main .card, main .ping-callout, main .ping-notice { min-width: 0; overflow-wrap:
 .table th, .table td { vertical-align: top; }
 textarea:focus-visible, summary:focus-visible { outline: 3px solid var(--ping-focus); outline-offset: 3px; }
 summary { cursor: pointer; color: var(--ping-link); }
+
+/* Área de toque cómoda para la entrega móvil. */
+@media (max-width: 576px) { .btn, .ping-nav-links a { min-height: 44px; } .ping-nav-links a { display: inline-flex; align-items: center; } }

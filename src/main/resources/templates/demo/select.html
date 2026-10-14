@@ -3,7 +3,7 @@
 <section class="card p-4 p-md-5"><img th:if="${brandLogoAvailable}" class="ping-home-logo" th:src="@{/img/ping-logo.jpg}" alt="Ping — logo oficial">
 <span class="badge bg-warning align-self-start mb-3">Modo demo académico</span><h1>Entrar como participante</h1>
 <p class="text-secondary">Selecciona un alias registrado. Esta selección es para la demostración y no acredita identidad real.</p>
-<p th:if="${#lists.isEmpty(participants)}">Primero <a th:href="@{/participants/new}">registra un participante</a> en un evento abierto.</p>
+<div class="ping-callout mb-4"><p class="mb-2">¿Primera vez? Prepara la feria con Samuel, Julián, Ana y Carlos en un paso.</p><a class="btn btn-primary" th:href="@{/demo/prepare}">Preparar demo rápida</a></div><p th:if="${#lists.isEmpty(participants)}">Todavía no hay participantes. Prepara la demo o <a th:href="@{/participants/new}">registra uno</a> en un evento abierto.</p>
 <form th:unless="${#lists.isEmpty(participants)}" method="post" th:action="@{/demo}"><input type="hidden" name="_csrf" th:value="${csrfToken}">
 <label for="participantId" class="form-label">Participante y evento</label><select class="form-select mb-3" id="participantId" name="participantId" required><option value="">Elige tu participante</option><option th:each="p : ${participants}" th:value="${p.id}" th:selected="${selectedParticipantId != null and selectedParticipantId == p.id}" th:text="${p.alias + ' · ' + p.eventName + ' (#' + p.id + ')'}"></option></select>
 <button class="btn btn-primary">Entrar como participante</button></form><p class="small text-secondary mt-4 mb-0">Para dos personas, usa una ventana normal y otra de incógnito. Cada una tendrá su sesión independiente.</p>
