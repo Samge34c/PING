@@ -255,3 +255,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Dirección visual explícita del usuario, 2026-10-14.
 - **Decisión:** Sidebar desktop, navegación inferior móvil, paleta Work B/D, Manrope local y componentes de ondas/afinidad. Solo templates, CSS, recursos locales y JS de presentación; matching, Saga, puntos, services, repositorios y migraciones intactos. PR #23 sin merge.
+
+## DEC-027 — Correcciones localizadas tras auditoría de entrega
+
+- **Estado:** Autorizadas por la solicitud de auditoría del usuario, 2026-10-14; hallazgos mostrados antes de modificar.
+- **Decisión:** Demo en localhost por defecto porque admin/identidad siguen siendo públicos; una sola instancia. Corregir alias visual al consultar perfiles ajenos, encabezado de alternativa y espaciado de misión activa. Sin autenticación nueva, cambios de matching/Saga/puntos/esquema ni merge. Se conservan evidencias anteriores y se valida regresión.
