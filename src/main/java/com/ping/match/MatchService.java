@@ -38,7 +38,8 @@ public class MatchService {
         if (match.getStatus() != MatchStatus.OFFERED) throw new BusinessRuleException("Esta propuesta ya se canceló.");
         if (!match.getEvent().canStartNewMatches()) throw new BusinessRuleException("El evento debe estar abierto para aceptar una nueva conexión. Puedes cancelar la propuesta.");
         match.accept(participantId);
-        if (match.bothAccepted()) match.activate(ActivityCatalog.word(match.getCommonInterests(), match.getId()), ActivityCatalog.activity(match.getCommonInterests()));
+        if (match.bothAccepted()) match.activate(ActivityCatalog.encounter(match.getCommonInterests(), match.getId(),
+            match.getEvent().getName(), match.getEvent().getMeetingPoint()));
     }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void cancel(long id, long participantId) {
         Match match = locked(id, participantId);

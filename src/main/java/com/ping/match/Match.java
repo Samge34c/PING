@@ -57,7 +57,9 @@ public class Match {
     boolean bothAccepted() { return firstAccepted && secondAccepted; }
     void confirm(long id) { if (first.getId() == id) firstConfirmed = true; else secondConfirmed = true; }
     boolean bothConfirmed() { return firstConfirmed && secondConfirmed; }
-    void activate(String word, String activity) { status = MatchStatus.ACTIVE; this.word = word; this.activity = activity; meetingPoint = event.getMeetingPoint(); }
+    void activate(ActivityCatalog.Encounter encounter) {
+        status = MatchStatus.ACTIVE; word = encounter.word(); activity = encounter.activity(); meetingPoint = encounter.meetingPoint();
+    }
     void complete() { status = MatchStatus.COMPLETED; completionPending = false; }
     void cancel() { status = MatchStatus.CANCELLED; }
     boolean excludedPair(Participant a, Participant b) {

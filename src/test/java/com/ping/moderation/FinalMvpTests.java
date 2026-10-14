@@ -112,18 +112,18 @@ class FinalMvpTests {
             assertThat(sam.post("/me/availability",Map.of("available","true","version",""+participants.get(a).version())).statusCode()).isEqualTo(302);
             jul.post("/me/availability",Map.of("available","true","version",""+participants.get(b).version()));
             var search=sam.post("/me/search",Map.of()); String path=search.headers().firstValue("Location").orElseThrow();
-            assertThat(sam.get(path).body()).contains("Videojuegos").doesNotContain("Entrada principal");
+            assertThat(sam.get(path).body()).contains("Videojuegos").doesNotContain("Zona Gamer · Pabellón 18");
             sam.post(path+"/accept",Map.of()); assertThat(sam.get(path).body()).contains("Esperando respuesta de Julián");
             assertThat(jul.get("/me").body()).contains("Samuel aceptó. Falta tu aceptación.");
             jul.get(path); jul.post(path+"/accept",Map.of());
-            assertThat(sam.get(path).body()).contains("Entrada principal", "PIXEL-", "videojuego");
-            assertThat(sam.get("/me").body()).contains("Entrada principal", "PIXEL-", "videojuego");
+            assertThat(sam.get(path).body()).contains("Zona Gamer · Pabellón 18", "PIXEL-", "Elijan un juego o stand");
+            assertThat(sam.get("/me").body()).contains("Zona Gamer · Pabellón 18", "PIXEL-", "Elijan un juego o stand");
             sam.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Esperando a Julián");
             assertThat(jul.get("/me").body()).contains("Samuel ya confirmó. Falta tu confirmación.");
             jul.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Conexión completada 🎉");
             sam.post(path+"/feedback",Map.of("rating","USEFUL"));
             sam.post(path+"/report",Map.of("reason","OTHER","comment","<script>alert(1)</script>"));
-            assertThat(sam.get("/me").body()).contains("Feedback guardado", "videojuego", "+10 puntos acreditados");
+            assertThat(sam.get("/me").body()).contains("Feedback guardado", "Elijan un juego o stand", "+10 puntos acreditados");
             String panel=sam.get("/admin?eventId="+event).body();
             assertThat(panel).contains("Samuel", "Julián", "Positivo", "100%", "&lt;script&gt;").doesNotContain("<script>alert(1)</script>");
             assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(b).points()).isEqualTo(10);
@@ -155,7 +155,7 @@ class FinalMvpTests {
             assertThat(browser.get("/participants/"+a).body()).contains("/demo?participantId="+a);
             browser.post("/demo",Map.of("participantId",""+a));
             assertThat(browser.get("/me").body()).contains("href=\"/me/benefits\"", "href=\"/demo\"");
-            assertThat(browser.get("/events/"+event).body()).contains("Entrada principal", "Ver resultados del evento", "Cerrar es definitivo");
+            assertThat(browser.get("/events/"+event).body()).contains("Meet &amp; Greet · Pabellón 23", "Ver resultados del evento", "Cerrar es definitivo");
         }
     }
     @Test void expiredFormUsesPingThemeAndNeverMutatesTheOriginalAction() throws Exception {

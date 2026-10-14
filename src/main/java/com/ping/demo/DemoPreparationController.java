@@ -10,6 +10,6 @@ public class DemoPreparationController {
     public DemoPreparationController(DemoPreparationService service) { this.service = service; }
     @GetMapping("/demo/prepare") public String page(Model model) { model.addAttribute("scenario", service.current()); return "demo/prepare"; }
     @PostMapping("/demo/prepare") public String prepare(RedirectAttributes flash) {
-        service.prepare(); flash.addFlashAttribute("message", "Escenario demo listo. Si ya existía, se conservaron todos sus datos."); return "redirect:/demo/prepare";
+        service.prepare(); flash.addFlashAttribute("message", "Escenario demo listo. Se conservan puntos, disponibilidad y conexiones anteriores."); return "redirect:/demo/prepare";
     }
 }

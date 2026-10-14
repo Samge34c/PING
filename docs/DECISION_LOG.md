@@ -260,3 +260,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Autorizadas por la solicitud de auditoría del usuario, 2026-10-14; hallazgos mostrados antes de modificar.
 - **Decisión:** Demo en localhost por defecto porque admin/identidad siguen siendo públicos; una sola instancia. Corregir alias visual al consultar perfiles ajenos, encabezado de alternativa y espaciado de misión activa. Sin autenticación nueva, cambios de matching/Saga/puntos/esquema ni merge. Se conservan evidencias anteriores y se valida regresión.
+
+## DEC-028 — Escenario demo académico SOFA 2026
+
+- **Estado:** Autorizado explícitamente por la solicitud del usuario, 2026-10-14; sin atribuir aprobación individual adicional.
+- **Decisión:** Preparar SOFA 2026 (simulación académica, Corferias Bogotá, 8–12 de octubre), con intereses indicados para Samuel/Julián/Ana/Carlos y catálogo de encuentro SOFA por afinidad. Al preparar la antigua Feria Universitaria, actualizar el mismo evento y los intereses demo una sola vez; conservar estado, disponibilidad, puntos e historial. Los otros eventos mantienen su catálogo y punto configurado. Sin cambiar matching, Saga, puntos, seguridad, esquema ni dependencias; PR #23, sin merge.

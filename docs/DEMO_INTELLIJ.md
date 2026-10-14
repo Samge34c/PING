@@ -15,10 +15,10 @@ Si se dispone del JPG oficial, copiarlo sin modificar a `src/main/resources/stat
 
 ## Recorrido de exposición
 
-1. **Entrar a demo → Preparar demo rápida → Preparar escenario demo**. Se crea Feria Universitaria 2026, Entrada principal y Samuel/Julián/Ana/Carlos con intereses. Repetir conserva los datos, sin duplicarlos.
+1. **Entrar a demo → Preparar demo rápida → Preparar escenario demo**. Se prepara SOFA 2026, simulación académica en Corferias · Bogotá (8–12 de octubre). Samuel: Videojuegos/Anime; Julián: Videojuegos/Tecnología; Ana: Anime/Fotografía; Carlos: Cine/Música. Si existía la antigua feria demo, se adapta el mismo evento y sus intereses una sola vez, sin reiniciar puntos, disponibilidad, matches, bloqueos ni estado. Repetir conserva los datos, sin duplicarlos.
 2. **Seleccionar Samuel** en ventana normal; **Seleccionar Julián** en incógnito o segundo navegador. Entrar desde el selector. Dos pestañas normales comparten sesión: no sirven para representar dos personas.
 3. En **Mi Ping**, marcar disponibles solo a Samuel y Julián. Samuel pulsa **Buscar conexión**: propuesta normal con Videojuegos compartido.
-4. Ambos aceptan. Se muestran punto, la misma palabra temporal `PIXEL-…` y actividad. La palabra usa un sufijo único, no un número fijo.
+4. Ambos aceptan. Se muestran Zona Gamer · Pabellón 18, la misma palabra temporal `PIXEL-…` y una actividad gamer breve. La palabra usa un sufijo único, no un número fijo.
 5. Ambos pulsan **Confirmar encuentro y actividad**. La Saga finaliza: COMPLETADO y **+10 a cada uno**. Una sola confirmación todavía espera a la otra persona; reintentar no duplica puntos.
 6. Guardar feedback opcional, volver a **Mi Ping** para historial y abrir **Administración** para resultados del evento.
 7. Si se quiere mostrar canje, completar otra conexión entre ambos: saldo 20 → **Beneficios → Solicitar canje** → admin registra entregado/incidencia. Reintentar la solicitud no duplica el descuento.
