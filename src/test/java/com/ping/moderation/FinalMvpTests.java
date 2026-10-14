@@ -148,4 +148,45 @@ class FinalMvpTests {
         var metrics=admin.metrics().stream().filter(v -> v.id()==event).findFirst().orElseThrow();
         assertThat(metrics.neutral()).isZero(); assertThat(metrics.feedbackCount()).isZero(); assertThat(metrics.completionPercent()).isEqualTo(100);
     }
+    @Test void demoEntryPreparationAndParticipantNavigationAreDirect() throws Exception {
+        try(var browser=new TestBrowser(port)) {
+            String entry=browser.get("/demo").body();
+            assertThat(entry).contains("Preparar demo rápida", "href=\"/demo/prepare\"").doesNotContain("href=\"/me/benefits\"");
+            assertThat(browser.get("/participants/"+a).body()).contains("/demo?participantId="+a);
+            browser.post("/demo",Map.of("participantId",""+a));
+            assertThat(browser.get("/me").body()).contains("href=\"/me/benefits\"", "href=\"/demo\"");
+            assertThat(browser.get("/events/"+event).body()).contains("Entrada principal", "Ver resultados del evento", "Cerrar es definitivo");
+        }
+    }
+    @Test void expiredFormUsesPingThemeAndNeverMutatesTheOriginalAction() throws Exception {
+        try(var browser=new TestBrowser(port)) {
+            var expired=browser.post("/events/"+event+"/close",Map.of());
+            assertThat(expired.statusCode()).isEqualTo(403);
+            assertThat(expired.body()).contains("Vuelve a abrir el formulario", "No se guardaron cambios", "/css/brand.css", "/js/theme-init.js", "Volver a Mi Ping");
+            assertThat(expired.body()).doesNotContain("Exception", "Hibernate", "stacktrace");
+            assertThat(events.get(event).getStatus()).isEqualTo(EventStatus.OPEN);
+        }
+    }
+    @Test void unknownPageWrongMethodAndInvalidInputKeepHttpStatusAndFriendlyTheme() throws Exception {
+        try(var browser=new TestBrowser(port)) {
+            var unknown=browser.get("/pagina-que-no-existe");
+            var wrongMethod=browser.get("/events/"+event+"/close");
+            var invalid=browser.get("/admin?eventId=incorrecto");
+            assertThat(unknown.statusCode()).isEqualTo(404); assertThat(wrongMethod.statusCode()).isEqualTo(405); assertThat(invalid.statusCode()).isEqualTo(400);
+            for(var response:List.of(unknown,wrongMethod,invalid))
+                assertThat(response.body()).contains("/css/brand.css", "Volver a Ping").doesNotContain("Exception", "Hibernate", "stacktrace");
+            assertThat(events.get(event).getStatus()).isEqualTo(EventStatus.OPEN);
+        }
+    }
+    @Test void repeatingAvailabilityFormCannotOverwriteMoreRecentState() throws Exception {
+        try(var browser=new TestBrowser(port)) {
+            browser.get("/demo"); browser.post("/demo",Map.of("participantId",""+a)); browser.get("/me");
+            String oldVersion=""+participants.get(a).version();
+            assertThat(browser.post("/me/availability",Map.of("available","true","version",oldVersion)).statusCode()).isEqualTo(302);
+            var repeat=browser.post("/me/availability",Map.of("available","false","version",oldVersion));
+            assertThat(repeat.statusCode()).isEqualTo(409); assertThat(participants.get(a).available()).isTrue();
+            assertThat(repeat.body()).contains("Recarga la página", "/css/brand.css").doesNotContain("Exception");
+        }
+    }
+
 }

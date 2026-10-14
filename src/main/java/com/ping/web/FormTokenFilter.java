@@ -18,12 +18,7 @@ public class FormTokenFilter extends OncePerRequestFilter {
             String expected = session == null ? null : (String) session.getAttribute("pingCsrfToken");
             String actual = request.getParameter("_csrf");
             if (expected == null || actual == null || !MessageDigest.isEqual(expected.getBytes(StandardCharsets.UTF_8), actual.getBytes(StandardCharsets.UTF_8))) {
-                response.setStatus(403); response.setContentType("text/html;charset=UTF-8");
-                response.getWriter().write("""
-                        <!doctype html><html lang="es"><meta charset="UTF-8"><title>Formulario vencido · Ping</title>
-                        <h1>Vuelve a abrir el formulario</h1><p>No se guardaron cambios. Recarga la página y vuelve a intentarlo.</p>
-                        <a href="/">Volver a Ping</a></html>
-                        """);
+                request.getRequestDispatcher("/errors/form-expired").forward(request, response);
                 return;
             }
         }

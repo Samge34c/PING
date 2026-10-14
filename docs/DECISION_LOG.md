@@ -245,3 +245,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Aplicado tras validar admin/bloqueo/reporte/flujo en 91 tests y Chromium/MySQL, por autorización condicional del usuario.
 - **Decisión:** Snack DEMO de 20 puntos; solicitud con clave idempotente, costo guardado y descuento transaccional único. REQUESTED → DELIVERED o INCIDENT, sin stock, pagos ni devolución automática. Una incidencia registra revisión de entrega; no vuelve a descontar. El bloqueo por evento y la prohibición de canjear mientras la finalización Saga esté pendiente protegen los créditos compensables.
+
+## DEC-025 — Finalización de entrega
+
+- **Estado:** Autorización explícita del usuario, 2026-10-14; sin atribuir aprobaciones individuales adicionales.
+- **Decisión:** Correcciones de errores/recuperación de actualización automática, entrada/navegación de demo, presentación y guía IntelliJ vigente. Misma rama/PR #23; no cambia matching, Saga, recompensas ni esquema. No se reinician datos ni bloqueos de los ensayos.
