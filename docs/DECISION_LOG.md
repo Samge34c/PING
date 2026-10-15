@@ -270,3 +270,8 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Segunda pasada autorizada explícitamente por el usuario, 2026-10-14; no atribuye aprobación individual adicional.
 - **Decisión:** Añadir portada de evento, guía interna offline por zonas, enlace desde el encuentro y pistas preparadas de ropa/accesorios exclusivamente para participantes demo y solo durante ACTIVE. Las pistas complementan la palabra; no sustituyen su mecanismo ni introducen datos sensibles, GPS o perfiles. Promoción ficticia claramente marcada y badges derivados de conexiones, sin alterar saldos. Composición propia de Ping; fuentes públicas se registran sin atribuir derechos/licencias no comprobados. Sin cambiar matching, Saga, puntos, bloqueos, reportes, migraciones ni dependencias. Commits separados, PR #23, sin merge.
+
+## DEC-030 — Cartel en vivo y pista personal opcional
+
+- **Estado:** Solicitud explícita del usuario y prompt principal adjunto, 2026-10-14; no atribuye aceptación individual adicional.
+- **Decisión:** Composición editorial continua en ACTIVE/Hub/Home/Mi Ping, objetos independientes en cards y navegación contextual. Única ampliación funcional: «Cómo reconocerme», pista privada opcional persistente de 120 caracteres Unicode, edición propia por sesión/CSRF/versión y lectura ajena exclusivamente ACTIVE con aceptación bilateral. Sin DTO público, backfill, pistas sensibles requeridas ni cambios de matching/ActivityCatalog/Saga/puntos/canje/seguridad. Migración nueva; V1–V11 intactas. Baseline e037ace: 133 tests aprobados y MySQL/Chromium real. Remoto pendiente de autenticación; no publicar sin verificarlo. Rama feature/final-mvp, PR23, sin merge.

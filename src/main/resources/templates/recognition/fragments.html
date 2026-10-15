@@ -1,0 +1,15 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
+<details th:fragment="editor" class="hint-editor" data-hint-editor th:open="${hintError != null}"><summary>Cómo reconocerme <span>· opcional</span></summary>
+<p th:if="${participant != null and participant.available and #strings.isEmpty(recognitionHintForm.hint)}" class="small text-secondary" data-hint-invite>Una prenda o accesorio puede ayudar a reconocerlos. Es opcional. <button type="button" class="btn btn-link" data-hint-invite-dismiss>Entendido</button></p>
+<form method="post" th:action="@{/me/recognition-hint}" th:object="${recognitionHintForm}" data-hint-form>
+<input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" th:field="*{version}">
+<label class="form-label" for="recognitionHint">Una prenda o accesorio que lleves hoy</label>
+<p id="recognition-help" class="small text-secondary">Por ejemplo, camiseta negra o morral morado. Evita teléfono, redes, salud, origen o ubicación personal. Solo lo verá tu conexión durante un encuentro activo. Puedes dejarlo vacío.</p>
+<textarea id="recognitionHint" class="form-control" th:field="*{hint}" maxlength="240" rows="3" aria-describedby="recognition-help recognition-count recognition-errors" th:attr="aria-invalid=${hintError != null}" data-hint-input></textarea>
+<div class="hint-meta"><span id="recognition-count" data-hint-count>0 / 120 caracteres</span><span data-hint-draft hidden>Borrador sin guardar</span></div>
+<p id="recognition-errors" class="text-danger" th:text="${hintError}"></p>
+<div class="hint-suggestions" aria-label="Ideas para personalizar"><button type="button" data-hint-suggestion="Camiseta ">Camiseta</button><button type="button" data-hint-suggestion="Gorra ">Gorra</button><button type="button" data-hint-suggestion="Morral ">Morral</button><button type="button" data-hint-suggestion="Cosplay de ">Cosplay</button></div>
+<p class="small text-secondary">Personaliza el texto y pulsa Guardar. Las sugerencias no se guardan automáticamente.</p>
+<div class="action-row"><button class="btn btn-primary" type="submit">Guardar pista</button><button class="btn btn-link" type="reset" data-hint-cancel>Cancelar</button></div>
+</form></details>
+</body></html>

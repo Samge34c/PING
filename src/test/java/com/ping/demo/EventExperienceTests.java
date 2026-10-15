@@ -34,6 +34,7 @@ class EventExperienceTests {
     @Autowired RewardService rewards;
     @Autowired RewardClaimRepository claims;
     @Autowired DemoRecognitionHints hints;
+    @Autowired RecognitionHintService personalHints;
     @Autowired JdbcTemplate sql;
     @LocalServerPort int port;
     long a,b,event;
@@ -42,6 +43,9 @@ class EventExperienceTests {
         claims.deleteAll(); feedback.deleteAll(); reservations.deleteAll(); matchRepository.deleteAll(); people.deleteAll(); eventRepository.deleteAll();
         var s = preparation.prepare(); event = s.eventId(); a = s.people().get(0).id(); b = s.people().get(1).id();
         available(a); available(b);
+        for(var entry : Map.of(a,"Camiseta negra y morral",b,"Gorra roja").entrySet()) {
+            var form = personalHints.ownForm(entry.getKey()); form.setHint(entry.getValue()); personalHints.save(entry.getKey(),form);
+        }
     }
     void available(long id) {
         AvailabilityForm f = new AvailabilityForm(); f.setVersion(participants.get(id).version()); f.setAvailable(true); participants.setAvailability(id,f);
@@ -55,9 +59,9 @@ class EventExperienceTests {
             for(String path:List.of("/matches/"+m,"/me")) assertThat(sam.get(path).body()).doesNotContain("Gorra roja","PISTA PARA ENCONTRARSE");
             matches.accept(m,a); assertThat(sam.get("/matches/"+m).body()).doesNotContain("Gorra roja");
             matches.accept(m,b);
-            assertThat(sam.get("/matches/"+m).body()).contains("Gorra roja","PISTA PARA ENCONTRARSE · DEMO","Ver en mapa");
+            assertThat(sam.get("/matches/"+m).body()).contains("Gorra roja","Cómo reconocer a Julián","Abrir mapa");
             assertThat(jul.get("/matches/"+m).body()).contains("Camiseta negra y morral");
-            assertThat(sam.get("/me").body()).contains("Gorra roja");
+            assertThat(sam.get("/me").body()).doesNotContain("Gorra roja");
             for(String path:List.of("/participants","/admin","/events/"+event+"/hub","/events/"+event+"/map"))
                 assertThat(sam.get(path).body()).doesNotContain("Gorra roja","Camiseta negra y morral","Tote bag y camiseta de anime");
             matches.confirm(m,a); matches.confirm(m,b);

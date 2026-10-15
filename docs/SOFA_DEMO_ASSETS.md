@@ -1,6 +1,6 @@
 # Contexto y recursos de la demo SOFA
 
-SOFA 2026 es el contexto de una **simulación académica**. Ping no fue usado oficialmente por SOFA. Pistas, promociones y recompensas presentadas son ejemplos demo.
+SOFA 2026 es el contexto de una **simulación académica**. Ping no fue usado oficialmente por SOFA. Promociones y recompensas presentadas son ejemplos demo.
 
 Fuentes oficiales consultadas el 14 de octubre de 2026:
 
@@ -11,6 +11,6 @@ Fuentes oficiales consultadas el 14 de octubre de 2026:
 
 **No se incorpora ninguna fotografía, logo SOFA ni plano oficial al proyecto:** no se comprobó una licencia de redistribución. El plano oficial se consultó como referencia factual; la interfaz dibuja un esquema propio simplificado de los pabellones relevantes. Coordenadas aproximadas, sin escala, distancias o instrucciones de recorrido. Stage y Cultura Gamer comparten el marcador del pabellón 17. Música usa ese punto como afinidad demo; no afirma que sea un escenario musical.
 
-Hero: composición propia con ondas e iconos Ping ya locales. Mapa: `templates/experience/map.html`, `static/js/event-map.js`; contexto y zonas: `EventExperienceCatalog`. Todos los recursos se sirven localmente; las fuentes anteriores solo documentan procedencia, no se solicitan al ejecutar la app.
+Cartel: composición propia con diagonales, sin logo ni arte oficial SOFA. Mapa y minimapa comparten el SVG propio `templates/experience/venue.html`; mapa: `templates/experience/map.html`, `static/js/event-map.js`; contexto y zonas: `EventExperienceCatalog`. Todos los recursos se sirven localmente; las fuentes anteriores solo documentan procedencia, no se solicitan al ejecutar la app.
 
-Pistas de ropa/accesorios preparadas para la demo, no datos reales verificados. Se muestran únicamente en ACTIVE y no se publican en listado, admin, propuesta o historial. La palabra sigue siendo el mecanismo de reconocimiento. `PING-GAMER` es una promoción ficticia, sin descuento, canje ni consumo de puntos; se muestra tras completar una conexión. El snack mantiene su canje real de 20 PTS.
+«Cómo reconocerme» es texto opcional escrito por la sesión demo seleccionada, persistido mediante V12. No hay pistas precargadas por alias ni se restablecen al borrar. Solo el otro participante de un match ACTIVE con ambas aceptaciones puede leerlo; no se publica en listado, admin, propuesta, historial ni JSON de estado. La palabra sigue siendo el mecanismo de reconocimiento. `PING-GAMER` es una promoción ficticia, sin descuento, canje ni consumo de puntos; se muestra tras completar una conexión. El snack mantiene su canje real de 20 PTS.

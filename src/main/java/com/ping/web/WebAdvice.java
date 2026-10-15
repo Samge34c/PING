@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice @Profile("!bootstrap")
 public class WebAdvice {
+    @ModelAttribute public void privatePageCache(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getRequestURI().startsWith("/me") || request.getRequestURI().startsWith("/matches")) {
+            response.setHeader("Cache-Control", "no-store, private"); response.setHeader("Expires", "0");
+        }
+    }
     @ModelAttribute("brandLogoAvailable") public boolean brandLogoAvailable() {
         return new org.springframework.core.io.ClassPathResource("static/img/ping-logo.jpg").exists();
     }

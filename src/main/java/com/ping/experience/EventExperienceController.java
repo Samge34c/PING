@@ -23,6 +23,11 @@ public class EventExperienceController {
         if (experience == null) throw new NotFoundException("Este evento todavía no tiene una guía de zonas preparada. Vuelve al detalle del evento.");
         model.addAttribute("event", event); model.addAttribute("experience", experience); return experience;
     }
+    @GetMapping("/me/event") public String myEvent(HttpSession session) {
+        if (!(session.getAttribute("pingDemoParticipantId") instanceof Long self)) return "redirect:/events";
+        var p = participants.get(self);
+        return "redirect:/events/" + p.eventId() + (EventExperienceCatalog.forEvent(p.eventName()) != null ? "/hub" : "");
+    }
     @GetMapping("/events/{id}/hub") public String hub(@PathVariable long id, HttpSession session, Model model) {
         experience(id, model);
         if (session.getAttribute("pingDemoParticipantId") instanceof Long self) {

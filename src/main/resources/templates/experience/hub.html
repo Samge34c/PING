@@ -1,10 +1,10 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Mi evento')}"></head><body>
 <nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container event-hub">
 <div class="section-heading"><a th:href="@{/me}">← Mi Ping</a><span class="ping-status" th:attr="data-status=${event.status.name()}" th:text="${event.status.label}"></span></div>
-<section class="event-hero"><div class="event-hero-copy"><span class="eyebrow">TU EVENTO / TUS MUNDOS</span><p class="event-greeting" th:if="${participant != null}" th:text="${'Hola, ' + participant.alias + '.'}"></p>
+<section class="event-poster"><div class="event-poster-copy"><span class="eyebrow">TU EVENTO / TUS MUNDOS</span><p class="event-greeting" th:if="${participant != null}" th:text="${'Hola, ' + participant.alias + '.'}"></p>
 <h1 th:text="${experience.name}"></h1><p class="event-location"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span th:text="${experience.location}"></span></p>
-<div class="chip-list"><span class="ping-chip" th:text="${experience.dates}"></span><span class="ping-chip">SIMULACIÓN ACADÉMICA</span></div>
-<p class="event-invitation">Comparte tus mundos.<br>Descubre a alguien cerca.</p>
+<p class="poster-context"><span th:text="${experience.dates}"></span> · SIMULACIÓN ACADÉMICA / NO OFICIAL</p>
+<p class="event-invitation">Comparte tus mundos. Descubre a alguien de tu evento.</p>
 <div class="hub-presence" th:if="${participant != null}"><span><i class="status-dot"></i><span th:text="${currentMatch != null ? 'Conexión en curso' : (participant.available ? 'Disponible para conectar' : 'A tu ritmo · no disponible')}"></span></span><strong th:text="${participant.points + ' PTS'}"></strong></div>
 <div class="hub-next">
 <a th:if="${participant == null}" class="btn btn-primary" th:href="@{/demo}">Entrar al evento <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
@@ -14,7 +14,7 @@
 <p th:if="${participant != null and currentMatch == null and event.status.name() != 'OPEN'}" class="ping-notice">El evento no está abierto para nuevas conexiones. Puedes consultar las zonas y tus encuentros anteriores.</p>
 </div></div><div th:replace="~{experience/fragments :: art}"></div></section>
 <section class="hub-zones"><div class="section-heading"><div><span class="eyebrow">ENCUENTRA TU PRÓXIMO MUNDO</span><h2>Zonas para explorar</h2></div><a th:href="@{/events/{id}/map(id=${event.id})}">Abrir mapa <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
-<div class="zone-strip"><a th:each="z : ${experience.zones}" th:if="${z.id != 'technology' and z.id != 'meet'}" th:href="@{/events/{id}/map(id=${event.id},zone=${z.id})}"><svg th:replace="~{fragments/layout :: icon(${z.icon})}"></svg><strong th:text="${z.name}"></strong><span th:text="${z.point.substring(z.point.indexOf('·') + 1)}"></span></a></div></section>
+<div class="zone-directory"><a th:each="z : ${experience.zones}" th:href="@{/events/{id}/map(id=${event.id},zone=${z.id})}"><span class="zone-number" th:text="${z.pavilion}"></span><div><strong th:text="${z.name}"></strong><p th:text="${z.description}"></p></div><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div></section>
 <div th:replace="~{experience/fragments :: badges}"></div>
 <nav class="hub-links" aria-label="Explorar mi evento"><a th:href="@{/events/{id}/map(id=${event.id})}"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg>Mapa</a><a th:href="@{/me/benefits}"><svg th:replace="~{fragments/layout :: icon('gift')}"></svg>Beneficios</a><a th:href="@{/me}"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg>Mi Ping</a></nav>
 <p class="small text-secondary mt-4">Demo académica inspirada en SOFA. Ping no es una aplicación oficial del evento.</p>

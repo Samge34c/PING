@@ -27,6 +27,9 @@ public class Participant {
         points -= cost;
     }
     public void restartWaiting() { waitingSince = available ? Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS) : null; }
+    @Column(name = "recognition_hint", length = 120) private String recognitionHint;
+    public String getRecognitionHint() { return recognitionHint; }
+    void changeRecognitionHint(String hint) { recognitionHint = hint; }
     @Version private long version;
     @ManyToMany
     @JoinTable(name = "participant_interests", joinColumns = @JoinColumn(name = "participant_id"), inverseJoinColumns = @JoinColumn(name = "interest_id"))

@@ -11,8 +11,9 @@
   });
   const menu = document.querySelector('#mobile-menu'), toggle = document.querySelector('[data-more-toggle]');
   if (toggle && section && !['me','connect','events','benefits'].includes(section)) toggle.setAttribute('aria-current','page');
-  const closeMenu = () => { if (!menu || menu.hidden) return; menu.hidden = true; toggle.setAttribute('aria-expanded', 'false'); document.body.classList.remove('menu-open'); toggle.focus(); };
-  toggle?.addEventListener('click', () => { menu.hidden = false; toggle.setAttribute('aria-expanded', 'true'); document.body.classList.add('menu-open'); menu.querySelector('button').focus(); });
+  const background = [...document.querySelectorAll('main,.ping-topbar,.ping-sidebar,.ping-bottom-nav,.ping-footer')];
+  const closeMenu = () => { if (!menu || menu.hidden) return; menu.hidden = true; background.forEach(el => { el.inert = false; }); toggle.setAttribute('aria-expanded', 'false'); document.body.classList.remove('menu-open'); toggle.focus(); };
+  toggle?.addEventListener('click', () => { menu.hidden = false; background.forEach(el => { el.inert = true; }); toggle.setAttribute('aria-expanded', 'true'); document.body.classList.add('menu-open'); menu.querySelector('button').focus(); });
   document.querySelectorAll('[data-more-close]').forEach(el => el.addEventListener('click', closeMenu));
   document.addEventListener('keydown', e => {
     if (!menu || menu.hidden) return;
@@ -29,7 +30,7 @@
   const interestData = { Videojuegos: ['game', 'Juega, comparte, conecta.'], Música: ['music', 'Tu próxima canción favorita.'], Cine: ['film', 'Historias que nos encuentran.'], Tecnología: ['code', 'Ideas para lo que viene.'], Viajes: ['plane', 'Lugares que merecen contarse.'], Fotografía: ['camera', 'Otra forma de ver el mundo.'], Anime: ['spark', 'Universos para compartir.'], Deportes: ['ball', 'La energía de estar juntos.'] };
   const decorateInterests = root => root.querySelectorAll('[data-interest-name]').forEach(tile => {
     const [icon, description] = interestData[tile.dataset.interestName] || ['heart', 'Un tema para conectar.'];
-    const use = tile.querySelector('.icon-tile use'); if (use) use.setAttribute('href', use.getAttribute('href').split('#')[0] + '#' + icon);
+    const use = tile.querySelector('.interest-icon use'); if (use) use.setAttribute('href', use.getAttribute('href').split('#')[0] + '#' + icon);
     const label = tile.querySelector('[data-interest-description]'); if (label) label.textContent = description;
   });
   decorateInterests(document);

@@ -1,11 +1,11 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
-<div th:fragment="art" class="event-signal-art" aria-hidden="true"><i></i><i></i><i></i><span><svg th:replace="~{fragments/layout :: icon('waves')}"></svg></span><b class="signal-star first">✦</b><b class="signal-star second">✦</b></div>
-<div th:fragment="recognition(alias)" th:if="${recognitionHint != null}" class="recognition-note">
-    <svg th:replace="~{fragments/layout :: icon('users')}"></svg><div><span class="eyebrow">PISTA PARA ENCONTRARSE · DEMO</span>
-    <p><strong th:text="${alias}"></strong>: <span th:text="${recognitionHint}"></span>.</p><small>Pista preparada de demostración. Comprueben también la palabra.</small></div>
+<div th:fragment="art" class="poster-art" aria-hidden="true"><i></i><i></i><i></i></div>
+<div th:fragment="minimap(point)" class="mission-minimap" th:if="${experience != null and experience.atPoint(point) != null}" th:with="zone=${experience.atPoint(point)}" role="img" th:attr="aria-label=${'Plano esquemático: ' + point}">
+<svg th:replace="~{experience/venue :: outline}"></svg><span th:each="z : ${experience.markers()}" class="mini-marker" th:classappend="${z.pavilion == zone.pavilion} ? 'selected' : ''" th:style="|left:${z.x}%;top:${z.y}%;|" th:text="${z.pavilion}"></span>
 </div>
-<a th:fragment="mapLink(point, matchId)" th:if="${experience != null and experience.atPoint(point) != null}" class="btn btn-outline-primary btn-sm map-link"
-   th:href="@{/events/{id}/map(id=${event.id},zone=${experience.atPoint(point).id},matchId=${matchId})}"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg>Ver en mapa</a>
+<div th:fragment="recognition(alias)" class="recognition-note" data-other-hint th:hidden="${recognitionHint == null or #strings.isEmpty(recognitionHint)}"><svg th:replace="~{fragments/layout :: icon('users')}"></svg><div><span class="small text-secondary" th:text="${'Cómo reconocer a ' + alias}"></span><p data-hint-text th:text="${recognitionHint}"></p></div></div>
+<a th:fragment="mapLink(point, matchId)" th:if="${experience != null and experience.atPoint(point) != null}" class="map-link secondary-action"
+   th:href="@{/events/{id}/map(id=${event.id},zone=${experience.atPoint(point).id},matchId=${matchId})}"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg>Abrir mapa →</a>
 <div th:fragment="badges" th:if="${badges != null and !#lists.isEmpty(badges)}" class="earned-badges"><span class="eyebrow">LO QUE YA VIVISTE</span><div class="chip-list"><span class="ping-chip" th:each="badge : ${badges}"><svg th:replace="~{fragments/layout :: icon('spark')}"></svg><span th:text="${badge}"></span></span></div></div>
 <section th:fragment="promotion" th:if="${experience != null}" class="demo-promotion">
     <div class="section-heading"><span class="eyebrow">PROMOCIÓN DEMO</span><svg th:replace="~{fragments/layout :: icon('game')}"></svg></div><h2>Zona Gamer</h2>

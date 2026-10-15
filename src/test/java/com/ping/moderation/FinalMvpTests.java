@@ -117,7 +117,7 @@ class FinalMvpTests {
             assertThat(jul.get("/me").body()).contains("Samuel aceptó. Falta tu aceptación.");
             jul.get(path); jul.post(path+"/accept",Map.of());
             assertThat(sam.get(path).body()).contains("Zona Gamer · Pabellón 18", "PIXEL-", "Elijan un juego o stand");
-            assertThat(sam.get("/me").body()).contains("Zona Gamer · Pabellón 18", "PIXEL-", "Elijan un juego o stand");
+            assertThat(sam.get("/me").body()).contains("Tu encuentro está activo.", "Zona Gamer · Pabellón 18", "Abrir mi conexión").doesNotContain("PIXEL-");
             sam.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Esperando a Julián");
             assertThat(jul.get("/me").body()).contains("Samuel ya confirmó. Falta tu confirmación.");
             jul.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Conexión completada 🎉");
@@ -154,7 +154,7 @@ class FinalMvpTests {
             assertThat(entry).contains("Preparar demo rápida", "href=\"/demo/prepare\"").doesNotContain("href=\"/me/benefits\"");
             assertThat(browser.get("/participants/"+a).body()).contains("/demo?participantId="+a);
             browser.post("/demo",Map.of("participantId",""+a));
-            assertThat(browser.get("/me").body()).contains("href=\"/me/benefits\"", "href=\"/demo\"");
+            assertThat(browser.get("/me").body()).contains("href=\"/me/benefits\"", "action=\"/demo/exit\"");
             assertThat(browser.get("/events/"+event).body()).contains("Meet &amp; Greet · Pabellón 23", "Ver resultados del evento", "Cerrar es definitivo");
         }
     }

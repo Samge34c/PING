@@ -1,12 +1,14 @@
 # Contexto compartido para IA — Ping
 
-**Estado:** PREDEV v1.1, flujo principal completo y mejoras de demo en `feature/mvp-demo`, pendiente de revisión/merge. **Equipo:** Samuel Riveros y Julián Caicedo. **Objetivo:** MVP universitario funcional y defendible ante un profesor, sin operación comercial compleja.
+**Estado:** PREDEV v1.1 más decisiones registradas; MVP y demo SOFA en `feature/final-mvp` (PR #23), pendiente de revisión/merge. **Equipo:** Samuel Riveros y Julián Caicedo. **Objetivo:** MVP universitario funcional y defendible ante un profesor, sin operación comercial compleja.
 
 ## Qué es y cómo funciona
 
 Ping conecta a dos personas dentro de un evento. Evento abierto → alias e intereses → disponibilidad → propuesta → aceptación bilateral → punto público + palabra/símbolo temporal + actividad → confirmación bilateral → puntos → feedback opcional → nueva búsqueda si sigue abierto.
 
 La actividad ocurre después del match. No es una plataforma general de actividades grupales.
+
+DEC-030 autoriza «Cartel en vivo» y «Cómo reconocerme»: prenda/accesorio opcional persistido en V12, edición de la sesión demo propia y lectura ajena solo en ACTIVE con ambas aceptaciones. Complementa la palabra; no la reemplaza. Sin pistas precargadas por alias, DTO público ni autenticación definitiva.
 
 ## Reglas esenciales
 

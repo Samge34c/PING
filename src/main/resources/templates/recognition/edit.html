@@ -1,0 +1,4 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Revisar cómo reconocerme')}"></head><body><nav th:replace="~{fragments/layout :: nav}"></nav>
+<main id="main-content" class="container ping-narrow"><a class="secondary-action" th:href="@{/me}">← Mi Ping</a><h1>Tu borrador sigue aquí.</h1>
+<div class="error-summary" role="alert" tabindex="-1" data-error-summary><p th:text="${hintError}"></p><ul th:if="${#fields.hasErrors('recognitionHintForm.*')}"><li th:each="error : ${#fields.errors('recognitionHintForm.*')}" th:text="${error}"></li></ul></div>
+<div th:replace="~{recognition/fragments :: editor}"></div></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
