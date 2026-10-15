@@ -3,6 +3,8 @@
     theme = theme === 'light' ? 'light' : 'dark';
     document.documentElement.dataset.theme = theme;
     document.documentElement.dataset.bsTheme = theme;
+    const color = getComputedStyle(document.documentElement).getPropertyValue('--ping-bg').trim();
+    if (color) document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
     document.querySelectorAll('[data-theme-option]').forEach(button => {
       button.setAttribute('aria-pressed', String(button.dataset.themeOption === theme));
     });

@@ -235,3 +235,43 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Implementación solicitada expresamente por el usuario, 2026-10-13; sin atribuir aceptación individual adicional.
 - **Decisión:** Orquestación local con pasos transaccionales independientes, registro durable y compensaciones inversas. Match permanece ACTIVE con finalización reservada hasta completar ambos créditos; solo después pasa a COMPLETED. Ante fallo se revierten los créditos de este intento y la última confirmación, sin borrar puntos previos ni liberar la reserva. Se conserva el monolito y una base; sin broker ni servicios distribuidos. Serialización del coordinador en el único proceso de aplicación, con bloqueo por evento en cada paso. Recuperación de pendientes al iniciar y mediante reintento. PR separada en `feature/saga`, base `feature/mvp-demo`, sin merge.
+
+## DEC-023 — Cierre funcional del MVP académico
+
+- **Estado:** Solicitud explícita del usuario, 2026-10-13; no atribuye aprobaciones individuales adicionales.
+- **Decisión:** `feature/final-mvp` basada en Saga, Issues #12–#14: admin detallado, bloqueo direccional con exclusión simétrica de futuras propuestas, reporte sin sanciones automáticas, historial/UX y pruebas integrales. Reportes vinculados a interacciones terminadas/canceladas; comentario máximo 300 caracteres y uno por autor/match para reintentos. No modifica matches anteriores ni finalización Saga. Admin sigue siendo panel de demo sin autenticación definitiva. Canje opcional solo tras estabilizar el resto, sin gasto de créditos durante una Saga pendiente. Sin merge.
+
+## DEC-024 — Canje opcional autorizado y acotado
+
+- **Estado:** Aplicado tras validar admin/bloqueo/reporte/flujo en 91 tests y Chromium/MySQL, por autorización condicional del usuario.
+- **Decisión:** Snack DEMO de 20 puntos; solicitud con clave idempotente, costo guardado y descuento transaccional único. REQUESTED → DELIVERED o INCIDENT, sin stock, pagos ni devolución automática. Una incidencia registra revisión de entrega; no vuelve a descontar. El bloqueo por evento y la prohibición de canjear mientras la finalización Saga esté pendiente protegen los créditos compensables.
+
+## DEC-025 — Finalización de entrega
+
+- **Estado:** Autorización explícita del usuario, 2026-10-14; sin atribuir aprobaciones individuales adicionales.
+- **Decisión:** Correcciones de errores/recuperación de actualización automática, entrada/navegación de demo, presentación y guía IntelliJ vigente. Misma rama/PR #23; no cambia matching, Saga, recompensas ni esquema. No se reinician datos ni bloqueos de los ensayos.
+
+## DEC-026 — Dirección visual App Social Dark
+
+- **Estado:** Dirección visual explícita del usuario, 2026-10-14.
+- **Decisión:** Sidebar desktop, navegación inferior móvil, paleta Work B/D, Manrope local y componentes de ondas/afinidad. Solo templates, CSS, recursos locales y JS de presentación; matching, Saga, puntos, services, repositorios y migraciones intactos. PR #23 sin merge.
+
+## DEC-027 — Correcciones localizadas tras auditoría de entrega
+
+- **Estado:** Autorizadas por la solicitud de auditoría del usuario, 2026-10-14; hallazgos mostrados antes de modificar.
+- **Decisión:** Demo en localhost por defecto porque admin/identidad siguen siendo públicos; una sola instancia. Corregir alias visual al consultar perfiles ajenos, encabezado de alternativa y espaciado de misión activa. Sin autenticación nueva, cambios de matching/Saga/puntos/esquema ni merge. Se conservan evidencias anteriores y se valida regresión.
+
+## DEC-028 — Escenario demo académico SOFA 2026
+
+- **Estado:** Autorizado explícitamente por la solicitud del usuario, 2026-10-14; sin atribuir aprobación individual adicional.
+- **Decisión:** Preparar SOFA 2026 (simulación académica, Corferias Bogotá, 8–12 de octubre), con intereses indicados para Samuel/Julián/Ana/Carlos y catálogo de encuentro SOFA por afinidad. Al preparar la antigua Feria Universitaria, actualizar el mismo evento y los intereses demo una sola vez; conservar estado, disponibilidad, puntos e historial. Los otros eventos mantienen su catálogo y punto configurado. Sin cambiar matching, Saga, puntos, seguridad, esquema ni dependencias; PR #23, sin merge.
+
+## DEC-029 — Orientación y reconocimiento en la experiencia SOFA
+
+- **Estado:** Segunda pasada autorizada explícitamente por el usuario, 2026-10-14; no atribuye aprobación individual adicional.
+- **Decisión:** Añadir portada de evento, guía interna offline por zonas, enlace desde el encuentro y pistas preparadas de ropa/accesorios exclusivamente para participantes demo y solo durante ACTIVE. Las pistas complementan la palabra; no sustituyen su mecanismo ni introducen datos sensibles, GPS o perfiles. Promoción ficticia claramente marcada y badges derivados de conexiones, sin alterar saldos. Composición propia de Ping; fuentes públicas se registran sin atribuir derechos/licencias no comprobados. Sin cambiar matching, Saga, puntos, bloqueos, reportes, migraciones ni dependencias. Commits separados, PR #23, sin merge.
+
+## DEC-030 — Cartel en vivo y pista personal opcional
+
+- **Estado:** Solicitud explícita del usuario y prompt principal adjunto, 2026-10-14; no atribuye aceptación individual adicional.
+- **Decisión:** Composición editorial continua en ACTIVE/Hub/Home/Mi Ping, objetos independientes en cards y navegación contextual. Única ampliación funcional: «Cómo reconocerme», pista privada opcional persistente de 120 caracteres Unicode, edición propia por sesión/CSRF/versión y lectura ajena exclusivamente ACTIVE con aceptación bilateral. Sin DTO público, backfill, pistas sensibles requeridas ni cambios de matching/ActivityCatalog/Saga/puntos/canje/seguridad. Migración nueva; V1–V11 intactas. Baseline e037ace: 133 tests aprobados y MySQL/Chromium real. Remoto pendiente de autenticación; no publicar sin verificarlo. Rama feature/final-mvp, PR23, sin merge.

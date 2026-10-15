@@ -22,17 +22,38 @@ public class DemoPreparationService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public Scenario prepare() {
         DemoScenario marker = scenarios.lockScenario().orElseThrow();
-        if (marker.getEvent() != null) return view(marker.getEvent());
-        EventForm f = new EventForm(); f.setName("Feria Universitaria 2026"); f.setDescription("Escenario DEMO académico, preparado manualmente. Datos de demostración."); f.setMeetingPoint("Entrada principal");
+        if (marker.getEvent() != null) {
+            Event event = marker.getEvent();
+            if ("Feria Universitaria 2026".equals(event.getName())) {
+                EventForm f = EventForm.from(events.lock(event.getId())); configure(f); events.update(event.getId(), f);
+                configurePeople(event);
+            }
+            return view(event);
+        }
+        EventForm f = new EventForm(); configure(f);
         Event event = events.create(f); events.transition(event.getId(), EventStatus.OPEN);
-        add(event, "Samuel", "Videojuegos", "Tecnología"); add(event, "Julián", "Videojuegos", "Música");
-        add(event, "Ana", "Cine", "Fotografía"); add(event, "Carlos", "Deportes", "Viajes");
+        configurePeople(event);
         marker.setEvent(event); return view(event);
     }
+    private void configure(EventForm form) {
+        form.setName("SOFA 2026");
+        form.setDescription("Escenario demo académico inspirado en SOFA 2026, realizado en Corferias Bogotá del 8 al 12 de octubre de 2026.");
+        form.setMeetingPoint("Meet & Greet · Pabellón 23");
+    }
+    private void configurePeople(Event event) {
+        add(event, "Samuel", "Videojuegos", "Anime"); add(event, "Julián", "Videojuegos", "Tecnología");
+        add(event, "Ana", "Anime", "Fotografía"); add(event, "Carlos", "Cine", "Música");
+    }
     private void add(Event event, String alias, String... names) {
-        ParticipantForm f = new ParticipantForm(); f.setAlias(alias); f.setEventId(event.getId());
-        var p = participants.create(f); InterestSelectionForm selected = new InterestSelectionForm(); selected.setVersion(p.version());
-        selected.setInterestIds(interests.catalog().stream().filter(i -> Arrays.asList(names).contains(i.getName())).map(Interest::getId).toList()); interests.save(p.id(), selected);
+        var existing = people.findByEventIdOrderByIdAsc(event.getId()).stream().filter(p -> p.getAlias().equals(alias)).findFirst();
+        long id;
+        if (existing.isPresent()) id = existing.get().getId();
+        else {
+            ParticipantForm f = new ParticipantForm(); f.setAlias(alias); f.setEventId(event.getId());
+            id = participants.create(f).id();
+        }
+        InterestSelectionForm selected = interests.selection(id);
+        selected.setInterestIds(interests.catalog().stream().filter(i -> Arrays.asList(names).contains(i.getName())).map(Interest::getId).toList()); interests.save(id, selected);
     }
     private Scenario view(Event event) {
         return new Scenario(event.getId(), event.getName(), event.getStatus(), people.findByEventIdOrderByIdAsc(event.getId()).stream()

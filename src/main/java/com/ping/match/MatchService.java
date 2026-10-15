@@ -38,7 +38,8 @@ public class MatchService {
         if (match.getStatus() != MatchStatus.OFFERED) throw new BusinessRuleException("Esta propuesta ya se canceló.");
         if (!match.getEvent().canStartNewMatches()) throw new BusinessRuleException("El evento debe estar abierto para aceptar una nueva conexión. Puedes cancelar la propuesta.");
         match.accept(participantId);
-        if (match.bothAccepted()) match.activate(ActivityCatalog.word(match.getCommonInterests(), match.getId()), ActivityCatalog.activity(match.getCommonInterests()));
+        if (match.bothAccepted()) match.activate(ActivityCatalog.encounter(match.getCommonInterests(), match.getId(),
+            match.getEvent().getName(), match.getEvent().getMeetingPoint()));
     }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void cancel(long id, long participantId) {
         Match match = locked(id, participantId);
@@ -65,7 +66,7 @@ public class MatchService {
         return new MatchView(match.getId(), match.getStatus(), first ? match.getSecond().getAlias() : match.getFirst().getAlias(),
             match.getCommonInterests(), first ? match.getSecondInterests() : match.getFirstInterests(),
             match.accepted(self), match.accepted(other), match.confirmed(self), match.confirmed(other),
-            active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active ? match.getActivity() : null,
-            rating, match.isCompletionPending());
+            active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active || match.getStatus() == MatchStatus.COMPLETED ? match.getActivity() : null,
+            rating, match.isCompletionPending(), match.getCreatedAt());
     }
 }

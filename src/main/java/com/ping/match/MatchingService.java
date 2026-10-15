@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service @Profile("!bootstrap")
 public class MatchingService {
+    private final com.ping.moderation.BlockRepository blocks;
     private final ParticipantRepository participants;
     private final EventService events;
     private final MatchRepository matches;
     private final MatchReservationRepository reservations;
-    public MatchingService(ParticipantRepository participants, EventService events, MatchRepository matches, MatchReservationRepository reservations) {
+    public MatchingService(ParticipantRepository participants, EventService events, MatchRepository matches, MatchReservationRepository reservations, com.ping.moderation.BlockRepository blocks) {
+        this.blocks = blocks;
         this.participants = participants; this.events = events; this.matches = matches; this.reservations = reservations;
     }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public long search(long participantId) {
@@ -27,9 +29,10 @@ public class MatchingService {
         if (!event.canStartNewMatches()) throw new BusinessRuleException("El evento debe estar abierto para buscar una conexión.");
         if (!self.isAvailable()) throw new BusinessRuleException("Marca tu disponibilidad antes de buscar.");
         Set<Long> occupied = new HashSet<>(reservations.findAll().stream().map(MatchReservation::getParticipantId).toList());
+        Set<Long> blocked = new HashSet<>(blocks.excluded(participantId));
         List<Match> rejected = matches.findByEventIdAndStatus(event.getId(), MatchStatus.CANCELLED);
         Participant candidate = participants.findByEventIdAndAvailableTrue(event.getId()).stream()
-            .filter(p -> !p.getId().equals(self.getId()) && !occupied.contains(p.getId()))
+            .filter(p -> !p.getId().equals(self.getId()) && !occupied.contains(p.getId()) && !blocked.contains(p.getId()))
             .filter(p -> rejected.stream().noneMatch(m -> m.excludedPair(self, p)))
             .sorted(Comparator.<Participant>comparingInt(p -> common(self, p).size()).reversed()
                 .thenComparing(Participant::getWaitingSince).thenComparing(Participant::getId))

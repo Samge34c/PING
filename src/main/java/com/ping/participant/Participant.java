@@ -22,7 +22,14 @@ public class Participant {
         if (points < 10) throw new IllegalStateException("Cannot reverse a reward without its balance");
         points -= 10;
     }
+    public void spendPoints(long cost) {
+        if (cost <= 0 || points < cost) throw new com.ping.web.BusinessRuleException("No tienes puntos suficientes para este beneficio.");
+        points -= cost;
+    }
     public void restartWaiting() { waitingSince = available ? Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS) : null; }
+    @Column(name = "recognition_hint", length = 120) private String recognitionHint;
+    public String getRecognitionHint() { return recognitionHint; }
+    void changeRecognitionHint(String hint) { recognitionHint = hint; }
     @Version private long version;
     @ManyToMany
     @JoinTable(name = "participant_interests", joinColumns = @JoinColumn(name = "participant_id"), inverseJoinColumns = @JoinColumn(name = "interest_id"))

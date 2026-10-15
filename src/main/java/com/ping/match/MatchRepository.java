@@ -13,5 +13,7 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     interface Total { Long getEventId(); MatchStatus getStatus(); long getTotal(); }
     @Query("select m.event.id as eventId, m.status as status, count(m) as total from Match m group by m.event.id, m.status")
     List<Total> eventTotals();
+    @EntityGraph(attributePaths = {"first", "second", "event"})
+    List<Match> findByEventIdOrderByIdDesc(long eventId);
     long countByStatus(MatchStatus status);
 }

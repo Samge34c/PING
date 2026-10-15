@@ -46,8 +46,13 @@ class DemoImprovementTests {
         EventForm f = new EventForm(); f.setName("Mi evento existente"); var own = eventService.create(f);
         var first = preparation.prepare(); var second = preparation.prepare();
         assertThat(first.eventId()).isEqualTo(second.eventId()); assertThat(first.status()).isEqualTo(EventStatus.OPEN);
+        assertThat(first.name()).isEqualTo("SOFA 2026");
+        assertThat(eventService.get(first.eventId()).getDescription()).contains("demo académico", "Corferias Bogotá", "8 al 12 de octubre de 2026");
         assertThat(first.people()).extracting(DemoPreparationService.Person::alias).containsExactly("Samuel", "Julián", "Ana", "Carlos");
-        assertThat(first.people().getFirst().interests()).contains("Videojuegos", "Tecnología");
+        assertThat(first.people().getFirst().interests()).containsExactlyInAnyOrder("Videojuegos", "Anime");
+        assertThat(first.people().get(1).interests()).containsExactlyInAnyOrder("Videojuegos", "Tecnología");
+        assertThat(first.people().get(2).interests()).containsExactlyInAnyOrder("Anime", "Fotografía");
+        assertThat(first.people().get(3).interests()).containsExactlyInAnyOrder("Cine", "Música");
         assertThat(people.count()).isEqualTo(4); assertThat(events.count()).isEqualTo(2);
         assertThat(events.findById(own.getId())).isPresent(); assertThat(metrics(first.eventId()).available()).isZero();
     }
@@ -76,6 +81,18 @@ class DemoImprovementTests {
         assertThat(metrics(s.eventId()).useful()).isEqualTo(1); assertThat(metrics(s.eventId()).neutral()).isZero();
         long rejected = matching.search(a); matchService.cancel(rejected,b);
         assertThat(metrics(s.eventId()).cancelled()).isEqualTo(1); assertThat(metrics(s.eventId()).points()).isEqualTo(20);
+        var detail = admin.details(s.eventId());
+        assertThat(detail.meetingPoint()).isEqualTo("Meet & Greet · Pabellón 23");
+        assertThat(detail.participants()).filteredOn(p -> p.id() == a).singleElement().satisfies(p -> {
+            assertThat(p.points()).isEqualTo(10); assertThat(p.completed()).isEqualTo(1); assertThat(p.interests()).contains("Videojuegos");
+        });
+        assertThat(detail.matches()).hasSize(2);
+        assertThat(detail.feedback()).singleElement().satisfies(fb -> {
+            assertThat(fb.alias()).isEqualTo("Samuel"); assertThat(fb.rating()).isEqualTo("Positivo"); assertThat(fb.createdAt()).isNotNull();
+        });
+        assertThat(admin.details(other).matches()).isEmpty();
+        assertThat(metrics(s.eventId()).completionPercent()).isEqualTo(50);
+        assertThat(metrics(s.eventId()).unavailable()).isEqualTo(2);
         assertThat(metrics(other).participants()).isZero(); assertThat(metrics(other).points()).isZero();
         preparation.prepare(); assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(a).available()).isTrue();
     }
@@ -98,7 +115,7 @@ class DemoImprovementTests {
             long samuel = id(s,"Samuel"); String page = browser.get("/demo?participantId="+samuel).body();
             assertThat(page).contains("selected=\"selected\"");
             browser.post("/demo",Map.of("participantId",""+samuel)); assertThat(browser.get("/me").statusCode()).isEqualTo(200);
-            assertThat(browser.get("/admin").body()).contains("Feria Universitaria 2026", "Libres para conectar", "Puntos entregados");
+            assertThat(browser.get("/admin").body()).contains("SOFA 2026", "Libres para conectar", "Puntos entregados");
         }
     }
     @Test void preparationRequiresPostAndFormToken() throws Exception {
@@ -156,4 +173,70 @@ class DemoImprovementTests {
         }
     }
 
+    @Test void viewingAnotherParticipantNeverAssignsTheirAliasToSelectedSessionInNavbar() throws Exception {
+        var scenario = preparation.prepare();
+        long samuel = id(scenario, "Samuel"), julian = id(scenario, "Julián");
+        try (var browser = new TestBrowser(port)) {
+            browser.get("/demo");
+            browser.post("/demo", Map.of("participantId", Long.toString(samuel)));
+            assertThat(browser.get("/me").body()).contains("data-session-name=\"Samuel\"");
+            for (String route : List.of("/participants/" + julian, "/participants/" + julian + "/interests")) {
+                var response = browser.get(route);
+                assertThat(response.statusCode()).isEqualTo(200);
+                var chip = java.util.regex.Pattern.compile("<div class=\"session-chip\"([^>]*)>").matcher(response.body());
+                assertThat(chip.find()).isTrue();
+                assertThat(chip.group(1)).contains("data-session-id=\"" + samuel + "\"")
+                        .doesNotContain("data-session-name=\"Julián\"");
+            }
+            assertThat(browser.get("/me/state").body()).contains(samuel + ":");
+            assertThat(browser.get("/me").body()).contains("data-session-name=\"Samuel\"");
+        }
+    }
+
+    @Test void alternativeOfferHeadingDoesNotClaimSharedAffinity() throws Exception {
+        var scenario = preparation.prepare();
+        long ana = id(scenario, "Ana"), carlos = id(scenario, "Carlos");
+        available(ana, true); available(carlos, true);
+        long match = matching.search(ana);
+        try (var browser = new TestBrowser(port)) {
+            browser.get("/demo");
+            browser.post("/demo", Map.of("participantId", Long.toString(ana)));
+            var response = browser.get("/matches/" + match);
+            assertThat(response.statusCode()).isEqualTo(200);
+            assertThat(response.body()).contains("DESCUBRE OTROS INTERESES", "Alternativa · 0 intereses compartidos")
+                    .doesNotContain("ENCONTRAMOS AFINIDAD");
+            assertThat(participants.get(ana).points()).isZero();
+            assertThat(participants.get(carlos).points()).isZero();
+        }
+    }
+
+
+    @Test void legacyScenarioIsAdaptedOnceWithoutResettingProgressOrExistingEncounter() {
+        var scenario = preparation.prepare(); long a = id(scenario, "Samuel"), b = id(scenario, "Julián");
+        EventForm legacy = EventForm.from(eventService.get(scenario.eventId()));
+        legacy.setName("Feria Universitaria 2026"); legacy.setMeetingPoint("Entrada principal");
+        eventService.update(scenario.eventId(), legacy);
+        available(a, true); available(b, true); long match = matching.search(a);
+        matchService.accept(match, a); matchService.accept(match, b);
+        var before = matchService.get(match, a);
+        matchService.confirm(match, a); matchService.confirm(match, b);
+        long active = matching.search(a); matchService.accept(active, a); matchService.accept(active, b);
+        var activeBefore = matchService.get(active, a);
+        eventService.transition(scenario.eventId(), EventStatus.PAUSED);
+        sql.update("update participants set points = 23 where id = ?", a);
+        var adapted = preparation.prepare();
+        assertThat(adapted.eventId()).isEqualTo(scenario.eventId());
+        assertThat(adapted.name()).isEqualTo("SOFA 2026"); assertThat(adapted.status()).isEqualTo(EventStatus.PAUSED);
+        assertThat(adapted.people()).extracting(DemoPreparationService.Person::id).containsExactlyElementsOf(
+            scenario.people().stream().map(DemoPreparationService.Person::id).toList());
+        assertThat(participants.get(a).points()).isEqualTo(23); assertThat(participants.get(b).points()).isEqualTo(10);
+        assertThat(participants.get(a).available()).isTrue(); assertThat(matches.count()).isEqualTo(2);
+        assertThat(matchService.get(match, a).activity()).isEqualTo(before.activity());
+        assertThat(matchService.get(active, a)).isEqualTo(activeBefore);
+        assertThat(adapted.people().getFirst().interests()).containsExactlyInAnyOrder("Videojuegos", "Anime");
+        // Repeat prepare must preserve subsequent user edits as well as progress.
+        sql.update("delete from participant_interests where participant_id = ?", a);
+        assertThat(preparation.prepare().people().getFirst().interests()).isEmpty();
+        assertThat(events.count()).isEqualTo(1); assertThat(people.count()).isEqualTo(4);
+    }
 }

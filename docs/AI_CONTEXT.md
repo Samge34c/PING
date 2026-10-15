@@ -1,12 +1,14 @@
 # Contexto compartido para IA — Ping
 
-**Estado:** PREDEV v1.1, flujo principal completo y mejoras de demo en `feature/mvp-demo`, pendiente de revisión/merge. **Equipo:** Samuel Riveros y Julián Caicedo. **Objetivo:** MVP universitario funcional y defendible ante un profesor, sin operación comercial compleja.
+**Estado:** PREDEV v1.1 más decisiones registradas; MVP y demo SOFA en `feature/final-mvp` (PR #23), pendiente de revisión/merge. **Equipo:** Samuel Riveros y Julián Caicedo. **Objetivo:** MVP universitario funcional y defendible ante un profesor, sin operación comercial compleja.
 
 ## Qué es y cómo funciona
 
 Ping conecta a dos personas dentro de un evento. Evento abierto → alias e intereses → disponibilidad → propuesta → aceptación bilateral → punto público + palabra/símbolo temporal + actividad → confirmación bilateral → puntos → feedback opcional → nueva búsqueda si sigue abierto.
 
 La actividad ocurre después del match. No es una plataforma general de actividades grupales.
+
+DEC-030 autoriza «Cartel en vivo» y «Cómo reconocerme»: prenda/accesorio opcional persistido en V12, edición de la sesión demo propia y lectura ajena solo en ACTIVE con ambas aceptaciones. Complementa la palabra; no la reemplaza. Sin pistas precargadas por alias, DTO público ni autenticación definitiva.
 
 ## Reglas esenciales
 
@@ -36,3 +38,5 @@ Fuente funcional principal: [PING_PREDEV_v1.1.md](PING_PREDEV_v1.1.md). Leer tam
 No inventar comportamiento pendiente. Los cambios deben registrarse, aceptarse por Samuel y Julián y documentarse antes de modificar código. Los pendientes están en DECISION_LOG.
 
 En `feature/saga`, DEC-022 implementa finalización con orquestación local durable, transacciones independientes y compensación; base `feature/mvp-demo`, PR separada. Ver SAGA.md para pasos, límites de proceso único, pruebas y CAP.
+
+`feature/final-mvp` (DEC-023, Issues #12–#14) añade admin detallado, bloqueo simétrico en futuras propuestas, reporte sin sanciones y claridad del historial/flujo. Base temporal `feature/saga`, PR separada sin merge. DEC-024 incorpora canje DEMO de snack de 20 puntos, con clave idempotente y entrega/incidencia manual; no permite gastar durante finalización Saga pendiente.
