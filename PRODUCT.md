@@ -45,7 +45,7 @@ Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genérica
 
 El usuario eligió composición primero para portadas y showcases, y trabajo directamente en código para pantallas operativas. El valor de herramienta para portadas se registra en `.impeccable/config.json` (`buildPath: comp`).
 
-Alcance actual autorizado por **Samuel**, 2026-10-16: reorganizar visualmente ACTIVE y los estados asociados dentro de la pantalla de encuentro, conservando backend, reglas, permisos, persistencia, migraciones, matching, Saga, palabra, pista opcional, actividad, confirmación bilateral y puntos. Base actual con Hub integrado: `55bb83162b01e3131732716c85796ff668ce145b`. Rama propia `feature/active-festival-social`; PR en borrador hacia `reconstruction/festival-social`, separada de PR #24. No rediseñar Home, Mi Ping, Beneficios ni Hub; sin merge, force-push ni cambios en main. No se atribuye aprobación a Julián. Ver DEC-032.
+Alcance actual autorizado por **Samuel**, 2026-10-16: reorganizar visualmente Mi Ping `/me`, priorizando estado real, siguiente acción, intereses y pista propia opcional. Rama `feature/mi-ping-mobile` desde `d088e59` (Hub, ACTIVE y pauta móvil de AGENTS.md). Conservar backend y funcionalidad; sin nueva portada ni cambios de otras pantallas, reglas, permisos, persistencia o migraciones. Ver DEC-033; no se atribuye aprobación a Julián. Samuel autoriza posteriormente el respaldo de Mi Ping y su PR en borrador hacia la rama base de ACTIVE.
 
 ## Evidence on Hand
 
@@ -56,4 +56,4 @@ Alcance actual autorizado por **Samuel**, 2026-10-16: reorganizar visualmente AC
 
 ## Open Decisions
 
-El Hub integrado se conserva. Samuel autoriza ahora la pantalla del encuentro en DEC-032; otras pantallas y ampliaciones funcionales quedan fuera.
+Hub y ACTIVE integrados se conservan. Samuel autoriza Mi Ping en DEC-033; las ampliaciones funcionales y otras pantallas quedan fuera.

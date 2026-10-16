@@ -20,3 +20,9 @@ Superficie operativa derivada del Hub, sin copiar su portada. Manrope y variable
 - Confirmación propia/ajena explícita; espera unilateral no equivale a puntos ni finalización. Saga pendiente conserva aviso y reintento. Formularios, live.js, pista/editor y permisos existentes intactos.
 
 Fuentes editables: `templates/demo/match.html`, `templates/demo/active-mission.html`, `static/js/active-map.js` y sección CSS DEC-032. OFFERED/COMPLETED/CANCELLED mantienen su comportamiento y composición previa.
+
+## Mi Ping — DEC-033
+
+Pantalla operativa `/me`, diseñada a 390 px y comprobada después a 360 px; misma Manrope y paleta Festival Social que Hub/ACTIVE, sin ilustración ni portada nueva. Un solo panel morado para estado real y acción, botón amarillo, identidad/saldo compactos. Orden DOM: identidad → acción → intereses → editor privado propio opcional → historial. Escritorio aprovecha el espacio lateral para intereses y pista, conservando el orden de lectura.
+
+Encuentro actual presentado una sola vez; historial desplegable con encuentros anteriores, detalles reales accesibles en sus enlaces. Pista ajena y palabra del encuentro ausentes de Mi Ping. Formularios, versión, CSRF, live.js y fragmento compartido de pista conservados. CSS limitado a `.mi-ping-page`/`.mp-*`, sin cambiar navegación compartida. Hooks Impeccable desactivados.
