@@ -35,6 +35,7 @@ class EventExperienceTests {
     @Autowired RewardClaimRepository claims;
     @Autowired DemoRecognitionHints hints;
     @Autowired RecognitionHintService personalHints;
+    @Autowired com.ping.interest.InterestService interests;
     @Autowired JdbcTemplate sql;
     @LocalServerPort int port;
     long a,b,event;
@@ -90,10 +91,80 @@ class EventExperienceTests {
             assertThat(browser.get(path).body()).contains("Corferias · Bogotá", "Hola, Samuel.", "Buscar conexión", "0 PTS", "SIMULACIÓN ACADÉMICA");
             long m = matching.search(a);
             assertThat(browser.get(path).body()).contains("Ver propuesta").doesNotContain("action=\"/me/search\"");
+            assertThat(browser.get(path).body()).doesNotContain("Tu encuentro con", "Tu punto de encuentro", "Volver al encuentro");
             matches.accept(m,a); matches.accept(m,b); assertThat(browser.get(path).body()).contains("Volver al encuentro");
             EventForm f = new EventForm(); f.setName("Otro evento"); long other = events.create(f).getId(); events.transition(other,EventStatus.OPEN);
             ParticipantForm p = new ParticipantForm(); p.setAlias("Fuera de SOFA"); p.setEventId(other); long outside = participants.create(p).id();
             enter(browser,outside); assertThat(browser.get(path).body()).contains("Entrar al evento").doesNotContain("Hola, Fuera de SOFA.");
+        }
+    }
+    @Test void hubKeepsGuestExplorationAvailabilityVersionAndRealBalance() throws Exception {
+        String path = "/events/"+event+"/hub";
+        try(var browser = new TestBrowser(port)) {
+            var guest = browser.get(path);
+            assertThat(guest.statusCode()).isEqualTo(200);
+            assertThat(guest.body()).contains("Entrar al evento", "Encuentra tu mundo", "Sin vínculo oficial", "convencion-social.webp")
+                .doesNotContain("data-meeting=\"true\"", "Volver al encuentro", "action=\"/me/search\"");
+            enter(browser,a);
+            AvailabilityForm f = new AvailabilityForm(); f.setVersion(participants.get(a).version()); f.setAvailable(false); participants.setAvailability(a,f);
+            String idle = browser.get(path).body();
+            assertThat(idle).contains("Estoy listo para conectar", "action=\"/me/availability\"", "name=\"_csrf\"", "name=\"version\"", "value=\""+participants.get(a).version()+"\"")
+                .doesNotContain("action=\"/me/search\"");
+            // Exercise the real form contract; an outdated version must still be rejected.
+            assertThat(browser.post("/me/availability",Map.of("available","true","version",Long.toString(participants.get(a).version()-1))).statusCode()).isEqualTo(409);
+            assertThat(participants.get(a).available()).isFalse();
+            browser.get(path);
+            assertThat(browser.post("/me/availability",Map.of("available","true","version",Long.toString(participants.get(a).version()))).statusCode()).isEqualTo(302);
+            assertThat(browser.get(path).body()).contains("Buscar conexión");
+            complete();
+            assertThat(browser.get(path).body()).contains("10 PTS").doesNotContain(">0 PTS<", "Tu punto de encuentro");
+        }
+    }
+    @ParameterizedTest @CsvSource({"PAUSED", "CLOSED"})
+    void hubRespectsEventStateWithoutBlockingAnExistingActiveEncounter(EventStatus status) throws Exception {
+        long m = matching.search(a); matches.accept(m,a); matches.accept(m,b);
+        events.transition(event,status);
+        try(var browser = new TestBrowser(port)) {
+            enter(browser,a);
+            assertThat(browser.get("/events/"+event+"/hub").body()).contains("Volver al encuentro", "data-status=\""+status+"\"", "Tu punto de encuentro")
+                .doesNotContain("action=\"/me/search\"", "action=\"/me/availability\"");
+            var carlos = preparation.current().people().get(3).id(); enter(browser,carlos);
+            assertThat(browser.get("/events/"+event+"/hub").body()).contains("Sin nuevas conexiones", "Abrir mapa")
+                .doesNotContain("action=\"/me/search\"", "action=\"/me/availability\"", "Tu punto de encuentro");
+        }
+    }
+    @ParameterizedTest @CsvSource({"Videojuegos,gamer", "Tecnología,technology", "Música,stage", "Fotografía,cosplay", "Anime,communities", "Cine,meet"})
+    void hubHighlightsOnlyTheActiveZoneByIdEvenWhenPavilionsAreShared(String interest,String zone) throws Exception {
+        for(long id : List.of(a,b)) {
+            var selection = interests.selection(id);
+            selection.setInterestIds(interests.catalog().stream().filter(i -> i.getName().equals(interest)).map(com.ping.interest.Interest::getId).toList());
+            interests.save(id,selection);
+        }
+        long m = matching.search(a);
+        try(var browser = new TestBrowser(port)) {
+            enter(browser,a);
+            matches.accept(m,a);
+            assertThat(browser.get("/events/"+event+"/hub").body()).contains("Ver propuesta").doesNotContain("Tu punto de encuentro");
+            matches.accept(m,b);
+            var response = browser.get("/events/"+event+"/hub");
+            assertThat(response.statusCode()).isEqualTo(200);
+            assertThat(response.body()).contains("data-zone=\""+zone+"\" data-meeting=\"true\"", "zone="+zone+"&amp;matchId="+m, "Tu encuentro con", "Julián")
+                .doesNotContain("Gorra roja", "Camiseta negra y morral", "data-other-hint");
+            assertThat(response.body().split("class=\"h-here\"",-1)).hasSize(2);
+            for(var z : EventExperienceCatalog.forEvent("SOFA 2026").zones()) {
+                assertThat(response.body()).contains("data-zone=\""+z.id()+"\" data-meeting=\""+z.id().equals(zone)+"\"");
+            }
+        }
+    }
+    @Test void hubWithAnUncataloguedPointKeepsTheEncounterWithoutInventingAZone() throws Exception {
+        long m = matching.search(a); matches.accept(m,a); matches.accept(m,b);
+        // Historical/unrecognised presentation point: never infer a zone from a pavilion substring.
+        sql.update("update ping_matches set meeting_point = ? where id = ?", "Punto anterior · Pabellón 17", m);
+        try(var browser = new TestBrowser(port)) {
+            enter(browser,a); var page = browser.get("/events/"+event+"/hub");
+            assertThat(page.statusCode()).isEqualTo(200);
+            assertThat(page.body()).contains("Volver al encuentro", "Punto anterior · Pabellón 17")
+                .doesNotContain("data-meeting=\"true\"", "Tu punto de encuentro", "Gorra roja");
         }
     }
     @Test void fictionalPromotionAndDerivedBadgesNeverAffectTheRealSnackBalance() throws Exception {

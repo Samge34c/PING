@@ -1,0 +1,29 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
+<header th:fragment="header" class="h-header">
+  <a class="ping-skip" href="#main-content">Saltar al contenido</a>
+  <a th:replace="~{fragments/layout :: brand}"></a>
+  <nav class="h-desktop-nav" aria-label="Navegación principal del Hub">
+    <a th:href="@{/me}">Mi Ping</a><a th:href="${participant != null} ? @{/me} : @{/demo}">Conectar</a>
+    <a aria-current="page" th:href="@{/events/{id}/hub(id=${event.id})}">Mi evento</a><a th:href="${participant != null} ? @{/me/benefits} : @{/demo}">Beneficios</a>
+  </nav>
+  <div class="h-account"><div th:replace="~{fragments/layout :: theme}"></div>
+    <div th:if="${participant != null}" class="h-account-name"><strong th:text="${participant.alias}"></strong><span th:text="${participant.points + ' PTS'}"></span></div>
+    <span th:if="${participant != null}" class="h-avatar" aria-hidden="true" th:text="${#strings.toUpperCase(#strings.substring(participant.alias,0,1))}"></span>
+    <a th:if="${participant == null}" class="h-guest" th:href="@{/demo}">Entrar</a>
+  </div>
+</header>
+<nav th:fragment="mobileNav" class="h-mobile-nav" aria-label="Navegación móvil del Hub">
+  <a th:href="@{/me}"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg><span>Mi Ping</span></a>
+  <a th:href="${participant != null} ? @{/me} : @{/demo}"><svg th:replace="~{fragments/layout :: icon('spark')}"></svg><span>Conectar</span></a>
+  <a aria-current="page" th:href="@{/events/{id}/hub(id=${event.id})}"><svg th:replace="~{fragments/layout :: icon('calendar')}"></svg><span>Mi evento</span></a>
+  <a th:href="@{/events/{id}/map(id=${event.id})}"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span>Mapa</span></a>
+  <a th:href="${participant != null} ? @{/me/benefits} : @{/demo}"><svg th:replace="~{fragments/layout :: icon('gift')}"></svg><span>Beneficios</span></a>
+</nav>
+<div th:fragment="zoneArt(id)" class="h-zone-visual" aria-hidden="true" th:switch="${id}">
+  <th:block th:case="'cosplay'"><svg class="h-zone-art" viewBox="0 0 100 90" aria-hidden="true"><path d="M10 22h21l8-12h23l9 12h19v57H10Z"/><circle cx="50" cy="50" r="22"/><circle cx="50" cy="50" r="11"/><path d="M75 32h6"/></svg></th:block>
+  <th:block th:case="'technology'"><svg class="h-zone-art" viewBox="0 0 96 78" aria-hidden="true"><rect x="17" y="13" width="60" height="52" rx="8"/><rect x="32" y="25" width="30" height="28" rx="3"/><path d="M28 5v8m18-8v8m18-8v8M28 65v8m18-8v8m18-8v8M9 24h8m-8 15h8m-8 15h8m60-30h8m-8 15h8m-8 15h8"/><path d="m41 34-4 5 4 5m12-10 4 5-4 5"/></svg></th:block>
+  <th:block th:case="'stage'"><svg class="h-zone-art" viewBox="0 0 96 78" aria-hidden="true"><circle cx="40" cy="39" r="32"/><circle cx="40" cy="39" r="21"/><circle cx="40" cy="39" r="10"/><circle cx="40" cy="39" r="2"/><path d="M77 8v38L65 58m-3-4 7 6"/><circle cx="77" cy="8" r="3"/></svg></th:block>
+  <th:block th:case="'meet'"><svg class="h-zone-art" viewBox="0 0 96 78" aria-hidden="true"><path d="M12 29h72v40H12Z"/><path d="m10 14 69-9 3 17-69 9Z"/><path d="m20 13 10 15m9-18 10 15M59 8l10 15"/><path d="m43 40 16 9-16 9Z"/></svg></th:block>
+  <th:block th:case="'gamer'"><svg class="h-zone-art" aria-hidden="true" viewBox="0 0 180 100"><path d="M43 22h94c15 0 30 52 24 63-7 12-27-7-41-20H60C46 78 26 97 19 85c-6-11 9-63 24-63Z"/><path d="M52 35v29M38 49h29m49-10h1m17 16h1"/></svg></th:block>
+</div>
+</body></html>

@@ -40,3 +40,5 @@ No inventar comportamiento pendiente. Los cambios deben registrarse, aceptarse p
 En `feature/saga`, DEC-022 implementa finalización con orquestación local durable, transacciones independientes y compensación; base `feature/mvp-demo`, PR separada. Ver SAGA.md para pasos, límites de proceso único, pruebas y CAP.
 
 `feature/final-mvp` (DEC-023, Issues #12–#14) añade admin detallado, bloqueo simétrico en futuras propuestas, reporte sin sanciones y claridad del historial/flujo. Base temporal `feature/saga`, PR separada sin merge. DEC-024 incorpora canje DEMO de snack de 20 puntos, con clave idempotente y entrega/incidencia manual; no permite gastar durante finalización Saga pendiente.
+
+En `reconstruction/festival-social`, DEC-031 registra la instrucción explícita de Samuel (2026-10-16) para integrar exclusivamente el Hub Festival Social aprobado, asociado al Issue #14. No se atribuye aprobación a Julián. Otras pantallas, reglas, permisos, migraciones y datos quedan fuera del cambio; el respaldo anterior sigue sin recuperarse.

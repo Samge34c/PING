@@ -275,3 +275,13 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 
 - **Estado:** Solicitud explícita del usuario y prompt principal adjunto, 2026-10-14; no atribuye aceptación individual adicional.
 - **Decisión:** Composición editorial continua en ACTIVE/Hub/Home/Mi Ping, objetos independientes en cards y navegación contextual. Única ampliación funcional: «Cómo reconocerme», pista privada opcional persistente de 120 caracteres Unicode, edición propia por sesión/CSRF/versión y lectura ajena exclusivamente ACTIVE con aceptación bilateral. Sin DTO público, backfill, pistas sensibles requeridas ni cambios de matching/ActivityCatalog/Saga/puntos/canje/seguridad. Migración nueva; V1–V11 intactas. Baseline e037ace: 133 tests aprobados y MySQL/Chromium real. Remoto pendiente de autenticación; no publicar sin verificarlo. Rama feature/final-mvp, PR23, sin merge.
+
+## DEC-031 — Integración de Festival Social exclusivamente en Hub SOFA
+
+- **Estado y autoridad:** instrucción y aprobación explícitas de **Samuel** del 2026-10-16; no se atribuye aprobación a Julián. La autorización actual sustituye la restricción de prototipo aislado para este Hub.
+- **Asociación:** [Issue #14 — Preparar demo final](https://github.com/Samge34c/PING/issues/14), consultado mediante el conector (abierto); antecedente PR #23. Esta decisión acota el incremento visual; no declara completado el Issue.
+- **Referencia real:** segunda iteración local `/workspace/work/sofa-hub-propuesta/`, HTML/CSS, ilustración con procedencia y capturas desktop/mobile-iteration2. No representa recuperación del respaldo anterior.
+- **Alcance:** Hub, recursos locales necesarios, variante de navegación exclusiva, documentación y pruebas de sus estados. Portada con dos personas en convención; negro/morado/amarillo, zonas diferenciadas, siguiente acción antes de portada, nombre de la primera zona temprano en móvil.
+- **Conservación:** sin cambios a reglas/permisos/migraciones/datos; demo, matching, Saga, aceptación y confirmación bilaterales, palabra/pista opcional, actividades, puntos, beneficios y mapa intactos. OFFERED presenta propuesta; ACTIVE destaca la zona derivada del punto por identificador, no pabellón. Nunca exponer la pista ajena en Hub.
+- **Verificación:** controles del repositorio, EventExperienceTests/SofaDemoTests y Hub real a 1440/800/390/360 px, temas claro/oscuro y estados pertinentes. No usar resultados históricos como actuales.
+- **Entrega autorizada:** commit y push solo a `reconstruction/festival-social` después de revisar diff/verificaciones; sin merge, main ni force-push. No incluir sesiones, secretos o datos privados.

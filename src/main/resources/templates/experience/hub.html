@@ -1,22 +1,72 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Mi evento')}"></head><body>
-<nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container event-hub">
-<div class="section-heading"><a th:href="@{/me}">← Mi Ping</a><span class="ping-status" th:attr="data-status=${event.status.name()}" th:text="${event.status.label}"></span></div>
-<section class="event-poster"><div class="event-poster-copy"><span class="eyebrow">TU EVENTO / TUS MUNDOS</span><p class="event-greeting" th:if="${participant != null}" th:text="${'Hola, ' + participant.alias + '.'}"></p>
-<h1 th:text="${experience.name}"></h1><p class="event-location"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span th:text="${experience.location}"></span></p>
-<p class="poster-context"><span th:text="${experience.dates}"></span> · SIMULACIÓN ACADÉMICA / NO OFICIAL</p>
-<p class="event-invitation">Comparte tus mundos. Descubre a alguien de tu evento.</p>
-<div class="hub-presence" th:if="${participant != null}"><span><i class="status-dot"></i><span th:text="${currentMatch != null ? 'Conexión en curso' : (participant.available ? 'Disponible para conectar' : 'A tu ritmo · no disponible')}"></span></span><strong th:text="${participant.points + ' PTS'}"></strong></div>
-<div class="hub-next">
-<a th:if="${participant == null}" class="btn btn-primary" th:href="@{/demo}">Entrar al evento <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
-<a th:if="${participant != null and currentMatch != null}" class="btn btn-primary" th:href="@{/matches/{id}(id=${currentMatch.id})}" th:text="${currentMatch.status.name() == 'OFFERED' ? 'Ver propuesta' : 'Volver al encuentro'}"></a>
-<form th:if="${participant != null and currentMatch == null and event.status.name() == 'OPEN' and participant.available}" method="post" th:action="@{/me/search}" data-search-form><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-primary">Buscar conexión <svg th:replace="~{fragments/layout :: icon('spark')}"></svg></button></form>
-<form th:if="${participant != null and currentMatch == null and event.status.name() == 'OPEN' and !participant.available}" method="post" th:action="@{/me/availability}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="version" th:value="${participant.version}"><input type="hidden" name="available" value="true"><button class="btn btn-primary">Estoy listo para conectar</button></form>
-<p th:if="${participant != null and currentMatch == null and event.status.name() != 'OPEN'}" class="ping-notice">El evento no está abierto para nuevas conexiones. Puedes consultar las zonas y tus encuentros anteriores.</p>
-</div></div><div th:replace="~{experience/fragments :: art}"></div></section>
-<section class="hub-zones"><div class="section-heading"><div><span class="eyebrow">ENCUENTRA TU PRÓXIMO MUNDO</span><h2>Zonas para explorar</h2></div><a th:href="@{/events/{id}/map(id=${event.id})}">Abrir mapa <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
-<div class="zone-directory"><a th:each="z : ${experience.zones}" th:href="@{/events/{id}/map(id=${event.id},zone=${z.id})}"><span class="zone-number" th:text="${z.pavilion}"></span><div><strong th:text="${z.name}"></strong><p th:text="${z.description}"></p></div><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div></section>
-<div th:replace="~{experience/fragments :: badges}"></div>
-<nav class="hub-links" aria-label="Explorar mi evento"><a th:href="@{/events/{id}/map(id=${event.id})}"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg>Mapa</a><a th:href="@{/me/benefits}"><svg th:replace="~{fragments/layout :: icon('gift')}"></svg>Beneficios</a><a th:href="@{/me}"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg>Mi Ping</a></nav>
-<p class="small text-secondary mt-4">Demo académica inspirada en SOFA. Ping no es una aplicación oficial del evento.</p>
-<div class="ping-search-screen" hidden role="status" aria-live="polite"><div class="search-content"><div class="search-orbits"><i></i><i></i><i></i><span class="search-node"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg></span></div><h2>Buscando personas con afinidad…</h2><p>Tu próxima conversación empieza en SOFA.</p></div></div>
-</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Mi evento')}"></head>
+<body class="sofa-hub-page" th:with="active=${currentMatch != null and currentMatch.status.name() == 'ACTIVE'}, offered=${currentMatch != null and currentMatch.status.name() == 'OFFERED'}, meetingZone=${active ? experience.atPoint(currentMatch.meetingPoint) : null}">
+<div class="h-scroll">
+  <header th:replace="~{experience/hub-fragments :: header}"></header>
+  <main id="main-content" class="h-main">
+    <section class="h-context" aria-label="Tu siguiente paso">
+      <div class="h-context-copy">
+        <span class="h-state-dot" th:attr="data-state=${active ? 'active' : (offered ? 'offered' : (participant != null and participant.available ? 'available' : 'idle'))}"></span>
+        <div>
+          <p th:if="${active}">Tu encuentro con <strong th:text="${currentMatch.otherAlias}"></strong></p>
+          <p th:if="${offered}">Tienes una propuesta de conexión</p>
+          <p th:if="${currentMatch == null and participant != null}" th:text="${'Hola, ' + participant.alias + '.'}"></p>
+          <p th:if="${participant == null}">Conecta en tu evento</p>
+          <span th:if="${active}" th:text="${currentMatch.meetingPoint}"></span>
+          <span th:if="${offered}">El encuentro empieza cuando ambos acepten.</span>
+          <span th:if="${participant != null and currentMatch == null}" th:text="${event.status.name() != 'OPEN' ? 'Sin nuevas conexiones · puedes explorar' : (participant.available ? 'Disponible para conectar' : 'A tu ritmo · no disponible')}"></span>
+          <span th:if="${participant == null}">Explora SOFA o entra a la demo.</span>
+        </div>
+      </div>
+      <div class="h-context-actions">
+        <a th:if="${active or offered}" class="btn h-primary" th:href="@{/matches/{id}(id=${currentMatch.id})}"><span th:text="${offered ? 'Ver propuesta' : 'Volver al encuentro'}"></span><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+        <a th:if="${participant == null}" class="btn h-primary" th:href="@{/demo}">Entrar al evento <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+        <form th:if="${participant != null and currentMatch == null and event.status.name() == 'OPEN' and participant.available}" method="post" th:action="@{/me/search}" data-search-form>
+          <input type="hidden" name="_csrf" th:value="${csrfToken}">
+          <button class="btn h-primary">Buscar conexión <svg th:replace="~{fragments/layout :: icon('spark')}"></svg></button>
+        </form>
+        <form th:if="${participant != null and currentMatch == null and event.status.name() == 'OPEN' and !participant.available}" method="post" th:action="@{/me/availability}">
+          <input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="version" th:value="${participant.version}"><input type="hidden" name="available" value="true">
+          <button class="btn h-primary">Estoy listo para conectar</button>
+        </form>
+        <a class="btn h-map-action" th:href="${active} ? @{/events/{id}/map(id=${event.id},zone=${meetingZone != null ? meetingZone.id : null},matchId=${currentMatch.id})} : @{/events/{id}/map(id=${event.id})}">Abrir mapa <svg th:replace="~{fragments/layout :: icon('pin')}"></svg></a>
+      </div>
+    </section>
+
+    <section class="h-festival" aria-labelledby="h-title">
+      <div class="h-festival-copy">
+        <div class="h-facts"><span><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span th:text="${experience.location}"></span></span><span th:text="${experience.dates}"></span></div>
+        <h1 id="h-title">SOFA <span>2026<svg class="h-star" aria-hidden="true" viewBox="0 0 32 32"><path d="M13 1h6v9l7-6 4 5-8 6 10 1-1 6-10-2 4 9-5 3-4-10-4 10-5-3 4-9-10 2-1-6 10-1-8-6 4-5 7 6Z"/></svg></span></h1>
+        <p class="h-message"><strong>Comparte tus mundos.</strong><span>Conecta con alguien de tu evento.</span></p>
+      </div>
+      <figure class="h-scene"><img th:src="@{/img/sofa/convencion-social.webp}" width="1536" height="1024" fetchpriority="high" alt="Ilustración de dos personas que se reconocen en una convención, entre cómics, cosplay y música."></figure>
+      <div class="h-festival-foot"><span class="h-event-status" th:attr="data-status=${event.status.name()}"><i></i><span th:text="${'Evento ' + #strings.toLowerCase(event.status.label)}"></span></span><span>SIMULACIÓN ACADÉMICA · No oficial</span><span class="h-motto">CONECTA POR LO QUE TE MUEVE <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></span></div>
+    </section>
+
+    <section class="h-worlds" aria-labelledby="h-worlds-title">
+      <div class="h-section-head"><div><h2 id="h-worlds-title">Encuentra tu mundo<span>.</span></h2><p>Seis zonas. Intereses que abren conversaciones.</p></div><a class="h-text-link" th:href="@{/events/{id}/map(id=${event.id})}">Ver mapa del evento <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
+      <div class="h-zones">
+        <a th:each="zoneId : ${#strings.arraySplit('gamer,cosplay,communities,technology,stage,meet', ',')}" th:with="z=${experience.zone(zoneId)}, isMeeting=${meetingZone != null and meetingZone.id == z.id}"
+           class="h-zone" th:attr="data-zone=${z.id},data-meeting=${isMeeting},aria-label=${z.name + (isMeeting ? ' · Tu punto de encuentro' : '')}" th:href="${isMeeting} ? @{/events/{id}/map(id=${event.id},zone=${z.id},matchId=${currentMatch.id})} : @{/events/{id}/map(id=${event.id},zone=${z.id})}">
+          <div class="h-zone-location"><span>Pabellón <b th:text="${z.pavilion}"></b></span><span th:if="${z.id == 'cosplay' or z.id == 'communities'}">Nivel 2</span></div>
+          <span th:if="${isMeeting}" class="h-here">Tu punto de encuentro</span>
+          <div class="h-zone-copy"><h3 th:text="${z.name}"></h3><p th:text="${z.id == 'gamer' ? 'Open Games y desarrolladores.' : (z.id == 'communities' ? 'Anime, comunidades y aficiones.' : (z.id == 'stage' ? 'Punto demo para Música' : z.interest))}"></p></div>
+          <div th:replace="~{experience/hub-fragments :: zoneArt(${z.id})}"></div>
+          <svg class="h-zone-arrow" th:replace="~{fragments/layout :: icon('arrow')}"></svg>
+        </a>
+      </div>
+    </section>
+    <div th:replace="~{experience/fragments :: badges}"></div>
+    <section class="h-benefits" aria-label="Saldo y beneficios">
+      <svg th:replace="~{fragments/layout :: icon('gift')}"></svg>
+      <p><strong th:text="${participant != null ? participant.points + ' PTS · Conectar también suma.' : 'Conectar también suma.'}"></strong><span>Consulta los beneficios de la demo.</span></p>
+      <a class="h-text-link" th:href="${participant != null} ? @{/me/benefits} : @{/demo}">Ver beneficios <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+    </section>
+    <footer class="h-footer"><a th:replace="~{fragments/layout :: brand}"></a><p>Simulación académica inspirada en SOFA.<br>Sin vínculo oficial con el evento.</p></footer>
+    <div th:replace="~{fragments/layout :: message}"></div>
+    <div class="ping-search-screen" hidden role="status" aria-live="polite"><div class="search-content"><div class="search-orbits"><i></i><i></i><i></i><span class="search-node"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg></span></div><h2>Buscando personas con afinidad…</h2><p>Tu próxima conversación empieza en SOFA.</p></div></div>
+  </main>
+</div>
+<nav th:replace="~{experience/hub-fragments :: mobileNav}"></nav>
+</body></html>

@@ -1,0 +1,16 @@
+{
+  "asset": "src/main/resources/static/img/sofa/convencion-social.webp",
+  "type": "AI-generated original illustration",
+  "tool": "image_gen.imagegen",
+  "generated_source": "/workspace/generated_images/exec-c3fcc154-0a97-472e-891c-e1e0da817b09.png",
+  "purpose": "Illustrative social encounter at a convention, not documentation of real attendees/activity",
+  "source_image_count": 0,
+  "not_official_SOFA_art": true,
+  "manrope": "Existing local Manrope, OFL.txt retained",
+  "zone_mini_art": "Original SVG geometry authored in the prototype for technology, music and cinema",
+  "source_sha256": "0d5d9aeaab646d071f8e293a1024a695747c5b1e61361a151b70e19fe86a2922",
+  "sha256": "1cca94859b1c16e6f421443dfddfc1ddbec6b7880757ccdc00929f7319f04146",
+  "optimization": "ImageMagick existing installation; -strip -quality 84, WebP 1536x1024; no regeneration or new content",
+  "original_bytes": 2704697,
+  "served_bytes": 319502
+}
