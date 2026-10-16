@@ -2588,3 +2588,24 @@ html:has(body.home-festival-page) {scroll-padding-bottom:calc(100px + env(safe-a
 .completed-encounter-page .feedback-panel {padding:16px;text-align:left;margin:24px 0}
 .completed-encounter-page .feedback-panel .action-row {justify-content:flex-start}
 @media(min-width:900px) {.demo-entry-page .demo-visual {display:block}}
+
+/* DEC-037: participant interest selection, scoped away from administration. */
+.participant-interests-page main.pi-page {width:calc(100% - 32px);max-width:760px;margin-top:12px;animation:none;overflow-wrap:anywhere}
+.pi-back {display:inline-flex;align-items:center;min-height:44px;font-size:13px}
+.pi-heading {margin:8px 0 20px}
+.pi-heading h1 {font-size:28px;margin:0 0 8px}
+.pi-heading p {font-size:14px;color:var(--ping-muted);margin:0 0 12px}
+.pi-heading p strong {color:var(--ping-text);font-weight:600}
+.pi-page .interest-list {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;border:0}
+.pi-page .interest-row {min-width:0;min-height:84px;border:1px solid var(--ping-control-border);border-radius:12px;background:var(--ping-surface)}
+.pi-page .interest-row-content {grid-template-columns:minmax(0,1fr) 24px;grid-template-rows:24px auto;gap:10px;min-height:84px;padding:12px;align-items:start}
+.pi-page .interest-row-content .interest-icon {grid-column:1;grid-row:1;line-height:1}
+.pi-page .interest-row-content .interest-check {grid-column:2;grid-row:1}
+.pi-page .interest-row-content strong {grid-column:1/-1;grid-row:2;font-size:16px;font-weight:650;line-height:1.4}
+.pi-page .interest-row:has(input:checked) {border-color:var(--ping-primary);background:var(--ping-badge-bg)}
+.pi-page .interest-row:has(input:checked) strong::after {content:none}
+.pi-page .interest-row:has(input:focus-visible) {outline:2px solid var(--ping-focus);outline-offset:3px}
+.pi-page .interest-selection-footer {display:flex;flex-direction:column;align-items:stretch;gap:12px;margin-top:20px;padding-top:0;border:0}
+.pi-page .interest-selection-footer p {font-size:13px;margin:0;color:var(--ping-muted)}
+.pi-page .interest-selection-footer>.btn {min-height:48px}
+html:has(body.participant-interests-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
