@@ -29,7 +29,7 @@ Aplicación web para escritorio y móvil, con temas claro y oscuro. Proyecto aca
 
 ## Brand Commitments
 
-Dirección solicitada por el usuario: **Festival Social**, con energía de convención y de app social; negro, morado y amarillo. Debe funcionar en móvil y en temas claro/oscuro. Estos son compromisos de identidad; la composición y los valores de implementación concretos siguen pendientes.
+Dirección solicitada por el usuario: **Festival Social**, con energía de convención y de app social; negro, morado y amarillo. Debe funcionar en móvil y en temas claro/oscuro. El Hub integra la segunda composición aprobada; DESIGN.md registra sus decisiones. La implementación de otras pantallas sigue fuera de este incremento.
 
 Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genéricas y tarjetas repetidas. El espacio debe ayudar a entender, decidir o actuar. No reemplazar contenidos reales con pruebas sociales, fotografías, personas o datos inventados.
 
@@ -45,7 +45,7 @@ Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genérica
 
 El usuario eligió composición primero para portadas y showcases, y trabajo directamente en código para pantallas operativas. El valor de herramienta para portadas se registra en `.impeccable/config.json` (`buildPath: comp`).
 
-Alcance actual autorizado: respaldar configuración, skills y documentación mediante un commit y push exclusivamente a `reconstruction/festival-social`, y preparar una propuesta visual aislada del Hub SOFA en escritorio y móvil. La composición se revisa antes de implementar. No modificar la aplicación, otras pantallas ni backend; sin merge, cambios en main ni force-push. La autorización de push es puntual para ese respaldo.
+Alcance actual autorizado por **Samuel**, 2026-10-16: integrar la segunda composición aprobada del Hub SOFA en Java/Spring MVC/Thymeleaf, conservando stack, reglas, estados, privacidad, demo y destinos. Trabajo exclusivamente en Hub y recursos necesarios; navegación horizontal acotada al Hub, sin rediseñar otras pantallas ni cambiar migraciones/datos. Ver DEC-031 y el Issue #14. Tras verificar, commit y push exclusivamente a `reconstruction/festival-social`, sin merge, main ni force-push. No se atribuye aprobación a Julián.
 
 ## Evidence on Hand
 
@@ -56,4 +56,4 @@ Alcance actual autorizado: respaldar configuración, skills y documentación med
 
 ## Open Decisions
 
-Composición final, tratamiento visual por pantalla y detalles de ejecución pendientes de revisión. No hay aprobación implícita para implementar la propuesta que salga de esta auditoría.
+La segunda composición del Hub fue aprobada explícitamente por Samuel como referencia para integración. Otras pantallas y ampliaciones funcionales quedan fuera de esta autorización.
