@@ -285,3 +285,12 @@ Las credenciales aleatorias de la instancia de prueba no se imprimieron ni versi
 - **Conservación:** sin cambios a reglas/permisos/migraciones/datos; demo, matching, Saga, aceptación y confirmación bilaterales, palabra/pista opcional, actividades, puntos, beneficios y mapa intactos. OFFERED presenta propuesta; ACTIVE destaca la zona derivada del punto por identificador, no pabellón. Nunca exponer la pista ajena en Hub.
 - **Verificación:** controles del repositorio, EventExperienceTests/SofaDemoTests y Hub real a 1440/800/390/360 px, temas claro/oscuro y estados pertinentes. No usar resultados históricos como actuales.
 - **Entrega autorizada:** commit y push solo a `reconstruction/festival-social` después de revisar diff/verificaciones; sin merge, main ni force-push. No incluir sesiones, secretos o datos privados.
+
+## DEC-032 — Misión ACTIVE Festival Social en una rama independiente
+
+- **Autoridad y fecha:** instrucción explícita de Samuel, 2026-10-16. No se atribuye aprobación a Julián.
+- **Asociación:** Issue #14 (demo final), consultado abierto; las reglas de confirmación del Issue #9/PREDEV se conservan. PR #24 corresponde exclusivamente al Hub.
+- **Base/entrega:** `55bb83162b01e3131732716c85796ff668ce145b`, rama nueva `feature/active-festival-social`; commit/push solo de esta tarea y PR en borrador hacia `reconstruction/festival-social`. Sin merge, force-push ni main.
+- **Alcance visual:** pantalla del encuentro ACTIVE y ajustes necesarios de sus estados asociados. Escritorio: cabecera compacta, punto/mapa principal y palabra/pista/actividad lateral. Móvil: persona/estado, palabra, pista autorizada, lugar/mapa compacto, actividad y confirmación. Conservar componentes, recursos locales, temas, foco, lectura lógica y área segura. Sin portada nueva ni rediseño de otras pantallas.
+- **Conservación funcional:** rutas/formularios, CSRF, sesión/pertenencia, palabra/punto asignados, pista opcional privada solo durante ACTIVE autorizado, actualización automática y protección de borradores, confirmación bilateral, Saga pendiente, reintentos e idempotencia. Sin cambiar backend, reglas, permisos, esquema ni datos de la demo.
+- **Verificación:** ACTIVE mediante aceptación de ambos en dos sesiones; confirmaciones/puntos solo con datos aislados. Revisar pista presente/ausente, contenido largo, Gamer/otras zonas (IDs distintos en pabellón 17), mapa/retorno, estados adyacentes y 1440/800/390/360 claro/oscuro. Controles actuales del repositorio antes del respaldo; no atribuir las 150 pruebas históricas al nuevo trabajo.

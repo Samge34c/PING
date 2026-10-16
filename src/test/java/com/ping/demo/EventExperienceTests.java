@@ -25,6 +25,7 @@ class EventExperienceTests {
     @Autowired ParticipantService participants;
     @Autowired ParticipantRepository people;
     @Autowired MatchService matches;
+    @Autowired MatchCompletionSagaSteps completionSteps;
     @Autowired MatchingService matching;
     @Autowired MatchRepository matchRepository;
     @Autowired MatchReservationRepository reservations;
@@ -165,6 +166,57 @@ class EventExperienceTests {
             assertThat(page.statusCode()).isEqualTo(200);
             assertThat(page.body()).contains("Volver al encuentro", "Punto anterior · Pabellón 17")
                 .doesNotContain("data-meeting=\"true\"", "Tu punto de encuentro", "Gorra roja");
+        }
+    }
+    @Test void activeMissionUsesRealSessionFormsAndKeepsUnilateralConfirmationDistinct() throws Exception {
+        long m = matching.search(a); String path = "/matches/"+m;
+        try(var sam = new TestBrowser(port); var jul = new TestBrowser(port)) {
+            enter(sam,a); enter(jul,b);
+            assertThat(sam.get(path).body()).contains("Aceptar conexión").doesNotContain("am-grid", "Gorra roja", "active-map.js");
+            assertThat(sam.post(path+"/accept",Map.of()).statusCode()).isEqualTo(302);
+            assertThat(sam.get(path).body()).doesNotContain("am-grid", "Gorra roja");
+            jul.get(path); assertThat(jul.post(path+"/accept",Map.of()).statusCode()).isEqualTo(302);
+            var active = matches.get(m,a);
+            assertThat(sam.get(path).body()).contains("class=\"am-grid\"", "Su palabra de encuentro", active.word(), active.meetingPoint(), active.activity(), "Gorra roja", "Confirmaciones: 0 de 2", "active-map.js");
+            assertThat(sam.post(path+"/confirm",Map.of()).statusCode()).isEqualTo(302);
+            assertThat(sam.get(path).body()).contains("Tú ya confirmaste. Esperando a Julián", "Confirmaciones: 1 de 2")
+                .doesNotContain("action=\""+path+"/confirm\"", "Conexión completada");
+            assertThat(jul.get(path).body()).contains("Samuel ya confirmó. Falta tu confirmación.", "Confirmar encuentro y actividad");
+            assertThat(participants.get(a).points()).isZero(); assertThat(participants.get(b).points()).isZero();
+            assertThat(matches.get(m,b).word()).isEqualTo(active.word());
+            assertThat(matches.get(m,b).meetingPoint()).isEqualTo(active.meetingPoint());
+            jul.post(path+"/confirm",Map.of()); sam.post(path+"/confirm",Map.of()); jul.post(path+"/confirm",Map.of());
+            assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(b).points()).isEqualTo(10);
+            assertThat(sam.get(path).body()).contains("Conexión completada", "Feedback opcional")
+                .doesNotContain("am-grid", "active-map.js", "Gorra roja");
+        }
+    }
+    @Test void activeMissionRetainsDurablePendingSagaAndRetryWithoutPrematureCompletion() throws Exception {
+        long m = matching.search(a); matches.accept(m,a); matches.accept(m,b);
+        completionSteps.begin(m,a); completionSteps.begin(m,b); // Durable state left before the reward steps.
+        try(var browser = new TestBrowser(port)) {
+            enter(browser,a); String path = "/matches/"+m;
+            assertThat(browser.get(path).body()).contains("Finalizando la conexión", "Reintentar finalización", "Confirmaciones: 2 de 2")
+                .doesNotContain("Conexión completada", "action=\""+path+"/cancel\"");
+            assertThat(participants.get(a).points()).isZero(); assertThat(participants.get(b).points()).isZero();
+            assertThat(browser.post(path+"/confirm",Map.of()).statusCode()).isEqualTo(302);
+            browser.post(path+"/confirm",Map.of());
+            assertThat(matches.get(m,a).status()).isEqualTo(MatchStatus.COMPLETED);
+            assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(b).points()).isEqualTo(10);
+        }
+    }
+    @ParameterizedTest @CsvSource({"Tecnología,technology", "Música,stage"})
+    void inlineEncounterMapKeepsTheAssignedZoneIdAndMatchReturn(String interest,String zone) throws Exception {
+        for(long id : List.of(a,b)) {
+            var form = interests.selection(id);
+            form.setInterestIds(interests.catalog().stream().filter(i -> i.getName().equals(interest)).map(com.ping.interest.Interest::getId).toList()); interests.save(id,form);
+        }
+        long m = matching.search(a); matches.accept(m,a); matches.accept(m,b);
+        try(var browser = new TestBrowser(port)) {
+            enter(browser,a); String body = browser.get("/matches/"+m).body();
+            assertThat(body).contains("data-zone-id=\""+zone+"\"", "zone="+zone+"&amp;matchId="+m, "data-encounter-zoom=\"in\"", "data-encounter-center", "aria-current=\"location\"");
+            assertThat(body.split("data-assigned=\"true\"",-1)).hasSize(2);
+            assertThat(browser.get("/events/"+event+"/map?zone="+zone+"&matchId="+m).body()).contains("href=\"/matches/"+m+"\"", "Volver al encuentro");
         }
     }
     @Test void fictionalPromotionAndDerivedBadgesNeverAffectTheRealSnackBalance() throws Exception {
