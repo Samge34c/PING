@@ -26,3 +26,5 @@ GitHub contiene la memoria compartida del proyecto. No dependas del contexto pri
 Si una petición contradice PING_PREDEV_v1.1.md, detente y solicita decisión humana.
 
 Los cambios del producto requieren aceptación de Samuel y Julián, registro en `docs/DECISION_LOG.md` y actualización documental antes del código afectado. Consulta `CONTRIBUTING.md` y `docs/WORKFLOW_GITHUB.md`.
+
+Consulta el registro de [skills de PING](docs/SKILLS_PING.md). Seleccionar skills según la tarea; no cargar todas por defecto.

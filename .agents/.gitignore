@@ -1,0 +1,4 @@
+# Cachés y bytecode locales; conservar instrucciones y licencias en Git.
+skills/impeccable/.runtime/
+**/__pycache__/
+**/*.pyc
