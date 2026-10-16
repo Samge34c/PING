@@ -34,7 +34,7 @@
     const label = tile.querySelector('[data-interest-description]'); if (label) label.textContent = description;
   });
   decorateInterests(document);
-  const updateInterestCount = form => { const count = form.querySelectorAll('input[type="checkbox"]:checked').length; const label = form.querySelector('[data-selected-count]'); if (label) label.textContent = count + ' intereses seleccionados'; };
+  const updateInterestCount = form => { const count = form.querySelectorAll('input[type="checkbox"]:checked').length; const label = form.querySelector('[data-selected-count]'); if (label) label.textContent = count === 1 ? '1 interés seleccionado' : count + ' intereses seleccionados'; };
   document.querySelectorAll('[data-interest-editor]').forEach(updateInterestCount);
   document.addEventListener('change', e => { const form = e.target.closest('[data-interest-editor]'); if (form) updateInterestCount(form); });
   const inlineEditor = document.querySelector('[data-interest-selection-url]');

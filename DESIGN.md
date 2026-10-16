@@ -42,3 +42,7 @@ Escena social del Hub reutilizada sin alterar el archivo (ver HUB_ART_PROVENANCE
 ## Continuidad del recorrido móvil — DEC-036
 
 Corrección operativa, sin rediseñar las cinco pantallas: entrada demo con un selector nativo, encabezado único y formulario temprano; ilustración antigua solo en escritorio con etiquetas separadas. COMPLETED agrupa recompensa/saldo y adelanta enlaces existentes de continuación antes del feedback opcional. CSS acotado a `.demo-entry-page` y `.completed-encounter-page`; ACTIVE/OFFERED/CANCELLED y navegación compartida conservados. Misma Manrope, variables y controles Festival Social; sin recursos nuevos. Evidencia y límites en docs/REVISION_MOVIL_INTEGRADA.md.
+
+## Selección de intereses móvil — DEC-037 (parte visual)
+
+Editor existente del participante: dos columnas de opciones táctiles completas, icono/nombre sin descripciones repetidas, selección por superficie/borde y check nativo, foco visible y contador singular/plural real. Título/contexto compactos, retorno arriba y un único botón principal. CSS `.participant-interests-page`/`.pi-*`, Manrope y variables existentes en ambos temas; controles≥44 px y reserva de navegación compartida. No se modifica administración ni el contrato del formulario (CSRF, versión e IDs). El enlace funcional de alta sigue pendiente de la decisión descrita en DEC-037; este editor no lo sustituye.
