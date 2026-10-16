@@ -38,3 +38,7 @@ Orden móvil: catálogo real por puntos → solicitudes y entrega → promoción
 Entrada funcional diseñada desde390 px. Mensaje breve y acción antes del arte; contexto explícito de demo académica SOFA, sin confundirlo con el evento de una sesión. Invitado: entrada demo y explorar eventos. Con sesión: Mi Ping y resolución real de su evento mediante `/me/event`; selección demo, exploración y preparación siguen accesibles.
 
 Escena social del Hub reutilizada sin alterar el archivo (ver HUB_ART_PROVENANCE.json), recorte compacto que conserva personas/manos, tamaño reservado y sin carga diferida. Secuencia enlazada con iconos locales e intereses → aceptación bilateral → encuentro/actividad/confirmación; sin tarjetas repetidas ni instrucciones duplicadas. Desktop amplía el arte al lateral del flujo móvil. Variables existentes, Manrope y Festival Social en ambos temas; sin navegación compartida nueva ni dependencias.
+
+## Continuidad del recorrido móvil — DEC-036
+
+Corrección operativa, sin rediseñar las cinco pantallas: entrada demo con un selector nativo, encabezado único y formulario temprano; ilustración antigua solo en escritorio con etiquetas separadas. COMPLETED agrupa recompensa/saldo y adelanta enlaces existentes de continuación antes del feedback opcional. CSS acotado a `.demo-entry-page` y `.completed-encounter-page`; ACTIVE/OFFERED/CANCELLED y navegación compartida conservados. Misma Manrope, variables y controles Festival Social; sin recursos nuevos. Evidencia y límites en docs/REVISION_MOVIL_INTEGRADA.md.
