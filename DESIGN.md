@@ -32,3 +32,9 @@ Encuentro actual presentado una sola vez; historial desplegable con encuentros a
 Pantalla operativa diseñada a 390 px: cabecera compacta y enlace temprano a Mis canjes, cupón amarillo con saldo/coste/faltantes contiguos, acción y condiciones antes de cualquier promoción. La perforación geométrica pequeña identifica el cupón sin ilustración ni portada. Interiores siguen variables de tema; Manrope, amarillo, negro y morado conservan Festival Social.
 
 Orden móvil: catálogo real por puntos → solicitudes y entrega → promoción ficticia, con avisos académicos. Desktop aprovecha el lateral para Mis canjes. Estados de saldo insuficiente, saldo suficiente y Saga pendiente explícitos; solicitud/entregado/incidencia muestran datos reales. El fragmento promocional compartido y las reglas de desbloqueo no se modifican. Formularios, CSRF, requestKey e idempotencia del backend intactos; CSS limitado a `.benefits-page` y `.bf-*`.
+
+## Home — DEC-035
+
+Entrada funcional diseñada desde390 px. Mensaje breve y acción antes del arte; contexto explícito de demo académica SOFA, sin confundirlo con el evento de una sesión. Invitado: entrada demo y explorar eventos. Con sesión: Mi Ping y resolución real de su evento mediante `/me/event`; selección demo, exploración y preparación siguen accesibles.
+
+Escena social del Hub reutilizada sin alterar el archivo (ver HUB_ART_PROVENANCE.json), recorte compacto que conserva personas/manos, tamaño reservado y sin carga diferida. Secuencia enlazada con iconos locales e intereses → aceptación bilateral → encuentro/actividad/confirmación; sin tarjetas repetidas ni instrucciones duplicadas. Desktop amplía el arte al lateral del flujo móvil. Variables existentes, Manrope y Festival Social en ambos temas; sin navegación compartida nueva ni dependencias.

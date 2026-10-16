@@ -2510,3 +2510,58 @@ html:has(body.benefits-page) {scroll-padding-bottom:calc(100px + env(safe-area-i
  .bf-coupon-head {padding:24px}.bf-coupon-body {padding:24px}.bf-coupon-head h2 {font-size:28px}
  .bf-fiction .demo-promotion {max-width:620px}
 }
+
+/* Home — DEC-035. Message/action before local social art at390. */
+body.home-festival-page {background-image:none}
+.home-festival-page main.hm-page {width:calc(100% - 32px);max-width:1160px;margin-top:16px;animation:none;overflow-wrap:anywhere}
+.hm-intro {display:flex;flex-direction:column;gap:20px}
+.hm-copy {min-width:0}
+.hm-context {display:flex;align-items:center;gap:8px;min-height:32px;margin:0 0 12px;font-size:13px;color:var(--ping-muted)}
+.hm-context .ping-icon {width:16px;height:16px;flex:none;color:var(--ping-primary)}
+.hm-copy h1 {font-size:36px;line-height:1.12;letter-spacing:-.03em;font-weight:800;margin:0;text-wrap:balance}
+.hm-copy h1>span {display:block;color:var(--ping-highlight-text)}
+.hm-description {font-size:16px;line-height:1.6;max-width:40ch;margin:14px 0 18px;color:var(--ping-muted)}
+.hm-actions {display:flex;flex-direction:column;gap:4px}
+.hm-actions .hm-primary {display:flex;align-items:center;justify-content:center;gap:14px;min-height:48px;padding:12px 18px;background:var(--ping-yellow-light);color:var(--ping-black);border:1px solid transparent;font-size:15px;line-height:1.4;font-weight:800;white-space:normal}
+.hm-actions .hm-primary:hover {background:#fff375;color:var(--ping-black)}
+.hm-actions .hm-primary:active {background:var(--ping-yellow);color:var(--ping-black)}
+.hm-secondary {display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;font-weight:650}
+.hm-secondary .ping-icon {width:18px;height:18px}
+.hm-unofficial {font-size:12px;line-height:1.6;color:var(--ping-muted);margin:10px 0 0}
+.hm-art {position:relative;isolation:isolate;aspect-ratio:1.7;margin:0;overflow:hidden;border-radius:12px;background:var(--ping-art-bg)}
+.hm-art img {display:block;width:100%;height:100%;object-fit:cover;object-position:50% 36%}
+.hm-how {margin-top:28px}
+.hm-how>h2 {font-size:22px;line-height:1.3;letter-spacing:-.02em;font-weight:750;margin:0 0 20px;text-wrap:balance}
+.hm-steps {list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0}
+.hm-steps>li {position:relative;display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding-bottom:24px;min-width:0}
+.hm-steps>li:last-child {padding-bottom:0}
+.hm-steps>li:not(:last-child)::after {content:"";position:absolute;left:21px;top:49px;bottom:5px;width:1px;background:var(--ping-border)}
+.hm-step-icon {display:flex;align-items:center;justify-content:center;width:44px;height:44px;background:var(--ping-badge-bg);color:var(--ping-primary);border-radius:10px}
+.hm-step-icon .ping-icon {width:22px;height:22px}
+.hm-steps h3 {font-size:17px;line-height:1.4;font-weight:750;margin:0 0 6px}
+.hm-steps p {font-size:14px;line-height:1.6;color:var(--ping-muted);margin:0;max-width:48ch}
+.hm-demo {border-top:1px solid var(--ping-border);padding-top:20px;margin-top:28px}
+.hm-demo>div {display:grid;grid-template-columns:24px minmax(0,1fr);column-gap:12px;align-items:start}
+.hm-demo>div>.ping-icon {width:24px;height:24px;color:var(--ping-primary);margin-top:2px}
+.hm-demo p {font-size:15px;font-weight:650;margin:0;line-height:1.5}
+.hm-demo p>span {display:block;margin-top:4px;font-size:13px;font-weight:400;color:var(--ping-muted)}
+.hm-demo>div>a {grid-column:2;display:flex;align-items:center;min-height:44px;gap:8px;margin-top:6px;font-size:14px}
+.hm-demo a>.ping-icon {width:18px;height:18px}
+.hm-session-tools {display:flex;flex-wrap:wrap;gap:4px 24px;padding-top:12px;margin-top:12px;border-top:1px solid var(--ping-border)}
+.hm-session-tools a {display:flex;align-items:center;min-height:44px;font-size:13px}
+.home-festival-page :is(a,button) {scroll-margin-block:90px 112px}
+.home-festival-page :is(a,button):focus-visible {outline:3px solid var(--ping-focus);outline-offset:3px;box-shadow:none}
+html:has(body.home-festival-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+@media(min-width:1024px) {
+ .home-festival-page main.hm-page {width:calc(100% - 64px);margin-top:28px}
+ .hm-intro {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:36px;align-items:center}
+ .hm-copy h1 {font-size:44px;line-height:1.12}.hm-description {max-width:38ch}
+ .hm-art {aspect-ratio:1.35;max-height:420px}
+ .hm-actions {flex-direction:row;align-items:center;gap:24px;flex-wrap:wrap}.hm-actions .hm-primary {min-width:216px}
+ .hm-secondary {justify-content:flex-start}.hm-unofficial {max-width:48ch}
+ .hm-how {margin-top:36px}.hm-how>h2 {font-size:24px;margin-bottom:24px}
+ .hm-steps {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+ .hm-steps>li {grid-template-columns:44px minmax(0,1fr);gap:12px;padding:0}
+ .hm-steps>li:not(:last-child)::after {display:none}
+ .hm-demo {margin-top:28px}.hm-demo>div {grid-template-columns:24px minmax(0,1fr) auto;align-items:center}.hm-demo>div>a {grid-column:3;margin:0}
+}

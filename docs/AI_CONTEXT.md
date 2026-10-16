@@ -46,3 +46,5 @@ En `reconstruction/festival-social`, DEC-031 registra la instrucción explícita
 DEC-032 registra la instrucción explícita de Samuel para reorganizar ACTIVE como misión Festival Social, en `feature/active-festival-social` desde `55bb831`, con PR separada hacia `reconstruction/festival-social`. PR #24/Hub no se modifica. Sin atribuir aprobación a Julián; backend, reglas, privacidad, persistencia y otras pantallas se conservan. Evidencia y continuidad: ACTIVE_FESTIVAL_SOCIAL.md.
 
 DEC-033/Mi Ping quedó respaldado en `6110e48`, PR #26 hacia ACTIVE. DEC-034 autoriza ahora Beneficios móvil en `feature/beneficios-mobile` desde esa base y PR en borrador hacia Mi Ping: cupón con saldo/coste/faltantes juntos, Mis canjes temprano y promoción ficticia separada. Backend y reglas intactos; ver BENEFICIOS_MOBILE.md al entregar.
+
+DEC-035 autoriza Home móvil desde `6711b21` (Beneficios/PR #27) en `feature/home-mobile`, con PR en borrador hacia Beneficios. Entrada funcional directa, arte social existente, demo explícitamente académica y navegación propia por sesión; sin cambiar backend ni pantallas terminadas. Ver HOME_MOBILE.md y HOME_ART_PROVENANCE.json.
