@@ -26,3 +26,9 @@ Fuentes editables: `templates/demo/match.html`, `templates/demo/active-mission.h
 Pantalla operativa `/me`, diseñada a 390 px y comprobada después a 360 px; misma Manrope y paleta Festival Social que Hub/ACTIVE, sin ilustración ni portada nueva. Un solo panel morado para estado real y acción, botón amarillo, identidad/saldo compactos. Orden DOM: identidad → acción → intereses → editor privado propio opcional → historial. Escritorio aprovecha el espacio lateral para intereses y pista, conservando el orden de lectura.
 
 Encuentro actual presentado una sola vez; historial desplegable con encuentros anteriores, detalles reales accesibles en sus enlaces. Pista ajena y palabra del encuentro ausentes de Mi Ping. Formularios, versión, CSRF, live.js y fragmento compartido de pista conservados. CSS limitado a `.mi-ping-page`/`.mp-*`, sin cambiar navegación compartida. Hooks Impeccable desactivados.
+
+## Beneficios — DEC-034
+
+Pantalla operativa diseñada a 390 px: cabecera compacta y enlace temprano a Mis canjes, cupón amarillo con saldo/coste/faltantes contiguos, acción y condiciones antes de cualquier promoción. La perforación geométrica pequeña identifica el cupón sin ilustración ni portada. Interiores siguen variables de tema; Manrope, amarillo, negro y morado conservan Festival Social.
+
+Orden móvil: catálogo real por puntos → solicitudes y entrega → promoción ficticia, con avisos académicos. Desktop aprovecha el lateral para Mis canjes. Estados de saldo insuficiente, saldo suficiente y Saga pendiente explícitos; solicitud/entregado/incidencia muestran datos reales. El fragmento promocional compartido y las reglas de desbloqueo no se modifican. Formularios, CSRF, requestKey e idempotencia del backend intactos; CSS limitado a `.benefits-page` y `.bf-*`.

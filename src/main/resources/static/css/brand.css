@@ -2434,3 +2434,79 @@ html:has(body.mi-ping-page) {scroll-padding-bottom:calc(100px + env(safe-area-in
  .mp-history {grid-column:1 / -1;border-top:1px solid var(--ping-border);padding-top:12px}
  .mp-next h2 {font-size:28px}.mp-update {max-width:620px}
 }
+
+/* Beneficios — DEC-034. Coupon and delivery flow, designed at390 first. */
+body.benefits-page {background-image:none}
+.benefits-page main.bf-page {width:calc(100% - 32px);max-width:1080px;margin-top:12px;animation:none;overflow-wrap:anywhere}
+.bf-header {margin-bottom:20px}
+.bf-context {display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:13px;color:var(--ping-muted);margin-bottom:12px}
+.bf-context a {display:flex;align-items:center;min-height:44px;flex:none}
+.bf-context>span {text-align:right;min-width:0}
+.bf-heading {display:flex;align-items:center;justify-content:space-between;gap:20px}
+.bf-heading>div {min-width:0}
+.bf-heading h1 {font-size:28px;line-height:1.2;letter-spacing:-.03em;font-weight:800;margin:0 0 8px}
+.bf-heading p {font-size:14px;color:var(--ping-muted);margin:0}
+.bf-claims-link {display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:13px;font-weight:650;flex:none}
+.bf-claims-link>span {display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;border-radius:6px;background:var(--ping-badge-bg);color:var(--ping-badge-text);font-variant-numeric:tabular-nums}
+.bf-claims-link .ping-icon {width:16px;height:16px;transform:rotate(90deg)}
+.bf-layout {display:flex;flex-direction:column;gap:28px}
+.bf-catalog {min-width:0;display:flex;flex-direction:column;gap:20px}
+.bf-saga-notice {margin:0;font-size:14px}
+.bf-coupon {background:var(--ping-surface);border-radius:12px;overflow:hidden}
+.bf-coupon-head {display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px;background:var(--ping-yellow-light);color:var(--ping-black);position:relative}
+.bf-coupon-head p {font-size:12px;font-weight:650;margin:0 0 8px;color:#51470d}
+.bf-coupon-head h2 {font-size:24px;line-height:1.25;letter-spacing:-.025em;font-weight:800;margin:0;color:inherit;text-wrap:pretty}
+.bf-coupon-head>.ping-icon {width:36px;height:36px;flex:none}
+.bf-coupon-head::before,.bf-coupon-head::after {content:"";position:absolute;bottom:-8px;width:16px;height:16px;border-radius:50%;background:var(--ping-bg);z-index:1}
+.bf-coupon-head::before {left:-8px}.bf-coupon-head::after {right:-8px}
+.bf-coupon-body {padding:20px;border-top:1px dashed var(--ping-control-border)}
+.bf-costs {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 18px}
+.bf-costs>div {min-width:0}
+.bf-costs dt {font-size:13px;font-weight:500;color:var(--ping-muted);margin-bottom:8px}
+.bf-costs dd {display:flex;flex-direction:column;gap:2px;margin:0}
+.bf-costs strong {font-size:28px;line-height:1.2;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.bf-costs span {font-size:12px;color:var(--ping-muted)}
+.bf-costs>div:first-child strong {color:var(--ping-highlight-text)}
+.bf-eligibility {display:flex;align-items:flex-start;gap:8px;font-size:14px;margin:0 0 16px;color:var(--ping-text)}
+.bf-eligibility .ping-icon {width:18px;height:18px;flex:none;margin-top:2px;color:var(--ping-primary)}
+.bf-coupon .bf-primary {display:flex;align-items:center;justify-content:center;gap:12px;min-height:48px;width:100%;font-size:14px;line-height:1.4;font-weight:800;background:var(--ping-yellow-light);color:var(--ping-black);border:1px solid transparent;white-space:normal}
+.bf-coupon .bf-primary:hover {background:#fff375;color:var(--ping-black)}
+.bf-coupon .bf-primary:active {background:var(--ping-yellow);color:var(--ping-black)}
+.bf-coupon .bf-primary:disabled {opacity:1;background:var(--ping-surface-alt);color:var(--ping-muted);border-color:var(--ping-control-border);cursor:not-allowed}
+.bf-connect {display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:14px;margin-top:8px}
+.bf-connect .ping-icon {width:18px;height:18px}
+.bf-help {font-size:12px;line-height:1.6;color:var(--ping-muted);margin:14px 0 0}
+.bf-section-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
+.bf-section-heading h2 {font-size:20px;line-height:1.4;font-weight:750;letter-spacing:-.02em;margin:0}
+.bf-section-heading a {display:flex;align-items:center;gap:6px;min-height:44px;font-size:13px;flex:none}
+.bf-section-heading .ping-icon {width:16px;height:16px}
+.bf-empty {border-top:1px solid var(--ping-border);padding-top:16px}
+.bf-empty p {font-size:14px;margin:0 0 6px}.bf-empty p+p {color:var(--ping-muted);font-size:13px}
+.bf-claim {border-top:1px solid var(--ping-border);padding:20px 0}
+.bf-claim-top {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.bf-claim-id {font-size:12px;color:var(--ping-muted);font-variant-numeric:tabular-nums}
+.bf-claim h3 {font-size:18px;line-height:1.4;font-weight:700;margin:0 0 10px}
+.bf-claim p {font-size:14px;line-height:1.6;margin:8px 0;color:var(--ping-muted)}
+.bf-claim .bf-claim-cost {color:var(--ping-text)}.bf-claim time {display:block;margin-top:10px;font-size:12px;color:var(--ping-muted)}
+.bf-fiction {border-top:1px solid var(--ping-border);padding-top:20px;min-width:0}
+.bf-fiction-label {font-size:13px;color:var(--ping-muted);margin:0 0 12px}
+.bf-fiction .demo-promotion {padding:20px;margin:0;background:var(--ping-surface-alt);border:1px dashed var(--ping-control-border);border-radius:12px;box-shadow:none}
+.bf-fiction .demo-promotion h2 {font-size:22px;margin:12px 0}
+.bf-fiction .demo-promotion>p {font-size:14px;line-height:1.6;margin-bottom:12px}
+.bf-fiction .section-heading {margin:0}
+.bf-fiction .section-heading .eyebrow {font-size:12px;color:var(--ping-muted)}
+.bf-fiction .section-heading>.ping-icon {width:24px;height:24px}
+.bf-fiction .promo-disclaimer {font-size:12px}.bf-fiction .promo-code {margin:12px 0}.bf-fiction .promo-code strong {font-size:24px}
+.bf-empty-catalog {padding:20px;background:var(--ping-surface);border-radius:12px}.bf-empty-catalog h2 {font-size:20px;line-height:1.4}.bf-empty-catalog p {font-size:14px}.bf-empty-catalog a {display:flex;align-items:center;min-height:44px;gap:8px}
+.bf-academic {font-size:12px;line-height:1.6;color:var(--ping-muted);margin:24px 0 0}
+.benefits-page :is(a,button,[tabindex]) {scroll-margin-block:90px 112px}
+.benefits-page :is(a,button,[tabindex]):focus-visible {outline:3px solid var(--ping-focus);outline-offset:3px;box-shadow:none}
+html:has(body.benefits-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+@media(min-width:1024px) {
+ .benefits-page main.bf-page {width:calc(100% - 64px);margin-top:24px}
+ .bf-header {margin-bottom:28px}.bf-context {max-width:620px}.bf-heading {max-width:620px}
+ .bf-layout {display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,1fr);gap:32px 40px;align-items:start}
+ .bf-catalog {grid-column:1;grid-row:1}.bf-claims {grid-column:2;grid-row:1}.bf-fiction {grid-column:1 / -1;grid-row:2}
+ .bf-coupon-head {padding:24px}.bf-coupon-body {padding:24px}.bf-coupon-head h2 {font-size:28px}
+ .bf-fiction .demo-promotion {max-width:620px}
+}
