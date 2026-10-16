@@ -45,7 +45,7 @@ Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genérica
 
 El usuario eligió composición primero para portadas y showcases, y trabajo directamente en código para pantallas operativas. El valor de herramienta para portadas se registra en `.impeccable/config.json` (`buildPath: comp`).
 
-Alcance actual autorizado por **Samuel**, 2026-10-16: reorganizar visualmente Mi Ping `/me`, priorizando estado real, siguiente acción, intereses y pista propia opcional. Rama `feature/mi-ping-mobile` desde `d088e59` (Hub, ACTIVE y pauta móvil de AGENTS.md). Conservar backend y funcionalidad; sin nueva portada ni cambios de otras pantallas, reglas, permisos, persistencia o migraciones. Ver DEC-033; no se atribuye aprobación a Julián. Samuel autoriza posteriormente el respaldo de Mi Ping y su PR en borrador hacia la rama base de ACTIVE.
+Alcance actual autorizado por **Samuel**, 2026-10-16: reorganizar visualmente Beneficios `/me/benefits` con composición de cupón, saldo/coste/puntos faltantes juntos y acceso temprano a Mis canjes. Rama `feature/beneficios-mobile` desde `6110e48` (Hub, ACTIVE y Mi Ping respaldados). Preservar backend, reglas, formularios, idempotencia y estados de entrega; promoción ficticia separada. Ver DEC-034. Commit/push y PR en borrador autorizados hacia `feature/mi-ping-mobile`; sin merge, force-push ni cambios en main. No se atribuye aprobación a Julián.
 
 ## Evidence on Hand
 
@@ -56,4 +56,4 @@ Alcance actual autorizado por **Samuel**, 2026-10-16: reorganizar visualmente Mi
 
 ## Open Decisions
 
-Hub y ACTIVE integrados se conservan. Samuel autoriza Mi Ping en DEC-033; las ampliaciones funcionales y otras pantallas quedan fuera.
+Hub, ACTIVE y Mi Ping se conservan. Samuel autoriza Beneficios en DEC-034; las ampliaciones funcionales y otras pantallas quedan fuera.

@@ -44,3 +44,5 @@ En `feature/saga`, DEC-022 implementa finalización con orquestación local dura
 En `reconstruction/festival-social`, DEC-031 registra la instrucción explícita de Samuel (2026-10-16) para integrar exclusivamente el Hub Festival Social aprobado, asociado al Issue #14. No se atribuye aprobación a Julián. Otras pantallas, reglas, permisos, migraciones y datos quedan fuera del cambio; el respaldo anterior sigue sin recuperarse.
 
 DEC-032 registra la instrucción explícita de Samuel para reorganizar ACTIVE como misión Festival Social, en `feature/active-festival-social` desde `55bb831`, con PR separada hacia `reconstruction/festival-social`. PR #24/Hub no se modifica. Sin atribuir aprobación a Julián; backend, reglas, privacidad, persistencia y otras pantallas se conservan. Evidencia y continuidad: ACTIVE_FESTIVAL_SOCIAL.md.
+
+DEC-033/Mi Ping quedó respaldado en `6110e48`, PR #26 hacia ACTIVE. DEC-034 autoriza ahora Beneficios móvil en `feature/beneficios-mobile` desde esa base y PR en borrador hacia Mi Ping: cupón con saldo/coste/faltantes juntos, Mis canjes temprano y promoción ficticia separada. Backend y reglas intactos; ver BENEFICIOS_MOBILE.md al entregar.
