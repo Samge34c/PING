@@ -117,7 +117,7 @@ class FinalMvpTests {
             assertThat(jul.get("/me").body()).contains("Samuel aceptó. Falta tu aceptación.");
             jul.get(path); jul.post(path+"/accept",Map.of());
             assertThat(sam.get(path).body()).contains("Zona Gamer · Pabellón 18", "PIXEL-", "Elijan un juego o stand");
-            assertThat(sam.get("/me").body()).contains("Tu encuentro está activo.", "Zona Gamer · Pabellón 18", "Abrir mi conexión").doesNotContain("PIXEL-");
+            assertThat(sam.get("/me").body()).contains("Encuentro activo", "Zona Gamer · Pabellón 18", "Volver al encuentro").doesNotContain("PIXEL-");
             sam.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Esperando a Julián");
             assertThat(jul.get("/me").body()).contains("Samuel ya confirmó. Falta tu confirmación.");
             jul.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Conexión completada 🎉");

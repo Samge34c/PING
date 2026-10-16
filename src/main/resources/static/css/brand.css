@@ -2359,3 +2359,78 @@ body.sofa-hub-page {padding:0;min-height:100dvh;background:var(--ping-bg)}
 
 .active-encounter-page summary {min-height:44px;padding-block:10px}
 .active-encounter-page [data-live-status] a {display:inline-flex;align-items:center;min-height:44px}
+
+/* Mi Ping — DEC-033. Mobile flow first; scoped to /me. */
+body.mi-ping-page {background-image:none}
+.mi-ping-page main.mp-page {width:calc(100% - 32px);max-width:1080px;margin-top:16px;animation:none;overflow-wrap:anywhere}
+.mp-header {margin-bottom:20px}
+.mp-event {display:flex;align-items:baseline;justify-content:space-between;gap:16px;font-size:13px;color:var(--ping-muted);margin-bottom:16px}
+.mp-event a {display:flex;align-items:center;gap:8px;min-height:44px;min-width:0}
+.mp-event .ping-icon {width:16px;height:16px;flex:none}
+.mp-identity {display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px}
+.mp-identity>.avatar {width:44px;height:44px;font-size:20px}
+.mp-identity h1 {font-size:28px;line-height:1.2;letter-spacing:-.03em;margin:0;font-weight:800;min-width:0}
+.mp-balance {display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:44px;min-height:44px;gap:0;color:var(--ping-muted);font-size:12px}
+.mp-balance strong {font-size:24px;line-height:1.2;color:var(--ping-highlight-text);font-variant-numeric:tabular-nums}
+.mp-flow {display:flex;flex-direction:column;gap:24px}
+.mp-settings {display:flex;flex-direction:column;gap:24px}
+.mp-next {padding:20px;background:var(--ping-art-bg);color:var(--ping-art-text);border-radius:12px}
+.mp-state {display:flex;align-items:center;gap:8px;font-size:13px;color:#dcc6f3;font-weight:650}
+.mp-state .ping-icon {width:18px;height:18px;flex:none}
+.mp-next h2 {font-size:24px;line-height:1.25;letter-spacing:-.025em;font-weight:800;margin:14px 0 12px;text-wrap:pretty;color:inherit}
+.mp-next p {font-size:15px;line-height:1.6;margin:0 0 16px;color:#e0d4eb;max-width:65ch}
+.mp-next .mp-location {display:flex;gap:8px;align-items:flex-start;color:var(--ping-art-text);font-size:16px;font-weight:600}
+.mp-location .ping-icon {width:18px;height:18px;margin-top:3px;flex:none;color:#cfb1ff}
+.mp-next .btn {min-height:48px;line-height:1.4;font-size:14px;white-space:normal}
+.mp-next .mp-primary {display:flex;align-items:center;justify-content:center;gap:12px;width:100%;background:var(--ping-yellow-light);color:var(--ping-black);border:1px solid transparent;font-weight:800}
+.mp-next .mp-primary:hover {background:#fff375;color:var(--ping-black)}
+.mp-next .mp-primary:active {background:var(--ping-yellow);color:var(--ping-black)}
+.mp-next .mp-primary:focus-visible,.mp-next .mp-secondary:focus-visible,.mp-next .btn-link:focus-visible {outline:3px solid #cfb1ff;outline-offset:4px;box-shadow:none}
+.mp-next .mp-secondary {display:flex;justify-content:center;align-items:center;gap:10px;border:1px solid #826993;color:var(--ping-art-text)}
+.mp-next .mp-secondary:hover {background:#352042;color:var(--ping-art-text)}
+.mp-next .btn-link {color:#dcc6f3;text-decoration:underline;text-underline-offset:4px;padding:8px 4px}
+.mp-next .mp-availability {margin-top:8px;text-align:center}
+.mp-actions {display:flex;flex-direction:column;gap:10px}
+.mp-actions .mp-reject {align-self:center}
+.mp-section-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
+.mp-section-heading h2 {font-size:20px;line-height:1.4;font-weight:750;margin:0;letter-spacing:-.02em}
+.mp-section-heading a {display:flex;align-items:center;justify-content:flex-end;min-height:44px;gap:6px;font-size:14px;flex:none}
+.mp-section-heading .ping-icon {width:16px;height:16px}
+.mp-interests .chip-list {gap:8px}
+.mp-interests .ping-chip {font-size:14px;padding:8px 12px;line-height:1.5;max-width:100%;white-space:normal}
+.mp-interests p {font-size:14px;color:var(--ping-muted);margin-bottom:0}
+.mp-own-hint .hint-editor {margin:0;border-top:1px solid var(--ping-border);border-bottom:1px solid var(--ping-border);padding:0}
+.mp-own-hint summary {min-height:56px;display:list-item;padding:16px 0;font-size:16px;font-weight:700}
+.mp-own-hint summary span {font-size:13px;font-weight:400}
+.mp-own-hint .hint-editor[open] {padding-bottom:16px}
+.mp-own-hint .hint-editor>p,.mp-own-hint .hint-editor>form {padding-inline:2px}
+.mp-own-hint .hint-suggestions button {min-height:44px}
+.mp-own-hint .action-row {gap:8px;flex-wrap:wrap}
+.mp-own-hint .action-row .btn {min-height:48px}
+.mp-own-hint textarea {font-size:16px}
+.mp-history-details>summary {min-height:48px;font-size:16px;font-weight:700;padding:12px 0}
+.mp-history-count {display:inline-flex;align-items:center;justify-content:center;margin-left:8px;min-width:24px;min-height:24px;font-size:12px;font-weight:600;color:var(--ping-muted);background:var(--ping-surface-alt);border-radius:6px;font-variant-numeric:tabular-nums}
+.mp-empty {font-size:14px;color:var(--ping-muted);padding:12px 0;margin:0}
+.mp-history-row {display:grid;grid-template-columns:32px minmax(0,1fr) 16px;align-items:start;gap:12px;border-bottom:1px solid var(--ping-border);padding:16px 0;color:var(--ping-text)}
+.mp-history-row>div {min-width:0}.mp-history-row>.ping-icon {width:16px;margin-top:4px}
+.mp-history-row p {font-size:14px;color:var(--ping-muted);margin:6px 0}
+.mp-history-row small {font-size:12px;color:var(--ping-muted)}
+.mp-history-row .ping-status {margin-top:10px}.mp-history-points {display:block;margin-top:8px;font-size:13px;color:var(--ping-highlight-text)}
+.mp-completed {display:flex;align-items:start;gap:10px;padding-bottom:16px;font-size:14px}.mp-completed>.ping-icon {color:var(--ping-success);flex:none}.mp-completed a {display:flex;align-items:center;min-height:44px}
+.mp-update {display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px}
+.mp-update p {margin:0;font-size:12px;max-width:36ch}.mp-update a {display:flex;align-items:center;gap:6px;min-height:44px;font-size:13px;flex:none}.mp-update .ping-icon {width:16px;height:16px}
+.mp-disclaimer {font-size:12px;color:var(--ping-muted);line-height:1.6;margin:16px 0}
+.mp-tools {display:flex;flex-wrap:wrap;align-items:center;gap:4px 24px;margin-top:16px;border-top:1px solid var(--ping-border);padding-top:12px}
+.mp-tools>a {display:flex;align-items:center;min-height:44px;gap:8px;font-size:14px}.mp-tools .btn {font-size:13px;min-height:44px;padding-inline:0}.mp-tools .ping-icon {width:18px;height:18px}
+.mi-ping-page :is(a,button,summary,textarea) {scroll-margin-block:90px 112px}
+.mi-ping-page :is(a,button,summary,textarea):focus-visible {outline:3px solid var(--ping-focus);outline-offset:3px;box-shadow:none}
+html:has(body.mi-ping-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+@media(min-width:1024px) {
+ .mi-ping-page main.mp-page {width:calc(100% - 64px);margin-top:24px}
+ .mp-header {max-width:620px;margin-bottom:24px}
+ .mp-flow {display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,1fr);column-gap:40px;row-gap:24px;align-items:start}
+ .mp-next {grid-column:1;grid-row:1;padding:28px}
+ .mp-settings {grid-column:2;grid-row:1}
+ .mp-history {grid-column:1 / -1;border-top:1px solid var(--ping-border);padding-top:12px}
+ .mp-next h2 {font-size:28px}.mp-update {max-width:620px}
+}

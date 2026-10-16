@@ -2,6 +2,14 @@
 
 Fuente principal: [PREDEV v1.1](PING_PREDEV_v1.1.md), fechado el **12 de octubre de 2026**, y solicitud de preparación del usuario. Este registro resume decisiones conocidas; no constituye una aprobación nueva ni atribuye una aceptación individual no documentada.
 
+## DEC-033 — Mi Ping operativo con prioridad móvil
+
+- **Autoridad:** instrucción explícita de Samuel, 2026-10-16; no se atribuye aprobación a Julián. Issue #14 consultado abierto. Esta autorización habilita Mi Ping, antes excluido de DEC-031/032.
+- **Base y aislamiento:** `d088e592dcccb6ede0b7b1ac97b7a80f6274348f` (incluye Hub, ACTIVE y pauta móvil respaldada), rama propia `feature/mi-ping-mobile`. No mezclar código de Mi Ping en la PR #25 de ACTIVE. Sin merge ni cambios en main; la petición original de commit/push se refería a AGENTS.md, ya respaldado en la rama anterior. Samuel autoriza posteriormente respaldar también Mi Ping y preparar PR en borrador hacia `feature/active-festival-social`, sin merge ni force-push.
+- **Alcance:** únicamente Mi Ping `/me`, su plantilla y CSS acotado. Estado real y siguiente acción antes de intereses y pista propia opcional; reducir duplicados, sin portada grande. Conservar historial y destinos, saldo/alias reales, identidad Festival Social y navegación compartida.
+- **Conservación:** ningún cambio de backend, permisos, rutas, CSRF, versión, matching, disponibilidad, aceptación/confirmación bilateral, Saga, puntos, persistencia, migraciones ni datos de la demo. La pista ajena y la palabra del encuentro no se trasladan a Mi Ping. Editor propio y actualización automática existentes intactos.
+- **Verificación:** seguir la pauta proporcional de AGENTS.md y pruebas pertinentes actuales. Formularios con datos aislados; demo MySQL en lectura. Decisiones implementadas y evidencia en DESIGN.md y docs/MI_PING_MOBILE.md al entregar.
+
 Las DEC-001 a DEC-014 se numeran conforme a la solicitud. La guía GitHub usa una numeración de ejemplo, no un registro alternativo. Para cada cambio futuro registrar ID, título, estado, fecha, decisión, motivo e impacto; documentar aceptación de ambos integrantes antes de cambiar el producto.
 
 ## DEC-001 — Conexiones 1 a 1
