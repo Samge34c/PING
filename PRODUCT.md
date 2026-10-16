@@ -45,7 +45,7 @@ Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genérica
 
 El usuario eligió composición primero para portadas y showcases, y trabajo directamente en código para pantallas operativas. El valor de herramienta para portadas se registra en `.impeccable/config.json` (`buildPath: comp`).
 
-Alcance actual autorizado por **Samuel**, 2026-10-16: implementar directamente Home `/` con mensaje/contexto/acción móviles antes del arte y secuencia visual breve Festival Social. Rama `feature/home-mobile` desde `6711b21` (incluye Hub, ACTIVE, Mi Ping y Beneficios). Reutilizar arte local pertinente con procedencia; preservar accesos de demo/preparación/Mi Ping/evento, backend y todas las reglas/datos/permisos. Otras pantallas se conservan. Ver DEC-035. Commit/push y PR en borrador autorizados hacia `feature/beneficios-mobile`; sin merge, force-push ni main. No se atribuye aprobación a Julián.
+Alcance actual autorizado por **Samuel**, 2026-10-16: cierre integrado móvil desde Home, conservando las cinco pantallas aprobadas. Solo correcciones pequeñas observadas en entrada demo y continuación de COMPLETED, sin cambiar reglas, datos, backend ni navegación compartida. Ver DEC-036. Rama propia `fix/mobile-journey-review` desde `feature/home-mobile` (`4d43491`), commit/push y PR en borrador hacia esa base; PR #24–#28 conservan su cadena. Sin merge, force-push ni main. No se atribuye aprobación a Julián.
 
 ## Evidence on Hand
 
@@ -56,4 +56,4 @@ Alcance actual autorizado por **Samuel**, 2026-10-16: implementar directamente H
 
 ## Open Decisions
 
-Hub, ACTIVE, Mi Ping y Beneficios se conservan. Samuel autoriza Home en DEC-035; ampliaciones funcionales y otras pantallas quedan fuera.
+Las cinco pantallas se conservan. DEC-036 acota las correcciones a defectos observados en el recorrido; ampliaciones funcionales y otros rediseños quedan fuera.

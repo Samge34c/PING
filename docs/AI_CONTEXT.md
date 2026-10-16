@@ -48,3 +48,5 @@ DEC-032 registra la instrucción explícita de Samuel para reorganizar ACTIVE co
 DEC-033/Mi Ping quedó respaldado en `6110e48`, PR #26 hacia ACTIVE. DEC-034 autoriza ahora Beneficios móvil en `feature/beneficios-mobile` desde esa base y PR en borrador hacia Mi Ping: cupón con saldo/coste/faltantes juntos, Mis canjes temprano y promoción ficticia separada. Backend y reglas intactos; ver BENEFICIOS_MOBILE.md al entregar.
 
 DEC-035 autoriza Home móvil desde `6711b21` (Beneficios/PR #27) en `feature/home-mobile`, con PR en borrador hacia Beneficios. Entrada funcional directa, arte social existente, demo explícitamente académica y navegación propia por sesión; sin cambiar backend ni pantallas terminadas. Ver HOME_MOBILE.md y HOME_ART_PROVENANCE.json.
+
+DEC-036 cierra la revisión integrada a390 px desde Home (`4d43491`), con datos aislados y correcciones solo en entrada demo/continuación COMPLETED. Rama `fix/mobile-journey-review`, PR en borrador hacia `feature/home-mobile`; PR #24–#28 conservan sus bases. Ver REVISION_MOVIL_INTEGRADA.md para evidencia, resultados y siguiente prioridad; no declara toda la app terminada.

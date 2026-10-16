@@ -2565,3 +2565,26 @@ html:has(body.home-festival-page) {scroll-padding-bottom:calc(100px + env(safe-a
  .hm-steps>li:not(:last-child)::after {display:none}
  .hm-demo {margin-top:28px}.hm-demo>div {grid-template-columns:24px minmax(0,1fr) auto;align-items:center}.hm-demo>div>a {grid-column:3;margin:0}
 }
+
+/* DEC-036: only entry and completed continuation, mobile first. */
+.demo-entry-page main.container,.completed-encounter-page main.container {width:calc(100% - 32px);margin-top:16px;animation:none;overflow-wrap:anywhere}
+.demo-entry-page .page-heading {margin-bottom:20px}
+.demo-entry-page .page-heading h1 {font-size:28px}
+.demo-entry-page .page-heading p {margin-bottom:0}
+.demo-entry-page .demo-layout {align-items:start}
+.demo-entry-page .demo-select-form {padding:20px}
+.demo-entry-page .demo-select-form .form-label {margin-top:0}
+.demo-entry-page .demo-help {padding-top:16px;margin-top:20px;font-size:12px}
+.demo-entry-page .demo-visual {display:none}
+.demo-entry-page .floating-person strong,.demo-entry-page .floating-person small {display:block}
+.completed-encounter-page .celebration {padding:20px 0}
+.completed-encounter-page .celebration-mark {margin-bottom:12px;animation:none}
+.completed-encounter-page .celebration h2 {font-size:28px}
+.completed-encounter-page .celebration>p:last-of-type {margin-bottom:16px}
+.completed-encounter-page .completion-totals {display:flex;flex-wrap:wrap;gap:12px 28px;align-items:baseline}
+.completed-encounter-page .completion-totals .reward-earned {font-size:28px;letter-spacing:-.03em;margin:0}
+.completed-encounter-page .completion-totals .ping-balance {margin:0!important;flex-wrap:wrap;gap:8px}
+.completed-encounter-page .celebration+.match-actions {justify-content:flex-start;margin:0 0 24px}
+.completed-encounter-page .feedback-panel {padding:16px;text-align:left;margin:24px 0}
+.completed-encounter-page .feedback-panel .action-row {justify-content:flex-start}
+@media(min-width:900px) {.demo-entry-page .demo-visual {display:block}}
