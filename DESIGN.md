@@ -9,3 +9,14 @@ Implemented scope: only `/events/{id}/hub`, approved second composition (Samuel,
 - Real alias, balance, event and match states; no fabricated activity. Academic/unofficial notices stay visible. No private recognition hints on Hub.
 
 Editable sources: `templates/experience/hub.html`, `experience/hub-fragments.html`, scoped Festival Social section at end of `static/css/brand.css`. No new framework or dependency.
+
+## Encuentro ACTIVE — DEC-032
+
+Superficie operativa derivada del Hub, sin copiar su portada. Manrope y variables `--ping-*` existentes; palabra amarilla sobre morado, acción amarilla, estructura sin tarjetas repetidas ni ilustración nueva. La navegación compartida se conserva.
+
+- Escritorio: persona/estado compactos; punto y plano interactivo a la izquierda; palabra, pista privada autorizada, actividad y confirmación a la derecha.
+- Móvil/tablet: orden de lectura del DOM palabra/pista → lugar/plano compacto → actividad → confirmación. Texto sin truncar, controles ≥44 px, sin acción fija ni sticky que tape contenido. La barra inferior existente conserva su reserva de espacio y área segura.
+- El SVG del recinto se reutiliza con marcadores enlazados al mapa real y zoom/centrado local. Los enlaces preservan zona y matchId (Música y Tecnología comparten pabellón pero no ID). Sin modificar el mapa externo ni sus rutas.
+- Confirmación propia/ajena explícita; espera unilateral no equivale a puntos ni finalización. Saga pendiente conserva aviso y reintento. Formularios, live.js, pista/editor y permisos existentes intactos.
+
+Fuentes editables: `templates/demo/match.html`, `templates/demo/active-mission.html`, `static/js/active-map.js` y sección CSS DEC-032. OFFERED/COMPLETED/CANCELLED mantienen su comportamiento y composición previa.

@@ -45,7 +45,7 @@ Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genérica
 
 El usuario eligió composición primero para portadas y showcases, y trabajo directamente en código para pantallas operativas. El valor de herramienta para portadas se registra en `.impeccable/config.json` (`buildPath: comp`).
 
-Alcance actual autorizado por **Samuel**, 2026-10-16: integrar la segunda composición aprobada del Hub SOFA en Java/Spring MVC/Thymeleaf, conservando stack, reglas, estados, privacidad, demo y destinos. Trabajo exclusivamente en Hub y recursos necesarios; navegación horizontal acotada al Hub, sin rediseñar otras pantallas ni cambiar migraciones/datos. Ver DEC-031 y el Issue #14. Tras verificar, commit y push exclusivamente a `reconstruction/festival-social`, sin merge, main ni force-push. No se atribuye aprobación a Julián.
+Alcance actual autorizado por **Samuel**, 2026-10-16: reorganizar visualmente ACTIVE y los estados asociados dentro de la pantalla de encuentro, conservando backend, reglas, permisos, persistencia, migraciones, matching, Saga, palabra, pista opcional, actividad, confirmación bilateral y puntos. Base actual con Hub integrado: `55bb83162b01e3131732716c85796ff668ce145b`. Rama propia `feature/active-festival-social`; PR en borrador hacia `reconstruction/festival-social`, separada de PR #24. No rediseñar Home, Mi Ping, Beneficios ni Hub; sin merge, force-push ni cambios en main. No se atribuye aprobación a Julián. Ver DEC-032.
 
 ## Evidence on Hand
 
@@ -56,4 +56,4 @@ Alcance actual autorizado por **Samuel**, 2026-10-16: integrar la segunda compos
 
 ## Open Decisions
 
-La segunda composición del Hub fue aprobada explícitamente por Samuel como referencia para integración. Otras pantallas y ampliaciones funcionales quedan fuera de esta autorización.
+El Hub integrado se conserva. Samuel autoriza ahora la pantalla del encuentro en DEC-032; otras pantallas y ampliaciones funcionales quedan fuera.
