@@ -1,0 +1,18 @@
+{
+  "asset": "src/main/resources/static/img/sofa/convencion-social.webp",
+  "reused_from": "docs/HUB_ART_PROVENANCE.json",
+  "sha256": "1cca94859b1c16e6f421443dfddfc1ddbec6b7880757ccdc00929f7319f04146",
+  "served_bytes": 319502,
+  "dimensions": [
+    1536,
+    1024
+  ],
+  "type": "Existing AI-generated original convention illustration from the Hub prototype",
+  "generated_in_this_task": false,
+  "modified_in_this_task": false,
+  "purpose": "Illustrative human encounter, not real attendees or live activity",
+  "official_SOFA_art": false,
+  "crop": "CSS object-fit:cover; mobile aspect1.7, desktop aspect1.35; preserves both people and handshake",
+  "delivery": "Existing optimized local WebP, explicit dimensions, fetchpriority high, no lazy loading",
+  "other_resources": "Existing local Manrope/OFL and img/icons.svg; no new tools or dependencies"
+}

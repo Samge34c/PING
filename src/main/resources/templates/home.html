@@ -1,6 +1,27 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Inicio')}"></head><body><nav th:replace="~{fragments/layout :: nav}"></nav>
-<main id="main-content" class="container editorial-home"><section class="home-introduction"><div><span class="eyebrow">CONEXIONES EN TU EVENTO</span><img th:if="${brandLogoAvailable}" class="ping-home-logo" th:src="@{/img/ping-logo.jpg}" alt="Ping — logo oficial"><h1>Hay algo<br>en común.<span>Haz PING.</span></h1><p>Intereses compartidos. Un encuentro real.<br>Empieza con las personas de tu evento.</p><div class="home-actions"><a class="btn btn-primary" th:href="@{/demo}">Entrar a la demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a><a class="secondary-action" th:href="@{/events}">Explorar eventos →</a></div></div>
-<div class="home-gesture" role="img" aria-label="Señal gráfica con iniciales de ejemplo, unidas por un interés compartido"><svg viewBox="0 0 600 260" aria-hidden="true"><path d="M0 135C95 45 170 70 240 148S410 192 490 114S555 98 600 146"/><circle cx="140" cy="87" r="38"/><circle class="accent" cx="475" cy="133" r="38"/><text x="140" y="97">S</text><text class="accent" x="475" y="143">J</text></svg><span>Videojuegos</span><p>Una conversación puede empezar aquí.</p></div></section>
-<section class="home-timeline"><span class="eyebrow">ASÍ EMPIEZA</span><ol><li><strong>01</strong><div><h2>Elige intereses</h2><p>Lo que te gusta abre una conversación.</p></div></li><li><strong>02</strong><div><h2>Aceptan ambos</h2><p>La propuesta solo se activa si los dos quieren conectar.</p></div></li><li><strong>03</strong><div><h2>Encuéntrense</h2><p>Punto, palabra y actividad. +10 puntos para cada persona solo al completar entre ambos.</p></div></li></ol></section>
-<p class="home-demo-link">SOFA 2026 · escenario académico. <a th:href="@{/demo/prepare}">Preparar demo →</a></p>
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Inicio')}"></head><body class="home-festival-page"><nav th:replace="~{fragments/layout :: nav}"></nav>
+<main id="main-content" class="container hm-page">
+<section class="hm-intro" aria-labelledby="hm-title">
+  <div class="hm-copy">
+    <p class="hm-context"><svg th:replace="~{fragments/layout :: icon('calendar')}"></svg>Demo académica inspirada en SOFA 2026</p>
+    <h1 id="hm-title">Comparte gustos.<span>Conecta en persona.</span></h1>
+    <p class="hm-description">PING conecta personas por intereses para encontrarse dentro del evento.</p>
+    <div class="hm-actions">
+      <a class="btn hm-primary" th:href="${session.pingDemoParticipantId != null} ? @{/me} : @{/demo}"><span th:text="${session.pingDemoParticipantId != null ? 'Volver a Mi Ping' : 'Entrar a la demo'}"></span><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+      <a class="hm-secondary" th:href="${session.pingDemoParticipantId != null} ? @{/me/event} : @{/events}"><span th:text="${session.pingDemoParticipantId != null ? 'Ir a mi evento' : 'Explorar eventos'}"></span><svg th:replace="~{fragments/layout :: icon('pin')}"></svg></a>
+    </div>
+    <p class="hm-unofficial">Simulación académica. Sin vínculo oficial con SOFA.</p>
+  </div>
+  <figure class="hm-art"><img th:src="@{/img/sofa/convencion-social.webp}" width="1536" height="1024" fetchpriority="high" decoding="async" alt="Ilustración de dos personas encontrándose entre puestos de distintas aficiones en una convención."></figure>
+</section>
+<section class="hm-how" aria-labelledby="hm-how-title"><h2 id="hm-how-title">De tus intereses al encuentro</h2>
+  <ol class="hm-steps">
+    <li><span class="hm-step-icon"><svg th:replace="~{fragments/layout :: icon('heart')}"></svg></span><div><h3>Elige intereses</h3><p>Usa un alias, elige tus gustos y marca cuándo quieres conectar.</p></div></li>
+    <li><span class="hm-step-icon"><svg th:replace="~{fragments/layout :: icon('link')}"></svg></span><div><h3>Aceptan ambos</h3><p>La propuesta solo se activa si las dos personas quieren conectar.</p></div></li>
+    <li><span class="hm-step-icon"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg></span><div><h3>Encuéntrense</h3><p>Punto, palabra y actividad. +10 puntos para cada persona solo al completar y confirmar ambos.</p></div></li>
+  </ol>
+</section>
+<section class="hm-demo" aria-label="Accesos de la demo académica">
+  <div><svg th:replace="~{fragments/layout :: icon('bolt')}"></svg><p>¿Preparas la demostración?<span>Configura o reutiliza el escenario de prueba.</span></p><a th:href="@{/demo/prepare}">Preparar demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
+  <nav th:if="${session.pingDemoParticipantId != null}" class="hm-session-tools" aria-label="Otros accesos"><a th:href="@{/demo}">Elegir participante demo</a><a th:href="@{/events}">Explorar eventos</a></nav>
+</section>
 </main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
