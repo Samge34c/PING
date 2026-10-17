@@ -17,10 +17,12 @@ public class Participant {
     @Column(nullable = false) private long points;
     public Instant getWaitingSince() { return waitingSince; }
     public long getPoints() { return points; }
-    public void rewardCompletedMatch() { points = Math.addExact(points, 10); }
-    public void reverseCompletionReward() {
-        if (points < 10) throw new IllegalStateException("Cannot reverse a reward without its balance");
-        points -= 10;
+    private void rewardAmount(int amount) { if(amount<0 || amount>100)throw new IllegalArgumentException("Invalid completion amount"); }
+    public void rewardCompletedMatch(int amount) { rewardAmount(amount);points = Math.addExact(points, amount); }
+    public void reverseCompletionReward(int amount) {
+        rewardAmount(amount);
+        if (points < amount) throw new IllegalStateException("Cannot reverse a reward without its balance");
+        points -= amount;
     }
     public void spendPoints(long cost) {
         if (cost <= 0 || points < cost) throw new com.ping.web.BusinessRuleException("No tienes puntos suficientes para este beneficio.");

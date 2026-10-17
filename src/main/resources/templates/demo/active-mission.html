@@ -56,7 +56,7 @@
         <input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-primary" th:text="${match.completionPending ? 'Reintentar finalización' : 'Confirmar encuentro y actividad'}"></button>
       </form>
       <p class="am-confirm-count" th:text="${'Confirmaciones: ' + ((match.confirmed ? 1 : 0) + (match.otherConfirmed ? 1 : 0)) + ' de 2'}"></p>
-      <p class="am-points-note">Los puntos se acreditan al finalizar la confirmación de ambos.</p>
+      <p class="am-points-note"><span th:text="${'+' + match.rewardPoints + ' puntos para cada persona al finalizar la confirmación de ambos.'}"></span></p>
     </section>
   </div>
   <p class="am-demo-notice" th:if="${experience != null}">Simulación académica inspirada en SOFA · Sin vínculo oficial con el evento.</p>

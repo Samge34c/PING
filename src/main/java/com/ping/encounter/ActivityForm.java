@@ -1,6 +1,8 @@
 package com.ping.encounter;
 import jakarta.validation.constraints.*;
 public class ActivityForm {
+ @Min(0) @Max(100) private int rewardPoints=10;
+ public int getRewardPoints(){return rewardPoints;} public void setRewardPoints(int value){rewardPoints=value;}
  @NotBlank @Size(max=120) private String title="";
  public String getTitle(){return title;} public void setTitle(String value){title=value;}
  @NotBlank @Size(max=500) private String instructions="";
@@ -13,5 +15,5 @@ public class ActivityForm {
  public boolean isActive(){return active;} public void setActive(boolean value){active=value;}
  @PositiveOrZero private Long version=null;
  public Long getVersion(){return version;} public void setVersion(Long value){version=value;}
- public static ActivityForm from(EventActivity e){var f=new ActivityForm();f.setTitle(e.getTitle());f.setInstructions(e.getInstructions());f.setPointIds(e.getPointIds());f.setInterestIds(e.getInterestIds());f.setActive(e.isActive());f.setVersion(e.getVersion());return f;}
+ public static ActivityForm from(EventActivity e){var f=new ActivityForm();f.setRewardPoints(e.getRewardPoints());f.setTitle(e.getTitle());f.setInstructions(e.getInstructions());f.setPointIds(e.getPointIds());f.setInterestIds(e.getInterestIds());f.setActive(e.isActive());f.setVersion(e.getVersion());return f;}
 }
