@@ -4,7 +4,7 @@
 
 Actualizado17 octubre2026 Bogotá. Copia `/workspace/PING`, remoto `https://github.com/Samge34c/PING.git`. Recuperación verificada: PR36 en borrador, rama `feature/event-encounter-arrival`, último respaldo inicial `9d233b60ec2493f12403e4c0b6278792221fc571`; GitHub no tenía avances posteriores. Árbol inicial limpio, base `feature/connect-event-entry` @ `c288f778d8d7cdf72ec3abb4306473aa756b352b`. Cadena anterior conservada. Sin main, merge, force-push ni publicación pública.
 
-Este documento se actualiza antes de cada commit; el SHA del commit que contiene la actualización se confirma después mediante `git ls-remote origin refs/heads/<rama>` y en su PR. No inferir un respaldo de un archivo local. Respaldo bloque1 confirmado: `087b3a7489c88a630b0064adea8e50824e51906b`, PR36 actualizada/en borrador. Bloque2 en `feature/event-points-rewards` desde ese SHA; implementación local verificada, preparada para commit/push; bloque3 sigue después de su respaldo. No hay trabajo de otros sin conservar.
+Este documento se actualiza antes de cada commit; el SHA del commit que contiene la actualización se confirma después mediante `git ls-remote origin refs/heads/<rama>` y en su PR. No inferir un respaldo de un archivo local. Respaldo bloque1 confirmado: `087b3a7489c88a630b0064adea8e50824e51906b`, PR36 actualizada/en borrador. Respaldo bloque2 confirmado: `bce34589cc346ab73d21fcd277b5f3c029e11f4d`, rama `feature/event-points-rewards`, PR37 en borrador hacia PR36. Respaldo de código bloque3 confirmado: `e85da1b1a0ad7acd1608d8c569d01f18730dc4d5`, rama `fix/event-journey-consistency`, [PR38](https://github.com/Samge34c/PING/pull/38) en borrador hacia PR37. Esta actualización final solo registra respaldos/PR ya verificados; el código probado no cambia. HEAD puede incluir este commit documental posterior: consultar el SHA exacto remoto en PR38/git ls-remote. No queda implementación local sin subir. No hay trabajo de otros sin conservar.
 
 ## Decisiones y comportamiento actual — bloque1 / DEC-042
 
@@ -37,11 +37,11 @@ Después de confirmar push/actualizar PR36, crear rama desde ese commit: puntos 
 
 ## Arranque y Windows (incluido clone --single-branch)
 
-Con árbol limpio: `git remote set-branches --add origin feature/event-encounter-arrival`; `git fetch origin`; `git switch --track origin/feature/event-encounter-arrival` si no existe local; si existe, `git switch feature/event-encounter-arrival` y `git pull --ff-only`. No usar reset/clean/main para actualizar. Conservar cambios locales en su rama antes de cambiar.
+Detener solo la app PING propia antes de cambiar código; conservar MySQL/datos/variables privadas. Con árbol limpio: `git remote set-branches --add origin fix/event-journey-consistency`; `git fetch origin`; `git switch --track origin/fix/event-journey-consistency` si no existe local; si existe, `git switch fix/event-journey-consistency` y `git pull --ff-only`. No usar reset/clean/main para actualizar. Conservar cambios locales en su rama antes de cambiar.
 
 JDK21 completo, Maven Wrapper del repo; `./mvnw verify` / `.\mvnw.cmd verify`. Para iniciar `PingApplication`: perfil `mysql`; variables externas `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`; opcional `PING_PUBLIC_BASE_URL` real para QR. Bind predeterminado127.0.0.1; no abrir Internet. Flyway aplica nuevas migraciones sin borrar la base; ensayar primero en base exclusiva. En este entorno Java de sistema carece de ct.sym: JDK funcional `/workspace/tools/jdk-21.0.12.1+1`, caché/settings Maven fuera de Git. No copiar credenciales/variables de este entorno a Git.
 
-MySQL y app de ensayo pertenecen a esta tarea; credenciales aleatorias, logs y harness en `/workspace/work/ping-next/` fuera de Git. Pendiente teléfono físico/Safari. No prometer ejecución después de terminar el turno. Próxima acción concreta: confirmar respaldo del bloque1 y empezar bloque2, sin pedir otra autorización.
+MySQL y app de ensayo pertenecen a esta tarea; credenciales aleatorias, logs y harness en `/workspace/work/ping-next/` fuera de Git. Pendiente teléfono físico/Safari. No prometer ejecución después de terminar el turno. Los bloques siguientes se registran abajo; no recuperar archivos de otros chats para arrancar. El código, migraciones, recursos y este documento están en la cadena de ramas GitHub.
 
 ## Bloque2 — DEC-043 / puntos y recompensas de evento
 
@@ -56,3 +56,25 @@ Chromium/MySQL: dos altas nuevas reciben37 cada una al confirmar (solo una marc�
 La revisión automática rechazó crear un Issue del bloque2 por considerarlo publicación externa no autorizada. No se reintentó ni se eludió; la decisión/alcance se registran aquí y en la PR en borrador expresamente autorizada. No hay un Issue nuevo publicado.
 
 Siguiente acción concreta tras push/PR del bloque2: revisar integrado y corregir tres problemas observados, sin rediseñar: beneficio demo aparece antes que el propio del evento; «Seguir conectando»/«Buscar otra conexión» vuelven a Mi Ping en vez de Conectar; llegada opcional aún dice «Esperando…/En camino» aunque no bloquea. Registrar evidencia y mantener ambas rutas sin efectos por GET.
+
+## Bloque3 — DEC-044 / recorrido integrado final
+
+Corregido sobre el respaldo del bloque2: beneficios propios antes del demo; «Seguir conectando» y «Buscar otra conexión» van a `/connect`; llegada sin marcar dice «Sin registrar», no supone ubicación ni espera obligatoria; confirmación pregunta por actividad terminada. Nuevos puntos exigen indicaciones; importación antigua y misiones sin mapa tienen orientación honesta para ubicar el punto/consultar organizador. Sin migraciones ni cambios de recompensa/Saga/autenticación.
+
+34 pruebas dirigidas aprobadas. Chromium real/MySQL, dos contextos nuevos: QR PNG generado en servidor, decodificado con ZXing y URL exacta utilizada por primera persona; segunda escribe código. Evento → alias/intereses → Mi Ping → Conectar; varias navegaciones GET conservan firma/disponibilidad/matches. Disponibilidad/búsqueda explícitas, propuesta/aceptación y recuperación por Conectar; misión sin mapa SOFA en evento genérico e indicaciones visibles. Solo uno marca llegada; polling informa al otro y ambos confirman37/37. «Buscar otra conexión» abre Conectar sin crear propuesta. Recompensa local aparece primero,30 →saldo7 →solicitud y POST repetido con misma clave: un solo canje/sin descuento extra →entrega registrada. Sin erroresJS/overflow.
+
+Revisión visual manual390 principal,360 claro y1440 oscuro: la acción de canje queda visible antes de la barra, saldo/coste/faltantes contiguos e indicaciones encontrables; llegada opcional y confirmación separadas; no hay decoración/portada nueva. En escritorio Mis canjes comparte espacio con catálogo sin perder navegación. [Beneficio390](screenshots/journey-final/10-event-reward-mobile.png), [llegada390](screenshots/journey-final/04-one-arrived-mobile.png), [confirmación360](screenshots/journey-final/06-arrival-360-light.png), [entregado390](screenshots/journey-final/12-delivered-mobile.png), después [escritorio1440](screenshots/journey-final/14-benefits-desktop.png). Solo capturas representativas en Git; QR PNG de ensayo, extras y sesiones fuera. Decodificar QR no equivale a cámara de teléfono.
+
+Archivos principales: `encounter/EncounterService,PointForm`, `reward/RewardService`, templates `demo/active-mission,match`, `rewards/benefits`, `encounter/point`; pruebas StructuredEncounter/EventBenefit y regresiones de entrada/matches. General final `verify` del bloque3: **193 pruebas,0 fallos/errores/omitidas**, BUILD SUCCESS/JAR. No hay cambios de código posteriores a esa ejecución; solo esta documentación y selección de capturas. Credenciales y datos de bases exclusivas no se publican.
+
+Pendiente real: teléfono físico/Safari y prueba Wi-Fi Windows. No hay publicación pública, merge o autenticación nueva. Próxima acción humana: actualizar la copia Windows a la última rama (comandos arriba), arrancar con su configuración privada y comprobar el recorrido desde teléfono; revisar PR36→PR37→PR38 en ese orden, sin integrar automáticamente. Toda implementación de los tres bloques está en los commits de trabajo, no se promete ejecución posterior al turno.
+
+### Referencias finales verificadas antes de esta actualización documental
+
+| Bloque | Rama | Código remoto verificado | PR borrador |
+|---|---|---|---|
+| Llegada/estructura/MySQL | feature/event-encounter-arrival | 087b3a7489c88a630b0064adea8e50824e51906b | [36](https://github.com/Samge34c/PING/pull/36) |
+| Puntos/recompensas | feature/event-points-rewards | bce34589cc346ab73d21fcd277b5f3c029e11f4d | [37](https://github.com/Samge34c/PING/pull/37) |
+| Recorrido integrado | fix/event-journey-consistency | e85da1b1a0ad7acd1608d8c569d01f18730dc4d5 | [38](https://github.com/Samge34c/PING/pull/38) |
+
+Main remoto sigue en97f9b4302d0c2bb05221d45e4ac5c1d92d608ac7; no se integró nada. Cada push se contrastó con git ls-remote. Los logs completos actuales de verificación están fuera de Git en /workspace/work/ping-next; no contienen credenciales exportadas. Las PR y los fuentes de prueba documentan evidencia recuperable sin depender de ese directorio.

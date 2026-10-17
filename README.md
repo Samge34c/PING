@@ -146,4 +146,4 @@ Guion exacto y requisitos: [DEMO_INTELLIJ](docs/DEMO_INTELLIJ.md).
 
 Validación Issue #4: `clean test` y `clean verify`, 40 pruebas aprobadas, cero fallos/errores/omitidas. Chromium y MySQL 8.4.11 con TLS VERIFY_CA comprobaron el catálogo, selección múltiple para Samuel y Julián, vistas móvil/escritorio y persistencia tras reiniciar la aplicación. Se verificó también el cierre de otro evento real. V1–V4 aplicadas sin borrar los datos previos. No se implementó Issue #5.
 
-Segundo avance: [encuentro configurable por evento y llegada bilateral](docs/ENCUENTRO_CONFIGURABLE_LLEGADA.md) (DEC-041, Issue #35).
+Continuidad: [encuentro configurable, llegada informativa y recompensas por evento](docs/ENCUENTRO_CONFIGURABLE_LLEGADA.md) (DEC-041, Issue #35).

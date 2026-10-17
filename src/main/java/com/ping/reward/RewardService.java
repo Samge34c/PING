@@ -21,7 +21,7 @@ public class RewardService {
         this.benefits = benefits; this.claims = claims; this.participants = participants; this.matches = matches; this.events = events;
     }
     public List<Benefit> catalog() { return benefits.findByActiveTrueOrderByIdAsc().stream().filter(b->b.getEventId()==null).toList(); }
-    public List<Benefit> catalog(long event) { return benefits.findByActiveTrueOrderByIdAsc().stream().filter(b->b.getEventId()==null || b.getEventId()==event).toList(); }
+    public List<Benefit> catalog(long event) { return benefits.findByActiveTrueOrderByIdAsc().stream().filter(b->b.getEventId()==null || b.getEventId()==event).sorted(Comparator.comparing((Benefit b)->b.getEventId()==null).thenComparing(Benefit::getId)).toList(); }
     public List<ClaimView> personal(long self) { return claims.findByParticipantIdOrderByIdDesc(self).stream().map(this::view).toList(); }
     public boolean pendingCompletion(long self) { return matches.forParticipant(self).stream().anyMatch(m -> m.isCompletionPending()); }
     private ClaimView view(RewardClaim c) { return new ClaimView(c.getId(), c.getParticipant().getAlias(), c.getBenefitName(), c.getCost(), c.getStatus(), c.getCreatedAt(),c.getBenefitDescription(),c.getClaimLocation(),c.getClaimInstructions()); }

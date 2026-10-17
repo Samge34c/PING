@@ -40,6 +40,7 @@ class StructuredEncounterTests {
   matches.accept(id,a);assertThatThrownBy(()->matches.accept(id,b)).isInstanceOf(EncounterUnavailableException.class);
   assertThat(config.assign(events.get(event),"Videojuegos",id).title()).isEqualTo("Una recomendación");
  }
+ @Test void newPointRequiresDirectionsWithoutChangingExistingCatalog(){PointForm f=new PointForm();f.setName("Sin mapa");assertThatThrownBy(()->config.savePoint(event,null,f)).isInstanceOf(jakarta.validation.ConstraintViolationException.class);assertThat(config.points(event)).hasSize(1);}
  @Test void rejectsForeignPointsAndStaleEditsAndLegacyImportPreservesSources(){
   EventForm f=new EventForm();f.setName("Anterior");f.setMeetingPoints("Plaza\nEntrada");f.setEncounterActivities("Conversen sobre el evento.");long legacy=events.create(f).getId();
   config.importLegacy(legacy);config.importLegacy(legacy);assertThat(config.points(legacy)).hasSize(2);assertThat(config.activities(legacy)).hasSize(1);assertThat(events.get(legacy).getMeetingPoints()).isEqualTo("Plaza\nEntrada");
