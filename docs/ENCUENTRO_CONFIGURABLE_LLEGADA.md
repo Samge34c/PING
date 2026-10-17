@@ -2,6 +2,8 @@
 
 ## Estado y recuperación
 
+**Bloque vigente: DEC-045, categorías y selección móvil**, rama `feature/interest-categories-mobile`, [PR39 en borrador](https://github.com/Samge34c/PING/pull/39), sobre552906a/PR38. Las secciones anteriores describen la cadena conservada. [Cierre y cómo retomar](#cierre-dec-045--unidad3).
+
 Actualizado17 octubre2026 Bogotá. Copia `/workspace/PING`, remoto `https://github.com/Samge34c/PING.git`. Recuperación verificada: PR36 en borrador, rama `feature/event-encounter-arrival`, último respaldo inicial `9d233b60ec2493f12403e4c0b6278792221fc571`; GitHub no tenía avances posteriores. Árbol inicial limpio, base `feature/connect-event-entry` @ `c288f778d8d7cdf72ec3abb4306473aa756b352b`. Cadena anterior conservada. Sin main, merge, force-push ni publicación pública.
 
 Este documento se actualiza antes de cada commit; el SHA del commit que contiene la actualización se confirma después mediante `git ls-remote origin refs/heads/<rama>` y en su PR. No inferir un respaldo de un archivo local. Respaldo bloque1 confirmado: `087b3a7489c88a630b0064adea8e50824e51906b`, PR36 actualizada/en borrador. Respaldo bloque2 confirmado: `bce34589cc346ab73d21fcd277b5f3c029e11f4d`, rama `feature/event-points-rewards`, PR37 en borrador hacia PR36. Respaldo de código bloque3 confirmado: `e85da1b1a0ad7acd1608d8c569d01f18730dc4d5`, rama `fix/event-journey-consistency`, [PR38](https://github.com/Samge34c/PING/pull/38) en borrador hacia PR37. Esta actualización final solo registra respaldos/PR ya verificados; el código probado no cambia. HEAD puede incluir este commit documental posterior: consultar el SHA exacto remoto en PR38/git ls-remote. No queda implementación local sin subir. No hay trabajo de otros sin conservar.
@@ -103,3 +105,28 @@ Verificación dirigida de unidad2:28 pruebas existentes/categorías aprobadas y6
 Chromium/MySQL exclusivo `ping_categories_ui_exclusive`, distinto del ensayo de migración y de la demo: dos contextos nuevos, QR PNG decodificado y utilizado + código manual, alta, filtros sin perder selección al enviar, volver a alias y edición inline, Space sobre checkbox nativo. Desactivar categoría conserva Música/Tecnología; guardado posterior y matching real entre dos selecciones de Música conservadas. Sin errores JS ni overflow. Capturas examinadas a390 oscuro,360 claro y1440 oscuro. Se retiró barra sticky tras observar que tapaba una fila; botón al final queda al alcance al desplazar y sin cubrir opciones. [Alta390](screenshots/interest-categories/01-join-390.png), [edición360](screenshots/interest-categories/03-edit-360-light.png), [conservados390](screenshots/interest-categories/06-retained-390.png), después [escritorio1440](screenshots/interest-categories/04-edit-desktop.png).
 
 Estado al guardar unidad2: administración/selector y consumidores completos, pruebas dirigidas y revisión visual aprobadas; falta comprobar búsqueda con catálogo de ensayo mayor y cierre general Maven. Siguiente acción exacta tras contrastar push: probar búsqueda/vacío/teclado con fixtures solo en base exclusiva, revisar correcciones y ejecutar verify final. Teléfono físico/Safari siguen pendientes; decodificar QR no equivale a probar su cámara. No hay cachés, secretos, sesiones, dumps ni logs en el commit.
+
+
+### Cierre DEC-045 — unidad3
+
+Últimos respaldos remotos contrastados antes de esta actualización: unidad1 `7e47010506ac0f35644e753a314269ec8f791462`; unidad2 `ff29bdf32af68a81315b79f4d3edff9e80a5429e`. La tercera unidad contiene esta sección, la corrección de teclado y la evidencia final; su SHA se contrasta tras push y queda publicado en PR39 y en la punta de la rama. El documento no intenta adivinar el hash del commit que lo contiene.
+
+Búsqueda ensayada con13 opciones:8 reales +5 fixtures solo en ping_categories_ui_exclusive, retirados al terminar. Sin resultados, búsqueda sin tildes (`tecnologia`), limpiar filtro y POST con elecciones ocultas conservaron Música/Tecnología. Se reprodujo y corrigió Enter en búsqueda: enviaba el alta; ahora solo filtra localmente. Reejecución dirigida pasó; alta sin JavaScript también terminó con las categorías abiertas. Ningún gusto adicional entra en V17 ni en el catálogo publicado.
+
+**Cierre general:204 pruebas,0 fallos/errores/omitidas, BUILD SUCCESS y JAR.** Comando: JDK21 completo + Wrapper `./mvnw -B -o -Dmaven.repo.local=/workspace/.m2/repository verify`, con red local permitida para los servidores HTTP de prueba. No se descargó ni instaló nada. `clean verify` offline se detuvo antes de pruebas por plugin maven-clean-plugin3.5.0 ausente en caché; se retiraron únicamente target/classes y target/test-classes y se ejecutó verify, recompilando98 fuentes principales y26 de prueba. No hubo código posterior a ese resultado; solo documentación y encuadre de capturas. Suite general H2 separada del ensayo **MySQL8.4.11 V16→17** de unidad1 y de la aplicación real MySQL del navegador.
+
+Revisión manual final: pantalla reconocible, títulos y categorías antes de opciones, selección explícita por check/borde/superficie y resumen; no hay portada ni espacio decorativo que desplace el formulario. Acción después de8 opciones, en flujo para no taparlas. Captura de viewport real a360 con los8 gustos originales confirma botón completo por encima de la navegación: [acción360 claro](screenshots/interest-categories/07-action-360-light.png). Ambos temas conservan controles y contraste de Festival Social. Las capturas full-page muestran la navegación fija en la posición del viewport; no representan una pantalla física de toda esa altura. Capturas y comprobación DOM sin overflow, teclado nativo/Space y foco; sin errores JS en el recorrido principal. Impeccable se revisó manualmente con sus referencias porque no había motor local; no se instaló ni activaron hooks.
+
+Límites: no se probó teléfono físico, cámara, Safari ni Wi-Fi de Windows. Administración académica conserva permisos existentes, sin autenticación nueva. Sin cambios de disponibilidad, alternativas, palabras, llegada informativa, Saga, puntos, canjes o main. c288f778 sigue siendo ancestro; base remota552906a y main97f9b430 se comprobaron sin avances. Bases y navegador son ensayos aislados; no constituyen respaldo de datos. Aplicación de ensayo8087 detenida al acabar; las credenciales, cookies y logs permanecen fuera de Git.
+
+Para retomar en otra copia, revisar primero `git status --short` y conservar cualquier cambio. Desde árbol limpio:
+
+```powershell
+git fetch origin feature/interest-categories-mobile:refs/remotes/origin/feature/interest-categories-mobile
+git switch feature/interest-categories-mobile
+git pull --ff-only origin feature/interest-categories-mobile
+git rev-parse HEAD
+git ls-remote origin refs/heads/feature/interest-categories-mobile
+```
+
+Comparar los dos SHA y PR39. Mantener configuración MySQL privada de la copia; Flyway aplica V17 una vez y Hibernate valida. Abrir evento → entrar por código/QR → seleccionar/filtrar/guardar → editar; administración de categorías en `/interests/categories`. Si se interrumpe antes del push de unidad3, remoto seguroff29bdf y cambios locales exactos por `git status`; ejecutar diff/check, commit y push normal, nunca reset/force-push. Tras publicarla, no queda implementación pendiente de DEC-045: la próxima comprobación es teléfono físico/Windows. Propuesta de siguiente bloque, aún no implementada: gestionar altas y edición de gustos reales desde la administración, manteniendo matching por IDs.

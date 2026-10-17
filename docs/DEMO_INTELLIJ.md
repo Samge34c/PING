@@ -16,6 +16,9 @@ Si se dispone del JPG oficial, copiarlo sin modificar a `src/main/resources/stat
 ## Recorrido de exposición
 
 1. **Entrar a demo → Preparar demo rápida → Preparar escenario demo**. Se prepara SOFA 2026, simulación académica en Corferias · Bogotá (8–12 de octubre). Samuel: Videojuegos/Anime; Julián: Videojuegos/Tecnología; Ana: Anime/Fotografía; Carlos: Cine/Música. Si existía la antigua feria demo, se adapta el mismo evento y sus intereses una sola vez, sin reiniciar puntos, disponibilidad, matches, bloqueos ni estado. Repetir conserva los datos, sin duplicarlos.
+
+> Categorías (DEC-045): si se desactivaron gustos desde `/interests/categories`, preparar un escenario nuevo omite esos presets; no los reactiva. Las selecciones ya guardadas se conservan. Reactivar una categoría es una decisión explícita del organizador.
+
 2. **Seleccionar Samuel** en ventana normal; **Seleccionar Julián** en incógnito o segundo navegador. Entrar desde el selector. Dos pestañas normales comparten sesión: no sirven para representar dos personas.
 3. En **Mi Ping**, marcar disponibles solo a Samuel y Julián. Samuel pulsa **Buscar conexión**: propuesta normal con Videojuegos compartido.
 4. Ambos aceptan. Se muestran Zona Gamer · Pabellón 18, la misma palabra temporal `PIXEL-…` y una actividad gamer breve. La palabra usa un sufijo único, no un número fijo. Opcionalmente, cada sesión puede guardar su propia prenda o accesorio en **Cómo reconocerme**; solo su conexión podrá verlo mientras ACTIVE. No hace falta para buscar ni confirmar. **Abrir mapa** abre la guía local con la zona seleccionada y permite volver al encuentro.

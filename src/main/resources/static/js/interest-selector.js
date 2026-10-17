@@ -34,6 +34,12 @@
     root.querySelector('[data-filter-controls]').hidden = false;
     filter.addEventListener('change', applyFilter);
     search?.addEventListener('input', applyFilter);
+    search?.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // This field filters locally; finishing remains an explicit action.
+        applyFilter();
+      }
+    });
     root.querySelector('[data-clear-filter]').addEventListener('click', () => { filter.value = 'all'; if (search) search.value = ''; applyFilter(); filter.focus(); });
     form.addEventListener('change', event => { if (event.target.matches('input[name="interestIds"]')) updateSelection(); });
     updateSelection(); applyFilter();
