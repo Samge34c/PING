@@ -21,6 +21,11 @@ public class Match {
     @Column(nullable = false, length = 700) private String firstInterests;
     @Column(nullable = false, length = 700) private String secondInterests;
     @Column(length = 160) private String meetingPoint;
+    @Column(nullable=false,length=500) private String meetingDirections="";
+    @Column(nullable=false,length=120) private String activityTitle="";
+    public String getMeetingDirections(){return meetingDirections;}
+    public String getActivityTitle(){return activityTitle;}
+    void describeEncounter(String directions,String title){meetingDirections=directions;activityTitle=title;}
     @Column(length = 80, unique = true) private String word;
     @Column(length = 500) private String activity;
     @Column(nullable = false, updatable = false) private Instant createdAt;
@@ -65,7 +70,7 @@ public class Match {
     void confirm(long id) { if (first.getId() == id) firstConfirmed = true; else secondConfirmed = true; }
     boolean bothConfirmed() { return firstConfirmed && secondConfirmed; }
     void activate(ActivityCatalog.Encounter encounter) {
-        arrivalRequired = true;
+        arrivalRequired = false;
         status = MatchStatus.ACTIVE; word = encounter.word(); activity = encounter.activity(); meetingPoint = encounter.meetingPoint();
     }
     void complete() { status = MatchStatus.COMPLETED; completionPending = false; }

@@ -9,12 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service @Profile("!bootstrap") @Transactional(readOnly = true)
 public class MatchService {
+    private final com.ping.encounter.EncounterService encounters;
     private final MatchRepository matches;
     private final MatchReservationRepository reservations;
     private final FeedbackRepository feedback;
     private final EventService events;
     private final MatchCompletionSaga completion;
-    public MatchService(MatchRepository matches, MatchReservationRepository reservations, FeedbackRepository feedback, EventService events, MatchCompletionSaga completion) {
+    public MatchService(MatchRepository matches, MatchReservationRepository reservations, FeedbackRepository feedback, EventService events, MatchCompletionSaga completion, com.ping.encounter.EncounterService encounters) {
+        this.encounters=encounters;
         this.matches = matches; this.reservations = reservations; this.feedback = feedback; this.events = events; this.completion = completion;
     }
     public long completedCount() { return matches.countByStatus(MatchStatus.COMPLETED); }
@@ -38,8 +40,10 @@ public class MatchService {
         if (match.getStatus() != MatchStatus.OFFERED) throw new BusinessRuleException("Esta propuesta ya se canceló.");
         if (!match.getEvent().canStartNewMatches()) throw new BusinessRuleException("El evento debe estar abierto para aceptar una nueva conexión. Puedes cancelar la propuesta.");
         match.accept(participantId);
-        if (match.bothAccepted()) match.activate(ActivityCatalog.encounter(match.getCommonInterests(), match.getId(),
-            match.getEvent()));
+        if (match.bothAccepted()) {
+            var selected=encounters.assign(match.getEvent(),match.getCommonInterests(),match.getId());
+            match.activate(selected.encounter()); match.describeEncounter(selected.directions(),selected.title());
+        }
     }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void arrive(long id, long participantId) {
         Match match = locked(id, participantId);
@@ -72,6 +76,6 @@ public class MatchService {
             match.getCommonInterests(), first ? match.getSecondInterests() : match.getFirstInterests(),
             match.accepted(self), match.accepted(other), match.confirmed(self), match.confirmed(other),
             active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active || match.getStatus() == MatchStatus.COMPLETED ? match.getActivity() : null,
-            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other));
+            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null);
     }
 }

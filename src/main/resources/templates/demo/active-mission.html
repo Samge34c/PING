@@ -14,6 +14,7 @@
     <section class="am-location" aria-labelledby="am-location-title">
       <div class="am-location-heading"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span>Punto de encuentro</span></div>
       <h2 id="am-location-title" th:text="${match.meetingPoint}"></h2>
+      <p th:if="${!#strings.isEmpty(match.meetingDirections)}" th:text="${match.meetingDirections}" class="description"></p>
       <div th:if="${meetingZone != null}" class="am-map" data-encounter-map th:attr="data-zone-id=${meetingZone.id}">
         <div class="am-map-toolbar"><span>Tu punto en el plano</span><div role="group" aria-label="Controles del plano del encuentro">
           <button type="button" data-encounter-zoom="out" aria-label="Reducir plano" disabled>−</button>
@@ -30,17 +31,17 @@
       </div>
       <a th:if="${meetingZone != null}" class="btn btn-outline-primary am-open-map" th:href="@{/events/{id}/map(id=${event.id},zone=${meetingZone.id},matchId=${match.id})}">Abrir mapa <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
     </section>
-    <section class="am-arrival" aria-labelledby="am-arrival-title" th:if="${match.arrivalRequired}">
-      <h2 id="am-arrival-title" tabindex="-1" th:text="${match.canConfirm() ? 'Ambos llegaron' : '¿Ya estás en el punto?'}"></h2>
+    <section class="am-arrival" aria-labelledby="am-arrival-title" th:if="${!match.completionPending}">
+      <h2 id="am-arrival-title" tabindex="-1" th:text="${match.arrived and match.otherArrived ? 'Ambos llegaron' : '¿Ya estás en el punto?'}"></h2>
       <ul class="am-confirm-people" aria-label="Llegadas al punto de encuentro">
         <li><span>Tú</span><strong th:text="${match.arrived ? 'Ya llegaste' : 'En camino'}"></strong></li>
         <li><span th:text="${match.otherAlias}"></span><strong th:text="${match.otherArrived ? 'Ya llegó' : 'En camino'}"></strong></li>
       </ul>
       <form th:if="${!match.arrived}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-primary">Ya llegué</button></form>
       <p role="status" th:if="${match.arrived and !match.otherArrived}" th:text="${'Tu llegada está guardada. Esperando a ' + match.otherAlias + '…'}"></p>
-      <p class="small text-secondary" th:text="${match.canConfirm() ? 'Hagan la actividad y confirmen después.' : 'Al llegar ambos podrán confirmar la actividad. Llegar no da puntos.'}"></p>
+      <p class="small text-secondary" th:text="${'Llegada opcional e informativa. No da puntos ni es necesaria para confirmar la actividad.'}"></p>
     </section>
-    <section class="am-activity" aria-labelledby="am-activity-title"><h2 id="am-activity-title"><svg th:replace="~{fragments/layout :: icon('chat')}"></svg>Hagan algo juntos</h2><p class="mission-activity-text" th:text="${match.activity}"></p></section>
+    <section class="am-activity" aria-labelledby="am-activity-title"><h2 id="am-activity-title"><svg th:replace="~{fragments/layout :: icon('chat')}"></svg>Hagan algo juntos</h2><h3 th:if="${!#strings.isEmpty(match.activityTitle)}" th:text="${match.activityTitle}" class="h5 mt-2"></h3><p class="mission-activity-text" th:text="${match.activity}"></p></section>
     <section th:if="${match.canConfirm()}" class="am-confirmation" aria-labelledby="am-confirm-title">
       <h2 id="am-confirm-title" tabindex="-1" th:text="${match.completionPending ? 'Finalizando la conexión' : (match.confirmed ? 'Tu parte está confirmada' : '¿Ya se encontraron?')}"></h2>
       <p class="am-confirm-help" th:if="${!match.confirmed and !match.completionPending}">Confirma después del encuentro y de realizar la actividad.</p>

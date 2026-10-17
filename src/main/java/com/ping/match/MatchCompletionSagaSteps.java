@@ -32,7 +32,6 @@ public class MatchCompletionSagaSteps {
         if (match.getStatus() == MatchStatus.COMPLETED) return false; // Incluye matches anteriores a V8.
         if (match.getStatus() != MatchStatus.ACTIVE) throw new BusinessRuleException("Primero ambos deben aceptar la propuesta.");
         if (match.isCompletionPending()) return true;
-        if (match.isArrivalRequired() && !match.bothArrived()) throw new BusinessRuleException("Primero ambos deben indicar «Ya llegué» en el punto de encuentro.");
         match.confirm(participantId);
         if (!match.bothConfirmed()) return false;
         MatchCompletion saga = sagas.findById(id).orElse(null);

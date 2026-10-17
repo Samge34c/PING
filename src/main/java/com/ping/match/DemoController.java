@@ -96,7 +96,11 @@ public class DemoController {
         }
         if (match.status() == MatchStatus.OFFERED || match.status() == MatchStatus.ACTIVE) model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(matches.list(selected)))); return "demo/match";
     }
-    @PostMapping("/matches/{id}/accept") public String accept(@PathVariable long id, HttpSession session) { matches.accept(id, self(session)); return "redirect:/matches/" + id; }
+    @PostMapping("/matches/{id}/accept") public String accept(@PathVariable long id, HttpSession session, RedirectAttributes flash) {
+        try { matches.accept(id, self(session)); }
+        catch (com.ping.encounter.EncounterUnavailableException error) { flash.addFlashAttribute("message",error.getMessage());flash.addFlashAttribute("messageTone","notice"); }
+        return "redirect:/matches/" + id;
+    }
     @PostMapping("/matches/{id}/reject") public String reject(@PathVariable long id, HttpSession session) { matches.cancel(id, self(session)); return "redirect:/matches/" + id; }
     @PostMapping("/matches/{id}/cancel") public String cancel(@PathVariable long id, HttpSession session) { matches.cancel(id, self(session)); return "redirect:/matches/" + id; }
     @PostMapping("/matches/{id}/arrive") public String arrive(@PathVariable long id, HttpSession session) { matches.arrive(id, self(session)); return "redirect:/matches/" + id + "#am-arrival-title"; }

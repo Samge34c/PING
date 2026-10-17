@@ -60,3 +60,5 @@ DEC-039: dos altas normales verificadas de extremo a extremo desde `6afac1e`; po
 DEC-040/Issue #33: Samuel autoriza Conectar propio y alta evento→alias→intereses por código/QR local, con persistencia/migración mínimas. Base `8df0b7d`, rama `feature/connect-event-entry` y PR en borrador hacia `fix/participant-confirmation-feedback`. No atribuir aprobación a Julián; conservar reglas/demo y excluir evoluciones posteriores. Continuidad: CONECTAR_CODIGO_QR.md.
 
 DEC-041/Issue #35 autoriza el segundo avance: catálogos opcionales por evento (puntos/palabras/actividades), snapshot al activar y llegada propia bilateral para nuevos activos antes de confirmar actividad. V14 aditiva conserva condiciones de activos anteriores; recompensa/Saga y privacidad intactas. Rama feature/event-encounter-arrival desde c288f77, PR borrador hacia feature/connect-event-entry.
+
+DEC-042/043 sustituyen la condición incorrecta de llegada de DEC-041: siempre informativa, incluso arrival_required=true. Autorización explícita para configuración estructurada compatible, puntos variables y recompensas por evento; detalles/estado actual en ENCUENTRO_CONFIGURABLE_LLEGADA.md.

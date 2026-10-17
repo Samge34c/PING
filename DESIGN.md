@@ -64,3 +64,7 @@ Operación móvil390: código/QR → nombre del evento y alias → intereses. No
 ## Llegada y configuración — DEC-041
 
 ACTIVE conserva palabra/pista/lugar y añade llegada propia antes de actividad/confirmación; estado de ambas personas y una acción «Ya llegué» con foco nativo tras POST. Actividad visible desde aceptación; confirmación final disponible tras ambas llegadas en encuentros nuevos. Sin cambios a mapa/portada/Hub. Editor de evento reutiliza formulario y controles existentes con listas por línea y límites explícitos, sin dashboard nuevo.
+
+## Corrección operativa DEC-042
+
+Llegada opcional, confirmación siempre accesible tras aceptación bilateral; mensaje explícito de que no condiciona actividad ni premia. Indicaciones del punto y título de actividad guardados en la misión. Editor estructurado usa formularios/controles locales existentes y etiquetas claras de compatibilidad/estado, sin nueva portada o dashboard.

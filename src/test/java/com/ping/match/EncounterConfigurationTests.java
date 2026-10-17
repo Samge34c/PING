@@ -64,14 +64,12 @@ class EncounterConfigurationTests {
         assertThatThrownBy(()->EncounterOptions.normalize("hola\u0000",40,"Palabras")).isInstanceOf(BusinessRuleException.class);
     }
     @ParameterizedTest @EnumSource(value=EventStatus.class,names={"PAUSED","CLOSED"})
-    void arrivalIsBilateralAndNeverRewardsAndActiveCanFinishWhenEventStops(EventStatus status) {
+    void arrivalIsInformativeAndNeverRewardsAndActiveCanFinishWhenEventStops(EventStatus status) {
         assertThatThrownBy(()->matches.arrive(id,a)).isInstanceOf(BusinessRuleException.class);
         activate(); events.transition(event,status);
-        assertThatThrownBy(()->matches.confirm(id,a)).isInstanceOf(BusinessRuleException.class);
         matches.arrive(id,a); matches.arrive(id,a);
         assertThat(matches.get(id,a).arrived()).isTrue(); assertThat(matches.get(id,b).otherArrived()).isTrue();
         assertThat(matches.get(id,b).arrived()).isFalse(); assertThat(matches.get(id,a).confirmed()).isFalse();
-        assertThatThrownBy(()->matches.confirm(id,b)).isInstanceOf(BusinessRuleException.class);
         assertThat(people.get(a).points()).isZero(); matches.arrive(id,b); assertThat(people.get(b).points()).isZero();
         matches.confirm(id,a); assertThat(people.get(a).points()).isZero(); matches.confirm(id,b); matches.confirm(id,b);
         assertThat(matches.get(id,a).status()).isEqualTo(MatchStatus.COMPLETED);
@@ -87,6 +85,12 @@ class EncounterConfigurationTests {
         assertThat(matches.get(id,a).canConfirm()).isTrue(); assertThat(matches.get(id,a).word()).isEqualTo(before.word());
         assertThat(people.get(a).points()).isZero(); assertThat(matches.get(id,a).confirmed()).isFalse();
     }
+    @Test void arrivalRequiredTrueFromPublishedVersionDoesNotPreventConfirmation() {
+        activate(); sql.update("update ping_matches set arrival_required=true where id=?",id);
+        matches.confirm(id,a);matches.confirm(id,b);
+        assertThat(matches.get(id,a).status()).isEqualTo(MatchStatus.COMPLETED);
+        assertThat(matches.get(id,a).arrived()).isFalse();assertThat(matches.get(id,b).arrived()).isFalse();
+    }
     @Test void oldActiveWithPartialConfirmationKeepsItsConditions() {
         activate(); sql.update("update ping_matches set arrival_required=false, first_confirmed=true where id=?",id);
         matches.confirm(id,b); assertThat(matches.get(id,a).status()).isEqualTo(MatchStatus.COMPLETED); assertThat(people.get(a).points()).isEqualTo(10);
@@ -97,7 +101,7 @@ class EncounterConfigurationTests {
         try(var self=new TestBrowser(port);var other=new TestBrowser(port);var anonymous=new TestBrowser(port)) {
             self.get("/demo");self.post("/demo",Map.of("participantId",""+a));other.get("/demo");other.post("/demo",Map.of("participantId",""+outsider));
             String path="/matches/"+id; var page=self.get(path);
-            assertThat(page.body()).contains("Ya llegué").doesNotContain("action=\""+path+"/confirm\"");
+            assertThat(page.body()).contains("Ya llegué", "Confirmar encuentro y actividad");
             assertThat(anonymous.post(path+"/arrive",Map.of()).statusCode()).isEqualTo(403);
             assertThat(other.post(path+"/arrive",Map.of("participantId",""+a)).statusCode()).isEqualTo(404);
             assertThat(self.get(path+"/arrive").statusCode()).isEqualTo(405);

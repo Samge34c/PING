@@ -288,3 +288,7 @@ Samuel autoriza el 16 de octubre de 2026 separar Conectar de Mi Ping y simplific
 ## Ampliación autorizada DEC-041 — Encuentro configurable y llegada
 
 El evento puede configurar puntos públicos, palabras base y actividades breves, una opción por línea. Vacío mantiene el catálogo actual. Se asignan y guardan tras aceptación bilateral, sin modificar encuentros activos al editar. Nuevas activaciones requieren «Ya llegué» propio de ambos antes de la confirmación final; llegar no acredita puntos ni sustituye la actividad/confirmación bilateral. Los activos anteriores conservan sus condiciones; +10, Saga y cierre controlado intactos. Ver DEC-041/Issue #35.
+
+## Correcciones autorizadas DEC-042/043 (17 octubre2026)
+
+Llegada propia opcional/informativa: no condiciona confirmar ni otorga puntos, también en filas con arrival_required=true. Catálogo estructurado del evento: puntos activos con indicaciones y actividades activas con intereses y puntos compatibles; no asignar combinaciones inválidas. Conservar datos/listas y misiones activas. Actividades pueden configurar0–100 puntos enteros, guardados al activar; anteriores10. Saga conserva importe para crédito y compensación. Recompensas por evento con coste1–10000 e instrucciones de reclamación; condiciones de canjes anteriores conservadas. No cambia matching/aceptación/confirmación bilaterales ni añade autenticación.

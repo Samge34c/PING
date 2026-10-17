@@ -41,6 +41,9 @@ public class Event {
         encounterWords = EncounterOptions.normalize(form.getEncounterWords(), 40, "Palabras base");
         encounterActivities = EncounterOptions.normalize(form.getEncounterActivities(), 500, "Actividades");
     }
+    @Column(nullable=false) private boolean structuredEncounter;
+    public boolean isStructuredEncounter(){return structuredEncounter;}
+    public void enableStructuredEncounter(){structuredEncounter=true;}
     @Version
     private long version;
 
