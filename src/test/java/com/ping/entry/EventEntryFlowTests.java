@@ -112,6 +112,7 @@ class EventEntryFlowTests {
             a.get(location);a.post(location+"/accept",Map.of());b.get(location);b.post(location+"/accept",Map.of());
             assertThat(matches.get(id,aid).status()).isEqualTo(MatchStatus.ACTIVE);assertThat(a.get("/connect").headers().firstValue("Location").orElseThrow()).endsWith("/matches/"+id);
             assertThat(a.get("/me").body()).doesNotContain("PIXEL-","data-other-hint");assertThat(a.get("/demo").statusCode()).isEqualTo(200);assertThat(a.get("/events").statusCode()).isEqualTo(200);
+            a.post(location+"/arrive",Map.of());b.post(location+"/arrive",Map.of());
             a.get(location);a.post(location+"/confirm",Map.of());assertThat(participants.get(aid).points()).isZero();b.get(location);b.post(location+"/confirm",Map.of());assertThat(participants.get(aid).points()).isEqualTo(10);assertThat(participants.get(bid).points()).isEqualTo(10);
             assertThat(a.get("/connect").statusCode()).isEqualTo(200);
         }

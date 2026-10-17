@@ -65,6 +65,7 @@ class SofaDemoTests {
         EventForm edit = EventForm.from(events.get(event)); edit.setMeetingPoint("Otro punto"); events.update(event, edit);
         service.accept(match, a); assertThat(service.get(match, a).word()).isEqualTo(first.word());
         assertThat(service.get(match, b).meetingPoint()).isEqualTo(point);
+        service.arrive(match, a); service.arrive(match, b);
         service.confirm(match, a); assertThat(participants.get(a).points()).isZero();
         service.confirm(match, b); service.confirm(match, b); service.confirm(match, a);
         assertThat(service.get(match, a).status()).isEqualTo(MatchStatus.COMPLETED);

@@ -12,6 +12,24 @@ public class EventForm {
     private String meetingPoint = "Punto Ping del evento";
     public String getMeetingPoint() { return meetingPoint; }
     public void setMeetingPoint(String value) { meetingPoint = value; }
+    @Size(max = 4000) private String meetingPoints = "";
+    @Size(max = 2000) private String encounterWords = "";
+    @Size(max = 12000) private String encounterActivities = "";
+    public String getMeetingPoints() { return meetingPoints; }
+    public void setMeetingPoints(String value) { meetingPoints = value; }
+    public String getEncounterWords() { return encounterWords; }
+    public void setEncounterWords(String value) { encounterWords = value; }
+    public String getEncounterActivities() { return encounterActivities; }
+    public void setEncounterActivities(String value) { encounterActivities = value; }
+    @AssertTrue(message = "Usa hasta 20 opciones por catálogo: puntos de 160, palabras de 40 y actividades de 500 caracteres, sin caracteres de control.")
+    public boolean isEncounterOptionsValid() {
+        try {
+            EncounterOptions.normalize(meetingPoints, 160, "Puntos");
+            EncounterOptions.normalize(encounterWords, 40, "Palabras");
+            EncounterOptions.normalize(encounterActivities, 500, "Actividades");
+            return true;
+        } catch (com.ping.web.BusinessRuleException error) { return false; }
+    }
     @PositiveOrZero private Long version;
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -21,6 +39,7 @@ public class EventForm {
     public void setVersion(Long version) { this.version = version; }
     public static EventForm from(Event event) {
         EventForm form = new EventForm();
+        form.meetingPoints = event.getMeetingPoints(); form.encounterWords = event.getEncounterWords(); form.encounterActivities = event.getEncounterActivities();
         form.meetingPoint = event.getMeetingPoint(); form.name = event.getName(); form.description = event.getDescription(); form.version = event.getVersion();
         return form;
     }

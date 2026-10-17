@@ -35,7 +35,7 @@ public class DemoController {
         return history.stream().filter(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE).findFirst().orElse(null);
     }
     private String signature(ParticipantView p, com.ping.event.EventStatus status, MatchView m) {
-        return p.id() + ":" + p.version() + ":" + status.name() + ":" + (m == null ? "waiting" : m.id() + ":" + m.status().name() + ":" + m.accepted() + ":" + m.otherAccepted() + ":" + m.confirmed() + ":" + m.otherConfirmed() + ":" + m.completionPending());
+        return p.id() + ":" + p.version() + ":" + status.name() + ":" + (m == null ? "waiting" : m.id() + ":" + m.status().name() + ":" + m.accepted() + ":" + m.otherAccepted() + ":" + m.confirmed() + ":" + m.otherConfirmed() + ":" + m.completionPending() + ":" + m.arrived() + ":" + m.otherArrived());
     }
     @GetMapping("/me/state") @ResponseBody
     public java.util.Map<String, String> state(HttpSession session, jakarta.servlet.http.HttpServletResponse response) {
@@ -99,6 +99,7 @@ public class DemoController {
     @PostMapping("/matches/{id}/accept") public String accept(@PathVariable long id, HttpSession session) { matches.accept(id, self(session)); return "redirect:/matches/" + id; }
     @PostMapping("/matches/{id}/reject") public String reject(@PathVariable long id, HttpSession session) { matches.cancel(id, self(session)); return "redirect:/matches/" + id; }
     @PostMapping("/matches/{id}/cancel") public String cancel(@PathVariable long id, HttpSession session) { matches.cancel(id, self(session)); return "redirect:/matches/" + id; }
+    @PostMapping("/matches/{id}/arrive") public String arrive(@PathVariable long id, HttpSession session) { matches.arrive(id, self(session)); return "redirect:/matches/" + id + "#am-arrival-title"; }
     @PostMapping("/matches/{id}/confirm") public String confirm(@PathVariable long id, HttpSession session) { matches.confirm(id, self(session)); return "redirect:/matches/" + id + "#am-confirm-title"; }
     @PostMapping("/matches/{id}/block") public String block(@PathVariable long id, HttpSession session, RedirectAttributes flash) {
         moderation.block(id, self(session)); flash.addFlashAttribute("message", "Bloqueo guardado. No recibirán nuevas propuestas entre sí. La conexión actual conserva su estado."); return "redirect:/matches/" + id;

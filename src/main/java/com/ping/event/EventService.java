@@ -36,7 +36,7 @@ public class EventService {
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public Event create(@Valid EventForm form) {
         Event event = new Event(normalizedName(form), Objects.requireNonNullElse(form.getDescription(), "").strip());
-        event.changeMeetingPoint(point(form)); return repository.save(event);
+        event.changeEncounterOptions(form); event.changeMeetingPoint(point(form)); return repository.save(event);
     }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public Event update(long id, @Valid EventForm form) {
@@ -44,7 +44,7 @@ public class EventService {
         if (form.getVersion() == null || form.getVersion() != event.getVersion()) {
             throw new BusinessRuleException("El evento cambió mientras lo editabas. Vuelve a abrir el formulario.");
         }
-        event.changeMeetingPoint(point(form));
+        event.changeEncounterOptions(form); event.changeMeetingPoint(point(form));
         event.changeDetails(normalizedName(form), Objects.requireNonNullElse(form.getDescription(), "").strip());
         return event;
     }

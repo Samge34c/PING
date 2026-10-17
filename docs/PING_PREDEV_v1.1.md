@@ -284,3 +284,7 @@ El objetivo ahora es implementar una demo sólida, no resolver todavía operaci�
 ## Evolución autorizada — DEC-040
 
 Samuel autoriza el 16 de octubre de 2026 separar Conectar de Mi Ping y simplificar la entrada identificando primero el evento por código público o QR local. El QR solo enlaza al alta del evento y no reemplaza la palabra temporal ni autentica personas. Se permiten código único persistente, migración conservadora, enlace base configurable y cambios mínimos de rutas/controladores; se conservan borrador/alta transaccional y reglas existentes. No se implementan múltiples puntos, actividades/recompensas/mapa configurables ni «Ya llegué». Registro y límites: DEC-040/Issue #33. No se atribuye aprobación a Julián.
+
+## Ampliación autorizada DEC-041 — Encuentro configurable y llegada
+
+El evento puede configurar puntos públicos, palabras base y actividades breves, una opción por línea. Vacío mantiene el catálogo actual. Se asignan y guardan tras aceptación bilateral, sin modificar encuentros activos al editar. Nuevas activaciones requieren «Ya llegué» propio de ambos antes de la confirmación final; llegar no acredita puntos ni sustituye la actividad/confirmación bilateral. Los activos anteriores conservan sus condiciones; +10, Saga y cierre controlado intactos. Ver DEC-041/Issue #35.

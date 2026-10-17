@@ -31,6 +31,13 @@ public class Match {
         completionPending = false; status = MatchStatus.ACTIVE;
         if (first.getId() == trigger) firstConfirmed = false; else secondConfirmed = false;
     }
+    @Column(nullable = false) private boolean arrivalRequired;
+    @Column(nullable = false) private boolean firstArrived;
+    @Column(nullable = false) private boolean secondArrived;
+    public boolean isArrivalRequired() { return arrivalRequired; }
+    public boolean arrived(long id) { return first.getId() == id ? firstArrived : secondArrived; }
+    public boolean bothArrived() { return firstArrived && secondArrived; }
+    void arrive(long id) { if (first.getId() == id) firstArrived = true; else secondArrived = true; }
     @Version private long version;
     protected Match() { }
     Match(Event event, Participant first, Participant second, String common, String firstInterests, String secondInterests) {
@@ -58,6 +65,7 @@ public class Match {
     void confirm(long id) { if (first.getId() == id) firstConfirmed = true; else secondConfirmed = true; }
     boolean bothConfirmed() { return firstConfirmed && secondConfirmed; }
     void activate(ActivityCatalog.Encounter encounter) {
+        arrivalRequired = true;
         status = MatchStatus.ACTIVE; word = encounter.word(); activity = encounter.activity(); meetingPoint = encounter.meetingPoint();
     }
     void complete() { status = MatchStatus.COMPLETED; completionPending = false; }

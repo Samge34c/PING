@@ -55,7 +55,7 @@ class MatchTests {
     void available(long id, boolean value) {
         AvailabilityForm form = new AvailabilityForm(); form.setAvailable(value); form.setVersion(participants.get(id).version()); participants.setAvailability(id, form);
     }
-    long activate(long[] pair) { long id = matching.search(pair[0]); service.accept(id, pair[0]); service.accept(id, pair[1]); return id; }
+    long activate(long[] pair) { long id = matching.search(pair[0]); service.accept(id, pair[0]); service.accept(id, pair[1]); service.arrive(id, pair[0]); service.arrive(id, pair[1]); return id; }
     @Test void commonInterestAndBestAffinityWinOverWaiting() {
         long self = p("Samuel", "Videojuegos", "Tecnología");
         long older = p("Mayor espera", "Videojuegos");
@@ -212,6 +212,7 @@ class MatchTests {
             assertThat(julian.get(path).body()).contains("OFFERED", "Samuel aceptó. Falta tu aceptación.");
             julian.post(path + "/accept", Map.of());
             assertThat(samuel.get(path).body()).contains("ACTIVE", "Entrada principal", "PIXEL-", "videojuego");
+            samuel.post(path + "/arrive", Map.of()); julian.post(path + "/arrive", Map.of());
             var firstConfirmation = java.net.URI.create(samuel.post(path + "/confirm", Map.of()).headers().firstValue("Location").orElseThrow());
             assertThat(firstConfirmation.getPath()).isEqualTo(path);
             assertThat(firstConfirmation.getFragment()).isEqualTo("am-confirm-title");

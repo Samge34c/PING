@@ -57,3 +57,5 @@ Alcance actual autorizado por **Samuel**, 16 de octubre2026: separar Conectar de
 ## Open Decisions
 
 Las cinco pantallas se conservan. DEC-038 autoriza la entrada propia mediante sesión y servicios existentes; no autoriza autenticación nueva.
+
+Continuación autorizada DEC-041/Issue #35: catálogos por evento y «Ya llegué» bilateral para nuevos activos; conserva condiciones de activos anteriores, +10/Saga y compatibilidad. Sustituye la exclusión temporal de estas funciones en DEC-040. Sin mapa/recompensa configurables.

@@ -60,3 +60,7 @@ Después del POST de confirmación, fragmento nativo `#am-confirm-title` y encab
 ## Conectar y entrada identificada — DEC-040
 
 Operación móvil390: código/QR → nombre del evento y alias → intereses. No hay selector repetido del evento; cambio explícito guarda alias/intereses, errores visibles sin perder borrador. Se reutilizan cabecera local, Manrope, controles táctiles y temas existentes; sin ilustraciones/portada nueva. Mi Ping concentra identidad/saldo/intereses/historial y un enlace de continuidad; Conectar concentra disponibilidad/búsqueda y resuelve propuesta/ACTIVE. Navegación compartida y del Hub apuntan a `/connect`; selección activa coherente. QR negro/blanco con quiet zone, código textual y enlace seleccionable/copiable accesibles en el detalle, sin nueva estética administrativa. Evidencia y configuración: docs/CONECTAR_CODIGO_QR.md.
+
+## Llegada y configuración — DEC-041
+
+ACTIVE conserva palabra/pista/lugar y añade llegada propia antes de actividad/confirmación; estado de ambas personas y una acción «Ya llegué» con foco nativo tras POST. Actividad visible desde aceptación; confirmación final disponible tras ambas llegadas en encuentros nuevos. Sin cambios a mapa/portada/Hub. Editor de evento reutiliza formulario y controles existentes con listas por línea y límites explícitos, sin dashboard nuevo.

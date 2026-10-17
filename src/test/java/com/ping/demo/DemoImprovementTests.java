@@ -74,6 +74,7 @@ class DemoImprovementTests {
         assertThat(offered.offered()).isEqualTo(1); assertThat(offered.active()).isZero(); assertThat(offered.points()).isZero();
         matchService.accept(match,a); matchService.accept(match,b);
         assertThat(metrics(s.eventId()).active()).isEqualTo(1); assertThat(metrics(s.eventId()).offered()).isZero();
+        matchService.arrive(match,a); matchService.arrive(match,b);
         matchService.confirm(match,a); assertThat(metrics(s.eventId()).completed()).isZero();
         matchService.confirm(match,b); matchService.confirm(match,b);
         var completed = metrics(s.eventId()); assertThat(completed.completed()).isEqualTo(1); assertThat(completed.points()).isEqualTo(20); assertThat(completed.free()).isEqualTo(2);
@@ -145,10 +146,10 @@ class DemoImprovementTests {
             long match = matching.search(a); var offered = browser.get("/me/state"); assertThat(offered.body()).isNotEqualTo(initial.body());
             matchService.accept(match,b); var accepted = browser.get("/me/state"); assertThat(accepted.body()).isNotEqualTo(offered.body());
             assertThat(accepted.body()).doesNotContain("Entrada principal", "PIXEL", "Julián");
-            matchService.accept(match,a); matchService.confirm(match,a); matchService.confirm(match,b);
+            matchService.accept(match,a); matchService.arrive(match,a); matchService.arrive(match,b); matchService.confirm(match,a); matchService.confirm(match,b);
             available(a,false); available(b,false);
             long c = id(s,"Ana"), d = id(s,"Carlos"); available(c,true); available(d,true);
-            long other = matching.search(c); matchService.accept(other,c); matchService.accept(other,d); matchService.confirm(other,c); matchService.confirm(other,d);
+            long other = matching.search(c); matchService.accept(other,c); matchService.accept(other,d); matchService.arrive(other,c); matchService.arrive(other,d); matchService.confirm(other,c); matchService.confirm(other,d);
             assertThat(browser.get("/me").body()).contains("<span>1</span> conexiones completadas por ti.");
             assertThat(metrics(s.eventId()).completed()).isEqualTo(2);
         }
@@ -219,6 +220,7 @@ class DemoImprovementTests {
         available(a, true); available(b, true); long match = matching.search(a);
         matchService.accept(match, a); matchService.accept(match, b);
         var before = matchService.get(match, a);
+        matchService.arrive(match, a); matchService.arrive(match, b);
         matchService.confirm(match, a); matchService.confirm(match, b);
         long active = matching.search(a); matchService.accept(active, a); matchService.accept(active, b);
         var activeBefore = matchService.get(active, a);

@@ -53,7 +53,7 @@ class EventExperienceTests {
         AvailabilityForm f = new AvailabilityForm(); f.setVersion(participants.get(id).version()); f.setAvailable(true); participants.setAvailability(id,f);
     }
     void enter(TestBrowser browser,long id) throws Exception { browser.get("/demo"); browser.post("/demo",Map.of("participantId",Long.toString(id))); }
-    long complete() { long m = matching.search(a); matches.accept(m,a); matches.accept(m,b); matches.confirm(m,a); matches.confirm(m,b); return m; }
+    long complete() { long m = matching.search(a); matches.accept(m,a); matches.accept(m,b); matches.arrive(m,a); matches.arrive(m,b); matches.confirm(m,a); matches.confirm(m,b); return m; }
     @Test void recognitionIsOnlyVisibleDuringActiveMatchAndNeverInPublicListsOrHistory() throws Exception {
         long m = matching.search(a);
         try(var sam = new TestBrowser(port); var jul = new TestBrowser(port)) {
@@ -66,7 +66,7 @@ class EventExperienceTests {
             assertThat(sam.get("/me").body()).doesNotContain("Gorra roja");
             for(String path:List.of("/participants","/admin","/events/"+event+"/hub","/events/"+event+"/map"))
                 assertThat(sam.get(path).body()).doesNotContain("Gorra roja","Camiseta negra y morral","Tote bag y camiseta de anime");
-            matches.confirm(m,a); matches.confirm(m,b);
+            matches.arrive(m,a); matches.arrive(m,b); matches.confirm(m,a); matches.confirm(m,b);
             assertThat(sam.get("/matches/"+m).body()).doesNotContain("Gorra roja","PISTA PARA ENCONTRARSE");
             assertThat(sam.get("/me").body()).doesNotContain("Gorra roja");
         }
@@ -176,6 +176,7 @@ class EventExperienceTests {
             assertThat(sam.post(path+"/accept",Map.of()).statusCode()).isEqualTo(302);
             assertThat(sam.get(path).body()).doesNotContain("am-grid", "Gorra roja");
             jul.get(path); assertThat(jul.post(path+"/accept",Map.of()).statusCode()).isEqualTo(302);
+            sam.post(path+"/arrive",Map.of()); jul.post(path+"/arrive",Map.of());
             var active = matches.get(m,a);
             assertThat(sam.get(path).body()).contains("class=\"am-grid\"", "Su palabra de encuentro", active.word(), active.meetingPoint(), active.activity(), "Gorra roja", "Confirmaciones: 0 de 2", "active-map.js");
             assertThat(sam.post(path+"/confirm",Map.of()).statusCode()).isEqualTo(302);
@@ -193,6 +194,7 @@ class EventExperienceTests {
     }
     @Test void activeMissionRetainsDurablePendingSagaAndRetryWithoutPrematureCompletion() throws Exception {
         long m = matching.search(a); matches.accept(m,a); matches.accept(m,b);
+        matches.arrive(m,a); matches.arrive(m,b);
         completionSteps.begin(m,a); completionSteps.begin(m,b); // Durable state left before the reward steps.
         try(var browser = new TestBrowser(port)) {
             enter(browser,a); String path = "/matches/"+m;
@@ -257,7 +259,7 @@ class EventExperienceTests {
         long ana = scenario.people().get(2).id(), carlos = scenario.people().get(3).id(); available(ana); available(carlos);
         long m = matching.search(ana); matches.accept(m,ana); matches.accept(m,carlos);
         assertThat(EventExperienceCatalog.badges(matches.list(ana))).isEmpty();
-        matches.confirm(m,ana); matches.confirm(m,carlos);
+        matches.arrive(m,ana); matches.arrive(m,carlos); matches.confirm(m,ana); matches.confirm(m,carlos);
         assertThat(EventExperienceCatalog.badges(matches.list(ana))).containsExactly("Primer Ping","Explorador","SOFA Link");
     }
     @ParameterizedTest @CsvSource({"Videojuegos,gamer,18", "Tecnología,technology,17", "Anime,communities,3", "Fotografía,cosplay,8", "Música,stage,17", "Cine,meet,23", "'',meet,23"})
