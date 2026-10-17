@@ -89,7 +89,7 @@ class RecognitionHintTests {
             assertThat(active.headers().firstValue("Cache-Control").orElseThrow()).contains("no-store");
             assertThat(outside.get(path).statusCode()).isEqualTo(404); assertThat(outside.get(path).body()).doesNotContain("SECRETO-PRUEBA");
             assertThat(owner.get("/me/state").body()).contains("recognitionRevision").doesNotContain("SECRETO-PRUEBA");
-            matches.confirm(m,a); matches.confirm(m,b);
+            matches.arrive(m,a); matches.arrive(m,b); matches.confirm(m,a); matches.confirm(m,b);
             assertThat(owner.get(path).body()).doesNotContain("SECRETO-PRUEBA","revision");
             assertThat(owner.get("/me/state").body()).doesNotContain("SECRETO-PRUEBA","recognitionRevision");
             assertThat(owner.get("/matches/"+m).body()).doesNotContain("SECRETO-PRUEBA");

@@ -2641,3 +2641,12 @@ body.participant-entry-page {padding-left:0}
 .event-entry-share img {display:block;width:min(100%,256px);height:auto;margin:16px 0;background:#fff}
 .event-entry-share .entry-link-row {display:flex;gap:8px;flex-wrap:wrap}.entry-link-row input {min-width:0;flex:1 1 220px}
 @media (min-width:992px) {.connect-page main.cn-page {margin-top:28px}.cn-heading h1 {font-size:34px}}
+
+/* DEC-041: arrival belongs to the existing operational mission. */
+.am-arrival { grid-area: arrival; padding-block: 1rem; border-top: 1px solid var(--ping-border); min-width: 0; }
+.am-arrival h2 { font-size: 1.2rem; }
+.am-arrival form .btn { width: 100%; min-height: 44px; }
+.am-arrival p { margin: .75rem 0 0; }
+.am-grid { grid-template-areas: "location word" "location arrival" "location activity" "location confirm"; }
+@media (max-width: 991.98px) { .am-grid { grid-template-areas: "word" "location" "arrival" "activity" "confirm"; } }
+.am-arrival .am-confirm-people li { grid-template-columns: minmax(0, 1fr) auto; }

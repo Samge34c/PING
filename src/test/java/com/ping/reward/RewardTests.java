@@ -40,7 +40,7 @@ class RewardTests {
         complete(); complete();
         assertThat(participants.get(a).points()).isEqualTo(20);
     }
-    long active() { long m=matching.search(a); matches.accept(m,a); matches.accept(m,b); return m; }
+    long active() { long m=matching.search(a); matches.accept(m,a); matches.accept(m,b); matches.arrive(m,a); matches.arrive(m,b); return m; }
     void complete() { long m=active(); matches.confirm(m,a); matches.confirm(m,b); }
     String key() { return UUID.randomUUID().toString(); }
     @Test void exactBalanceClaimIsIdempotentAndDoesNotAlterIssuedPointsOrHistory() {

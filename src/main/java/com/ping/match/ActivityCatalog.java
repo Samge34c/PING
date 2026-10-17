@@ -31,6 +31,13 @@ public final class ActivityCatalog {
         String word = selected.word() + "-" + Long.toString(matchId, 36).toUpperCase(Locale.ROOT);
         return new Encounter(meetingPoint(interests), word, selected.activity());
     }
+    public static Encounter encounter(String interests, long matchId, com.ping.event.Event event) {
+        Encounter fallback = encounter(interests, matchId, event.getName(), event.getMeetingPoint());
+        String base = com.ping.event.EncounterOptions.select(event.getEncounterWords(), matchId, null);
+        return new Encounter(com.ping.event.EncounterOptions.select(event.getMeetingPoints(), matchId, fallback.meetingPoint()),
+            base == null ? fallback.word() : base + "-" + Long.toString(matchId, 36).toUpperCase(Locale.ROOT),
+            com.ping.event.EncounterOptions.select(event.getEncounterActivities(), matchId, fallback.activity()));
+    }
     public static String topic(String interests) { return ORDER.stream().filter(s -> Arrays.asList(interests.split(" · ")).contains(s)).findFirst().orElse(""); }
     public static String word(String interests, long matchId) {
         int index = ORDER.indexOf(topic(interests));

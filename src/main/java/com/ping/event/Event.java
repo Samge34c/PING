@@ -27,6 +27,23 @@ public class Event {
     private String meetingPoint = "Punto Ping del evento";
     public String getMeetingPoint() { return meetingPoint; }
     void changeMeetingPoint(String value) { meetingPoint = value; }
+    @Column(name = "meeting_points", nullable = false, length = 4000)
+    private String meetingPoints = "";
+    @Column(name = "encounter_words", nullable = false, length = 2000)
+    private String encounterWords = "";
+    @Column(name = "encounter_activities", nullable = false, columnDefinition = "TEXT")
+    private String encounterActivities = "";
+    public String getMeetingPoints() { return meetingPoints; }
+    public String getEncounterWords() { return encounterWords; }
+    public String getEncounterActivities() { return encounterActivities; }
+    void changeEncounterOptions(EventForm form) {
+        meetingPoints = EncounterOptions.normalize(form.getMeetingPoints(), 160, "Puntos de encuentro");
+        encounterWords = EncounterOptions.normalize(form.getEncounterWords(), 40, "Palabras base");
+        encounterActivities = EncounterOptions.normalize(form.getEncounterActivities(), 500, "Actividades");
+    }
+    @Column(nullable=false) private boolean structuredEncounter;
+    public boolean isStructuredEncounter(){return structuredEncounter;}
+    public void enableStructuredEncounter(){structuredEncounter=true;}
     @Version
     private long version;
 

@@ -45,7 +45,7 @@ class MatchCompletionSagaTests {
         feedback.deleteAll(); reservations.deleteAll(); matchRepository.deleteAll(); participantRepository.deleteAll(); eventRepository.deleteAll();
         EventForm f = new EventForm(); f.setName("Demo Saga"); var event = events.create(f); events.transition(event.getId(),EventStatus.OPEN);
         ParticipantForm p = new ParticipantForm(); p.setEventId(event.getId()); p.setAvailable(true); p.setAlias("Samuel"); a = people.create(p).id();
-        p.setAlias("Julián"); b = people.create(p).id(); match = matching.search(a); matches.accept(match,a); matches.accept(match,b);
+        p.setAlias("Julián"); b = people.create(p).id(); match = matching.search(a); matches.accept(match,a); matches.accept(match,b); matches.arrive(match,a); matches.arrive(match,b);
     }
     MatchCompletion record() { return records.findById(match).orElseThrow(); }
     List<String> actions() { return history.findByMatchIdOrderByIdAsc(match).stream().map(CompletionStep::getAction).toList(); }

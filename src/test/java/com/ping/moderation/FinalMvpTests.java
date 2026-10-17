@@ -45,7 +45,7 @@ class FinalMvpTests {
         AvailabilityForm f = new AvailabilityForm(); f.setAvailable(value); f.setVersion(participants.get(id).version()); participants.setAvailability(id,f);
     }
     long offer() { available(a,true); available(b,true); return matching.search(a); }
-    long complete() { long m=offer(); matches.accept(m,a); matches.accept(m,b); matches.confirm(m,a); matches.confirm(m,b); return m; }
+    long complete() { long m=offer(); matches.accept(m,a); matches.accept(m,b); matches.arrive(m,a); matches.arrive(m,b); matches.confirm(m,a); matches.confirm(m,b); return m; }
     void cycle(long id) { available(id,false); available(id,true); }
     @Test void blockExcludesBothDirectionsAcrossAvailabilityCyclesAndPreservesHistory() {
         long m=complete(); moderation.block(m,a); moderation.block(m,a);
@@ -63,7 +63,7 @@ class FinalMvpTests {
         long m=offer(); moderation.block(m,a);
         assertThat(matches.get(m,a).status()).isEqualTo(MatchStatus.OFFERED);
         assertThat(matching.search(b)).isEqualTo(m);
-        matches.accept(m,a); matches.accept(m,b); matches.confirm(m,a); matches.confirm(m,b);
+        matches.accept(m,a); matches.accept(m,b); matches.arrive(m,a); matches.arrive(m,b); matches.confirm(m,a); matches.confirm(m,b);
         assertThat(participants.get(a).points()).isEqualTo(10);
         assertThatThrownBy(() -> matching.search(a)).isInstanceOf(BusinessRuleException.class);
     }
@@ -120,6 +120,7 @@ class FinalMvpTests {
             jul.get(path); jul.post(path+"/accept",Map.of());
             assertThat(sam.get(path).body()).contains("Zona Gamer · Pabellón 18", "PIXEL-", "Elijan un juego o stand");
             assertThat(sam.get("/me").body()).contains("Tu encuentro continúa.", "Volver al encuentro").doesNotContain("PIXEL-");
+            sam.post(path+"/arrive",Map.of()); jul.post(path+"/arrive",Map.of());
             sam.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Esperando a Julián");
             assertThat(jul.get(path).body()).contains("Samuel ya confirmó. Falta tu confirmación.");
             jul.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Conexión completada 🎉");
