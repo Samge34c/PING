@@ -46,3 +46,9 @@ Corrección operativa, sin rediseñar las cinco pantallas: entrada demo con un s
 ## Selección de intereses móvil — DEC-037 (parte visual)
 
 Editor existente del participante: dos columnas de opciones táctiles completas, icono/nombre sin descripciones repetidas, selección por superficie/borde y check nativo, foco visible y contador singular/plural real. Título/contexto compactos, retorno arriba y un único botón principal. CSS `.participant-interests-page`/`.pi-*`, Manrope y variables existentes en ambos temas; controles≥44 px y reserva de navegación compartida. No se modifica administración ni el contrato del formulario (CSRF, versión e IDs). El enlace funcional de alta sigue pendiente de la decisión descrita en DEC-037; este editor no lo sustituye.
+
+## Alta propia operativa — DEC-038
+
+`/join` y `/join/interests`: flujo móvil390 con cabecera local compacta (marca/tema), alias/evento y opciones táctiles reutilizadas de DEC-037; sin portada nueva ni menú administrativo antes de entrar. Una acción principal por paso; corrección mediante POST conserva selección y borrador, con mensajes recuperables.360 claro conserva controles y acción; escritorio centra el mismo flujo sin nuevas columnas administrativas. Festival Social, Manrope e iconos locales existentes; ninguna ilustración nueva.
+
+Home/nav de invitado llevan a entrada normal; demo permanece separada. En modo participante, etiquetas/salida y menú omiten preparación/admin como presentación, sin cambiar rutas ni permisos. Editor propio vuelve a Mi Ping. Sin rediseñar las otras pantallas ni la navegación del Hub.

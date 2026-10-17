@@ -2609,3 +2609,18 @@ html:has(body.home-festival-page) {scroll-padding-bottom:calc(100px + env(safe-a
 .pi-page .interest-selection-footer p {font-size:13px;margin:0;color:var(--ping-muted)}
 .pi-page .interest-selection-footer>.btn {min-height:48px}
 html:has(body.participant-interests-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+
+/* DEC-038: compact participant entry; no administrative or shared navigation redesign. */
+body.participant-entry-page {padding-left:0}
+.entry-topbar {height:64px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--ping-border);background:var(--ping-bg)}
+.entry-topbar .ping-wordmark {font-size:28px}
+.participant-entry-page main.pe-page {width:calc(100% - 32px);max-width:520px;margin:12px auto 0;animation:none;overflow-wrap:anywhere}
+.pe-step {color:var(--ping-primary);font-size:13px;font-weight:650;margin:12px 0}
+.pe-page>h1 {font-size:32px;margin:0 0 12px;letter-spacing:-.03em}
+.pe-intro {font-size:15px;color:var(--ping-muted);margin-bottom:24px}
+.pe-page>form>.form-label {margin-top:12px}
+.pe-help,.pe-academic {font-size:12px;color:var(--ping-muted);margin:8px 0 16px}
+.pe-primary {width:100%;margin-top:20px}
+.pe-academic {margin-top:24px}
+.participant-entry-page .interest-selection-footer {gap:12px}
+.participant-entry-page .ping-footer {max-width:520px}

@@ -6,7 +6,7 @@
     <h1 id="hm-title">Comparte gustos.<span>Conecta en persona.</span></h1>
     <p class="hm-description">PING conecta personas por intereses para encontrarse dentro del evento.</p>
     <div class="hm-actions">
-      <a class="btn hm-primary" th:href="${session.pingDemoParticipantId != null} ? @{/me} : @{/demo}"><span th:text="${session.pingDemoParticipantId != null ? 'Volver a Mi Ping' : 'Entrar a la demo'}"></span><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+      <a class="btn hm-primary" th:href="${session.pingDemoParticipantId != null} ? @{/me} : @{/join}"><span th:text="${session.pingDemoParticipantId != null ? 'Volver a Mi Ping' : 'Empezar'}"></span><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
       <a class="hm-secondary" th:href="${session.pingDemoParticipantId != null} ? @{/me/event} : @{/events}"><span th:text="${session.pingDemoParticipantId != null ? 'Ir a mi evento' : 'Explorar eventos'}"></span><svg th:replace="~{fragments/layout :: icon('pin')}"></svg></a>
     </div>
     <p class="hm-unofficial">Simulación académica. Sin vínculo oficial con SOFA.</p>
@@ -21,7 +21,7 @@
   </ol>
 </section>
 <section class="hm-demo" aria-label="Accesos de la demo académica">
-  <div><svg th:replace="~{fragments/layout :: icon('bolt')}"></svg><p>¿Preparas la demostración?<span>Configura o reutiliza el escenario de prueba.</span></p><a th:href="@{/demo/prepare}">Preparar demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
+  <div><svg th:replace="~{fragments/layout :: icon('bolt')}"></svg><p>¿Quieres probar antes?<span>Explora la demo académica con participantes de prueba.</span></p><a th:href="@{/demo}">Probar la demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
   <nav th:if="${session.pingDemoParticipantId != null}" class="hm-session-tools" aria-label="Otros accesos"><a th:href="@{/demo}">Elegir participante demo</a><a th:href="@{/events}">Explorar eventos</a></nav>
 </section>
 </main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -1,6 +1,6 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Elegir intereses')}"></head><body class="participant-interests-page"><nav th:replace="~{fragments/layout :: nav}"></nav>
 <main id="main-content" class="container pi-page">
-  <a class="pi-back" th:href="@{/participants/{id}(id=${participant.id})}">← Volver</a>
+  <a class="pi-back" th:href="${session.pingEntryMode == 'participant' and participant.id == session.pingDemoParticipantId} ? @{/me} : @{/participants/{id}(id=${participant.id})}">← Volver</a>
   <header class="pi-heading"><h1>Tus intereses</h1><p><strong th:text="${participant.alias}"></strong> · <span th:text="${participant.eventName}"></span></p><p>Elige los temas que te apetece compartir. Puedes cambiarlos después.</p></header>
   <form data-interest-editor method="post" th:action="@{/participants/{id}/interests(id=${participant.id})}" th:object="${interestSelectionForm}">
     <input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" th:field="*{version}">

@@ -18,10 +18,10 @@ public class InterestController {
     @GetMapping("/participants/{id}/interests") public String form(@PathVariable long id, Model model) {
         model.addAttribute("interestSelectionForm", service.selection(id)); populate(model, id); return "interests/form";
     }
-    @PostMapping("/participants/{id}/interests") public String save(@PathVariable long id, @Valid @ModelAttribute InterestSelectionForm interestSelectionForm, BindingResult errors, Model model, RedirectAttributes flash) {
+    @PostMapping("/participants/{id}/interests") public String save(@PathVariable long id, @Valid @ModelAttribute InterestSelectionForm interestSelectionForm, BindingResult errors, Model model, RedirectAttributes flash, jakarta.servlet.http.HttpSession session) {
         participants.get(id);
         if (errors.hasErrors()) { populate(model, id); return "interests/form"; }
-        service.save(id, interestSelectionForm); flash.addFlashAttribute("message", "Intereses guardados."); return "redirect:/participants/" + id;
+        service.save(id, interestSelectionForm); flash.addFlashAttribute("message", "Intereses guardados."); return "participant".equals(session.getAttribute("pingEntryMode")) && Long.valueOf(id).equals(session.getAttribute("pingDemoParticipantId")) ? "redirect:/me" : "redirect:/participants/" + id;
     }
     private void populate(Model model, long id) { model.addAttribute("participant", participants.get(id)); model.addAttribute("interests", service.catalog()); }
 }
