@@ -4,7 +4,7 @@
 
 Actualizado17 octubre2026 Bogotá. Copia `/workspace/PING`, remoto `https://github.com/Samge34c/PING.git`. Recuperación verificada: PR36 en borrador, rama `feature/event-encounter-arrival`, último respaldo inicial `9d233b60ec2493f12403e4c0b6278792221fc571`; GitHub no tenía avances posteriores. Árbol inicial limpio, base `feature/connect-event-entry` @ `c288f778d8d7cdf72ec3abb4306473aa756b352b`. Cadena anterior conservada. Sin main, merge, force-push ni publicación pública.
 
-Este documento se actualiza antes de cada commit; el SHA del commit que contiene la actualización se confirma después mediante `git ls-remote origin refs/heads/<rama>` y en su PR. No inferir un respaldo de un archivo local. Respaldo bloque1 confirmado: `087b3a7489c88a630b0064adea8e50824e51906b`, PR36 actualizada/en borrador. Respaldo bloque2 confirmado: `bce34589cc346ab73d21fcd277b5f3c029e11f4d`, rama `feature/event-points-rewards`, PR37 en borrador hacia PR36. Bloque3 en `fix/event-journey-consistency` desde ese SHA; comprobado y preparado para su propio commit/PR en borrador hacia PR37. No hay trabajo de otros sin conservar.
+Este documento se actualiza antes de cada commit; el SHA del commit que contiene la actualización se confirma después mediante `git ls-remote origin refs/heads/<rama>` y en su PR. No inferir un respaldo de un archivo local. Respaldo bloque1 confirmado: `087b3a7489c88a630b0064adea8e50824e51906b`, PR36 actualizada/en borrador. Respaldo bloque2 confirmado: `bce34589cc346ab73d21fcd277b5f3c029e11f4d`, rama `feature/event-points-rewards`, PR37 en borrador hacia PR36. Respaldo de código bloque3 confirmado: `e85da1b1a0ad7acd1608d8c569d01f18730dc4d5`, rama `fix/event-journey-consistency`, [PR38](https://github.com/Samge34c/PING/pull/38) en borrador hacia PR37. Esta actualización final solo registra respaldos/PR ya verificados; el código probado no cambia. HEAD puede incluir este commit documental posterior: consultar el SHA exacto remoto en PR38/git ls-remote. No queda implementación local sin subir. No hay trabajo de otros sin conservar.
 
 ## Decisiones y comportamiento actual — bloque1 / DEC-042
 
@@ -67,4 +67,14 @@ Revisión visual manual390 principal,360 claro y1440 oscuro: la acción de canje
 
 Archivos principales: `encounter/EncounterService,PointForm`, `reward/RewardService`, templates `demo/active-mission,match`, `rewards/benefits`, `encounter/point`; pruebas StructuredEncounter/EventBenefit y regresiones de entrada/matches. General final `verify` del bloque3: **193 pruebas,0 fallos/errores/omitidas**, BUILD SUCCESS/JAR. No hay cambios de código posteriores a esa ejecución; solo esta documentación y selección de capturas. Credenciales y datos de bases exclusivas no se publican.
 
-Pendiente real: teléfono físico/Safari y prueba Wi-Fi Windows. No hay publicación pública, merge o autenticación nueva. Próxima acción humana: actualizar la copia Windows a la última rama (comandos arriba), arrancar con su configuración privada y comprobar el recorrido desde teléfono; revisar PR36→PR37→PR del bloque3 en ese orden, sin integrar automáticamente. Toda implementación de los tres bloques está en los commits de trabajo, no se promete ejecución posterior al turno.
+Pendiente real: teléfono físico/Safari y prueba Wi-Fi Windows. No hay publicación pública, merge o autenticación nueva. Próxima acción humana: actualizar la copia Windows a la última rama (comandos arriba), arrancar con su configuración privada y comprobar el recorrido desde teléfono; revisar PR36→PR37→PR38 en ese orden, sin integrar automáticamente. Toda implementación de los tres bloques está en los commits de trabajo, no se promete ejecución posterior al turno.
+
+### Referencias finales verificadas antes de esta actualización documental
+
+| Bloque | Rama | Código remoto verificado | PR borrador |
+|---|---|---|---|
+| Llegada/estructura/MySQL | feature/event-encounter-arrival | 087b3a7489c88a630b0064adea8e50824e51906b | [36](https://github.com/Samge34c/PING/pull/36) |
+| Puntos/recompensas | feature/event-points-rewards | bce34589cc346ab73d21fcd277b5f3c029e11f4d | [37](https://github.com/Samge34c/PING/pull/37) |
+| Recorrido integrado | fix/event-journey-consistency | e85da1b1a0ad7acd1608d8c569d01f18730dc4d5 | [38](https://github.com/Samge34c/PING/pull/38) |
+
+Main remoto sigue en97f9b4302d0c2bb05221d45e4ac5c1d92d608ac7; no se integró nada. Cada push se contrastó con git ls-remote. Los logs completos actuales de verificación están fuera de Git en /workspace/work/ping-next; no contienen credenciales exportadas. Las PR y los fuentes de prueba documentan evidencia recuperable sin depender de ese directorio.
