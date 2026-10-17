@@ -32,7 +32,7 @@
     </section>
     <section class="am-activity" aria-labelledby="am-activity-title"><h2 id="am-activity-title"><svg th:replace="~{fragments/layout :: icon('chat')}"></svg>Hagan algo juntos</h2><p class="mission-activity-text" th:text="${match.activity}"></p></section>
     <section class="am-confirmation" aria-labelledby="am-confirm-title">
-      <h2 id="am-confirm-title" th:text="${match.completionPending ? 'Finalizando la conexión' : (match.confirmed ? 'Tu parte está confirmada' : '¿Ya se encontraron?')}"></h2>
+      <h2 id="am-confirm-title" tabindex="-1" th:text="${match.completionPending ? 'Finalizando la conexión' : (match.confirmed ? 'Tu parte está confirmada' : '¿Ya se encontraron?')}"></h2>
       <p class="am-confirm-help" th:if="${!match.confirmed and !match.completionPending}">Confirma después del encuentro y de realizar la actividad.</p>
       <ul class="am-confirm-people" aria-label="Confirmaciones del encuentro">
         <li th:attr="data-confirmed=${match.confirmed}"><svg th:replace="~{fragments/layout :: icon(${match.confirmed ? 'check' : 'clock'})}"></svg><span>Tú</span><strong th:text="${match.confirmed ? 'Confirmado' : 'Por confirmar'}"></strong></li>

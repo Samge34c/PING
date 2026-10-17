@@ -45,7 +45,7 @@ Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genérica
 
 El usuario eligió composición primero para portadas y showcases, y trabajo directamente en código para pantallas operativas. El valor de herramienta para portadas se registra en `.impeccable/config.json` (`buildPath: comp`).
 
-Alcance actual autorizado por **Samuel**, 2026-10-16: recorrido alta manual → intereses → Mi Ping → búsqueda/conexión, con identidad Festival Social y demo diferenciada. Prioridad vigente en AGENTS.md; DEC-038 autoriza expresamente el enlace mínimo de continuidad antes propuesto. Rama `feature/participant-onboarding` desde `ea04d3d`; commit/push y PR en borrador hacia `feature/participant-mobile-entry` autorizados, sin merge, force-push ni main. No se atribuye aprobación a Julián.
+Alcance actual autorizado por **Samuel**,16 de octubre2026: comprobar conexión completa entre dos altas normales y corregir obstáculos concretos móviles. DEC-039 acota el único defecto observado al resultado fuera de vista después de confirmar; no autoriza otra auditoría/rediseño ni nuevas reglas. Rama `fix/participant-confirmation-feedback` desde `6afac1e`, commit/push y PR en borrador hacia `feature/participant-onboarding`, sin merge/main/force-push. No se atribuye aprobación a Julián.
 
 ## Evidence on Hand
 

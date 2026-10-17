@@ -211,8 +211,14 @@ class MatchTests {
             assertThat(julian.get(path).body()).contains("OFFERED", "Samuel aceptó. Falta tu aceptación.");
             julian.post(path + "/accept", Map.of());
             assertThat(samuel.get(path).body()).contains("ACTIVE", "Entrada principal", "PIXEL-", "videojuego");
-            samuel.post(path + "/confirm", Map.of()); assertThat(julian.get(path).body()).contains("ACTIVE");
-            julian.post(path + "/confirm", Map.of()); samuel.post(path + "/confirm", Map.of());
+            var firstConfirmation = java.net.URI.create(samuel.post(path + "/confirm", Map.of()).headers().firstValue("Location").orElseThrow());
+            assertThat(firstConfirmation.getPath()).isEqualTo(path);
+            assertThat(firstConfirmation.getFragment()).isEqualTo("am-confirm-title");
+            assertThat(julian.get(path).body()).contains("ACTIVE");
+            var finalConfirmation = java.net.URI.create(julian.post(path + "/confirm", Map.of()).headers().firstValue("Location").orElseThrow());
+            assertThat(finalConfirmation.getPath()).isEqualTo(path);
+            assertThat(finalConfirmation.getFragment()).isEqualTo("am-confirm-title");
+            samuel.post(path + "/confirm", Map.of());
             assertThat(samuel.get(path).body()).contains("COMPLETED", "+10", "Omitir");
             assertThat(samuel.post(path + "/feedback", Map.of("rating", "INVALID")).statusCode()).isEqualTo(409);
             samuel.post(path + "/feedback", Map.of("rating", "USEFUL"));

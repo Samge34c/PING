@@ -52,3 +52,7 @@ Editor existente del participante: dos columnas de opciones táctiles completas,
 `/join` y `/join/interests`: flujo móvil390 con cabecera local compacta (marca/tema), alias/evento y opciones táctiles reutilizadas de DEC-037; sin portada nueva ni menú administrativo antes de entrar. Una acción principal por paso; corrección mediante POST conserva selección y borrador, con mensajes recuperables.360 claro conserva controles y acción; escritorio centra el mismo flujo sin nuevas columnas administrativas. Festival Social, Manrope e iconos locales existentes; ninguna ilustración nueva.
 
 Home/nav de invitado llevan a entrada normal; demo permanece separada. En modo participante, etiquetas/salida y menú omiten preparación/admin como presentación, sin cambiar rutas ni permisos. Editor propio vuelve a Mi Ping. Sin rediseñar las otras pantallas ni la navegación del Hub.
+
+## Resultado de confirmación visible — DEC-039
+
+Después del POST de confirmación, fragmento nativo `#am-confirm-title` y encabezado con `tabindex=-1` en ACTIVE/COMPLETED. El resultado recibe foco y queda en vista sin añadir bloques, CSS o JavaScript, ni desplazar automáticamente a quien aún está leyendo la misión. El polling existente conserva los cambios de estado de la otra persona. Evidencia390/360 y límites en docs/CONEXION_DOS_ALTAS.md.
