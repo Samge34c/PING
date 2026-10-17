@@ -1,5 +1,7 @@
 # Entrada del participante — DEC-037, avance visual y bloqueo de continuidad
 
+**Continuidad:** este documento conserva el avance parcial de PR30. El enlace quedó autorizado e implementado en DEC-038; estado vigente y evidencia en [ALTA_PARTICIPANTE.md](ALTA_PARTICIPANTE.md).
+
 Instrucción de Samuel, 2026-10-16, sin atribuir aprobación a Julián. Prioridad general registrada únicamente en AGENTS.md. Issue #14 consultado abierto; no se cierra. Base local/remota `e8246b1f47d67ab38de7caabb8ff6b7c0a4583c6`, `fix/mobile-journey-review`, árbol limpio al comenzar; rama propia `feature/participant-mobile-entry`. No se alteran las PR24–29 ni sus bases.
 
 ## Qué funciona actualmente y dónde se corta

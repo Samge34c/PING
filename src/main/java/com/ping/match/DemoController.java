@@ -25,9 +25,9 @@ public class DemoController {
     }
     @GetMapping("/demo") public String select(@RequestParam(required = false) Long participantId, Model model) { model.addAttribute("selectedParticipantId", participantId); model.addAttribute("participants", participants.list()); return "demo/select"; }
     @PostMapping("/demo") public String enter(@RequestParam long participantId, HttpSession session) {
-        participants.get(participantId); session.setAttribute(SELECTED, participantId); return "redirect:/me";
+        participants.get(participantId); session.removeAttribute("pingEntryDraft"); session.removeAttribute("pingEntryMode"); session.setAttribute(SELECTED, participantId); return "redirect:/me";
     }
-    @PostMapping("/demo/exit") public String exit(HttpSession session) { session.removeAttribute(SELECTED); return "redirect:/demo"; }
+    @PostMapping("/demo/exit") public String exit(HttpSession session) { boolean ownEntry = "participant".equals(session.getAttribute("pingEntryMode")); session.removeAttribute(SELECTED); session.removeAttribute("pingEntryMode"); session.removeAttribute("pingEntryDraft"); return ownEntry ? "redirect:/join" : "redirect:/demo"; }
     private long self(HttpSession session) {
         return DemoSession.participantId(session);
     }
@@ -51,7 +51,7 @@ public class DemoController {
         return state;
     }
     @GetMapping("/me") public String dashboard(HttpSession session, Model model) {
-        if (session.getAttribute(SELECTED) == null) return "redirect:/demo";
+        if (session.getAttribute(SELECTED) == null) return "redirect:/join";
         long id = self(session); var history = matches.list(id);
         model.addAttribute("recognitionHintForm", hints.ownForm(id));
         var participant = participants.get(id); model.addAttribute("participant", participant); model.addAttribute("matches", history);

@@ -5,6 +5,6 @@ public final class DemoSession {
     private DemoSession() { }
     public static long participantId(HttpSession session) {
         if (session.getAttribute("pingDemoParticipantId") instanceof Long id) return id;
-        throw new BusinessRuleException("Entra como participante desde Modo demo antes de continuar.");
+        throw new BusinessRuleException("Vuelve a entrar a PING antes de continuar.");
     }
 }

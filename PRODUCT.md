@@ -45,7 +45,7 @@ Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genérica
 
 El usuario eligió composición primero para portadas y showcases, y trabajo directamente en código para pantallas operativas. El valor de herramienta para portadas se registra en `.impeccable/config.json` (`buildPath: comp`).
 
-Alcance actual autorizado por **Samuel**, 2026-10-16: recorrido alta manual → intereses → Mi Ping → búsqueda/conexión, con identidad Festival Social y demo diferenciada. Prioridad vigente en AGENTS.md; DEC-037 registra el límite y la propuesta mínima de continuidad, pendiente de decisión antes de modificar ese enlace funcional. Rama `feature/participant-mobile-entry` desde `e8246b1`; commit/push y PR en borrador hacia `fix/mobile-journey-review` autorizados, sin merge, force-push ni main. No se atribuye aprobación a Julián.
+Alcance actual autorizado por **Samuel**, 2026-10-16: recorrido alta manual → intereses → Mi Ping → búsqueda/conexión, con identidad Festival Social y demo diferenciada. Prioridad vigente en AGENTS.md; DEC-038 autoriza expresamente el enlace mínimo de continuidad antes propuesto. Rama `feature/participant-onboarding` desde `ea04d3d`; commit/push y PR en borrador hacia `feature/participant-mobile-entry` autorizados, sin merge, force-push ni main. No se atribuye aprobación a Julián.
 
 ## Evidence on Hand
 
@@ -56,4 +56,4 @@ Alcance actual autorizado por **Samuel**, 2026-10-16: recorrido alta manual → 
 
 ## Open Decisions
 
-Las cinco pantallas se conservan. DEC-037 acota la entrada propia y documenta el enlace mínimo pendiente de decisión; no autoriza autenticación nueva.
+Las cinco pantallas se conservan. DEC-038 autoriza la entrada propia mediante sesión y servicios existentes; no autoriza autenticación nueva.
