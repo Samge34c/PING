@@ -292,3 +292,7 @@ El evento puede configurar puntos públicos, palabras base y actividades breves,
 ## Correcciones autorizadas DEC-042/043 (17 octubre2026)
 
 Llegada propia opcional/informativa: no condiciona confirmar ni otorga puntos, también en filas con arrival_required=true. Catálogo estructurado del evento: puntos activos con indicaciones y actividades activas con intereses y puntos compatibles; no asignar combinaciones inválidas. Conservar datos/listas y misiones activas. Actividades pueden configurar0–100 puntos enteros, guardados al activar; anteriores10. Saga conserva importe para crédito y compensación. Recompensas por evento con coste1–10000 e instrucciones de reclamación; condiciones de canjes anteriores conservadas. No cambia matching/aceptación/confirmación bilaterales ni añade autenticación.
+
+## Ampliación autorizada DEC-045
+
+Categorías administrables de intereses para ordenar su selección móvil. Un interés tiene una categoría opcional; sin categoría sigue disponible bajo Otros intereses. Desactivar categoría impide nuevas selecciones pero conserva las anteriores y los encuentros. Matching sigue por IDs de intereses comunes; compartir categoría no es coincidencia. No cambia el resto del recorrido, puntos o permisos.

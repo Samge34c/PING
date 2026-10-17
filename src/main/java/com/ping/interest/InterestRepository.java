@@ -6,5 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @Profile("!bootstrap")
 public interface InterestRepository extends JpaRepository<Interest, Long> {
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths="category")
     List<Interest> findAllByOrderByNameAsc();
+    @org.springframework.data.jpa.repository.Query("select i.id from Interest i left join i.category c where c is null or c.active=true")
+    List<Long> selectableIds();
 }

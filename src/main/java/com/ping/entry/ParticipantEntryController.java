@@ -122,7 +122,7 @@ public class ParticipantEntryController {
             if (action.equals("back")) { d.revision++; return "redirect:/join"; }
             if (!action.equals("complete")) { response.setStatus(400); model.addAttribute("entryError", "Usa los botones para continuar o corregir tu entrada."); return choices(d, model); }
             if (d.eventId == null || d.alias.isBlank()) return "redirect:/join";
-            if (d.ids.stream().anyMatch(id -> id <= 0) || !interests.catalog().stream().map(Interest::getId).toList().containsAll(d.ids)) {
+            if (d.ids.stream().anyMatch(id -> id <= 0) || !interests.availableCatalog().stream().map(Interest::getId).toList().containsAll(d.ids)) {
                 response.setStatus(409); model.addAttribute("entryError", "Uno de los intereses ya no está disponible. Revisa la selección; tu borrador se conserva."); return choices(d, model);
             }
             try {

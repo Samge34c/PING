@@ -64,3 +64,5 @@ DEC-041/Issue #35 autoriza el segundo avance: catálogos opcionales por evento (
 DEC-042/043 sustituyen la condición incorrecta de llegada de DEC-041: siempre informativa, incluso arrival_required=true. Autorización explícita para configuración estructurada compatible, puntos variables y recompensas por evento; detalles/estado actual en ENCUENTRO_CONFIGURABLE_LLEGADA.md.
 
 Continuidad17 octubre2026: PR36 corregida en087b3a7 (llegada informativa/estructura compatible/MySQL); PR37 enbce3458 (puntos0–100, snapshots Saga y recompensas por evento). DEC-044 revisa recorrido desde esa base en fix/event-journey-consistency. GitHub/documento ENCUENTRO_CONFIGURABLE_LLEGADA.md son autoridad de estado/arranque; no recuperar ZIP de otro entorno.
+
+DEC-045: categorías de intereses y selección móvil desde552906a en feature/interest-categories-mobile. Inactivas impiden selecciones nuevas; anteriores se conservan sin alterar matching. V17 nueva; documento único ENCUENTRO_CONFIGURABLE_LLEGADA.md registra respaldos/verificación.

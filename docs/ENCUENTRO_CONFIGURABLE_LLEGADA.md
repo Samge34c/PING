@@ -78,3 +78,13 @@ Pendiente real: teléfono físico/Safari y prueba Wi-Fi Windows. No hay publicac
 | Recorrido integrado | fix/event-journey-consistency | e85da1b1a0ad7acd1608d8c569d01f18730dc4d5 | [38](https://github.com/Samge34c/PING/pull/38) |
 
 Main remoto sigue en97f9b4302d0c2bb05221d45e4ac5c1d92d608ac7; no se integró nada. Cada push se contrastó con git ls-remote. Los logs completos actuales de verificación están fuera de Git en /workspace/work/ping-next; no contienen credenciales exportadas. Las PR y los fuentes de prueba documentan evidencia recuperable sin depender de ese directorio.
+
+## Bloque actual DEC-045 — categorías de intereses
+
+Base remota verificada552906a80a88285c7eca7221bbd6b7dd4e3913b7, sin avances posteriores ni cambios locales; rama feature/interest-categories-mobile hacia fix/event-journey-consistency. Un único documento de continuidad, sin depender de otros chats. Último respaldo conocido al iniciar:552906a/PR38; los commits de esta unidad se contrastan después con git ls-remote y su PR en borrador.
+
+Unidad1 implementada: V17 crea categorías globales/orden/activo/versión, asociación opcional de cada interés y fila de serialización del catálogo. Solo agrupa los8 intereses existentes en3 categorías; otros sin categoría siguen disponibles. IDs/nombres/relaciones/encuentros intactos. Validación transaccional conserva selecciones inactivas ya guardadas, rechaza nuevas y permite retirada voluntaria; borrador nuevo no puede finalizar con inactivas. Matching sigue por IDs, sin cambios de reglas ni estados.
+
+Verificación unidad1:13 pruebas dirigidas aprobadas (categorías/migración/intereses existentes),0 fallos/errores/omitidas. **MySQL8.4.11 real**, base nueva ping_categories_upgrade_exclusive: Flyway16→17 conserva IDs/nombres,2 selecciones anteriores, interés sin categoría, snapshot ACTIVE con importe37 y saldos21/34; reejecución0. Fuente reproducible InterestCategoryMigrationTests y main InterestCategoryMySqlVerification (solo acepta base exclusiva nueva y vacía). V1–V16 publicadas intactas. Logs fuera de Git /workspace/work/ping-categories.
+
+Estado local de esta unidad: modelo/validación probados y preparados para commit/push. Aún faltan administración, selector compartido alta/edición, todos los consumidores, revisión móvil y suite general. Siguiente acción exacta después de confirmar este respaldo: implementar administración con nombre/orden/activo y asociación, reutilizando /interests; conectar selector por categorías y protección de borradores/versión. No declarar este punto como entrega visual terminada.
