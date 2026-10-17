@@ -76,3 +76,8 @@ Misma composición móvil de Beneficios, saldo/coste/faltantes juntos, lugar e i
 ## Recorrido integrado — DEC-044
 
 Ajustes observados, sin rediseño: recompensa local primero, continuidad de búsqueda a Conectar y llegada informativa sin suponer «en camino». Confirmación nombra actividad y permanece independiente. Indicaciones útiles en puntos nuevos y orientación honesta en antiguos sin plano.390/360 y escritorio, mismos controles/temas/recursos. Evidencia final en documento único de continuidad.
+
+
+## Categorías y selección compartida — DEC-045
+
+Alta y edición reutilizan el mismo selector móvil: categorías visibles, dos columnas táctiles, resumen de nombres y contador completo, filtro nativo opcional sin pérdida de selección. Búsqueda local a partir de13 opciones; catálogo real de8 sin buscador innecesario. Acción en el flujo después del catálogo para no tapar contenido; sin ilustraciones nuevas, acordeón obligatorio ni cambios de navegación. «Otros intereses» conserva los no agrupados; «Conservados» explica las selecciones inactivas. Formularios nativos/CSRF/versión, foco por teclado y temas Festival Social intactos. Evidencia390/360/escritorio y semántica en el documento único ENCUENTRO_CONFIGURABLE_LLEGADA.md.

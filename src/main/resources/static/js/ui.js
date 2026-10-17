@@ -40,7 +40,7 @@
   const inlineEditor = document.querySelector('[data-interest-selection-url]');
   if (inlineEditor) fetch(inlineEditor.dataset.interestSelectionUrl, { credentials: 'same-origin' }).then(r => { if (!r.ok) throw new Error(); return r.text(); }).then(html => {
     const form = new DOMParser().parseFromString(html, 'text/html').querySelector('[data-interest-editor]');
-    if (form) { inlineEditor.replaceChildren(document.importNode(form, true)); decorateInterests(inlineEditor); updateInterestCount(inlineEditor.querySelector('form')); }
+    if (form) { inlineEditor.replaceChildren(document.importNode(form, true)); decorateInterests(inlineEditor); updateInterestCount(inlineEditor.querySelector('form')); document.dispatchEvent(new CustomEvent('ping:interest-editor-ready', {detail:{form:inlineEditor.querySelector('form')}})); }
   }).catch(() => { /* El enlace al editor permanece disponible. */ });
   document.querySelectorAll('[data-demo-person]').forEach(button => button.addEventListener('click', () => { const select = document.querySelector('#participantId'); select.value = button.dataset.demoPerson; document.querySelectorAll('[data-demo-person]').forEach(b => b.setAttribute('aria-pressed', String(b === button))); select.focus(); }));
   let searchTimer;

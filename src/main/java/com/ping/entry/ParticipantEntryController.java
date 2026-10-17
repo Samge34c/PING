@@ -59,6 +59,8 @@ public class ParticipantEntryController {
     private String choices(Draft d, Model model) {
         model.addAttribute("alias", d.alias); model.addAttribute("eventName", events.get(d.eventId).getName());
         model.addAttribute("interests", interests.catalog()); model.addAttribute("selectedIds", d.ids);
+        var groups=interests.groups(d.ids);model.addAttribute("interestGroups",groups);model.addAttribute("interestOptionCount",groups.stream().mapToInt(g->g.choices().size()).sum());model.addAttribute("selectionContext","entry");
+        model.addAttribute("selectedNames",groups.stream().flatMap(g->g.choices().stream()).filter(c->d.ids.contains(c.id())).map(InterestCatalogService.Choice::name).toList());
         model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision); return "entry/interests";
     }
     private boolean current(Draft d, String key, long revision) { return d.key.equals(key) && d.revision == revision; }

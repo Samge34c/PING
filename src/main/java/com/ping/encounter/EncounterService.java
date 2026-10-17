@@ -17,7 +17,8 @@ public class EncounterService {
     private final EventActivityRepository activities;
     private final EventService events;
     private final InterestRepository interests;
-    public EncounterService(MeetingPointRepository points,EventActivityRepository activities,EventService events,InterestRepository interests){this.points=points;this.activities=activities;this.events=events;this.interests=interests;}
+    private final com.ping.interest.InterestCatalogService catalog;
+    public EncounterService(MeetingPointRepository points,EventActivityRepository activities,EventService events,InterestRepository interests,com.ping.interest.InterestCatalogService catalog){this.catalog=catalog;this.points=points;this.activities=activities;this.events=events;this.interests=interests;}
     public List<MeetingPoint> points(long event){events.get(event);return points.findByEventIdOrderByIdAsc(event);}
     public List<EventActivity> activities(long event){events.get(event);return activities.findByEventIdOrderByIdAsc(event);}
     public PointForm pointForm(long event,long id){return PointForm.from(point(event,id));}
@@ -35,6 +36,7 @@ public class EncounterService {
         var e=events.lock(event);var a=id==null?new EventActivity(event):activity(event,id);if(id!=null)revision(form.getVersion(),a.getVersion());
         if(points.findAllById(form.getPointIds()).size()!=form.getPointIds().size() || points.findAllById(form.getPointIds()).stream().anyMatch(p->p.getEventId()!=event))throw new BusinessRuleException("Elige puntos de este evento.");
         if(interests.findAllById(form.getInterestIds()).size()!=form.getInterestIds().size())throw new BusinessRuleException("Elige intereses del catálogo.");
+        catalog.validateSelection(form.getInterestIds(),a.getInterestIds());
         a.change(form);e.enableStructuredEncounter();return activities.save(a).getId();
     }
     /** Explicit, idempotent import preserves original V14 lists as a recoverable source. */
