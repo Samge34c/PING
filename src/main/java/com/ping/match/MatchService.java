@@ -42,7 +42,7 @@ public class MatchService {
         match.accept(participantId);
         if (match.bothAccepted()) {
             var selected=encounters.assign(match.getEvent(),match.getCommonInterests(),match.getId());
-            match.activate(selected.encounter()); match.describeEncounter(selected.directions(),selected.title());
+            match.activate(selected.encounter()); match.describeEncounter(selected.directions(),selected.title(),selected.rewardPoints());
         }
     }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void arrive(long id, long participantId) {
@@ -76,6 +76,6 @@ public class MatchService {
             match.getCommonInterests(), first ? match.getSecondInterests() : match.getFirstInterests(),
             match.accepted(self), match.accepted(other), match.confirmed(self), match.confirmed(other),
             active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active || match.getStatus() == MatchStatus.COMPLETED ? match.getActivity() : null,
-            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null);
+            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null, match.getRewardPoints());
     }
 }

@@ -49,7 +49,7 @@ class MatchCompletionSagaTests {
     }
     MatchCompletion record() { return records.findById(match).orElseThrow(); }
     List<String> actions() { return history.findByMatchIdOrderByIdAsc(match).stream().map(CompletionStep::getAction).toList(); }
-    void failSecond() { doThrow(new IllegalStateException("Test-only reward failure")).when(rewards).grant(b); }
+    void failSecond() { doThrow(new IllegalStateException("Test-only reward failure")).when(rewards).grant(b,10); }
     void confirmA() { matches.confirm(match,a); }
     void confirmB() { matches.confirm(match,b); }
     @Test void successfulSagaCommitsIdentifiableStepsAndCreditsBothOnce() {
@@ -71,7 +71,7 @@ class MatchCompletionSagaTests {
             System.out.println("SAGA: crédito A confirmado en otra transacción; saldo=" + committed);
             assertThat(committed).isEqualTo(50); // Prueba que A se confirmó antes: no es rollback de una sola transacción.
             throw new IllegalStateException("Failure injected only in test before B");
-        }).when(rewards).grant(b);
+        }).when(rewards).grant(b,10);
         confirmA(); assertThatThrownBy(this::confirmB).isInstanceOf(BusinessRuleException.class);
         assertThat(record().getStatus()).isEqualTo(SagaStatus.COMPENSATED);
         assertThat(people.get(a).points()).isEqualTo(40); assertThat(people.get(b).points()).isEqualTo(70);
@@ -82,7 +82,7 @@ class MatchCompletionSagaTests {
         System.out.println("SAGA: " + record().getStatus() + "; A=" + people.get(a).points() + "; B=" + people.get(b).points() + "; pasos=" + actions());
     }
     @Test void failureInFirstRewardRestoresMatchWithNoReversalOfUnappliedCredit() {
-        doThrow(new IllegalStateException("First reward failure")).when(rewards).grant(a);
+        doThrow(new IllegalStateException("First reward failure")).when(rewards).grant(a,10);
         confirmA(); assertThatThrownBy(this::confirmB).isInstanceOf(BusinessRuleException.class);
         assertThat(actions()).containsExactly("PREPARE_MATCH","RESTORE_MATCH");
         assertThat(people.get(a).points()).isZero(); assertThat(people.get(b).points()).isZero();
@@ -97,7 +97,7 @@ class MatchCompletionSagaTests {
     }
     @Test void retryUsesSameSagaAndMatchWithNewAttemptAndNoDuplicateCredits() {
         failSecond(); confirmA(); assertThatThrownBy(this::confirmB).isInstanceOf(BusinessRuleException.class);
-        doCallRealMethod().when(rewards).grant(b); confirmB(); confirmB(); confirmA();
+        doCallRealMethod().when(rewards).grant(b,10); confirmB(); confirmB(); confirmA();
         assertThat(record().getAttempt()).isEqualTo(2); assertThat(record().getStatus()).isEqualTo(SagaStatus.COMPLETED);
         assertThat(records.count()).isEqualTo(1); assertThat(matchRepository.count()).isEqualTo(1); assertThat(history.count()).isEqualTo(8);
         assertThat(people.get(a).points()).isEqualTo(10); assertThat(people.get(b).points()).isEqualTo(10);
@@ -117,13 +117,13 @@ class MatchCompletionSagaTests {
         assertThat(actions()).containsExactly("PREPARE_MATCH","GRANT_FIRST","GRANT_SECOND","CLOSE");
     }
     @Test void failedCompensationKeepsReservationAndRecoversWithoutNegativeBalance() {
-        failSecond(); doThrow(new IllegalStateException("Reverse failure in test")).when(rewards).reverse(a);
+        failSecond(); doThrow(new IllegalStateException("Reverse failure in test")).when(rewards).reverse(a,10);
         confirmA(); assertThatThrownBy(this::confirmB).isInstanceOf(BusinessRuleException.class);
         assertThat(record().getStatus()).isEqualTo(SagaStatus.FAILED); assertThat(record().isFirstGranted()).isTrue();
         assertThat(matches.get(match,a).confirmed()).isTrue(); assertThat(matches.get(match,b).completionPending()).isTrue();
         assertThat(reservations.count()).isEqualTo(2); assertThat(people.get(a).points()).isEqualTo(10);
         assertThatThrownBy(() -> matches.cancel(match,a)).isInstanceOf(BusinessRuleException.class);
-        doCallRealMethod().when(rewards).reverse(a); saga.recoverPending(); saga.recoverPending();
+        doCallRealMethod().when(rewards).reverse(a,10); saga.recoverPending(); saga.recoverPending();
         assertThat(record().getStatus()).isEqualTo(SagaStatus.COMPENSATED); assertThat(people.get(a).points()).isZero();
         assertThat(history.count()).isEqualTo(4); assertThat(reservations.count()).isEqualTo(2);
     }

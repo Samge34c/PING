@@ -4,7 +4,7 @@
 
 Actualizado17 octubre2026 Bogotá. Copia `/workspace/PING`, remoto `https://github.com/Samge34c/PING.git`. Recuperación verificada: PR36 en borrador, rama `feature/event-encounter-arrival`, último respaldo inicial `9d233b60ec2493f12403e4c0b6278792221fc571`; GitHub no tenía avances posteriores. Árbol inicial limpio, base `feature/connect-event-entry` @ `c288f778d8d7cdf72ec3abb4306473aa756b352b`. Cadena anterior conservada. Sin main, merge, force-push ni publicación pública.
 
-Este documento se actualiza antes de cada commit; el SHA del commit que contiene la actualización se confirma después mediante `git ls-remote origin refs/heads/<rama>` y en su PR. No inferir un respaldo de un archivo local. Estado de esta unidad: bloque1 implementado y verificado, preparado para commit/push; bloques2/3 autorizados y siguientes. No hay trabajo de otros sin conservar.
+Este documento se actualiza antes de cada commit; el SHA del commit que contiene la actualización se confirma después mediante `git ls-remote origin refs/heads/<rama>` y en su PR. No inferir un respaldo de un archivo local. Respaldo bloque1 confirmado: `087b3a7489c88a630b0064adea8e50824e51906b`, PR36 actualizada/en borrador. Bloque2 en `feature/event-points-rewards` desde ese SHA; implementación local verificada, preparada para commit/push; bloque3 sigue después de su respaldo. No hay trabajo de otros sin conservar.
 
 ## Decisiones y comportamiento actual — bloque1 / DEC-042
 
@@ -31,7 +31,7 @@ V1–V14 publicadas intactas. V15 aditiva: flag de configuración estructurada, 
 
 Evidencia móvil primero: [llegada informativa390](screenshots/structured-informative/04-one-arrived-mobile.png), [confirmación disponible360 claro](screenshots/structured-informative/06-arrival-360-light.png), [actividad estructurada](screenshots/structured-informative/01-structured-activity-mobile.png). Después [escritorio1440](screenshots/structured-informative/07-active-desktop.png). Capturas anteriores de `event-encounter-arrival` son históricas y muestran la condición corregida; no representan el comportamiento actual.
 
-## Siguiente bloque autorizado
+## Secuencia autorizada
 
 Después de confirmar push/actualizar PR36, crear rama desde ese commit: puntos enteros0–100 por actividad con snapshot, créditos y compensaciones Saga variables y anteriores10; recompensas por evento con coste1–10000, lugar/indicaciones y snapshot en canjes. Preservar beneficio demo y permisos existentes. Respaldar antes del recorrido integrado del bloque3.
 
@@ -42,3 +42,17 @@ Con árbol limpio: `git remote set-branches --add origin feature/event-encounter
 JDK21 completo, Maven Wrapper del repo; `./mvnw verify` / `.\mvnw.cmd verify`. Para iniciar `PingApplication`: perfil `mysql`; variables externas `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`; opcional `PING_PUBLIC_BASE_URL` real para QR. Bind predeterminado127.0.0.1; no abrir Internet. Flyway aplica nuevas migraciones sin borrar la base; ensayar primero en base exclusiva. En este entorno Java de sistema carece de ct.sym: JDK funcional `/workspace/tools/jdk-21.0.12.1+1`, caché/settings Maven fuera de Git. No copiar credenciales/variables de este entorno a Git.
 
 MySQL y app de ensayo pertenecen a esta tarea; credenciales aleatorias, logs y harness en `/workspace/work/ping-next/` fuera de Git. Pendiente teléfono físico/Safari. No prometer ejecución después de terminar el turno. Próxima acción concreta: confirmar respaldo del bloque1 y empezar bloque2, sin pedir otra autorización.
+
+## Bloque2 — DEC-043 / puntos y recompensas de evento
+
+Actividad configurable0–100 puntos enteros, guardados al activar en el match y al preparar la Saga en su registro durable. Créditos primero/segundo y compensaciones segundo/primero usan el importe de la Saga; no consultan la configuración actual. Reintentos/recuperación conservan importe y recibos. Valores anteriores10. Llegadas/recargas no premian;0 completa sin crédito. V16 aditiva, sin tocar V1–V15.
+
+`/events/{id}/rewards`: crear/editar/desactivar nombre/descripción/coste1–10000/lugar/indicaciones con versión y pertenencia al evento. Mismos permisos académicos, sin autenticación nueva. Catálogo del participante incluye sus recompensas y el snack demo global anterior. Solicitud solo acepta beneficio/clave; servidor decide coste/evento y guarda nombre/descripción/lugar/indicaciones/coste. Editar/desactivar no cambia canjes emitidos; reintento conserva recibo, entrega/incidencia no debita de nuevo. Importes mostrados en ACTIVE, resultado, historial y admin.
+
+Verificado:35 pruebas dirigidas (variables0/37/100, fallos de crédito/cierre/reversión, recuperación/idempotencia, snapshots, ámbito del evento, costes inválidos y solicitudes concurrentes); `verify` general **192 pruebas,0 fallos/errores/omitidas**, JAR. Se añadió después aserción explícita COMPLETED al caso0 y precondición de base vacía a la utilidad MySQL: verificación dirigida final8 casos/JAR. MySQL8.4.11 exclusivo `ping_final_upgrade_exclusive`: Flyway13→14→15→16, saldos30/20 y recibos intactos, importes10 anteriores, snapshot de canje previo20/nombredemo, reejecución0. La utilidad rechaza bases con tablas; nunca clean/drop.
+
+Chromium/MySQL: dos altas nuevas reciben37 cada una al confirmar (solo una marcó llegada). Recompensa del evento30 → saldo7 → solicitudREQUESTED → entregaDELIVERED por admin. Indicaciones en catálogo y canje;390 y360 claro, escritorio operativo, sin erroresJS/overflow. Se examinó el resultado: saldo/coste/faltantes y lugar visibles, barra no bloquea acciones; identidad y temas conservados. [Beneficio390](screenshots/event-points-rewards/10-event-reward-mobile.png), [entrega390](screenshots/event-points-rewards/12-delivered-mobile.png), [360 claro](screenshots/event-points-rewards/13-claim-360-light.png), [escritorio](screenshots/event-points-rewards/07-active-desktop.png). Capturas adicionales/harness/logs fuera de Git.
+
+La revisión automática rechazó crear un Issue del bloque2 por considerarlo publicación externa no autorizada. No se reintentó ni se eludió; la decisión/alcance se registran aquí y en la PR en borrador expresamente autorizada. No hay un Issue nuevo publicado.
+
+Siguiente acción concreta tras push/PR del bloque2: revisar integrado y corregir tres problemas observados, sin rediseñar: beneficio demo aparece antes que el propio del evento; «Seguir conectando»/«Buscar otra conexión» vuelven a Mi Ping en vez de Conectar; llegada opcional aún dice «Esperando…/En camino» aunque no bloquea. Registrar evidencia y mantener ambas rutas sin efectos por GET.

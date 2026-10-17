@@ -1,0 +1,17 @@
+ALTER TABLE event_activities ADD COLUMN reward_points INTEGER NOT NULL DEFAULT 10;
+ALTER TABLE event_activities ADD CONSTRAINT chk_activity_reward CHECK(reward_points BETWEEN 0 AND 100);
+ALTER TABLE ping_matches ADD COLUMN reward_points INTEGER NOT NULL DEFAULT 10;
+ALTER TABLE ping_matches ADD CONSTRAINT chk_match_reward CHECK(reward_points BETWEEN 0 AND 100);
+ALTER TABLE match_completion_sagas ADD COLUMN reward_points INTEGER NOT NULL DEFAULT 10;
+ALTER TABLE match_completion_sagas ADD CONSTRAINT chk_saga_reward CHECK(reward_points BETWEEN 0 AND 100);
+ALTER TABLE benefits ADD COLUMN event_id BIGINT NULL;
+ALTER TABLE benefits ADD COLUMN description VARCHAR(2000) NOT NULL DEFAULT '';
+ALTER TABLE benefits ADD COLUMN claim_location VARCHAR(160) NOT NULL DEFAULT '';
+ALTER TABLE benefits ADD COLUMN claim_instructions VARCHAR(500) NOT NULL DEFAULT '';
+ALTER TABLE benefits ADD COLUMN version BIGINT NOT NULL DEFAULT 0;
+ALTER TABLE benefits ADD CONSTRAINT fk_benefit_event FOREIGN KEY(event_id) REFERENCES events(id) ON DELETE CASCADE;
+ALTER TABLE reward_claims ADD COLUMN benefit_name VARCHAR(120) NOT NULL DEFAULT '';
+ALTER TABLE reward_claims ADD COLUMN benefit_description VARCHAR(2000) NOT NULL DEFAULT '';
+ALTER TABLE reward_claims ADD COLUMN claim_location VARCHAR(160) NOT NULL DEFAULT '';
+ALTER TABLE reward_claims ADD COLUMN claim_instructions VARCHAR(500) NOT NULL DEFAULT '';
+UPDATE reward_claims SET benefit_name=(SELECT name FROM benefits WHERE benefits.id=reward_claims.benefit_id);

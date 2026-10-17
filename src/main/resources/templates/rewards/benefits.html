@@ -9,13 +9,16 @@
 <section class="bf-catalog" aria-label="Beneficios por puntos">
   <p id="bf-saga-alert" class="ping-notice bf-saga-notice" th:if="${completionPending}" role="status">Tu conexión está finalizando. Espera a que termine antes de canjear.</p>
   <article class="bf-coupon" th:each="benefit : ${benefits}" th:attr="aria-labelledby=${'bf-title-' + benefit.id}">
-    <header class="bf-coupon-head"><div><p>Canje por puntos · DEMO</p><h2 th:id="${'bf-title-' + benefit.id}" th:text="${#strings.replace(benefit.name, ' · DEMO', '')}"></h2></div><svg th:replace="~{fragments/layout :: icon('snack')}"></svg></header>
+    <header class="bf-coupon-head"><div><p><span th:text="${benefit.eventId == null ? 'Canje por puntos · DEMO' : 'Canje de este evento'}"></span></p><h2 th:id="${'bf-title-' + benefit.id}" th:text="${#strings.replace(benefit.name, ' · DEMO', '')}"></h2></div><svg th:replace="~{fragments/layout :: icon('snack')}"></svg></header>
     <div class="bf-coupon-body">
+      <p th:if="${!#strings.isEmpty(benefit.description)}" th:text="${benefit.description}"></p>
+      <p><strong>Dónde reclamar:</strong> <span th:text="${#strings.isEmpty(benefit.claimLocation) ? 'Consulta al responsable del evento (beneficio demo).' : benefit.claimLocation}"></span></p>
+      <p class="description" th:if="${!#strings.isEmpty(benefit.claimInstructions)}" th:text="${benefit.claimInstructions}"></p>
       <dl class="bf-costs"><div><dt>Tu saldo</dt><dd><strong th:text="${participant.points}"></strong><span>puntos</span></dd></div><div><dt>Coste</dt><dd><strong th:text="${benefit.pointsCost}"></strong><span>puntos</span></dd></div><div><dt>Te faltan</dt><dd><strong th:text="${participant.points >= benefit.pointsCost ? 0 : benefit.pointsCost - participant.points}"></strong><span>puntos</span></dd></div></dl>
       <p class="bf-eligibility" th:id="${'bf-eligibility-' + benefit.id}"><svg th:replace="~{fragments/layout :: icon('gift')}"></svg><span th:text="${completionPending ? 'Canje en espera: finalización pendiente.' : (participant.points >= benefit.pointsCost ? 'Saldo suficiente para solicitarlo.' : 'Completa conexiones para reunir los puntos.')}"></span></p>
       <form method="post" th:action="@{/me/benefits}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="benefitId" th:value="${benefit.id}"><input type="hidden" name="requestKey" th:value="${requestKey}"><button class="btn bf-primary" type="submit" th:disabled="${completionPending or participant.points < benefit.pointsCost}" th:attr="aria-describedby=${'bf-eligibility-' + benefit.id + ' bf-help-' + benefit.id}">Solicitar canje <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></button></form>
       <a th:if="${participant.points < benefit.pointsCost and !completionPending}" class="bf-connect" th:href="@{/me}">Seguir conectando <svg th:replace="~{fragments/layout :: icon('waves')}"></svg></a>
-      <p class="bf-help" th:id="${'bf-help-' + benefit.id}">El coste se descuenta al solicitar el canje, una sola vez. Cada conexión completada por ambos suma +10 puntos.</p>
+      <p class="bf-help" th:id="${'bf-help-' + benefit.id}">El coste se descuenta al solicitar el canje, una sola vez. La recompensa depende de la actividad del encuentro.</p>
     </div>
   </article>
   <div th:if="${#lists.isEmpty(benefits)}" class="bf-empty-catalog"><h2>No hay beneficios disponibles.</h2><p>Tu saldo: <strong th:text="${participant.points}"></strong> puntos. Puedes consultar tus canjes anteriores.</p><a th:href="@{/me}">Volver a Mi Ping <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
@@ -26,6 +29,9 @@
   <article class="bf-claim" th:each="c : ${claims}" th:attr="data-claim-id=${c.id}">
     <div class="bf-claim-top"><span class="ping-status" th:text="${c.status.label}" th:attr="data-status=${c.status.name()},data-claim-status=${c.status.name()}"></span><span class="bf-claim-id">Solicitud #<span th:text="${c.id}"></span></span></div>
     <h3 th:text="${c.benefit}"></h3><p class="bf-claim-cost"><strong th:text="${c.cost}"></strong> puntos descontados una sola vez</p>
+    <p th:if="${!#strings.isEmpty(c.description)}" th:text="${c.description}"></p>
+    <p><strong>Dónde reclamar:</strong> <span th:text="${#strings.isEmpty(c.claimLocation) ? 'Consulta al responsable del evento (beneficio demo).' : c.claimLocation}"></span></p>
+    <p class="description" th:if="${!#strings.isEmpty(c.claimInstructions)}" th:text="${c.claimInstructions}"></p>
     <p th:if="${c.status.name() == 'REQUESTED'}">El responsable del evento registra la entrega.</p>
     <p th:if="${c.status.name() == 'DELIVERED'}">Entrega registrada. No se descuentan puntos adicionales.</p>
     <p th:if="${c.status.name() == 'INCIDENT'}">Hay una incidencia de entrega. Consulta al responsable del evento; no se realiza una devolución automática.</p>

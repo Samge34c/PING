@@ -18,7 +18,7 @@ public class RewardController {
         var experience = com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName());
         model.addAttribute("experience", experience);
         if (experience != null) model.addAttribute("promoUnlocked", com.ping.experience.EventExperienceCatalog.promoUnlocked(matches.list(self)));
-        model.addAttribute("benefits", rewards.catalog()); model.addAttribute("claims", rewards.personal(self));
+        model.addAttribute("benefits", rewards.catalog(participant.eventId())); model.addAttribute("claims", rewards.personal(self));
         model.addAttribute("completionPending", rewards.pendingCompletion(self)); model.addAttribute("requestKey", java.util.UUID.randomUUID().toString()); return "rewards/benefits";
     }
     @PostMapping("/me/benefits") public String request(@RequestParam long benefitId, @RequestParam String requestKey, HttpSession session, RedirectAttributes flash) {

@@ -12,9 +12,16 @@ public class RewardClaim {
     @Enumerated(EnumType.STRING) @org.hibernate.annotations.JdbcTypeCode(org.hibernate.type.SqlTypes.VARCHAR)
     @Column(nullable = false, length = 16) private ClaimStatus status;
     @Column(nullable = false, updatable = false) private Instant createdAt;
+    @Column(nullable=false,length=120) private String benefitName;
+    @Column(nullable=false,length=2000) private String benefitDescription;
+    @Column(nullable=false,length=160) private String claimLocation;
+    @Column(nullable=false,length=500) private String claimInstructions;
+    public String getBenefitName(){return benefitName;} public String getBenefitDescription(){return benefitDescription;}
+    public String getClaimLocation(){return claimLocation;} public String getClaimInstructions(){return claimInstructions;}
     protected RewardClaim() { }
     RewardClaim(Participant participant, Benefit benefit, String key) {
-        this.participant = participant; this.benefit = benefit; requestKey = key; cost = benefit.getPointsCost(); status = ClaimStatus.REQUESTED; createdAt = Instant.now();
+        this.participant = participant; this.benefit = benefit;
+        benefitName=benefit.getName();benefitDescription=benefit.getDescription();claimLocation=benefit.getClaimLocation();claimInstructions=benefit.getClaimInstructions(); requestKey = key; cost = benefit.getPointsCost(); status = ClaimStatus.REQUESTED; createdAt = Instant.now();
     }
     public Long getId() { return id; }
     public Participant getParticipant() { return participant; }

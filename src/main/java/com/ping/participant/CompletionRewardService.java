@@ -6,6 +6,6 @@ import org.springframework.transaction.annotation.*;
 public class CompletionRewardService {
     private final ParticipantRepository participants;
     public CompletionRewardService(ParticipantRepository participants) { this.participants = participants; }
-    public void grant(long participantId) { participants.findById(participantId).orElseThrow().rewardCompletedMatch(); }
-    public void reverse(long participantId) { participants.findById(participantId).orElseThrow().reverseCompletionReward(); }
+    public void grant(long participantId,int amount) { participants.findById(participantId).orElseThrow().rewardCompletedMatch(amount); }
+    public void reverse(long participantId,int amount) { participants.findById(participantId).orElseThrow().reverseCompletionReward(amount); }
 }

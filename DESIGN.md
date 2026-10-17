@@ -68,3 +68,7 @@ ACTIVE conserva palabra/pista/lugar y añade llegada propia antes de actividad/c
 ## Corrección operativa DEC-042
 
 Llegada opcional, confirmación siempre accesible tras aceptación bilateral; mensaje explícito de que no condiciona actividad ni premia. Indicaciones del punto y título de actividad guardados en la misión. Editor estructurado usa formularios/controles locales existentes y etiquetas claras de compatibilidad/estado, sin nueva portada o dashboard.
+
+## Puntos y recompensas por evento — DEC-043
+
+Misma composición móvil de Beneficios, saldo/coste/faltantes juntos, lugar e indicaciones explícitos y snapshot en Mis canjes. Recompensas propias identificadas como del evento; snack global conserva etiqueta DEMO. Editor operativo local sin portada nueva; importe de actividad visible en misión, resultado, historial y admin. Sin cambios en navegación compartida/Hub ni recursos externos.

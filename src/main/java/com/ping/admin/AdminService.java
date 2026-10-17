@@ -29,7 +29,7 @@ public class AdminService {
             p.getInterests().stream().map(i -> i.getName()).sorted().toList(), p.isAvailable(), p.getPoints(), completed.getOrDefault(p.getId(), 0L))).toList(),
             connections.stream().map(m -> new EventDetails.Connection(m.getId(), m.getFirst().getAlias(), m.getSecond().getAlias(),
                 m.getCommonInterests().isBlank() ? "Alternativo" : "Normal", m.getStatus().getLabel(), m.getWord(), m.getActivity(), m.getCreatedAt(),
-                m.getStatus() == MatchStatus.COMPLETED ? "+10 puntos a cada persona" : m.getStatus() == MatchStatus.CANCELLED ? "Sin recompensa" : "En curso")).toList(),
+                m.getStatus() == MatchStatus.COMPLETED ? "+"+m.getRewardPoints()+" puntos a cada persona" : m.getStatus() == MatchStatus.CANCELLED ? "Sin recompensa" : "En curso")).toList(),
             feedback.forEvent(eventId).stream().map(f -> new EventDetails.Opinion(f.matchId(), aliases.get(f.getParticipantId()),
                 switch(f.getRating()) { case USEFUL -> "Positivo"; case NEUTRAL -> "Neutral"; case NOT_USEFUL -> "Negativo"; }, f.getCreatedAt())).toList());
     }
