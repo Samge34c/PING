@@ -59,6 +59,8 @@ public class ParticipantEntryController {
     private String choices(Draft d, Model model) {
         model.addAttribute("alias", d.alias); model.addAttribute("eventName", events.get(d.eventId).getName());
         model.addAttribute("interests", interests.catalog()); model.addAttribute("selectedIds", d.ids);
+        var groups=interests.groups(d.ids);model.addAttribute("interestGroups",groups);model.addAttribute("interestOptionCount",groups.stream().mapToInt(g->g.choices().size()).sum());model.addAttribute("selectionContext","entry");
+        model.addAttribute("selectedNames",groups.stream().flatMap(g->g.choices().stream()).filter(c->d.ids.contains(c.id())).map(InterestCatalogService.Choice::name).toList());
         model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision); return "entry/interests";
     }
     private boolean current(Draft d, String key, long revision) { return d.key.equals(key) && d.revision == revision; }
@@ -122,7 +124,7 @@ public class ParticipantEntryController {
             if (action.equals("back")) { d.revision++; return "redirect:/join"; }
             if (!action.equals("complete")) { response.setStatus(400); model.addAttribute("entryError", "Usa los botones para continuar o corregir tu entrada."); return choices(d, model); }
             if (d.eventId == null || d.alias.isBlank()) return "redirect:/join";
-            if (d.ids.stream().anyMatch(id -> id <= 0) || !interests.catalog().stream().map(Interest::getId).toList().containsAll(d.ids)) {
+            if (d.ids.stream().anyMatch(id -> id <= 0) || !interests.availableCatalog().stream().map(Interest::getId).toList().containsAll(d.ids)) {
                 response.setStatus(409); model.addAttribute("entryError", "Uno de los intereses ya no está disponible. Revisa la selección; tu borrador se conserva."); return choices(d, model);
             }
             try {

@@ -53,7 +53,7 @@ public class DemoPreparationService {
             id = participants.create(f).id();
         }
         InterestSelectionForm selected = interests.selection(id);
-        selected.setInterestIds(interests.catalog().stream().filter(i -> Arrays.asList(names).contains(i.getName())).map(Interest::getId).toList()); interests.save(id, selected);
+        selected.setInterestIds(interests.catalog().stream().filter(i -> Arrays.asList(names).contains(i.getName()) && (i.isSelectable() || selected.getInterestIds().contains(i.getId()))).map(Interest::getId).toList()); interests.save(id, selected);
     }
     private Scenario view(Event event) {
         return new Scenario(event.getId(), event.getName(), event.getStatus(), people.findByEventIdOrderByIdAsc(event.getId()).stream()

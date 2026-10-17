@@ -61,3 +61,5 @@ Las cinco pantallas se conservan. DEC-038 autoriza la entrada propia mediante se
 Continuación autorizada DEC-041/Issue #35: catálogos por evento y «Ya llegué» bilateral para nuevos activos; conserva condiciones de activos anteriores, +10/Saga y compatibilidad. Sustituye la exclusión temporal de estas funciones en DEC-040. Sin mapa/recompensa configurables.
 
 DEC-042/043,17 octubre2026: autorización para corregir llegada como información opcional, catálogos estructurados compatibles, puntos variables y recompensas por evento. Sustituye restricciones temporales y condición incorrecta de DEC-041. Sin autenticación nueva ni exposición pública; conservar identidad/recorrido móvil.
+
+DEC-045 autoriza categorías y mejora del selector móvil de intereses: conservar ocho gustos/IDs actuales y matching; inactivas sin selecciones nuevas, anteriores visibles/conservables. Selector compartido alta/edición, categorías visibles y temas Festival Social, sin portada ni imágenes nuevas.

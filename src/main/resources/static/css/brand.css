@@ -2650,3 +2650,30 @@ body.participant-entry-page {padding-left:0}
 .am-grid { grid-template-areas: "location word" "location arrival" "location activity" "location confirm"; }
 @media (max-width: 991.98px) { .am-grid { grid-template-areas: "word" "location" "arrival" "activity" "confirm"; } }
 .am-arrival .am-confirm-people li { grid-template-columns: minmax(0, 1fr) auto; }
+
+/* DEC-045: one selector for onboarding, editing and the existing inline catalog. */
+.ic-editor { min-width: 0; }
+.ic-summary { margin: 0 0 16px; }
+.ic-summary strong { font-size: 13px; }
+.ic-summary p { margin: 5px 0 0; line-height: 1.5; overflow-wrap: anywhere; font-size: 14px; color: var(--ping-muted); }
+.ic-controls { margin-bottom: 16px; }
+.ic-controls .form-label { font-size: 13px; margin-bottom: 5px; }
+.ic-controls > div + div { margin-top: 12px; }
+.ic-controls .form-select,.ic-controls .form-control { min-height: 44px; }
+.ic-filter-status { margin: 8px 0 0; font-size: 13px; color: var(--ping-muted); }
+.ic-filter-status:empty { display: none; }
+.ic-group { min-width: 0; padding: 0; border: 0; margin: 0 0 22px; }
+.ic-group legend { float: none; width: auto; font-size: 16px; font-weight: 800; line-height: 1.4; margin-bottom: 10px; }
+.ic-group .interest-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.ic-group .interest-row { margin: 0; min-width: 0; }
+.ic-group[hidden],.ic-group .interest-row[hidden] { display: none !important; }
+.ic-group .interest-row-content { min-height: 64px; }
+.ic-group .interest-row-content small { grid-column: 1 / -1; font-size: 12px; line-height: 1.4; color: var(--ping-muted); }
+.ic-retained-help { font-size: 14px; line-height: 1.5; color: var(--ping-muted); }
+.ic-actions { position: relative; background: var(--ping-bg); padding: 10px 0 12px; border-top: 1px solid var(--ping-border); }
+.ic-actions p { margin: 0 0 7px; font-size: 13px; font-weight: 700; }
+.ic-actions > .btn { width: 100%; min-height: 48px; }
+.participant-entry-page .ic-actions { bottom: 0; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+.ic-admin-list { padding-left: 22px; margin-top: 24px; }
+.ic-admin-list li { margin-bottom: 24px; }
+@media (min-width: 992px) { .ic-actions { bottom: 0; } .ic-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .ic-controls > div + div { margin-top: 0; } .ic-filter-status { grid-column: 1 / -1; } }

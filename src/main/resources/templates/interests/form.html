@@ -1,22 +1,10 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Elegir intereses')}"></head><body class="participant-interests-page"><nav th:replace="~{fragments/layout :: nav}"></nav>
 <main id="main-content" class="container pi-page">
-  <a class="pi-back" th:href="${session.pingEntryMode == 'participant' and participant.id == session.pingDemoParticipantId} ? @{/me} : @{/participants/{id}(id=${participant.id})}">← Volver</a>
-  <header class="pi-heading"><h1>Tus intereses</h1><p><strong th:text="${participant.alias}"></strong> · <span th:text="${participant.eventName}"></span></p><p>Elige los temas que te apetece compartir. Puedes cambiarlos después.</p></header>
-  <form data-interest-editor method="post" th:action="@{/participants/{id}/interests(id=${participant.id})}" th:object="${interestSelectionForm}">
-    <input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" th:field="*{version}">
-    <div th:if="${#fields.hasAnyErrors()}" class="ping-notice mb-4" role="alert">Revisa la selección y vuelve a guardar.</div>
-    <fieldset><legend class="visually-hidden">Selecciona tus intereses</legend>
-      <div class="interest-list">
-        <div class="interest-row" th:each="interest : ${interests}" th:attr="data-interest-name=${interest.name}">
-          <input type="checkbox" th:field="*{interestIds}" th:value="${interest.id}">
-          <label class="interest-row-content" th:for="${#ids.prev('interestIds')}">
-            <span class="interest-icon"><svg th:replace="~{fragments/layout :: icon('heart')}"></svg></span>
-            <span class="interest-check"><svg th:replace="~{fragments/layout :: icon('check')}"></svg></span>
-            <strong th:text="${interest.name}"></strong>
-          </label>
-        </div>
-      </div>
-    </fieldset>
-    <div class="interest-selection-footer"><p data-selected-count>Selecciona lo que te gusta.</p><button class="btn btn-primary">Guardar intereses <svg th:replace="~{fragments/layout :: icon('check')}"></svg></button></div>
-  </form>
-</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<a class="pi-back" th:href="${session.pingEntryMode == 'participant' and participant.id == session.pingDemoParticipantId} ? @{/me} : @{/participants/{id}(id=${participant.id})}">← Volver</a>
+<header class="pi-heading"><h1>Tus intereses</h1><p><strong th:text="${participant.alias}"></strong> · <span th:text="${participant.eventName}"></span></p><p>Elige temas que te apetece compartir. Puedes cambiarlos después.</p></header>
+<form class="ic-editor" data-interest-editor method="post" th:action="@{/participants/{id}/interests(id=${participant.id})}" th:object="${interestSelectionForm}">
+<input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" th:field="*{version}">
+<div th:if="${#fields.hasAnyErrors()}" class="ping-notice" role="alert"><p>Revisa la selección y vuelve a guardar.</p><p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p><a th:href="@{/participants/{id}/interests(id=${participant.id})}">Recargar selección guardada</a></div>
+<div th:replace="~{interests/selector :: choices}"></div>
+<div class="ic-actions"><p data-selected-count role="status" aria-live="polite" th:text="${#lists.size(selectedNames) + ' intereses seleccionados'}"></p><button class="btn btn-primary">Guardar intereses <svg th:replace="~{fragments/layout :: icon('check')}"></svg></button></div>
+</form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

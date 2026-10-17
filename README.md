@@ -147,3 +147,10 @@ Guion exacto y requisitos: [DEMO_INTELLIJ](docs/DEMO_INTELLIJ.md).
 Validación Issue #4: `clean test` y `clean verify`, 40 pruebas aprobadas, cero fallos/errores/omitidas. Chromium y MySQL 8.4.11 con TLS VERIFY_CA comprobaron el catálogo, selección múltiple para Samuel y Julián, vistas móvil/escritorio y persistencia tras reiniciar la aplicación. Se verificó también el cierre de otro evento real. V1–V4 aplicadas sin borrar los datos previos. No se implementó Issue #5.
 
 Continuidad: [encuentro configurable, llegada informativa y recompensas por evento](docs/ENCUENTRO_CONFIGURABLE_LLEGADA.md) (DEC-041, Issue #35).
+
+
+## Categorías y selección móvil — DEC-045
+
+Rama `feature/interest-categories-mobile`, [PR39 en borrador](https://github.com/Samge34c/PING/pull/39), sobre `fix/event-journey-consistency`. V17 agrupa los8 intereses existentes sin cambiar sus IDs ni el matching. Administración académica en `/interests/categories`: nombre, orden, estado y asociación; sin categoría siguen en «Otros intereses». No añade autenticación.
+
+Alta y edición comparten categorías abiertas, selección táctil, resumen/contador y filtro que conserva elecciones; búsqueda local cuando el catálogo supera12 opciones. Las categorías inactivas impiden nuevas selecciones; las anteriores siguen en «Conservados» hasta retirarlas voluntariamente. Un borrador nuevo debe quitar las opciones que se desactivaron antes de finalizar. Evidencia, verificación MySQL y cómo retomar en [la continuidad](docs/ENCUENTRO_CONFIGURABLE_LLEGADA.md#bloque-actual-dec-045--categorías-de-intereses).
