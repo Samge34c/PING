@@ -11,7 +11,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller @Profile("!bootstrap") @RequestMapping("/events")
 public class EventController {
     private final EventService service;
-    public EventController(EventService service) { this.service = service; }
+    private final EventEntryLinks links;
+    public EventController(EventService service, EventEntryLinks links) { this.service = service; this.links = links; }
     @GetMapping public String list(Model model) { model.addAttribute("events", service.list()); return "events/list"; }
     @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("eventForm", new EventForm()); model.addAttribute("editing", false); return "events/form";
@@ -22,7 +23,14 @@ public class EventController {
         return "redirect:/events/" + event.getId();
     }
     @GetMapping("/{id}") public String detail(@PathVariable long id, Model model) {
-        model.addAttribute("event", service.get(id)); return "events/detail";
+        Event event = service.get(id); model.addAttribute("event", event); model.addAttribute("entryLink", links.link(event)); return "events/detail";
+    }
+    @GetMapping(value="/{id}/qr.png", produces="image/png") @ResponseBody
+    public org.springframework.http.ResponseEntity<byte[]> qr(@PathVariable long id, @RequestParam(defaultValue="false") boolean download) {
+        Event event = service.get(id);
+        return org.springframework.http.ResponseEntity.ok().header("Cache-Control", "no-store")
+                .header("Content-Disposition", (download ? "attachment" : "inline") + "; filename=\"ping-evento-" + event.getEntryCode() + ".png\"")
+                .body(links.qr(event));
     }
     @GetMapping("/{id}/edit") public String editForm(@PathVariable long id, Model model) {
         model.addAttribute("eventForm", EventForm.from(service.get(id))); editing(model, id); return "events/form";

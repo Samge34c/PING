@@ -114,12 +114,14 @@ class FinalMvpTests {
             var search=sam.post("/me/search",Map.of()); String path=search.headers().firstValue("Location").orElseThrow();
             assertThat(sam.get(path).body()).contains("Videojuegos").doesNotContain("Zona Gamer · Pabellón 18");
             sam.post(path+"/accept",Map.of()); assertThat(sam.get(path).body()).contains("Esperando respuesta de Julián");
-            assertThat(jul.get("/me").body()).contains("Samuel aceptó. Falta tu aceptación.");
+            assertThat(jul.get("/me").body()).contains("Ver propuesta");
+            assertThat(jul.get("/connect").headers().firstValue("Location").orElseThrow()).endsWith(java.net.URI.create(path).getPath());
+            assertThat(jul.get(path).body()).contains("Samuel aceptó. Falta tu aceptación.");
             jul.get(path); jul.post(path+"/accept",Map.of());
             assertThat(sam.get(path).body()).contains("Zona Gamer · Pabellón 18", "PIXEL-", "Elijan un juego o stand");
-            assertThat(sam.get("/me").body()).contains("Encuentro activo", "Zona Gamer · Pabellón 18", "Volver al encuentro").doesNotContain("PIXEL-");
+            assertThat(sam.get("/me").body()).contains("Tu encuentro continúa.", "Volver al encuentro").doesNotContain("PIXEL-");
             sam.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Esperando a Julián");
-            assertThat(jul.get("/me").body()).contains("Samuel ya confirmó. Falta tu confirmación.");
+            assertThat(jul.get(path).body()).contains("Samuel ya confirmó. Falta tu confirmación.");
             jul.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Conexión completada 🎉");
             sam.post(path+"/feedback",Map.of("rating","USEFUL"));
             sam.post(path+"/report",Map.of("reason","OTHER","comment","<script>alert(1)</script>"));

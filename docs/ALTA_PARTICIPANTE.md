@@ -1,5 +1,7 @@
 # Alta propia del participante — DEC-038
 
+**Continuidad:** DEC-040 sustituye la selección inicial por código/QR → evento identificado → alias → intereses. El alta transaccional y protecciones descritas aquí se conservan. Ver [Conectar/código/QR](CONECTAR_CODIGO_QR.md) para el recorrido vigente.
+
 Instrucción explícita de Samuel (16 de octubre2026, Bogotá), sin atribuir aprobación a Julián. Issue14 permanece abierto. Base limpia local/remota `ea04d3def9440c9319f8ade8b0fa765dba3b114d`; rama propia `feature/participant-onboarding`, PR en borrador hacia `feature/participant-mobile-entry` (PR30). Conserva PR24–30 y sus bases. Sustituye el pendiente anterior; no queda autorización pendiente para el enlace mínimo.
 
 ## Recorrido implementado

@@ -19,6 +19,17 @@ public class EventService {
     public Event get(long id) {
         return repository.findById(id).orElseThrow(() -> new NotFoundException("No encontramos ese evento."));
     }
+    public Event entryEvent(String code) {
+        String normalized = code == null ? "" : code.strip().replaceAll("[\\s-]", "").toUpperCase(java.util.Locale.ROOT);
+        if (!normalized.matches("[A-Z0-9]{5,32}")) throw new BusinessRuleException("Revisa el código del evento. Puedes copiarlo o escribirlo sin espacios.");
+        Event event = repository.findByEntryCode(normalized).orElseThrow(() -> new NotFoundException("No encontramos ese código. Revísalo o pídeselo al organizador."));
+        if (event.getStatus() != EventStatus.OPEN) throw new BusinessRuleException(switch (event.getStatus()) {
+            case PAUSED -> "La entrada a este evento está en pausa. Conservamos tu borrador; inténtalo cuando se reanude.";
+            case CLOSED -> "Este evento está cerrado y no admite nuevas entradas. Puedes usar el código de otro evento.";
+            default -> "Este evento todavía no ha abierto la entrada. Consulta con el organizador.";
+        });
+        return event;
+    }
     @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
     public Event lock(long id) { return repository.lockById(id).orElseThrow(() -> new NotFoundException("No encontramos ese evento.")); }
     private String point(EventForm form) { String value = Objects.requireNonNullElse(form.getMeetingPoint(), "").strip(); return value.isBlank() ? "Punto Ping del evento" : value; }

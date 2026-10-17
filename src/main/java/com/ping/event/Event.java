@@ -10,6 +10,8 @@ import org.hibernate.type.SqlTypes;
 public class Event {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "entry_code", nullable = false, length = 32, unique = true, updatable = false)
+    private String entryCode;
     @Column(nullable = false, length = 120)
     private String name;
     @Column(nullable = false, length = 2000)
@@ -30,12 +32,14 @@ public class Event {
 
     protected Event() { }
     public Event(String name, String description) {
+        this.entryCode = java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase(java.util.Locale.ROOT);
         this.name = name;
         this.description = description;
     }
     @PrePersist void onCreate() { createdAt = Instant.now(); updatedAt = createdAt; }
     @PreUpdate void onUpdate() { updatedAt = Instant.now(); }
     public Long getId() { return id; }
+    public String getEntryCode() { return entryCode; }
     public String getName() { return name; }
     public String getDescription() { return description; }
     public EventStatus getStatus() { return status; }

@@ -65,13 +65,19 @@ public class DemoController {
         model.addAttribute("held", history.stream().anyMatch(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE));
         model.addAttribute("completedCount", history.stream().filter(m -> m.status() == MatchStatus.COMPLETED).count()); return "demo/dashboard";
     }
-    @PostMapping("/me/availability") public String availability(@ModelAttribute AvailabilityForm form, HttpSession session) {
-        participants.setAvailability(self(session), form); return "redirect:/me";
+    @GetMapping("/connect") public String connect(HttpSession session, Model model) {
+        String page = dashboard(session, model);
+        if (page.startsWith("redirect:")) return page;
+        MatchView match = (MatchView) model.getAttribute("currentMatch");
+        return match == null ? "demo/connect" : "redirect:/matches/" + match.id();
     }
-    @PostMapping("/me/search") public String search(HttpSession session, RedirectAttributes flash) {
+    @PostMapping("/me/availability") public String availability(@ModelAttribute AvailabilityForm form, @RequestParam(defaultValue="me") String returnTo, HttpSession session) {
+        participants.setAvailability(self(session), form); return "connect".equals(returnTo) ? "redirect:/connect" : "redirect:/me";
+    }
+    @PostMapping("/me/search") public String search(@RequestParam(defaultValue="me") String returnTo, HttpSession session, RedirectAttributes flash) {
         long id = self(session);
         try { return "redirect:/matches/" + matching.search(id); }
-        catch (BusinessRuleException error) { flash.addFlashAttribute("message", error.getMessage()); flash.addFlashAttribute("messageTone", "notice"); return "redirect:/me"; }
+        catch (BusinessRuleException error) { flash.addFlashAttribute("message", error.getMessage()); flash.addFlashAttribute("messageTone", "notice"); return "connect".equals(returnTo) ? "redirect:/connect" : "redirect:/me"; }
     }
     @GetMapping("/matches/{id}") public String match(@PathVariable long id, HttpSession session, Model model) {
         long selected = self(session); var participant = participants.get(selected); model.addAttribute("participant", participant); model.addAttribute("event", events.get(participant.eventId()));

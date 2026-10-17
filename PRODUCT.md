@@ -45,7 +45,7 @@ Evitar espacios vacíos sin propósito, exceso de texto, ilustraciones genérica
 
 El usuario eligió composición primero para portadas y showcases, y trabajo directamente en código para pantallas operativas. El valor de herramienta para portadas se registra en `.impeccable/config.json` (`buildPath: comp`).
 
-Alcance actual autorizado por **Samuel**,16 de octubre2026: comprobar conexión completa entre dos altas normales y corregir obstáculos concretos móviles. DEC-039 acota el único defecto observado al resultado fuera de vista después de confirmar; no autoriza otra auditoría/rediseño ni nuevas reglas. Rama `fix/participant-confirmation-feedback` desde `6afac1e`, commit/push y PR en borrador hacia `feature/participant-onboarding`, sin merge/main/force-push. No se atribuye aprobación a Julián.
+Alcance actual autorizado por **Samuel**, 16 de octubre2026: separar Conectar de Mi Ping y entrada por código/QR público de evento antes de alias e intereses. DEC-040/Issue #33 autoriza rutas y persistencia/migración mínimas, conservando reglas, identidad propia y demo. Rama `feature/connect-event-entry` desde `8df0b7d`, PR en borrador hacia `fix/participant-confirmation-feedback`. Fuera las evoluciones posteriores de puntos/actividades/mapa y «Ya llegué»; no se atribuye aprobación a Julián.
 
 ## Evidence on Hand
 

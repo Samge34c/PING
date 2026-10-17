@@ -76,7 +76,7 @@ class EventTests {
     @Test void nonexistentEventFailsClearly() { assertThatThrownBy(() -> service.get(999999)).isInstanceOf(NotFoundException.class); }
     @Test void webCreatesEditsAndChangesEventState() throws Exception {
         try (var browser = new TestBrowser(port)) {
-            assertThat(browser.get("/").body()).contains("Hay algo", "Haz PING.", "Entrar a la demo");
+            assertThat(browser.get("/").body()).contains("Comparte gustos.", "Conecta en persona.", "Probar la demo");
             assertThat(browser.get("/events/new").statusCode()).isEqualTo(200);
             var invalid = browser.post("/events", Map.of("name", " "));
             assertThat(invalid.statusCode()).isEqualTo(200);

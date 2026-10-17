@@ -37,20 +37,23 @@ class ParticipantEntryTests {
         }
         return data;
     }
+    String open(TestBrowser b) throws Exception {
+        b.get("/join?code="+events.get(event).getEntryCode()); return b.get("/join").body();
+    }
     void details(TestBrowser b,String alias) throws Exception {
-        var f=fields(b.get("/join").body()); f.put("alias",alias); f.put("eventId",""+event);
+        var f=fields(open(b)); f.put("alias",alias); f.put("eventId",""+event);
         assertThat(b.post("/join",f).headers().firstValue("Location").orElseThrow()).endsWith("/join/interests");
     }
     @Test void ownEntryCorrectsDraftAndUsesExistingAvailabilityAndSearch() throws Exception {
         try(var b=new TestBrowser(port)) {
-            var data=fields(b.get("/join").body());data.put("alias"," ");data.put("eventId",""+event);
+            var data=fields(open(b));data.put("alias"," ");data.put("eventId",""+event);
             assertThat(b.post("/join",data).body()).contains("Escribe un alias");assertThat(people.count()).isZero();
             details(b,"Alias inicial");var f=fields(b.get("/join/interests").body());String interest=""+interests.catalog().getFirst().getId();f.put("interestIds",interest);f.put("action","back");b.post("/join/interests",f);
             var back=b.get("/join");assertThat(back.body()).contains("Alias inicial");f=fields(back.body());f.put("alias","Alias corregido");f.put("eventId",""+event);b.post("/join",f);
             String choices=b.get("/join/interests").body();assertThat(choices).contains("checked=\"checked\"");f=fields(choices);f.put("interestIds",interest);f.put("participantId","999999");
             assertThat(b.post("/join/interests",f).headers().firstValue("Location").orElseThrow()).endsWith("/me");
             var person=people.findAll().getFirst();assertThat(person.getAlias()).isEqualTo("Alias corregido");assertThat(person.isAvailable()).isFalse();assertThat(participants.get(person.getId()).interests()).hasSize(1);assertThat(person.getPoints()).isZero();
-            assertThat(b.get("/me").body()).contains("Alias corregido","Activar disponibilidad").doesNotContain("/demo/prepare", "Cambiar participante demo");
+            assertThat(b.get("/me").body()).contains("Alias corregido","Ir a Conectar").doesNotContain("/demo/prepare", "Cambiar participante demo");
             b.post("/me/availability",Map.of("available","true","version",""+person.getVersion()));
             b.post("/me/search",Map.of());assertThat(b.get("/me").body()).contains("No hay personas disponibles");
             assertThat(b.post("/join/interests",f).headers().firstValue("Location").orElseThrow()).endsWith("/me");assertThat(people.count()).isEqualTo(1);
@@ -58,7 +61,7 @@ class ParticipantEntryTests {
     }
     @Test void staleDetailsCannotOverwriteSavedDraft() throws Exception {
         try(var b=new TestBrowser(port)) {
-            var f=fields(b.get("/join").body()); f.put("alias","Alias guardado"); f.put("eventId",""+event); b.post("/join",f);
+            var f=fields(open(b)); f.put("alias","Alias guardado"); f.put("eventId",""+event); b.post("/join",f);
             f.put("alias","Cambio obsoleto"); var rejected=b.post("/join",f);
             assertThat(rejected.body()).contains("otra pestaña", "Alias guardado").doesNotContain("value=\"Cambio obsoleto\"");
             assertThat(people.count()).isZero();

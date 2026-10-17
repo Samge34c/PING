@@ -2624,3 +2624,20 @@ body.participant-entry-page {padding-left:0}
 .pe-academic {margin-top:24px}
 .participant-entry-page .interest-selection-footer {gap:12px}
 .participant-entry-page .ping-footer {max-width:520px}
+
+/* DEC-040: event-first entry and explicit connection workspace. */
+.pe-code {text-transform:uppercase;letter-spacing:.08em;font-variant-numeric:tabular-nums;font-size:18px}
+.pe-event {display:flex;gap:14px;align-items:center;padding:16px 0;margin:8px 0 12px;border-block:1px solid var(--ping-border)}
+.pe-event>.ping-icon {width:26px;height:26px;color:var(--ping-primary);flex-shrink:0}
+.pe-event>div {display:grid;gap:4px;min-width:0}.pe-event span,.pe-event small {font-size:13px;color:var(--ping-muted)}
+.pe-event strong {font-size:19px;line-height:1.4}.pe-return {display:inline-flex;align-items:center;min-height:44px;margin-top:12px}
+.connect-page main.cn-page {width:calc(100% - 32px);max-width:620px;margin:20px auto 0;animation:none;overflow-wrap:anywhere}
+.cn-heading {margin-bottom:20px}.cn-heading h1 {font-size:30px;letter-spacing:-.035em;margin:8px 0 12px}.cn-heading>p:last-child {color:var(--ping-muted);margin:0}
+.connect-page .mp-next {margin:0}.cn-interests {display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;padding:20px 0;border-bottom:1px solid var(--ping-border)}
+.cn-interests>.ping-icon {color:var(--ping-primary);flex-shrink:0;margin-top:3px}.cn-interests p {flex:1;min-width:180px;margin:0;font-size:14px;color:var(--ping-muted)}
+.cn-interests a {display:inline-flex;align-items:center;min-height:44px}.connect-page .mp-update {margin-block:12px}.connect-page .mp-update p {font-size:13px}
+.event-entry-share {border-top:1px solid var(--ping-border);margin-top:24px;padding-top:24px}.event-entry-share h2 {font-size:22px}
+.event-entry-share code {display:inline-block;font-size:21px;letter-spacing:.06em;padding:12px 0;color:var(--ping-text);overflow-wrap:anywhere}
+.event-entry-share img {display:block;width:min(100%,256px);height:auto;margin:16px 0;background:#fff}
+.event-entry-share .entry-link-row {display:flex;gap:8px;flex-wrap:wrap}.entry-link-row input {min-width:0;flex:1 1 220px}
+@media (min-width:992px) {.connect-page main.cn-page {margin-top:28px}.cn-heading h1 {font-size:34px}}

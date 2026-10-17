@@ -56,3 +56,7 @@ Home/nav de invitado llevan a entrada normal; demo permanece separada. En modo p
 ## Resultado de confirmación visible — DEC-039
 
 Después del POST de confirmación, fragmento nativo `#am-confirm-title` y encabezado con `tabindex=-1` en ACTIVE/COMPLETED. El resultado recibe foco y queda en vista sin añadir bloques, CSS o JavaScript, ni desplazar automáticamente a quien aún está leyendo la misión. El polling existente conserva los cambios de estado de la otra persona. Evidencia390/360 y límites en docs/CONEXION_DOS_ALTAS.md.
+
+## Conectar y entrada identificada — DEC-040
+
+Operación móvil390: código/QR → nombre del evento y alias → intereses. No hay selector repetido del evento; cambio explícito guarda alias/intereses, errores visibles sin perder borrador. Se reutilizan cabecera local, Manrope, controles táctiles y temas existentes; sin ilustraciones/portada nueva. Mi Ping concentra identidad/saldo/intereses/historial y un enlace de continuidad; Conectar concentra disponibilidad/búsqueda y resuelve propuesta/ACTIVE. Navegación compartida y del Hub apuntan a `/connect`; selección activa coherente. QR negro/blanco con quiet zone, código textual y enlace seleccionable/copiable accesibles en el detalle, sin nueva estética administrativa. Evidencia y configuración: docs/CONECTAR_CODIGO_QR.md.

@@ -6,42 +6,11 @@
   <div class="mp-identity"><span class="avatar" th:text="${#strings.toUpperCase(#strings.substring(participant.alias,0,1))}"></span><h1><span class="visually-hidden">Mi Ping de </span><span th:text="${participant.alias}"></span></h1><a class="mp-balance" th:href="@{/me/benefits}" aria-label="Ver mis puntos y beneficios"><strong th:text="${participant.points}"></strong><span>puntos</span></a></div>
 </header>
 <div class="mp-flow">
-<section class="mp-next" aria-labelledby="next-step">
-  <div th:if="${currentMatch == null}">
-    <span class="mp-state"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg><span th:text="${participant.available ? 'Disponible para conectar' : 'No disponible'}"></span></span>
-    <h2 id="next-step" th:text="${event.status.name() != 'OPEN' ? (event.status.name() == 'PAUSED' ? 'La búsqueda está en pausa.' : 'El evento no está abierto.') : (participant.available ? 'Encuentra tu próximo Ping.' : '¿Con quién vas a conectar?')}"></h2>
-    <p th:if="${event.status.name() != 'OPEN'}" th:text="${event.status.name() == 'PAUSED'} ? 'Podrás buscar cuando se reanude el evento.' : 'No se pueden iniciar nuevas conexiones.'"></p>
-    <p th:if="${event.status.name() == 'OPEN' and !participant.available}">Tus intereses son el punto de partida. Activa tu disponibilidad cuando quieras conectar.</p>
-    <p th:if="${event.status.name() == 'OPEN' and participant.available}">Busca una persona con intereses en común. La conexión empieza cuando ambos aceptan.</p>
-    <form th:if="${!participant.available and event.status.name() == 'OPEN'}" method="post" th:action="@{/me/availability}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="version" th:value="${participant.version}"><input type="hidden" name="available" value="true"><button class="btn mp-primary">Activar disponibilidad <svg th:replace="~{fragments/layout :: icon('bolt')}"></svg></button></form>
-    <form data-search-form th:if="${participant.available and event.status.name() == 'OPEN'}" method="post" th:action="@{/me/search}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn mp-primary">Buscar conexión <svg th:replace="~{fragments/layout :: icon('waves')}"></svg></button></form>
-    <form class="mp-availability" th:if="${!held and participant.available}" method="post" th:action="@{/me/availability}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="version" th:value="${participant.version}"><input type="hidden" name="available" value="false"><button class="btn btn-link">Marcar no disponible</button></form>
-  </div>
-  <div th:if="${currentMatch != null}">
-    <div th:if="${currentMatch.status.name() == 'OFFERED'}">
-      <span class="mp-state"><svg th:replace="~{fragments/layout :: icon('link')}"></svg>Propuesta de conexión</span>
-      <h2 id="next-step">Conecta con <span th:text="${currentMatch.otherAlias}"></span>.</h2>
-      <p th:unless="${#strings.isEmpty(currentMatch.commonInterests)}">En común: <strong th:text="${currentMatch.commonInterests}"></strong>.</p>
-      <p th:if="${#strings.isEmpty(currentMatch.commonInterests)}">Una alternativa para descubrir otros intereses. Revisa la propuesta antes de decidir.</p>
-      <p th:if="${currentMatch.accepted}" th:text="${'Ya aceptaste. Esperando respuesta de ' + currentMatch.otherAlias + '…'}" role="status"></p>
-      <p th:if="${currentMatch.otherAccepted and !currentMatch.accepted}" th:text="${currentMatch.otherAlias + ' aceptó. Falta tu aceptación.'}"></p>
-      <div class="mp-actions">
-        <form th:if="${!currentMatch.accepted and event.status.name() == 'OPEN'}" method="post" th:action="@{/matches/{id}/accept(id=${currentMatch.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn mp-primary">Aceptar conexión <svg th:replace="~{fragments/layout :: icon('check')}"></svg></button></form>
-        <a class="btn mp-secondary" th:href="@{/matches/{id}(id=${currentMatch.id})}">Ver propuesta <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
-        <form class="mp-reject" method="post" th:action="@{/matches/{id}/reject(id=${currentMatch.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-link" aria-label="Rechazar propuesta: ahora no">Ahora no</button></form>
-      </div>
-    </div>
-    <div th:if="${currentMatch.status.name() == 'ACTIVE'}">
-      <span class="mp-state"><svg th:replace="~{fragments/layout :: icon('link')}"></svg><span th:text="${currentMatch.completionPending ? 'Finalización pendiente' : 'Encuentro activo'}"></span></span>
-      <h2 id="next-step">Tu Ping con <span th:text="${currentMatch.otherAlias}"></span>.</h2>
-      <p class="mp-location"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span th:text="${currentMatch.meetingPoint}"></span></p>
-      <p th:if="${!currentMatch.confirmed and !currentMatch.otherConfirmed and !currentMatch.completionPending}">Ambos aceptaron. Vuelve al encuentro para ver su palabra, mapa y actividad.</p>
-      <p th:if="${currentMatch.confirmed and !currentMatch.completionPending}" th:text="${'Tú ya confirmaste. Esperando a ' + currentMatch.otherAlias + '…'}" role="status"></p>
-      <p th:if="${currentMatch.otherConfirmed and !currentMatch.confirmed}" th:text="${currentMatch.otherAlias + ' ya confirmó. Falta tu confirmación.'}"></p>
-      <p th:if="${currentMatch.completionPending}">La conexión está finalizando. Abre el encuentro para ver su estado o reintentar sin duplicar puntos.</p>
-      <a class="btn mp-primary" th:href="@{/matches/{id}(id=${currentMatch.id})}"><span th:text="${currentMatch.completionPending ? 'Revisar finalización' : 'Volver al encuentro'}"></span><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
-    </div>
-  </div>
+<section class="mp-next mp-connect-summary" aria-labelledby="next-step">
+<span class="mp-state" th:text="${currentMatch != null ? currentMatch.status.label : (event.status.name() != 'OPEN' ? event.status.label : (participant.available ? 'Disponible para conectar' : 'No disponible'))}"></span>
+<h2 id="next-step" th:text="${currentMatch != null ? (currentMatch.status.name() == 'ACTIVE' ? 'Tu encuentro continúa.' : 'Tienes una propuesta.') : 'Tu siguiente conexión, en Conectar.'}"></h2>
+<p th:text="${currentMatch != null ? 'Consulta el estado y continúa con tu conexión.' : (event.status.name() == 'OPEN' ? 'Activa tu disponibilidad o busca cuando quieras. Tú decides.' : 'El evento no permite nuevas conexiones ahora. Puedes consultar tu perfil e historial.')}"></p>
+<a class="btn mp-primary" th:href="@{/connect}" th:text="${currentMatch != null ? (currentMatch.status.name() == 'ACTIVE' ? 'Volver al encuentro' : 'Ver propuesta') : 'Ir a Conectar'}"></a>
 </section>
 <div class="mp-settings">
 <section class="mp-interests" aria-labelledby="mp-interests-title"><div class="mp-section-heading"><h2 id="mp-interests-title">Mis intereses</h2><a th:href="@{/participants/{id}/interests(id=${participant.id})}">Editar <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div><div class="chip-list"><span class="ping-chip" th:each="interest : ${participant.interests}" th:text="${interest}"></span></div><p th:if="${#lists.isEmpty(participant.interests)}">Sin intereses seleccionados. Puedes recibir una alternativa sin afinidad.</p></section>
@@ -60,5 +29,5 @@
 <div class="mp-update"><p class="small text-secondary" data-live-status role="status" aria-live="polite">Tu estado se actualiza automáticamente.</p><a th:href="@{/me}" aria-label="Actualizar Mi Ping">Actualizar <svg th:replace="~{fragments/layout :: icon('waves')}"></svg></a></div>
 <p th:if="${experience != null}" class="mp-disclaimer">Simulación académica inspirada en SOFA · Sin vínculo oficial con el evento.</p>
 <nav class="mp-tools" aria-label="Mi espacio"><a th:href="@{/me/benefits}">Ver beneficios <svg th:replace="~{fragments/layout :: icon('gift')}"></svg></a><form method="post" th:action="@{/demo/exit}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-link" th:text="${session.pingEntryMode == 'participant' ? 'Salir de Mi Ping' : 'Cambiar participante demo'}"></button></form></nav>
-<div class="ping-search-screen" hidden role="status" aria-live="polite"><div class="search-content"><div class="search-orbits"><i></i><i></i><i></i><span class="search-node"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg></span></div><h2>Buscando personas con afinidad…</h2><p>Estamos comprobando quién está disponible en tu evento.</p></div></div>
+
 </main><footer th:replace="~{fragments/layout :: footer}"></footer><script th:src="@{/js/live.js}" defer></script></body></html>
