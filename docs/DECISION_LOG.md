@@ -373,3 +373,7 @@ Autorización explícita del usuario, 17 octubre2026 Bogotá. Sustituye DEC-041:
 ## DEC-043 — Puntos variables y recompensas de evento
 
 Misma autorización: segundo bloque desde último respaldo del primero. Actividades de0 a100 puntos enteros (límite académico); snapshot del importe al activar. Anteriores conservan10. Saga usa importe guardado tanto para créditos como compensaciones, incluidos recibos anteriores. Beneficios por evento con nombre/descripción/coste1 a10000/lugar/indicaciones/activo; demo global anterior conservada. Canjes guardan copia de condiciones al solicitar y preservan idempotencia/entrega. Misma administración académica sin autenticación nueva ni exposición adicional. Rama/PR en borrador independientes y continuidad actualizada antes de cada respaldo.
+
+## DEC-044 — Coherencia del recorrido integrado
+
+Tercer bloque autorizado17 octubre2026, después de respaldar DEC-043 en bce34589cc346ab73d21fcd277b5f3c029e11f4d/PR37. Rama fix/event-journey-consistency hacia feature/event-points-rewards. Evidencia Chromium/MySQL del bloque2: snack demo precede la recompensa local, enlaces de búsqueda pasan por Mi Ping, llegada sin marcar se presenta como «En camino/Esperando». Corregir prioridad de beneficio local, enlaces directos a Conectar y llegada «Sin registrar» sin espera obligatoria; pedir indicaciones en nuevos puntos y dar orientación honesta en antiguos sin mapa. Sin rediseño, migración ni cambios a importes/Saga/permisos. Verificar código/QR, dos sesiones, llegada opcional, actividad, puntos y canje hasta entrega.

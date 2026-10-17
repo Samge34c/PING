@@ -72,3 +72,7 @@ Llegada opcional, confirmación siempre accesible tras aceptación bilateral; me
 ## Puntos y recompensas por evento — DEC-043
 
 Misma composición móvil de Beneficios, saldo/coste/faltantes juntos, lugar e indicaciones explícitos y snapshot en Mis canjes. Recompensas propias identificadas como del evento; snack global conserva etiqueta DEMO. Editor operativo local sin portada nueva; importe de actividad visible en misión, resultado, historial y admin. Sin cambios en navegación compartida/Hub ni recursos externos.
+
+## Recorrido integrado — DEC-044
+
+Ajustes observados, sin rediseño: recompensa local primero, continuidad de búsqueda a Conectar y llegada informativa sin suponer «en camino». Confirmación nombra actividad y permanece independiente. Indicaciones útiles en puntos nuevos y orientación honesta en antiguos sin plano.390/360 y escritorio, mismos controles/temas/recursos. Evidencia final en documento único de continuidad.

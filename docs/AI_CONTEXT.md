@@ -62,3 +62,5 @@ DEC-040/Issue #33: Samuel autoriza Conectar propio y alta evento→alias→inter
 DEC-041/Issue #35 autoriza el segundo avance: catálogos opcionales por evento (puntos/palabras/actividades), snapshot al activar y llegada propia bilateral para nuevos activos antes de confirmar actividad. V14 aditiva conserva condiciones de activos anteriores; recompensa/Saga y privacidad intactas. Rama feature/event-encounter-arrival desde c288f77, PR borrador hacia feature/connect-event-entry.
 
 DEC-042/043 sustituyen la condición incorrecta de llegada de DEC-041: siempre informativa, incluso arrival_required=true. Autorización explícita para configuración estructurada compatible, puntos variables y recompensas por evento; detalles/estado actual en ENCUENTRO_CONFIGURABLE_LLEGADA.md.
+
+Continuidad17 octubre2026: PR36 corregida en087b3a7 (llegada informativa/estructura compatible/MySQL); PR37 enbce3458 (puntos0–100, snapshots Saga y recompensas por evento). DEC-044 revisa recorrido desde esa base en fix/event-journey-consistency. GitHub/documento ENCUENTRO_CONFIGURABLE_LLEGADA.md son autoridad de estado/arranque; no recuperar ZIP de otro entorno.

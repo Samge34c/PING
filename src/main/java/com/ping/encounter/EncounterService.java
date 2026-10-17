@@ -43,7 +43,7 @@ public class EncounterService {
         var e=events.lock(event);if(e.isStructuredEncounter())return;
         var names=EncounterOptions.lines(e.getMeetingPoints());if(names.isEmpty())names=List.of(e.getMeetingPoint());
         Set<Long> ids=new LinkedHashSet<>();
-        for(String name:new LinkedHashSet<>(names)){var f=new PointForm();f.setName(name);ids.add(savePoint(event,null,f));}
+        for(String name:new LinkedHashSet<>(names)){var f=new PointForm();f.setName(name);f.setDirections("Busca el punto público «"+name+"». Si no lo identificas, consulta al organizador.");ids.add(savePoint(event,null,f));}
         var rows=EncounterOptions.lines(e.getEncounterActivities());if(rows.isEmpty())rows=List.of(ActivityCatalog.activity(""));
         for(String text:new LinkedHashSet<>(rows)){var f=new ActivityForm();f.setTitle(text.substring(0,Math.min(120,text.length())));f.setInstructions(text);f.setPointIds(ids);saveActivity(event,null,f);}
     }
