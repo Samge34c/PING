@@ -202,10 +202,11 @@ class MatchTests {
             samuel.get("/demo"); julian.get("/demo"); other.get("/demo");
             assertThat(samuel.post("/demo", Map.of("participantId", "" + pair[0])).statusCode()).isEqualTo(302);
             julian.post("/demo", Map.of("participantId", "" + pair[1])); other.post("/demo", Map.of("participantId", "" + outsider));
-            assertThat(samuel.get("/me").body()).contains("Samuel", "Buscar conexión", "Modo demo");
+            assertThat(samuel.get("/me").body()).contains("Samuel", "Ir a Conectar", "Modo demo");
+            assertThat(samuel.get("/connect").body()).contains("Buscar conexión");
             var offer = samuel.post("/me/search", Map.of()); String path = java.net.URI.create(offer.headers().firstValue("Location").orElseThrow()).getPath();
             assertThat(samuel.get(path).body()).contains("OFFERED", "Julián").doesNotContain("Entrada principal", "PIXEL-");
-            assertThat(julian.get("/me").body()).contains(path); assertThat(other.get(path).statusCode()).isEqualTo(404);
+            assertThat(julian.get("/connect").headers().firstValue("Location").orElseThrow()).endsWith(path); assertThat(other.get(path).statusCode()).isEqualTo(404);
             assertThat(other.post(path + "/accept", Map.of("participantId", "" + pair[0])).statusCode()).isEqualTo(404);
             samuel.post(path + "/accept", Map.of("participantId", "" + pair[1]));
             assertThat(julian.get(path).body()).contains("OFFERED", "Samuel aceptó. Falta tu aceptación.");

@@ -18,8 +18,9 @@ public class ParticipantEntryController {
     private final ParticipantService participants;
     private final InterestService interests;
     private final ParticipantEntryService entry;
-    public ParticipantEntryController(ParticipantService participants, InterestService interests, ParticipantEntryService entry) {
-        this.participants = participants; this.interests = interests; this.entry = entry;
+    private final com.ping.event.EventService events;
+    public ParticipantEntryController(ParticipantService participants, InterestService interests, ParticipantEntryService entry, com.ping.event.EventService events) {
+        this.participants = participants; this.interests = interests; this.entry = entry; this.events = events;
     }
     // The receipt and participant ID never come from request parameters.
     private static class Draft {
@@ -36,26 +37,62 @@ public class ParticipantEntryController {
         if (!model.containsAttribute("participantForm")) {
             ParticipantForm f = new ParticipantForm(); f.setAlias(d.alias); f.setEventId(d.eventId); model.addAttribute("participantForm", f);
         }
-        model.addAttribute("events", participants.registrationEvents()); model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision);
+        if (d.eventId == null) return eventCode(d, model);
+        var event = events.get(d.eventId); model.addAttribute("entryEvent", event); model.addAttribute("entryEventOpen", event.canStartNewMatches());
+        model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision);
         return "entry/details";
     }
+    private String eventCode(Draft d, Model model) {
+        model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision); model.addAttribute("hasEntryEvent", d.eventId != null);
+        return "entry/event";
+    }
+    private String chooseEvent(Draft d, String code, Model model, HttpServletResponse response) {
+        try {
+            var event = events.entryEvent(code);
+            if (!event.getId().equals(d.eventId)) { d.eventId = event.getId(); d.revision++; }
+            return "redirect:/join";
+        } catch (BusinessRuleException | NotFoundException error) {
+            response.setStatus(error instanceof NotFoundException ? 404 : 409);
+            model.addAttribute("entryError", error.getMessage()); model.addAttribute("code", code); return eventCode(d, model);
+        }
+    }
     private String choices(Draft d, Model model) {
-        model.addAttribute("alias", d.alias); model.addAttribute("eventName", participants.registrationEvents().stream().filter(e -> e.getId().equals(d.eventId)).map(e -> e.getName()).findFirst().orElse("Evento no disponible"));
+        model.addAttribute("alias", d.alias); model.addAttribute("eventName", events.get(d.eventId).getName());
         model.addAttribute("interests", interests.catalog()); model.addAttribute("selectedIds", d.ids);
         model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision); return "entry/interests";
     }
     private boolean current(Draft d, String key, long revision) { return d.key.equals(key) && d.revision == revision; }
-    @GetMapping public String start(HttpSession session, Model model, HttpServletResponse response) {
+    @GetMapping public String start(@RequestParam(required=false) String code, HttpSession session, Model model, HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-store, private");
-        synchronized (session) { if (entered(session)) return "redirect:/me"; return details(draft(session), model); }
+        synchronized (session) {
+            if (entered(session)) return "redirect:/me";
+            Draft d = draft(session); if (code != null) return chooseEvent(d, code, model, response);
+            return details(d, model);
+        }
+    }
+    @GetMapping("/event") public String event(HttpSession session, Model model) {
+        synchronized (session) { if (entered(session)) return "redirect:/me"; return eventCode(draft(session), model); }
+    }
+    @PostMapping("/event") public String event(@RequestParam String code, @RequestParam String draftKey, @RequestParam long revision,
+            HttpSession session, Model model, HttpServletResponse response) {
+        synchronized (session) {
+            if (entered(session)) return "redirect:/me";
+            Draft d = draft(session);
+            if (!current(d, draftKey, revision)) { response.setStatus(409); model.addAttribute("entryError", "La entrada cambió en otra pestaña. Revisa tu borrador antes de cambiar el evento."); return eventCode(d, model); }
+            return chooseEvent(d, code, model, response);
+        }
     }
     @PostMapping public String details(@Valid @ModelAttribute("participantForm") ParticipantForm form, BindingResult errors,
-            @RequestParam String draftKey, @RequestParam long revision, HttpSession session, Model model) {
+            @RequestParam String draftKey, @RequestParam long revision, @RequestParam(defaultValue="interests") String action, HttpSession session, Model model) {
         synchronized (session) {
             if (entered(session)) return "redirect:/me";
             Draft d = draft(session);
             if (!current(d, draftKey, revision)) { model.asMap().remove("participantForm"); model.addAttribute("entryError", "Este paso cambió en otra pestaña. Revisa los datos guardados antes de continuar."); return details(d, model); }
-            d.alias = form.getAlias(); d.eventId = form.getEventId();
+            if (d.eventId == null) return "redirect:/join";
+            if (!d.eventId.equals(form.getEventId())) { model.asMap().remove("participantForm"); model.addAttribute("entryError", "Usa Cambiar evento para identificar otro evento con su código."); return details(d, model); }
+            d.alias = form.getAlias();
+            if (action.equals("changeEvent")) { d.revision++; return "redirect:/join/event"; }
+            if (!action.equals("interests")) { model.addAttribute("entryError", "Usa los botones de esta entrada para continuar."); return details(d, model); }
             if (!errors.hasFieldErrors("eventId") && participants.registrationEvents().stream().noneMatch(e -> e.getId().equals(d.eventId))) errors.rejectValue("eventId", "closed", "Elige un evento abierto para continuar.");
             if (errors.hasErrors()) return details(d, model);
             d.revision++; return "redirect:/join/interests";

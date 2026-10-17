@@ -3,7 +3,7 @@
   <a class="ping-skip" href="#main-content">Saltar al contenido</a>
   <a th:replace="~{fragments/layout :: brand}"></a>
   <nav class="h-desktop-nav" aria-label="Navegación principal del Hub">
-    <a th:href="@{/me}">Mi Ping</a><a th:href="${participant != null} ? @{/me} : @{/demo}">Conectar</a>
+    <a th:href="@{/me}">Mi Ping</a><a th:href="@{/connect}">Conectar</a>
     <a aria-current="page" th:href="@{/events/{id}/hub(id=${event.id})}">Mi evento</a><a th:href="${participant != null} ? @{/me/benefits} : @{/demo}">Beneficios</a>
   </nav>
   <div class="h-account"><div th:replace="~{fragments/layout :: theme}"></div>
@@ -14,7 +14,7 @@
 </header>
 <nav th:fragment="mobileNav" class="h-mobile-nav" aria-label="Navegación móvil del Hub">
   <a th:href="@{/me}"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg><span>Mi Ping</span></a>
-  <a th:href="${participant != null} ? @{/me} : @{/demo}"><svg th:replace="~{fragments/layout :: icon('spark')}"></svg><span>Conectar</span></a>
+  <a th:href="@{/connect}"><svg th:replace="~{fragments/layout :: icon('spark')}"></svg><span>Conectar</span></a>
   <a aria-current="page" th:href="@{/events/{id}/hub(id=${event.id})}"><svg th:replace="~{fragments/layout :: icon('calendar')}"></svg><span>Mi evento</span></a>
   <a th:href="@{/events/{id}/map(id=${event.id})}"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span>Mapa</span></a>
   <a th:href="${participant != null} ? @{/me/benefits} : @{/demo}"><svg th:replace="~{fragments/layout :: icon('gift')}"></svg><span>Beneficios</span></a>

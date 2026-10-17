@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @ControllerAdvice @Profile("!bootstrap")
 public class WebAdvice {
     @ModelAttribute public void privatePageCache(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getRequestURI().startsWith("/me") || request.getRequestURI().startsWith("/matches") || request.getRequestURI().startsWith("/join")) {
+        if (request.getRequestURI().startsWith("/me") || request.getRequestURI().equals("/connect") || request.getRequestURI().startsWith("/matches") || request.getRequestURI().startsWith("/join")) {
             response.setHeader("Cache-Control", "no-store, private"); response.setHeader("Expires", "0");
         }
     }
