@@ -130,3 +130,21 @@ git ls-remote origin refs/heads/feature/interest-categories-mobile
 ```
 
 Comparar los dos SHA y PR39. Mantener configuración MySQL privada de la copia; Flyway aplica V17 una vez y Hibernate valida. Abrir evento → entrar por código/QR → seleccionar/filtrar/guardar → editar; administración de categorías en `/interests/categories`. Si se interrumpe antes del push de unidad3, remoto seguroff29bdf y cambios locales exactos por `git status`; ejecutar diff/check, commit y push normal, nunca reset/force-push. Tras publicarla, no queda implementación pendiente de DEC-045: la próxima comprobación es teléfono físico/Windows. Propuesta de siguiente bloque, aún no implementada: gestionar altas y edición de gustos reales desde la administración, manteniendo matching por IDs.
+
+
+## DEC-046 — Plano por evento, recuperación inicial
+
+Copia /workspace/PING, árbol limpio y remoto21ff7c9b9c2936de9da336207ddce5331c2284d4/PR39 sin avances posteriores. Rama nueva feature/event-floorplan-mobile; base PR39. Las6 skills están versionadas, legibles y hashes/licencias verificados; executor enumera0: aplicación manual. Impeccable context no ejecutó motor local (exit127); se usa PRODUCT/DESIGN y referencias manuales, hooks siguen desactivados. No restaurar variantes ni repetir instalaciones.
+
+Persistencia/alcance en DEC-046 antes del código. Último respaldo remoto seguro21ff7c9. Trabajo local: documentación de decisión; siguiente acción: V18, normalizador de imagen, persistencia separada y snapshot desde ID real del punto. Después carga/colocación, vista móvil y prueba MySQL exclusiva/reinicio/recorrido de dos sesiones. No se reutiliza la demo.
+
+
+### DEC-046 unidad1 — persistencia y compatibilidad
+
+Implementados V18 (V1–V17 intactas), versiones/bytes separados en MySQL, normalización PNG/JPEG/WebP y posiciones por ID real del punto. Aceptación bilateral toma snapshot de versión/x/y bajo el mismo bloqueo del evento; las respuestas ajenas/OFFERED/COMPLETED no exponen coordenadas. Sustituir exige versión actual/acción explícita, no copia posiciones y conserva imágenes anteriores; mover o quitar marcador no borra el punto. Revisión rechaza formularios obsoletos, puntos de otro evento, valores no finitos o fuera0–1. Versiones antiguas se conservan sin purga automática: incluirlas todas en el respaldo MySQL; cada imagen normalizada tiene límite4MiB.
+
+18 verificaciones dirigidas aprobadas:7 nuevas de imagen/persistencia/snapshots,9 regresiones de encuentros/intereses y2 migraciones. V17→V18 real en MySQL8.4.11, base nueva ping_floorplan_upgrade_exclusive: ACTIVE anterior/palabra/indicaciones/recompensa37, saldos21/34,2 selecciones y3 categorías intactos; referencias históricas nulas y reejecución0. Prueba histórica de categorías fijada explícitamente a V17 para no confundir V18 con su ensayo. Fuentes FloorplanTests/FloorplanMigrationTests/FloorplanMySqlVerification. Se corrigió el mapeo JPA de floorplan_x/y tras reproducir validación fallida; no se cambió V18 para ocultarla.
+
+Entorno: contenedor nuevo ping-floorplan-mysql8.4.11 en loopback3308, bases distintas upgrade_exclusive y ui_exclusive; contenedor/datos anteriores no utilizados. Maven directo falló sin ruta y luego CA del JDK descargado no confiaba en el proxy; configuración existente de proxy + almacén CA del sistema resolvieron TLS sin desactivarlo. Dependencia WebP TwelveMonkeys3.12.0 de Maven Central, lector puro Java (BSD3); jars y cachés fuera de Git. Logs en /workspace/work/ping-floorplan, secretos privados fuera del checkout.
+
+Estado al preparar unidad1: backend probado, sin interfaz todavía. Último remoto seguro antes de push21ff7c9; el commit que contiene esta sección se contrasta después en remoto/PR. Siguiente acción exacta: agregar carga/preview/colocación a la administración existente, con errores recuperables y alternativa numérica accesible; después vista del participante y recorrido/reinicio. No declarar terminado este punto.

@@ -15,7 +15,7 @@ public class InterestCategoryMigrationTests {
    s.executeUpdate("INSERT INTO interests(id,name,demo) VALUES(91,'Interés anterior sin categoría',false)");
    s.executeUpdate("INSERT INTO ping_matches(id,event_id,first_id,second_id,status,first_accepted,second_accepted,first_wait,second_wait,common_interests,first_interests,second_interests,meeting_point,word,activity,created_at,reward_points) VALUES(5,42,1,2,'ACTIVE',true,true,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'Videojuegos','Videojuegos','Videojuegos','Plaza original','PRESERVAR-5','Actividad original',CURRENT_TIMESTAMP,37)");
    Map<Long,String> before=new TreeMap<>();try(var r=s.executeQuery("select id,name from interests")){while(r.next())before.put(r.getLong(1),r.getString(2));}
-   var next=Flyway.configure().dataSource(source).load();assertThat(next.migrate().migrationsExecuted).isEqualTo(1);
+   var next=Flyway.configure().dataSource(source).target("17").load();assertThat(next.migrate().migrationsExecuted).isEqualTo(1);
    Map<Long,String> after=new TreeMap<>();try(var r=s.executeQuery("select id,name from interests")){while(r.next())after.put(r.getLong(1),r.getString(2));}assertThat(after).isEqualTo(before);
    try(var r=s.executeQuery("select count(*) from participant_interests where participant_id=1")){r.next();assertThat(r.getInt(1)).isEqualTo(2);}
    try(var r=s.executeQuery("select category_id from interests where id=91")){r.next();assertThat(r.getObject(1)).isNull();}

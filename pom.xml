@@ -19,6 +19,12 @@
         <java.version>21</java.version>
     </properties>
     <dependencies>
+        <!-- Pure Java WebP decoding for organizer floorplans. Re-encoded locally. -->
+        <dependency>
+            <groupId>com.twelvemonkeys.imageio</groupId>
+            <artifactId>imageio-webp</artifactId>
+            <version>3.12.0</version>
+        </dependency>
         <!-- Local QR encoding/decoding; no network service or image framework. -->
         <dependency>
             <groupId>com.google.zxing</groupId>

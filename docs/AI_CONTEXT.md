@@ -66,3 +66,6 @@ DEC-042/043 sustituyen la condición incorrecta de llegada de DEC-041: siempre i
 Continuidad17 octubre2026: PR36 corregida en087b3a7 (llegada informativa/estructura compatible/MySQL); PR37 enbce3458 (puntos0–100, snapshots Saga y recompensas por evento). DEC-044 revisa recorrido desde esa base en fix/event-journey-consistency. GitHub/documento ENCUENTRO_CONFIGURABLE_LLEGADA.md son autoridad de estado/arranque; no recuperar ZIP de otro entorno.
 
 DEC-045: categorías de intereses y selección móvil desde552906a en feature/interest-categories-mobile. Inactivas impiden selecciones nuevas; anteriores se conservan sin alterar matching. V17 nueva; documento único ENCUENTRO_CONFIGURABLE_LLEGADA.md registra respaldos/verificación.
+
+
+DEC-046 autoriza el plano de imagen configurable por evento, puntos existentes y snapshots al activar; persiste en MySQL separado de metadatos, sin GPS ni localización de personas. Sustituye la exclusión temporal de mapas configurables. Autorización explícita de Samuel18 octubre2026, sin atribuir aprobación a Julián.

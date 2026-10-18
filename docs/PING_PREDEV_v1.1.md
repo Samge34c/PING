@@ -296,3 +296,6 @@ Llegada propia opcional/informativa: no condiciona confirmar ni otorga puntos, t
 ## Ampliación autorizada DEC-045
 
 Categorías administrables de intereses para ordenar su selección móvil. Un interés tiene una categoría opcional; sin categoría sigue disponible bajo Otros intereses. Desactivar categoría impide nuevas selecciones pero conserva las anteriores y los encuentros. Matching sigue por IDs de intereses comunes; compartir categoría no es coincidencia. No cambia el resto del recorrido, puntos o permisos.
+
+
+DEC-046 autoriza el plano de imagen configurable por evento, puntos existentes y snapshots al activar; persiste en MySQL separado de metadatos, sin GPS ni localización de personas. Sustituye la exclusión temporal de mapas configurables. Autorización explícita de Samuel18 octubre2026, sin atribuir aprobación a Julián.
