@@ -49,9 +49,9 @@ public class EncounterService {
         var rows=EncounterOptions.lines(e.getEncounterActivities());if(rows.isEmpty())rows=List.of(ActivityCatalog.activity(""));
         for(String text:new LinkedHashSet<>(rows)){var f=new ActivityForm();f.setTitle(text.substring(0,Math.min(120,text.length())));f.setInstructions(text);f.setPointIds(ids);saveActivity(event,null,f);}
     }
-    public record Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints){}
+    public record Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints,Long pointId){}
     public Assignment assign(Event event,String common,long matchId){
-        if(!event.isStructuredEncounter())return new Assignment(ActivityCatalog.encounter(common,matchId,event),"","",10);
+        if(!event.isStructuredEncounter())return new Assignment(ActivityCatalog.encounter(common,matchId,event),"","",10,null);
         var available=points(event.getId()).stream().filter(MeetingPoint::isActive).toList();
         var names=new HashSet<>(Arrays.asList(common.split(" · ")));
         var interestNames=new HashMap<Long,String>();interests.findAll().forEach(i->interestNames.put(i.getId(),i.getName()));
@@ -64,6 +64,6 @@ public class EncounterService {
         var p=compatible.get((int)Math.floorMod(matchId-1,compatible.size()));
         String fallback=ActivityCatalog.word(common,matchId);
         String base=EncounterOptions.select(event.getEncounterWords(),matchId,null);
-        return new Assignment(new ActivityCatalog.Encounter(p.getName(),base==null?fallback:base+"-"+Long.toString(matchId,36).toUpperCase(Locale.ROOT),a.getInstructions()),p.getDirections(),a.getTitle(),a.getRewardPoints());
+        return new Assignment(new ActivityCatalog.Encounter(p.getName(),base==null?fallback:base+"-"+Long.toString(matchId,36).toUpperCase(Locale.ROOT),a.getInstructions()),p.getDirections(),a.getTitle(),a.getRewardPoints(),p.getId());
     }
 }

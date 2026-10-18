@@ -34,5 +34,14 @@ public class TestBrowser implements AutoCloseable {
                 .POST(HttpRequest.BodyPublishers.ofString(body)).build(), HttpResponse.BodyHandlers.ofString());
     }
     private String encode(String value) { return URLEncoder.encode(value, StandardCharsets.UTF_8); }
+    public HttpResponse<String> postFile(String path, Map<String,String> values, String filename, byte[] bytes) throws Exception {
+        String boundary="PingTest"+UUID.randomUUID();var body=new java.io.ByteArrayOutputStream();
+        var fields=new LinkedHashMap<>(values);if(csrf!=null)fields.put("_csrf",csrf);
+        for(var field:fields.entrySet())body.write(("--"+boundary+"\r\nContent-Disposition: form-data; name=\""+field.getKey()+"\"\r\n\r\n"+field.getValue()+"\r\n").getBytes(StandardCharsets.UTF_8));
+        body.write(("--"+boundary+"\r\nContent-Disposition: form-data; name=\"image\"; filename=\""+filename+"\"\r\nContent-Type: application/octet-stream\r\n\r\n").getBytes(StandardCharsets.UTF_8));
+        body.write(bytes);body.write(("\r\n--"+boundary+"--\r\n").getBytes(StandardCharsets.UTF_8));
+        return client.send(HttpRequest.newBuilder(URI.create(base).resolve(path)).header("Content-Type","multipart/form-data; boundary="+boundary)
+            .POST(HttpRequest.BodyPublishers.ofByteArray(body.toByteArray())).build(),HttpResponse.BodyHandlers.ofString());
+    }
     public void close() { client.close(); }
 }

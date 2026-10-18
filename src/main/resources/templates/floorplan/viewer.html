@@ -1,0 +1,19 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
+<section th:fragment="viewer" class="floorplan" data-floorplan th:attr="data-fp-x=${fpX},data-fp-y=${fpY},data-fp-label=${fpLabel}">
+  <div class="fp-controls" data-fp-controls hidden role="group" aria-label="Controles del plano">
+    <button class="btn btn-outline-primary" type="button" data-fp-zoom="out" aria-label="Reducir plano">−</button>
+    <span data-fp-scale role="status" aria-live="polite">100 %</span>
+    <button class="btn btn-outline-primary" type="button" data-fp-zoom="in" aria-label="Ampliar plano">+</button>
+    <button class="btn btn-outline-primary" type="button" data-fp-reset>Restablecer</button>
+    <button class="btn btn-outline-primary" type="button" data-fp-center>Centrar punto</button>
+  </div>
+  <div class="fp-viewport" data-fp-viewport tabindex="0" role="region" aria-label="Plano desplazable. Al ampliar, usa un dedo, barras o las flechas del teclado para recorrerlo.">
+    <div class="fp-canvas" data-fp-canvas>
+      <img data-fp-image th:src="@{/events/{e}/floorplan/images/{p}(e=${event.id},p=${plan.id})}" th:width="${plan.width}" th:height="${plan.height}" th:alt="${'Plano aportado por el organizador de ' + event.name}" draggable="false">
+      <span class="fp-marker" data-fp-marker th:hidden="${fpX == null or fpY == null}" th:style="${fpX != null and fpY != null} ? |left:${fpX * 100}%;top:${fpY * 100}%;| : null" role="img" th:attr="aria-label=${fpLabel}"><span class="fp-marker-badge">1</span></span>
+    </div>
+  </div>
+  <p class="fp-help" data-fp-status role="status" aria-live="polite">Amplía para leer etiquetas y desplázate dentro del plano. Sin GPS ni ubicación de personas.</p>
+  <p class="ping-notice" data-fp-image-error hidden>No pudimos cargar la imagen del plano. Conserva el nombre y las indicaciones del punto y vuelve a abrir esta página.</p>
+</section>
+</body></html>

@@ -62,6 +62,16 @@ public class Match {
     public String getFirstInterests() { return firstInterests; }
     public String getSecondInterests() { return secondInterests; }
     public String getMeetingPoint() { return meetingPoint; }
+    @Column(length=36) private String floorplanId;
+    private Long meetingPointId;
+    @Column(name="floorplan_x") private Double floorplanX;
+    @Column(name="floorplan_y") private Double floorplanY;
+    public String getFloorplanId(){return floorplanId;}
+    public Double getFloorplanX(){return floorplanX;}
+    public Double getFloorplanY(){return floorplanY;}
+    void freezeFloorplan(com.ping.floorplan.FloorplanService.Snapshot snapshot){
+        floorplanId=snapshot.planId();meetingPointId=snapshot.pointId();floorplanX=snapshot.x();floorplanY=snapshot.y();
+    }
     public String getWord() { return word; }
     public String getActivity() { return activity; }
     public boolean owns(long id) { return first.getId() == id || second.getId() == id; }

@@ -44,6 +44,9 @@ public class Event {
     @Column(nullable=false) private boolean structuredEncounter;
     public boolean isStructuredEncounter(){return structuredEncounter;}
     public void enableStructuredEncounter(){structuredEncounter=true;}
+    @Column(length=36) private String floorplanId;
+    public String getFloorplanId(){return floorplanId;}
+    public void useFloorplan(String id){floorplanId=id;}
     @Version
     private long version;
 

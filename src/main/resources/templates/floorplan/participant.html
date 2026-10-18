@@ -1,0 +1,17 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Plano del evento')}"></head><body>
+<link rel="stylesheet" th:href="@{/css/floorplan.css}"><nav th:replace="~{fragments/layout :: nav}"></nav>
+<main id="main-content" class="container ping-form-layout fp-page">
+  <a class="fp-back" th:href="${backUrl}" th:text="${'← ' + backLabel}"></a>
+  <h1 th:text="${assignment ? 'Tu punto de encuentro' : 'Plano del evento'}"></h1><p th:text="${event.name}"></p>
+  <p class="fp-help" th:if="${assignment and plan != null}">Plano guardado al activar tu encuentro. Los cambios posteriores no trasladan este punto.</p>
+  <form th:if="${!assignment and !#lists.isEmpty(planPoints)}" method="get" th:action="@{/events/{id}/plan(id=${event.id})}" class="fp-browse">
+    <label class="form-label" for="browse-point">Punto del evento</label><select class="form-select" id="browse-point" name="pointId"><option th:each="p : ${planPoints}" th:value="${p.id}" th:selected="${selectedPointId == p.id}" th:text="${p.name + (p.active ? '' : ' · Inactivo')}"></option></select><button class="btn btn-outline-primary" th:text="${plan == null ? 'Ver indicaciones' : 'Ver punto'}"></button>
+  </form>
+  <section class="fp-selected" aria-labelledby="point-title"><p class="fp-help" th:text="${fpX != null ? (assignment ? '1 · Tu punto de encuentro' : '1 · Punto seleccionado') : 'Punto público'}"></p><h2 id="point-title" th:text="${pointName}"></h2><p th:text="${directions}"></p><p th:if="${!pointActive}" class="fp-help">Este punto está inactivo para nuevas asignaciones.</p></section>
+  <p th:if="${plan == null}" class="ping-notice" role="status">No hay un plano disponible para este encuentro o evento. Conserva estas indicaciones y consulta al organizador si necesitas ayuda.</p>
+  <div th:if="${plan != null}">
+    <p class="ping-notice" th:if="${fpX == null or fpY == null}" role="status">El punto no está ubicado en esta versión del plano. Sigue sus indicaciones o consulta al organizador; no mostramos una posición aproximada.</p>
+    <div th:replace="~{floorplan/viewer :: viewer}"></div>
+  </div>
+  <a class="btn btn-primary fp-back" th:href="${backUrl}" th:text="${backLabel}"></a>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><script th:src="@{/js/floorplan.js}" defer></script></body></html>

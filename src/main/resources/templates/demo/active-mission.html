@@ -1,5 +1,5 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
-<section th:fragment="mission" th:if="${match.status.name() == 'ACTIVE'}" class="active-mission" th:with="meetingZone=${experience != null ? experience.atPoint(match.meetingPoint) : null}">
+<section th:fragment="mission" th:if="${match.status.name() == 'ACTIVE'}" class="active-mission" th:with="meetingZone=${match.floorplanId == null and experience != null ? experience.atPoint(match.meetingPoint) : null}">
   <div class="am-context"><a th:href="@{/me}">← Mi Ping</a><a th:if="${experience != null}" th:href="@{/events/{id}/hub(id=${event.id})}" th:text="${participant.eventName}"></a><span class="ping-status" data-status="ACTIVE" th:text="${match.status.label}"></span></div>
   <header class="am-person"><span class="avatar" aria-hidden="true" th:text="${#strings.toUpperCase(#strings.substring(match.otherAlias,0,1))}"></span><div><p>Tu encuentro con</p><h1 th:text="${match.otherAlias}"></h1></div></header>
   <p class="am-affinity"><span th:if="${!#strings.isEmpty(match.commonInterests)}" th:text="${match.commonInterests + ' en común · '}"></span><span th:if="${#strings.isEmpty(match.commonInterests)}">Alternativa sin intereses compartidos · </span>Aceptaron ambos</p>
@@ -31,6 +31,8 @@
         <p class="am-map-caption">Plano esquemático · sin escala ni ubicación en tiempo real.</p>
       </div>
       <a th:if="${meetingZone != null}" class="btn btn-outline-primary am-open-map" th:href="@{/events/{id}/map(id=${event.id},zone=${meetingZone.id},matchId=${match.id})}">Abrir mapa <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+      <a th:if="${match.floorplanId != null}" class="btn btn-outline-primary am-open-map" th:href="@{/matches/{id}/plan(id=${match.id})}" th:text="${match.floorplanX != null ? 'Ver mi punto en el plano' : 'Ver plano · Punto sin ubicar'}"></a>
+      <p th:if="${match.floorplanId == null and meetingZone == null}" class="am-word-help">Plano no disponible para este encuentro. Usa las indicaciones del punto.</p>
     </section>
     <section class="am-arrival" aria-labelledby="am-arrival-title" th:if="${!match.completionPending}">
       <h2 id="am-arrival-title" tabindex="-1" th:text="${match.arrived and match.otherArrived ? 'Ambos llegaron' : '¿Ya estás en el punto?'}"></h2>
