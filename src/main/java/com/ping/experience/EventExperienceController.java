@@ -26,7 +26,7 @@ public class EventExperienceController {
     @GetMapping("/me/event") public String myEvent(HttpSession session) {
         if (!(session.getAttribute("pingDemoParticipantId") instanceof Long self)) return "redirect:/events";
         var p = participants.get(self);
-        return "redirect:/events/" + p.eventId() + (EventExperienceCatalog.forEvent(p.eventName()) != null ? "/hub" : "");
+        return "redirect:/events/" + p.eventId() + (EventExperienceCatalog.forEvent(p.eventName()) != null ? "/hub" : "/plan");
     }
     @GetMapping("/events/{id}/hub") public String hub(@PathVariable long id, HttpSession session, Model model) {
         experience(id, model);
@@ -43,6 +43,10 @@ public class EventExperienceController {
     }
     @GetMapping("/events/{id}/map") public String map(@PathVariable long id, @RequestParam(required = false) String zone,
             @RequestParam(required = false) Long matchId, HttpSession session, Model model) {
+        if(matchId==null && events.get(id).getFloorplanId()!=null)return "redirect:/events/"+id+"/plan";
+        if(matchId!=null){long self=DemoSession.participantId(session);if(participants.get(self).eventId()!=id)throw new NotFoundException("Esta conexión pertenece a otro evento.");
+            var active=matches.get(matchId,self);if(active.status()==MatchStatus.ACTIVE && active.floorplanId()!=null)return "redirect:/matches/"+matchId+"/plan";
+        }
         var experience = experience(id, model);
         var selected = zone == null ? experience.zones().getFirst() : experience.zone(zone);
         if (selected == null) throw new NotFoundException("No encontramos esa zona. Vuelve al mapa del evento.");

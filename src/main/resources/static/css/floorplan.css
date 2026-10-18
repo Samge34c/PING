@@ -33,3 +33,6 @@
 .fp-selected h2 { font-size: 19px; margin-bottom: 8px; }
 .fp-selected p { font-size: 14px; line-height: 1.5; }
 .fp-back { display: inline-flex; min-height: 44px; align-items: center; margin-top: 16px; }
+.fp-browse { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; margin: 20px 0; }
+.fp-browse label { grid-column: 1/-1; margin: 0; }
+.fp-browse .btn { min-height: 44px; }

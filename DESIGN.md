@@ -86,3 +86,8 @@ Alta y edición reutilizan el mismo selector móvil: categorías visibles, dos c
 ## Plano configurable — DEC-046, organizador
 
 Superficie operativa en administración existente: seleccionar punto, tocar imagen y guardar; alternativa numérica0–1 con controles nativos. Preview real con nombre/dimensiones y errores recuperables; reemplazo en sección explícita que advierte recolocación. Visor compartido con zoom/centrar/reset y pan nativo táctil o mouse/teclado; un marcador seleccionado, ancla relativa a imagen y etiqueta1 fuera de los textos del plano. CSS/JS locales acotados, mismos tokens/Manrope/temas; sin portada ni dashboard nuevos. Plano de evidencia ficticio, no oficial SOFA.
+
+
+## Plano del participante — DEC-046
+
+Acceso compacto desde ACTIVE, sin incrustar otra imagen que desplace palabra/actividad/confirmación; vista operativa con nombre/indicaciones, marcador1 y retorno arriba/abajo. Mi evento usa el snapshot del ACTIVE propio; el mapa público general permite elegir puntos existentes. Sin imagen, texto útil y sin CTA de mapa ficticio; sin marcador, advertencia y centrar deshabilitado. Plano aportado conserva colores originales en ambos temas; controles/tipografía/retorno usan Festival Social.390 oscuro primero,360 claro y1440 examinados; zoom/pan/resize mantienen ancla. SOFA anterior sigue separado de los genéricos y de versiones nuevas.
