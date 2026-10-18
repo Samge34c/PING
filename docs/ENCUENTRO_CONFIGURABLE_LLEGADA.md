@@ -2,7 +2,7 @@
 
 ## Estado y recuperación
 
-**Bloque vigente: DEC-045, categorías y selección móvil**, rama `feature/interest-categories-mobile`, [PR39 en borrador](https://github.com/Samge34c/PING/pull/39), sobre552906a/PR38. Las secciones anteriores describen la cadena conservada. [Cierre y cómo retomar](#cierre-dec-045--unidad3).
+**Bloque vigente: DEC-046, plano configurable por evento**, rama `feature/event-floorplan-mobile`, [PR40 en borrador](https://github.com/Samge34c/PING/pull/40), sobre21ff7c9/PR39. La cadena anterior está conservada. [Persistencia, respaldo y Windows](#dec-046--persistencia-respaldo-y-windows).
 
 Actualizado17 octubre2026 Bogotá. Copia `/workspace/PING`, remoto `https://github.com/Samge34c/PING.git`. Recuperación verificada: PR36 en borrador, rama `feature/event-encounter-arrival`, último respaldo inicial `9d233b60ec2493f12403e4c0b6278792221fc571`; GitHub no tenía avances posteriores. Árbol inicial limpio, base `feature/connect-event-entry` @ `c288f778d8d7cdf72ec3abb4306473aa756b352b`. Cadena anterior conservada. Sin main, merge, force-push ni publicación pública.
 
@@ -172,3 +172,55 @@ Sustitución real durante ACTIVE: imagen nueva1000×700 y todas las posiciones v
 El harness llegó al último encuadre y falló por localizar a la vez option y h2 con el mismo nombre; se corrigió solo esa captura con #point-title y se contrastó el estado persistido, sin repetir altas/finalización. No se cambió producto para ocultar el fallo de selector. Capturas reales examinadas: [participante390](screenshots/event-floorplan/02-participant-390.png), [sin plano390](screenshots/event-floorplan/03-no-plan-390.png), [sin marcador390](screenshots/event-floorplan/04-no-marker-390.png), [360 claro](screenshots/event-floorplan/05-participant-360-light.png), después [escritorio1440](screenshots/event-floorplan/06-participant-desktop.png). Imagen y evento son ficticios; no se tocó el escenario demo SOFA existente.
 
 Estado al guardar unidad3: función integrada y recorrido representativo comprobado. Último remoto seguro antes de push0214e2c. Pendiente unidad4: revisión final de teclado/desktop y límites, documentación Windows/backup MySQL, verify general y contraste final de rama/PR; teléfono físico/Safari siguen fuera de esta emulación. Siguiente acción exacta: comprobar los bordes observados, ejecutar suite general una vez al cerrar y publicar el cuarto respaldo con evidencia y límites.
+
+
+### DEC-046 — persistencia, respaldo y Windows
+
+La aplicación guarda la imagen normalizada en `event_floorplan_images` (MEDIUMBLOB), separada de `event_floorplans` (metadatos) y `event_floorplan_positions` (ID real del punto/x/y). Eventos y matches guardan referencias y snapshots. No hay directorio de planos que configurar: sobreviven al reinicio de PING con el mismo MySQL. Listados/estados no consultan los bytes. Tope por versión4MiB; se conservan versiones anteriores sin purga automática para que los activos no pierdan recursos. Su espacio crece con las sustituciones; incluir todas las tablas en un respaldo consistente. No borrar versiones manualmente a partir del nombre de un archivo.
+
+**GitHub respalda código/migraciones/capturas ficticias, no los planos o datos subidos durante el uso.** Un clon nuevo no recupera esos datos. MySQL debe tener almacenamiento persistente y su propio respaldo; una base efímera de ensayo no es ese respaldo. No se suben imágenes privadas, dumps, contraseñas o cookies a Git. Las rutas de administración/eventos conservan su acceso académico existente: **no tienen autenticación nueva**. El plano de una misión exige su sesión para mostrarse integrado; los recursos de imagen/evento siguen el acceso público académico existente, no se afirman privados. Ninguna imagen muestra posiciones de personas.
+
+Ejemplo de respaldo Windows a una carpeta **fuera del clon**, adaptando host/puerto/usuario/base. `--password` solicita la contraseña en terminal; no escribirla en el comando/chat. `--hex-blob` incluye correctamente los planos y `--result-file` evita convertir el SQL binario por la redirección de PowerShell:
+
+```powershell
+New-Item -ItemType Directory -Force C:\PING-backups
+mysqldump --host=127.0.0.1 --port=3306 --user=TU_USUARIO --password --single-transaction --hex-blob --routines --triggers --result-file=C:\PING-backups\ping-respaldo.sql TU_BASE
+```
+
+Comprobar el código de salida y ensayar la restauración en **otra base vacía**, nunca sobrescribir la demo para probar. Restaurar el conjunto consistente, no solo los blobs: referencias/posiciones/snapshots deben corresponder a los mismos datos. Guardar ese respaldo con acceso apropiado a su contenido. La app no añade cuentas ni almacenamiento externo.
+
+Recuperar esta rama en Windows aunque el clon original usara `--single-branch`. Primero `git status --short` y conservar cambios locales. Los siguientes comandos no limpian ni reinician el repositorio:
+
+```powershell
+git remote set-branches --add origin feature/event-floorplan-mobile
+git fetch origin refs/heads/feature/event-floorplan-mobile:refs/remotes/origin/feature/event-floorplan-mobile
+git switch feature/event-floorplan-mobile
+git branch --set-upstream-to=origin/feature/event-floorplan-mobile
+git pull --ff-only origin feature/event-floorplan-mobile
+git rev-parse HEAD
+git ls-remote origin refs/heads/feature/event-floorplan-mobile
+.\mvnw.cmd verify
+```
+
+Si la rama local todavía no existe, Git la crea desde la referencia remota única al hacer switch; si pide selección explícita, usar `git switch --track origin/feature/event-floorplan-mobile`. Comparar HEAD con remoto/PR40. Usar JDK21 completo y la configuración MySQL privada existente (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`); Flyway añade V18 sin reescribir publicadas y Hibernate valida. Arranque local: `.\mvnw.cmd spring-boot:run`. El lector WebP3.12.0 se resuelve por Maven (licencia BSD3 incluida en META-INF/licenses del JAR), sin binario nativo o claves de mapas.
+
+Para ensayo desde teléfono, PING sigue escuchando127.0.0.1 por defecto. En una red local de prueba, configurar `PING_PUBLIC_BASE_URL` con la dirección LAN real de Windows y arrancar explícitamente con `--server.address=0.0.0.0`, por ejemplo `.\mvnw.cmd spring-boot:run "-Dspring-boot.run.arguments=--server.address=0.0.0.0"`; comprobar puerto/firewall de esa copia. Administración continúa sin autenticación. No se ha hecho una publicación pública ni se ha probado el teléfono físico en esta tarea.
+
+Recorrido para retomar: evento → Configurar plano y marcadores → imagen → seleccionar punto existente → tocar/ajustar0–1/guardar → abrir evento → dos entradas por código/QR → Conectar/aceptar ambos → Ver mi punto en el plano → volver/confirmar actividad. Reemplazar la imagen deja los puntos de la nueva versión sin ubicar, con avisos; activos conservan su versión. Sin nueva configuración, la guía SOFA anterior sigue disponible cuando corresponda.
+
+
+### DEC-046 unidad4 — cierre verificado
+
+Respaldos remotos contrastados antes de esta actualización: unidad1 **2c2d9eb01eaa45482f3c817882bfaf831ab396d5**, unidad2 **0214e2c532b6657bcd8f6c24e6cce7dde0227229**, unidad3 **83bbea03ccb0e15ccd4cb94d879b3256b64045d9**. El cuarto commit contiene este cierre/correcciones/evidencia; su SHA se contrasta tras push en la punta de feature/event-floorplan-mobile y PR40. No se adivina el hash del propio archivo.
+
+Comprobación general final: **218 pruebas,0 fallos/errores/omitidas, BUILD SUCCESS y JAR** con JDK21 completo y Wrapper `./mvnw -B -o -Dmaven.repo.local=/workspace/.m2/repository verify`. No hubo código posterior a esa ejecución; solo continuidad/README y encuadre de escritorio. Fuente y artefacto incluyen el lector WebP y licencia oficial BSD3 en META-INF/licenses, verificada byte a byte desde el tag upstream fijado. Sin cambios de stack, hooks ni skills versionadas. La suite general usa H2; se mantiene separada de la prueba MySQL8.4.11 V17→V18 real y del recorrido navegador/MySQL.
+
+Bordes finales: PNG con cabecera válida truncado rechazado y límite25MP detectado antes de decodificar; imagen inaccesible conserva indicaciones y oculta controles que no funcionan, también si el fallo llegó antes de inicializar JS. Ajustado borde del viewport para no añadir2px de scroll interno en zoom base. Navegador desktop real: flechas de teclado, arrastre de mouse y marcador alineado; al2× la imagen todavía cabía en el ancho de escritorio, así que se verificó desplazamiento horizontal al3×, sin alterar código para una expectativa errónea del ensayo. Gesto táctil con zoom base desplaza la página normalmente; el primer gesto de ensayo intentaba subir desde scroll0, se corrigió solo su dirección. Sin errores JS en estos controles finales.
+
+Arranque real del **JAR empaquetado** contra el mismo MySQL después de detener la app de ensayo: Hibernate/Flyway18 válidos, imagen original con SHA256 idéntico tras varios reinicios y coordenadas recolocadas0.7/0.3 de la nueva versión persistidas. Se dejó el fixture final con el esquema legible original mediante otra sustitución explícita, comprobando de nuevo posiciones vacías y recolocación; las3 versiones ficticias siguen accesibles, incluida la usada por el encuentro terminado. [Escritorio final](screenshots/event-floorplan/06-participant-desktop.png) muestra el visor público con punto seleccionado (no una ubicación de persona). El servidor de ensayo8088 quedó detenido; MySQL exclusivo permanece disponible y no es un respaldo de producción.
+
+Revisión visual conjunta: participante entiende qué punto es suyo por nombre/indicaciones y marcador1; controles y retorno son reconocibles, nombre/textos no dependen de las etiquetas pequeñas de la imagen; zoom permite leerlas. No se incrustó un plano nuevo en ACTIVE que desplace palabra/actividad/confirmación. Navegación inferior no bloquea controles al desplazarse; viewport360 claro muestra retorno completo sobre ella. Sin portada/decoración nueva, mismos temas/Manrope/Festival Social. Organizador selecciona un punto real del evento y dispone de alternativa numérica; sin plano o marcador el mensaje es explícito. Capturas390 principales y360 son del recorrido real, escritorio es la vista final del fixture; no representan teléfono físico o Safari.
+
+Límites pendientes: teléfono/cámara/Safari y ensayo Wi-Fi Windows con sus datos/configuración privada. Las sesiones HTTP existentes son volátiles al reiniciar; no se afirma recuperación de identidad/cuentas, fuera del alcance. Planos, posiciones y snapshots sí persisten en MySQL. No hay GPS, personas en el plano, servicios de pago, rutas automáticas, autenticación nueva, publicación pública, merge o cambios en main.
+
+Estado al preparar el cuarto respaldo: implementación, verificaciones y documentación completas; pendientes únicamente commit/push/contraste del propio cierre y actualización final de PR40. Tras publicarlo y comprobar árbol limpio, no queda código local pendiente de DEC-046. Si el entorno cae antes, remoto seguro83bbea03 y cambios exactos por git status; revisar diff, guardar y push normal, sin reset/clean/force-push. Próxima acción al retomar: actualizar esta rama mediante la guía Windows, respaldar MySQL real fuera del clon y probar carga/posición/recorrido desde teléfono; revisar PR40 sobre PR39, sin integrar automáticamente.

@@ -154,3 +154,10 @@ Continuidad: [encuentro configurable, llegada informativa y recompensas por even
 Rama `feature/interest-categories-mobile`, [PR39 en borrador](https://github.com/Samge34c/PING/pull/39), sobre `fix/event-journey-consistency`. V17 agrupa los8 intereses existentes sin cambiar sus IDs ni el matching. Administración académica en `/interests/categories`: nombre, orden, estado y asociación; sin categoría siguen en «Otros intereses». No añade autenticación.
 
 Alta y edición comparten categorías abiertas, selección táctil, resumen/contador y filtro que conserva elecciones; búsqueda local cuando el catálogo supera12 opciones. Las categorías inactivas impiden nuevas selecciones; las anteriores siguen en «Conservados» hasta retirarlas voluntariamente. Un borrador nuevo debe quitar las opciones que se desactivaron antes de finalizar. Evidencia, verificación MySQL y cómo retomar en [la continuidad](docs/ENCUENTRO_CONFIGURABLE_LLEGADA.md#bloque-actual-dec-045--categorías-de-intereses).
+
+
+## Plano por evento — DEC-046
+
+`feature/event-floorplan-mobile`, [PR40 en borrador](https://github.com/Samge34c/PING/pull/40), sobre PR39. Administración existente: `/events/{id}/floorplan` carga PNG/JPEG/WebP, conserva proporciones, valida contenido/tamaño/dimensiones y coloca puntos existentes por toque o coordenadas0–1. Sustitución explícita exige recolocar; no borra puntos ni versiones usadas por encuentros. V18 aditiva guarda metadatos/bytes separados en MySQL y referencia/posición al activar.
+
+Mi evento y ACTIVE abren la versión correcta con un marcador numerado, indicaciones, centrar/zoom/pan/reset y retorno. Sin imagen o posición, información útil sin GPS ni lugares inventados; SOFA anterior conserva su guía cuando corresponde. Imágenes subidas necesitan respaldo MySQL independiente de GitHub. [Recuperación Windows con single-branch y respaldo](docs/ENCUENTRO_CONFIGURABLE_LLEGADA.md#dec-046--persistencia-respaldo-y-windows). Administración académica sin autenticación nueva; lector WebP TwelveMonkeys3.12.0, BSD3 incluida en el JAR. Evidencia móvil en esa continuidad.

@@ -28,7 +28,7 @@
       const ratio = image.naturalHeight / image.naturalWidth;
       fitWidth = Math.min(viewport.clientWidth, 360 / ratio); fitHeight = fitWidth * ratio;
       canvas.style.width = `${fitWidth * zoom}px`; canvas.style.height = `${fitHeight * zoom}px`;
-      viewport.style.height = `${fitHeight}px`;
+      viewport.style.height = `${fitHeight + 2}px`;
       root.querySelector('[data-fp-scale]').textContent = `${Math.round(zoom * 100)} %`;
       root.querySelector('[data-fp-zoom="out"]').disabled = zoom <= 1;
       root.querySelector('[data-fp-zoom="in"]').disabled = zoom >= 4;
@@ -77,7 +77,8 @@
       new ResizeObserver(() => {if (viewport.clientWidth !== lastWidth) {lastWidth=viewport.clientWidth;layout();if(valid()&&zoom>1)center(x,y);}}).observe(viewport);
     };
     image.addEventListener('load', loaded);
-    image.addEventListener('error', () => {controls.hidden=true;viewport.hidden=true;root.querySelector('[data-fp-image-error]').hidden=false;});
-    if (image.complete) loaded();
+    const failed = () => {controls.hidden=true;viewport.hidden=true;root.querySelector('[data-fp-image-error]').hidden=false;};
+    image.addEventListener('error', failed);
+    if (image.complete) { if (image.naturalWidth) loaded(); else failed(); }
   });
 })();

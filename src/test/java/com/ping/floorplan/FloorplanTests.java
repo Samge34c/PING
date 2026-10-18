@@ -51,6 +51,11 @@ class FloorplanTests {
         for(String text:List.of("<svg xmlns='http://www.w3.org/2000/svg'/>","<html>Plano</html>","https://example.com/plano.png"))
             assertThatThrownBy(()->codec.decode(new MockMultipartFile("image","fake.png","image/png",text.getBytes()))).isInstanceOf(BusinessRuleException.class);
         assertThatThrownBy(()->codec.decode(image("gif",64,64))).isInstanceOf(BusinessRuleException.class);
+        byte[] truncated=Arrays.copyOf(image("png",64,64).getBytes(),32);
+        assertThatThrownBy(()->codec.decode(new MockMultipartFile("image","corrupt.png","image/png",truncated))).isInstanceOf(BusinessRuleException.class);
+        byte[] pixels=image("png",64,64).getBytes();java.nio.ByteBuffer.wrap(pixels,16,8).putInt(5000).putInt(5000);
+        var crc=new java.util.zip.CRC32();crc.update(pixels,12,17);java.nio.ByteBuffer.wrap(pixels,29,4).putInt((int)crc.getValue());
+        assertThatThrownBy(()->codec.decode(new MockMultipartFile("image","many-pixels.png","image/png",pixels))).isInstanceOf(BusinessRuleException.class);
         assertThatThrownBy(()->codec.decode(image("png",6001,32))).isInstanceOf(BusinessRuleException.class);
         assertThatThrownBy(()->codec.decode(new MockMultipartFile("image","large.png","image/png",new byte[FloorplanImageCodec.MAX_INPUT+1]))).isInstanceOf(BusinessRuleException.class);
         assertThat(plans.current(event)).isNull();
