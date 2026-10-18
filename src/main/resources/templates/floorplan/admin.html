@@ -1,0 +1,34 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Plano del evento')}"></head><body>
+<link rel="stylesheet" th:href="@{/css/floorplan.css}"><nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container ping-form-layout fp-page">
+<a th:href="@{/events/{id}(id=${event.id})}">← Gestionar evento</a><h1>Plano del evento</h1><p th:text="${event.name}"></p>
+<p th:if="${uploadError}" class="ping-notice" role="alert" th:text="${uploadError}"></p>
+<p th:if="${plan == null}" class="ping-notice">Aún no hay un plano cargado. Añade una imagen y después coloca los puntos de encuentro existentes.</p>
+<section th:if="${plan != null}">
+  <p class="fp-file"><strong th:text="${plan.filename}"></strong><span th:text="${plan.width + ' × ' + plan.height + ' px · ' + (plan.byteSize / 1024) + ' KiB guardados'}"></span></p>
+  <p class="ping-notice" th:if="${missingPoints > 0}" th:text="${missingPoints == 1 ? '1 punto sin ubicar en este plano. Conserva sus indicaciones.' : missingPoints + ' puntos sin ubicar en este plano. Conservan sus indicaciones.'}"></p>
+  <p th:if="${#lists.isEmpty(planPoints)}">Crea primero un punto en <a th:href="@{/events/{id}/encounters(id=${event.id})}">Puntos y actividades</a>. No se crean lugares a partir de la imagen.</p>
+  <div th:if="${#lists.isEmpty(planPoints)}"><div th:replace="~{floorplan/viewer :: viewer}"></div></div>
+  <form th:unless="${#lists.isEmpty(planPoints)}" method="post" th:action="@{/events/{id}/floorplan/position(id=${event.id})}" th:object="${positionForm}" data-floorplan-editor>
+    <input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" th:field="*{planId}"><input type="hidden" th:field="*{revision}">
+    <div th:if="${#fields.hasAnyErrors()}" class="ping-notice" role="alert"><p th:each="error : ${#fields.allErrors()}" th:text="${error}"></p><a th:href="@{/events/{id}/floorplan(id=${event.id})}">Recargar posiciones guardadas</a></div>
+    <label for="pointId" class="form-label">Punto de encuentro</label><select class="form-select" th:field="*{pointId}" required data-fp-point><option value="">Selecciona un punto existente</option><option th:each="p : ${planPoints}" th:value="${p.id}" th:attr="data-x=${p.x},data-y=${p.y},data-name=${p.name},data-directions=${p.directions},data-active=${p.active}" th:text="${p.name + (p.active ? ' · Activo' : ' · Inactivo') + (p.placed ? ' · Ubicado' : ' · Sin ubicar')}"></option></select>
+    <p class="fp-point-description" data-fp-description>El nombre, indicaciones y estado corresponden al punto seleccionado.</p>
+    <p class="fp-help">Toca el plano para colocar el punto seleccionado. Después guarda la posición.</p>
+    <div th:replace="~{floorplan/viewer :: viewer}"></div>
+    <fieldset class="fp-coordinate-fields"><legend>Ajustar sin arrastrar</legend><p>Coordenadas relativas: 0 es izquierda/arriba y 1 es derecha/abajo.</p><div><label for="x" class="form-label">Horizontal (0–1)</label><input class="form-control" type="number" th:field="*{x}" min="0" max="1" step="0.001" required></div><div><label for="y" class="form-label">Vertical (0–1)</label><input class="form-control" type="number" th:field="*{y}" min="0" max="1" step="0.001" required></div></fieldset>
+    <p data-fp-draft-status role="status" aria-live="polite">Elige un punto para revisar o ajustar su marcador.</p>
+    <div class="fp-actions"><button class="btn btn-primary">Guardar posición</button><button class="btn btn-outline-primary" th:formaction="@{/events/{id}/floorplan/remove(id=${event.id})}" formnovalidate>Quitar marcador</button></div>
+  </form>
+  <details class="fp-point-list"><summary>Revisar todos los puntos</summary><ul><li th:each="p : ${planPoints}"><strong th:text="${p.name}"></strong><span th:text="${(p.active ? ' · Activo' : ' · Inactivo') + (p.placed ? ' · Ubicado' : ' · Sin ubicar')}"></span><p th:text="${p.directions}"></p></li></ul></details>
+</section>
+<details class="fp-upload" th:open="${plan == null or uploadError != null}"><summary th:text="${plan == null ? 'Cargar plano' : 'Sustituir el plano'}"></summary>
+  <form method="post" enctype="multipart/form-data" th:action="@{/events/{id}/floorplan/image(id=${event.id})}">
+    <input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="expectedPlanId" th:value="${plan == null ? '' : plan.id}">
+    <label for="floorplan-image" class="form-label">Imagen PNG, JPEG o WebP</label><input class="form-control" id="floorplan-image" type="file" name="image" accept="image/png,image/jpeg,image/webp" required>
+    <p class="fp-help">Hasta 8 MiB, 6000 px por lado y 16 megapíxeles. Se guarda una versión proporcional de hasta 3200 px y 4 MiB. Comprueba que las etiquetas sigan legibles.</p>
+    <label th:if="${plan != null}" class="fp-replace"><input type="checkbox" name="replace" value="true" required>Confirmo sustituir la imagen y recolocar los puntos. Los encuentros activos conservarán su plano anterior.</label>
+    <button class="btn btn-primary" th:text="${plan == null ? 'Cargar plano' : 'Sustituir plano'}"></button>
+  </form>
+</details>
+<p class="fp-help">Administración académica con los permisos existentes. Los planos se guardan en MySQL y requieren su propio respaldo; GitHub conserva el código.</p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer><script th:src="@{/js/floorplan.js}" defer></script></body></html>

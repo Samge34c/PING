@@ -10,6 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice @Profile("!bootstrap")
 public class WebAdvice {
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public String uploadLimit(HttpServletRequest request,Model model,HttpServletResponse response) {
+        response.setStatus(413);
+        Object saved=request.getAttribute("floorplanBackUrl");
+        String back=saved instanceof String path ? path : request.getRequestURI().replaceFirst("/image$","");
+        model.addAttribute("backUrl",back.matches("/events/[0-9]+/floorplan") ? back : "/events");
+        return "floorplan/upload-error";
+    }
     @ModelAttribute public void privatePageCache(HttpServletRequest request, HttpServletResponse response) {
         if (request.getRequestURI().startsWith("/me") || request.getRequestURI().equals("/connect") || request.getRequestURI().startsWith("/matches") || request.getRequestURI().startsWith("/join")) {
             response.setHeader("Cache-Control", "no-store, private"); response.setHeader("Expires", "0");
