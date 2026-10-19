@@ -137,7 +137,7 @@ class FinalMvpTests {
         long m=complete(); String path="/matches/"+m;
         try(var browser=new TestBrowser(port)) {
             assertThat(browser.post(path+"/block",Map.of()).statusCode()).isEqualTo(403);
-            browser.get("/demo"); assertThat(browser.post(path+"/block",Map.of()).statusCode()).isEqualTo(409);
+            browser.get("/demo"); assertThat(browser.post(path+"/block",Map.of()).statusCode()).isEqualTo(401);
             browser.post("/demo",Map.of("participantId",""+a)); browser.get(path);
             assertThat(browser.post(path+"/report",Map.of("reason","INVALID")).statusCode()).isEqualTo(400);
             assertThat(browser.post(path+"/report",Map.of("reason","OTHER","comment","x".repeat(301))).statusCode()).isEqualTo(409);
@@ -165,7 +165,7 @@ class FinalMvpTests {
         try(var browser=new TestBrowser(port)) {
             var expired=browser.post("/events/"+event+"/close",Map.of());
             assertThat(expired.statusCode()).isEqualTo(403);
-            assertThat(expired.body()).contains("Vuelve a abrir el formulario", "No se guardaron cambios", "/css/brand.css", "/js/theme-init.js", "Volver a Mi Ping");
+            assertThat(expired.body()).contains("Vuelve a abrir el formulario", "No se guardaron cambios", "/css/brand.css", "/js/theme-init.js", "Entrar con el código del evento");
             assertThat(expired.body()).doesNotContain("Exception", "Hibernate", "stacktrace");
             assertThat(events.get(event).getStatus()).isEqualTo(EventStatus.OPEN);
         }
@@ -177,7 +177,7 @@ class FinalMvpTests {
             var invalid=browser.get("/admin?eventId=incorrecto");
             assertThat(unknown.statusCode()).isEqualTo(404); assertThat(wrongMethod.statusCode()).isEqualTo(405); assertThat(invalid.statusCode()).isEqualTo(400);
             for(var response:List.of(unknown,wrongMethod,invalid))
-                assertThat(response.body()).contains("/css/brand.css", "Volver a Ping").doesNotContain("Exception", "Hibernate", "stacktrace");
+                assertThat(response.body()).contains("/css/brand.css", "Volver al inicio").doesNotContain("Exception", "Hibernate", "stacktrace");
             assertThat(events.get(event).getStatus()).isEqualTo(EventStatus.OPEN);
         }
     }

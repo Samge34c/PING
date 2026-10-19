@@ -7,6 +7,11 @@
     const image = root.querySelector('[data-fp-image]');
     const marker = root.querySelector('[data-fp-marker]');
     const controls = root.querySelector('[data-fp-controls]');
+    const imageError = root.querySelector('[data-fp-image-error]');
+    const retry = root.querySelector('[data-fp-retry]');
+    const help = root.querySelector('[data-fp-status]');
+    const imageSource = new URL(image.src);
+    let retrying = false, retries = 0;
     const form = root.closest('[data-floorplan-editor]');
     const select = form?.querySelector('[data-fp-point]');
     const fieldX = form?.querySelector('[name="x"]');
@@ -73,11 +78,21 @@
     });
     let ready = false;
     const loaded = () => {
-      if (ready || !image.naturalWidth) return; ready = true; controls.hidden = false; layout();
+      if (ready || !image.naturalWidth) return; ready = true;
+      viewport.hidden=false; imageError.hidden=true; help.hidden=false; controls.hidden=false; root.removeAttribute('aria-busy'); layout();
+      if (retrying) { viewport.focus({preventScroll:true}); retrying=false; }
       new ResizeObserver(() => {if (viewport.clientWidth !== lastWidth) {lastWidth=viewport.clientWidth;layout();if(valid()&&zoom>1)center(x,y);}}).observe(viewport);
     };
     image.addEventListener('load', loaded);
-    const failed = () => {controls.hidden=true;viewport.hidden=true;root.querySelector('[data-fp-image-error]').hidden=false;};
+    const failed = () => {
+      ready=false; controls.hidden=true; viewport.hidden=true; help.hidden=true; imageError.hidden=false;
+      root.removeAttribute('aria-busy'); retry.disabled=false; retry.textContent='Volver a cargar plano'; retrying=false;
+    };
+    retry.addEventListener('click', () => {
+      retrying=true; retry.disabled=true; retry.textContent='Cargando…'; root.setAttribute('aria-busy','true');
+      // Retry only this same version. Numeric form drafts and mission snapshots stay intact.
+      const source=new URL(imageSource); source.searchParams.set('retry', String(++retries)); image.src=source.href;
+    });
     image.addEventListener('error', failed);
     if (image.complete) { if (image.naturalWidth) loaded(); else failed(); }
   });
