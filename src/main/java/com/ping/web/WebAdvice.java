@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice @Profile("!bootstrap")
 public class WebAdvice {
-    @ModelAttribute public void recovery(HttpServletRequest request, Model model) {
-        ErrorRecovery.configure(request, model, false);
-    }
     @ExceptionHandler(SessionRequiredException.class)
     public Object sessionRequired(SessionRequiredException error, HttpServletRequest request, Model model, HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-store, private");
@@ -35,7 +32,8 @@ public class WebAdvice {
         return "floorplan/upload-error";
     }
     @ModelAttribute public void privatePageCache(HttpServletRequest request, HttpServletResponse response) {
-        if (request.getRequestURI().startsWith("/me") || request.getRequestURI().equals("/connect") || request.getRequestURI().startsWith("/matches") || request.getRequestURI().startsWith("/join")) {
+        var session = request.getSession(false);
+        if ((session != null && session.getAttribute("pingDemoParticipantId") != null) || request.getRequestURI().startsWith("/me") || request.getRequestURI().equals("/connect") || request.getRequestURI().startsWith("/matches") || request.getRequestURI().startsWith("/join")) {
             response.setHeader("Cache-Control", "no-store, private"); response.setHeader("Expires", "0");
         }
     }
@@ -77,7 +75,7 @@ public class WebAdvice {
         }
         String reference = UUID.randomUUID().toString().substring(0, 8);
         org.slf4j.LoggerFactory.getLogger(WebAdvice.class).error("Error de Ping, referencia {}", reference, error);
-        response.setStatus(500); model.addAttribute("errorMessage", "No pudimos completar esta acción. Vuelve a Mi Ping y comprueba el estado. Referencia: " + reference); return errorView(request, model);
+        response.setStatus(500); model.addAttribute("errorMessage", "No pudimos completar esta acción. Comprueba el estado antes de repetirla. Referencia: " + reference); return errorView(request, model);
     }
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class) public String concurrentChange(HttpServletRequest request, Model model, HttpServletResponse response) {
         response.setStatus(409); model.addAttribute("errorMessage", "Los datos cambiaron. Recarga la página e inténtalo otra vez."); return errorView(request, model);

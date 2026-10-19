@@ -8,7 +8,7 @@
     <section class="am-recognition" aria-labelledby="am-word-title">
       <h2 id="am-word-title"><svg th:replace="~{fragments/layout :: icon('key')}"></svg>Su palabra de encuentro</h2>
       <p class="ping-word" th:text="${match.word}"></p>
-      <p class="am-word-help">Úsenla para reconocerse al llegar.</p>
+      <p class="am-word-help">Ambos ven esta misma palabra. Úsenla para reconocerse al llegar.</p>
       <div th:replace="~{experience/fragments :: recognition(${match.otherAlias})}"></div>
     </section>
     <section class="am-location" aria-labelledby="am-location-title">

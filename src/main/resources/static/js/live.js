@@ -22,6 +22,7 @@
   const sessionLost = () => {
     stopped = true; withdrawHint(); clearTimeout(timer);
     notice('Tu sesión ya no está disponible. Volver a entrar no recupera tu identidad ni tu saldo anterior.', '/join', 'Volver a entrar');
+    message?.querySelector('a')?.classList.add('btn', 'btn-primary');
     root.querySelectorAll('form[method="post"] button').forEach(button => { button.disabled = true; });
   };
   const refreshHint = async signal => {
