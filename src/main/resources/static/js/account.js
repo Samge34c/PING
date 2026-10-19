@@ -1,0 +1,1 @@
+document.querySelectorAll('[data-show-password]').forEach(b=>b.addEventListener('click',()=>{const input=document.getElementById(b.dataset.showPassword);const show=input.type==='password';input.type=show?'text':'password';b.textContent=show?'Ocultar':'Mostrar';b.setAttribute('aria-pressed',String(show));}));

@@ -1,5 +1,7 @@
 # Instrucciones para agentes de Ping
 
+Alcance vigente DEC-049, solicitud explícita de Samuel19 octubre2026: el paquete Work autoriza cuentas, permisos, verificación personal/QR y ambas llegadas antes de confirmar nuevos encuentros. Sustituye para esta evolución las exclusiones temporales de autenticación/llegada opcional de las instrucciones históricas siguientes; no atribuir aprobación a Julián. Preservar ACTIVE/Saga anteriores según política congelada. Especificación completa docs/work-handoff/ESPECIFICACION.md y continuidad única docs/ENCUENTRO_CONFIGURABLE_LLEGADA.md.
+
 GitHub contiene la memoria compartida del proyecto. No dependas del contexto privado de chats anteriores.
 
 ## Antes de modificar código

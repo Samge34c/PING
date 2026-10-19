@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @ControllerAdvice @Profile("!bootstrap")
 public class WebAdvice {
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public String forbidden(HttpServletRequest request,Model model,HttpServletResponse response){response.setStatus(403);model.addAttribute("errorTitle","Acceso restringido");model.addAttribute("errorMessage","No tienes permiso para esta acción. Entra con la cuenta autorizada para el evento.");return errorView(request,model);}
     @ExceptionHandler(SessionRequiredException.class)
     public Object sessionRequired(SessionRequiredException error, HttpServletRequest request, Model model, HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-store, private");

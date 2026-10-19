@@ -10,10 +10,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller @Profile("!bootstrap") @RequestMapping("/events")
 public class EventController {
+    private final com.ping.auth.AuthSupport auth;
     private final EventService service;
     private final EventEntryLinks links;
-    public EventController(EventService service, EventEntryLinks links) { this.service = service; this.links = links; }
-    @GetMapping public String list(Model model) { model.addAttribute("events", service.list()); return "events/list"; }
+    public EventController(EventService service, EventEntryLinks links,com.ping.auth.AuthSupport auth) { this.auth=auth; this.service = service; this.links = links; }
+    @GetMapping public String list(Model model) { model.addAttribute("events", service.list().stream().filter(e->auth.legacyFixture()||auth.canManage(e.getId())).toList()); return "events/list"; }
     @GetMapping("/new") public String createForm(Model model) {
         model.addAttribute("eventForm", new EventForm()); model.addAttribute("editing", false); return "events/form";
     }

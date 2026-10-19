@@ -1,5 +1,7 @@
 # Ping
 
+Estado vigente DEC-049: cuentas y permisos en modo normal. Consulta [configuración de cuentas, primer general, correo y OAuth](docs/ACCOUNTS_SETUP.md) y la [continuidad única](docs/ENCUENTRO_CONFIGURABLE_LLEGADA.md). Las secciones históricas de bootstrap/demo siguientes describen sus fases originales; ya no implican administración pública en modo normal.
+
 Proyecto académico de **Samuel Riveros y Julián Caicedo**. Ping conecta a dos asistentes de un evento según sus intereses y facilita una interacción breve y voluntaria.
 
 **Demo funcional en `feature/mvp-demo`, pendiente de merge:** eventos, participantes, intereses, matching, sesión demo, aceptación bilateral, encuentro/palabra/actividad, confirmación, +10 puntos y feedback opcional. [Guion y ejecución para mañana](docs/DEMO_INTELLIJ.md). Demo rápida: `/demo/prepare`; métricas por evento: `/admin`; comparación de paletas: `/demo/themes`.

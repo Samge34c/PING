@@ -9,10 +9,11 @@ import com.ping.web.NotFoundException;
 public class AdminController {
     private final com.ping.moderation.ModerationService moderation;
     private final com.ping.reward.RewardService rewards;
+    private final com.ping.auth.AuthSupport auth;
     private final AdminService service;
-    public AdminController(AdminService service, com.ping.moderation.ModerationService moderation, com.ping.reward.RewardService rewards) { this.service = service; this.moderation = moderation; this.rewards = rewards; }
+    public AdminController(AdminService service, com.ping.moderation.ModerationService moderation, com.ping.reward.RewardService rewards,com.ping.auth.AuthSupport auth) { this.auth=auth; this.service = service; this.moderation = moderation; this.rewards = rewards; }
     @GetMapping("/admin") public String dashboard(@RequestParam(required = false) Long eventId, Model model) {
-        var all = service.metrics();
+        var all = service.metrics().stream().filter(e->auth.legacyFixture()||auth.canManage(e.id())).toList();
         var selected = eventId == null ? all : all.stream().filter(e -> e.id() == eventId).toList();
         if (eventId != null && selected.isEmpty()) throw new NotFoundException("No encontramos ese evento. Vuelve al panel y selecciona uno registrado.");
         model.addAttribute("allEvents", all); model.addAttribute("selectedEventId", eventId);

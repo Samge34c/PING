@@ -1,0 +1,38 @@
+# Cuentas y permisos — DEC-049
+
+La aplicación normal requiere cuentas para participar y autorización por evento para administrar. Las cuentas PING son distintas del usuario técnico MySQL (`DB_USERNAME`): no introducir su contraseña en la pantalla de acceso de PING. Sin proveedor/correo configurado no se muestran botones sociales ni registro/recuperación funcionales ficticios. La cuenta general inicial se prepara exclusivamente mediante configuración privada local.
+
+## Primera cuenta general (una vez)
+
+JDK21/MySQL8.4, mismos DB_URL/DB_USERNAME/DB_PASSWORD existentes. Respaldar MySQL antes de migrar. Añadir `PING_BOOTSTRAP_EMAIL` y `PING_BOOTSTRAP_PASSWORD` a las variables privadas de la ejecución. Se exige correo nuevo y contraseña12–128 caracteres; no hay contraseña predeterminada ni promoción pública. La transacción consume auth_setup_state una sola vez, crea general verificado y registra BOOTSTRAP_GENERAL sin credenciales. Tras arrancar correctamente, retirar ambas variables y reiniciar. Volver a proporcionarlas no vuelve a crear ni promover cuentas. No usar correos/contraseñas de ejemplo como configuración real. Si la cuenta ya existe, no se promueve automáticamente.
+
+Entrar por /login?next=/organizer → crear evento/configurarlo. “Organizo un evento” no concede rol. /organizer/access permite al general asignar/revocar administradores de una cuenta ya registrada y un evento concreto. Revocación efectiva en la siguiente petición; auditoría por IDs/acción, sin códigos/correos. No hay endpoint para promover generales. Futuras promociones generales requieren una decisión/proceso privilegiado auditado, no SQL ad hoc silencioso.
+
+## Correo real o transporte de desarrollo controlado
+
+Variables Spring: `SPRING_MAIL_HOST`, `SPRING_MAIL_PORT`, `SPRING_MAIL_USERNAME`, `SPRING_MAIL_PASSWORD`; `SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true` cuando el servidor lo requiera. `PING_MAIL_FROM` remitente autorizado y `PING_PUBLIC_BASE_URL` origen absoluto accesible para los enlaces. STARTTLS enable/required verdaderos por defecto; usar el transporte autorizado por el propietario. No contratar servicios ni credenciales nuevas por defecto. Para un buzón aislado **solo loopback**, un ensayo puede pasar `--spring.mail.properties.mail.smtp.starttls.enable=false --spring.mail.properties.mail.smtp.starttls.required=false`; no usar ese override para SMTP remoto. No imprimir enlaces/tokens ni publicar el buzón en LAN/Internet.
+
+Registro: correo normalizado, contraseña y repetición, verificación de un solo uso24h. Cuenta no verificada no inicia sesión. Recuperación: respuesta común para correo existente/ausente, enlace30min de un solo uso; password reset incrementa auth_epoch y expira las sesiones previas. Token aleatorio256bits, solo SHA256 persistido. PBKDF2-HMAC-SHA256 mediante defaults Spring Security5.8 (310000iteraciones/sal16bytes); contraseñas12–128caracteres, gestores/pegar permitidos. Throttle durable: login10/cuenta y50/IP cada10min; registro5/IP15min; recuperación5/cuenta y10/IP15min, consumo20/IP15min. Sin bloqueo permanente ni log de secretos. Respuestas comunes no constituyen una defensa absoluta contra inferencia por tiempos de SMTP.
+
+## Google y Facebook (pendiente de configuración del propietario)
+
+`PING_OAUTH_ENABLED=true`; por proveedor: `PING_GOOGLE_CLIENT_ID`, `PING_GOOGLE_CLIENT_SECRET`, `PING_FACEBOOK_CLIENT_ID`, `PING_FACEBOOK_CLIENT_SECRET`. Solo pares completos crean un proveedor/botón. No hay valores versionados. Registrar redirects exactos `https://TU_ORIGEN/login/oauth2/code/google` y `https://TU_ORIGEN/login/oauth2/code/facebook`. Sustituir TU_ORIGEN en la consola del proveedor por el dominio HTTPS real de la instalación; localhost solo cuando el proveedor lo permita para desarrollo. Configuración/consentimiento/revisión de Facebook y Google corresponden al propietario. Configurar proxy de confianza si termina TLS delante de Spring, sin confiar en cabeceras forwarded de clientes arbitrarios.
+
+Spring Security AuthorizationCode/OIDC, state/nonce y renovación de sesión. Google pide openid/email/profile; Facebook email/public_profile. Identidad única provider+subject; nunca se fusiona por correo coincidente. Si ya existe ese correo, entrar con la cuenta y vincular desde /account mediante POST/CSRF y nuevo flujo del proveedor. Facebook sin prueba de correo requiere verificarlo mediante SMTP antes de entrar. Sin correo válido no se crea una cuenta. No usar fotos del proveedor: avatar preset propio. Destino de retorno se limita a rutas internas permitidas y conserva el borrador de evento en sesión.
+
+No hay OAuth real configurado en este entorno: probar pantalla de consentimiento, éxito, rechazo/cancelación y recuperación del contexto con credenciales del propietario sigue siendo un pendiente externo. Pruebas de adaptadores/servidor no equivalen a aprobación del proveedor.
+
+## Sesiones, demo y respaldo
+
+Sesión30min/HttpOnly/SameSite=Lax; fijación se mitiga con cambio de ID al autenticar. Logout POST/CSRF. En despliegue HTTPS configurar `SERVER_SERVLET_SESSION_COOKIE_SECURE=true`. HTTP por IP LAN permite navegación de prueba, no cámara ni garantías de transporte de producción. La sesión HTTP sigue siendo volátil al reiniciar: la cuenta recupera participación/saldo desde MySQL al volver a entrar, no se promete conservar cookies de sesión.
+
+Una cuenta tiene una participación por evento; no adopta por alias/ID recibido. Sesión invitada antigua válida puede vincular su participante tras autenticación y confirmación explícita. Un ID enviado por formulario no prueba posesión. Vinculación atómica, sin dos cuentas para el mismo participante ni fusión/borrado de saldos. Si ya hay otra participación de esa cuenta/evento, se rechaza sin mezclar.
+
+`PING_DEMO_ENABLED=false` por defecto. Activarla requiere además general autenticado; adopción solo de participantes sin cuenta del escenario demo explícito, nunca de cuentas reales. Preparación manual existente conserva sus datos. La fixture de pruebas legado está en src/test/java y no se empaqueta: no es un modo de ejecución normal ni un bypass instalable. Rutas administrativas antiguas, métricas, participantes, categorías, plano, recompensas y entrega están protegidas; participantes editan solo su identidad, admin de evento solo asignados, general todos. Datos/planos/cuentas/tokens hashed/auditoría viven en MySQL y requieren respaldo independiente de GitHub.
+
+
+### Buzón Windows sin proveedor externo (solo desarrollo)
+
+Con Python ya disponible, otra PowerShell: `py tools/dev-mailbox.py`. Escucha exclusivamente127.0.0.1:1025 y guarda .eml privados fuera del clon en la carpeta PING-dev-mailbox del usuario, sin envío externo ni impresión de tokens. Abrir esos mensajes en un lector local para seguir el enlace de verificación/recuperación. No adjuntar mensajes al chat, capturas ni Git. No es correo real enviado a Internet ni un servicio de producción.
+
+En la PowerShell de PING configurar `SPRING_MAIL_HOST=127.0.0.1`, `SPRING_MAIL_PORT=1025`, `PING_MAIL_FROM` con un remitente de prueba; mantener PING_PUBLIC_BASE_URL accesible y las variables MySQL privadas. Arrancar con los dos overrides STARTTLS de loopback descritos arriba. No introducir esas excepciones en application.properties. La cámara del teléfono sigue requiriendo HTTPS aunque el correo y la navegación LAN funcionen. CTRL+C detiene el buzón.

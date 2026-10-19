@@ -9,11 +9,14 @@ import java.util.List;
 
 @Service @Profile("!bootstrap")
 public class ParticipantEntryService {
+    private final com.ping.auth.AccountService accounts;
     private final ParticipantService participants;
     private final InterestService interests;
-    public ParticipantEntryService(ParticipantService participants, InterestService interests) {
+    public ParticipantEntryService(ParticipantService participants, InterestService interests,com.ping.auth.AccountService accounts) { this.accounts=accounts;
         this.participants = participants; this.interests = interests;
     }
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public long createForAccount(long account,String alias,Long eventId,List<Long> ids,Avatar avatar){accounts.lock(account);var old=accounts.participant(account,eventId);if(old.isPresent())return old.get();long id=create(alias,eventId,ids,avatar);accounts.bind(account,id,eventId);return id;}
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public long create(String alias,Long eventId,List<Long> ids,Avatar avatar){long id=create(alias,eventId,ids);participants.avatar(id,avatar);return id;}
     @Transactional(isolation = Isolation.READ_COMMITTED)

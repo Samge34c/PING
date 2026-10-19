@@ -19,6 +19,10 @@
         <java.version>21</java.version>
     </properties>
     <dependencies>
+        <!-- DEC-049: framework session authentication, provider flows and SMTP transport. -->
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-oauth2-client</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-mail</artifactId></dependency>
         <!-- Pure Java WebP decoding for organizer floorplans. Re-encoded locally. -->
         <dependency>
             <groupId>com.twelvemonkeys.imageio</groupId>

@@ -299,3 +299,8 @@ Categorías administrables de intereses para ordenar su selección móvil. Un in
 
 
 DEC-046 autoriza el plano de imagen configurable por evento, puntos existentes y snapshots al activar; persiste en MySQL separado de metadatos, sin GPS ni localización de personas. Sustituye la exclusión temporal de mapas configurables. Autorización explícita de Samuel18 octubre2026, sin atribuir aprobación a Julián.
+
+
+## Evolución vigente DEC-049 — Work R01–R12
+
+Solicitud explícita de Samuel19 octubre2026; no se atribuye aprobación a Julián. Cuentas/roles y verificación personal por código/QR ahora autorizados. Editor progresivo3/10/100, jerarquía editorial y avatar preset, entrega por recibo. Nuevos ACTIVE requieren ambas llegadas y verificaciones antes de confirmar; la regla opcional anterior se conserva solo para activos/Saga previos por versión de política, sin inventar historia ni cambiar recompensas. Sustituye las exclusiones temporales anteriores de estas funciones; resto de reglas/stack/snapshots intactos. Especificación completa en work-handoff/ESPECIFICACION.md; avances y pruebas actuales en la continuidad única.

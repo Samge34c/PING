@@ -10,9 +10,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller @Profile("!bootstrap") @RequestMapping("/participants")
 public class ParticipantController {
+    private final com.ping.auth.AuthSupport auth;
     private final ParticipantService service;
-    public ParticipantController(ParticipantService service) { this.service = service; }
-    @GetMapping public String list(Model model) { model.addAttribute("participants", service.list()); return "participants/list"; }
+    public ParticipantController(ParticipantService service,com.ping.auth.AuthSupport auth) { this.auth=auth; this.service = service; }
+    @GetMapping public String list(Model model) { model.addAttribute("participants", service.list().stream().filter(p->auth.legacyFixture()||auth.canManage(p.eventId())).toList()); return "participants/list"; }
     @GetMapping("/new") public String form(Model model) {
         model.addAttribute("participantForm", new ParticipantForm()); model.addAttribute("events", service.registrationEvents()); return "participants/form";
     }
