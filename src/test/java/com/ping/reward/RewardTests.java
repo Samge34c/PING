@@ -133,7 +133,7 @@ class RewardTests {
     }
     @Test void benefitWebRequiresSessionAndToken() throws Exception {
         try(var browser=new TestBrowser(port)) {
-            assertThat(browser.get("/me/benefits").statusCode()).isEqualTo(409);
+            assertThat(browser.get("/me/benefits").statusCode()).isEqualTo(401);
             assertThat(browser.post("/me/benefits",Map.of("benefitId",""+benefit,"requestKey",key())).statusCode()).isEqualTo(403);
             assertThat(claims.count()).isZero();
         }

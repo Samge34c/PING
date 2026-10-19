@@ -66,3 +66,5 @@ DEC-045 autoriza categorías y mejora del selector móvil de intereses: conserva
 
 
 DEC-046 autoriza el plano de imagen configurable por evento, puntos existentes y snapshots al activar; persiste en MySQL separado de metadatos, sin GPS ni localización de personas. Sustituye la exclusión temporal de mapas configurables. Autorización explícita de Samuel18 octubre2026, sin atribuir aprobación a Julián.
+
+DEC-047 autoriza recuperación y claridad de estados/envíos móviles, rendimiento observado y presentación pública genérica. Conserva composición aprobada, identidad por sesión, reglas y snapshots; sin cuentas ni funcionamiento offline. Evidencia actual y respaldos en el documento único de continuidad.

@@ -43,23 +43,47 @@
     if (form) { inlineEditor.replaceChildren(document.importNode(form, true)); decorateInterests(inlineEditor); updateInterestCount(inlineEditor.querySelector('form')); document.dispatchEvent(new CustomEvent('ping:interest-editor-ready', {detail:{form:inlineEditor.querySelector('form')}})); }
   }).catch(() => { /* El enlace al editor permanece disponible. */ });
   document.querySelectorAll('[data-demo-person]').forEach(button => button.addEventListener('click', () => { const select = document.querySelector('#participantId'); select.value = button.dataset.demoPerson; document.querySelectorAll('[data-demo-person]').forEach(b => b.setAttribute('aria-pressed', String(b === button))); select.focus(); }));
-  let searchTimer;
-  const resetForms = () => { clearTimeout(searchTimer); document.querySelectorAll('.is-submitting').forEach(form => { form.classList.remove('is-submitting'); delete form.dataset.submitting; delete form.dataset.searchReady; form.removeAttribute('aria-busy'); form.querySelectorAll('[aria-disabled]').forEach(btn => btn.removeAttribute('aria-disabled')); }); const overlay = document.querySelector('.ping-search-screen'); if (overlay) overlay.hidden = true; };
+  const pending = new Map();
+  const restore = form => {
+    clearTimeout(pending.get(form)); pending.delete(form);
+    form.classList.remove('is-submitting'); delete form.dataset.submitting; form.removeAttribute('aria-busy');
+    form.querySelectorAll('[data-submit-lock]').forEach(btn => { btn.removeAttribute('aria-disabled'); delete btn.dataset.submitLock; });
+    form.querySelector('[data-submit-status]')?.remove();
+  };
+  const feedback = (form, text, focus = false) => {
+    let status = form.querySelector('[data-submit-status]');
+    if (!status) { status = document.createElement('p'); status.dataset.submitStatus = ''; status.className = 'submit-status'; status.setAttribute('role','status'); status.tabIndex = -1; form.append(status); }
+    status.textContent = text;
+    if (focus) status.focus();
+    return status;
+  };
   document.addEventListener('submit', e => {
     if (e.defaultPrevented || !(e.target instanceof HTMLFormElement) || e.target.method.toLowerCase() !== 'post') return;
     const form = e.target;
-    if (form.dataset.submitting) { if (form.dataset.searchReady) { delete form.dataset.searchReady; return; } e.preventDefault(); return; }
-    form.dataset.submitting = 'true'; form.classList.add('is-submitting'); form.setAttribute('aria-busy', 'true');
-    // aria-disabled mantiene name/value del botón en el POST (feedback y entrega).
-    e.submitter?.setAttribute('aria-disabled', 'true');
-    if (form.matches('[data-search-form]')) {
+    if (form.dataset.submitting) { e.preventDefault(); return; }
+    if (!navigator.onLine) {
       e.preventDefault();
-      const overlay = document.querySelector('.ping-search-screen'); if (overlay) overlay.hidden = false;
-      searchTimer = setTimeout(() => { form.dataset.searchReady = 'true'; form.requestSubmit(e.submitter); }, 200);
+      feedback(form, 'Necesitas conexión para enviar. Tus datos siguen en este formulario; vuelve a intentarlo cuando tengas red.', true);
+      document.dispatchEvent(new Event('ping:form-restored')); return;
     }
+    form.dataset.submitting = 'true'; form.classList.add('is-submitting'); form.setAttribute('aria-busy','true');
+    // Keep original button labels and name/value in native POSTs (feedback/delivery).
+    form.querySelectorAll('button:not([type="button"]):not([type="reset"]),input[type="submit"]').forEach(btn => { btn.dataset.submitLock = ''; btn.setAttribute('aria-disabled','true'); });
+    feedback(form, 'Enviando…');
+    pending.set(form, setTimeout(() => {
+      const status = feedback(form, 'Está tardando. Puede haberse guardado: comprueba el estado antes de repetir la acción.');
+      const link = document.createElement('a');
+      link.href = location.pathname.startsWith('/join') ? location.pathname : location.pathname.startsWith('/matches/') ? location.pathname : location.pathname.startsWith('/me/benefits') ? '/me/benefits' : '/connect';
+      link.textContent = 'Comprobar estado'; status.append(' ',link);
+    }, 15000));
+    queueMicrotask(() => { if (e.defaultPrevented) { restore(form); document.dispatchEvent(new Event('ping:form-restored')); } });
   });
-  window.addEventListener('pagehide', () => clearTimeout(searchTimer));
-  window.addEventListener('pageshow', resetForms);
+  window.addEventListener('pagehide', () => { pending.forEach(clearTimeout); });
+  window.addEventListener('pageshow', () => {
+    document.querySelectorAll('form.is-submitting').forEach(restore);
+    document.querySelector('[data-error-summary]')?.focus();
+    document.querySelector('[aria-invalid="true"]')?.focus();
+  });
   const metricsUrl = document.querySelector('[data-event-metrics-url]');
   if (metricsUrl) fetch(metricsUrl.dataset.eventMetricsUrl, {credentials:'same-origin'}).then(r => { if (!r.ok) throw new Error(); return r.text(); }).then(html => {
     const metrics = new DOMParser().parseFromString(html, 'text/html');

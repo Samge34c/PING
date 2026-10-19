@@ -140,7 +140,7 @@ class DemoImprovementTests {
     @Test void liveStateReflectsOtherPersonsActionsAndHistoryIsPersonal() throws Exception {
         var s = preparation.prepare(); long a = id(s,"Samuel"), b = id(s,"Julián"); available(a,true); available(b,true);
         try(var browser = new TestBrowser(port); var anonymous = new TestBrowser(port)) {
-            assertThat(anonymous.get("/me/state").statusCode()).isEqualTo(409);
+            assertThat(anonymous.get("/me/state").statusCode()).isEqualTo(401);
             browser.get("/demo"); browser.post("/demo",Map.of("participantId",""+a));
             var initial = browser.get("/me/state"); assertThat(initial.headers().firstValue("Cache-Control")).contains("no-store");
             long match = matching.search(a); var offered = browser.get("/me/state"); assertThat(offered.body()).isNotEqualTo(initial.body());

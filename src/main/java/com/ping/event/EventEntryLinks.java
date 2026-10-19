@@ -27,6 +27,7 @@ public class EventEntryLinks {
             }
         }
     }
+    public String baseUrl() { return base.isEmpty() ? null : base; }
     public String link(Event event) { return base.isEmpty() ? null : base + "/join?code=" + event.getEntryCode(); }
     public byte[] qr(Event event) {
         String link = link(event);
