@@ -19,13 +19,15 @@ public class DemoController {
     private final MatchingService matching;
     private final MatchService matches;
     private final com.ping.event.EventService events;
-    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition, RecognitionHintService hints) {
+    private final com.ping.auth.AuthSupport auth;
+    private final org.springframework.jdbc.core.JdbcTemplate jdbc;
+    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc) { this.auth=auth;this.jdbc=jdbc;
         this.moderation = moderation; this.recognition = recognition; this.hints = hints;
         this.participants = participants; this.matching = matching; this.matches = matches; this.events = events;
     }
-    @GetMapping("/demo") public String select(@RequestParam(required = false) Long participantId, Model model) { model.addAttribute("selectedParticipantId", participantId); model.addAttribute("participants", participants.list()); return "demo/select"; }
+    @GetMapping("/demo") public String select(@RequestParam(required = false) Long participantId, Model model) { model.addAttribute("selectedParticipantId", participantId); model.addAttribute("participants", participants.list().stream().filter(p->auth.legacyFixture()||jdbc.queryForObject("select count(*) from demo_scenarios d where d.event_id=?",Integer.class,p.eventId())>0&&jdbc.queryForObject("select count(*) from account_participations where participant_id=?",Integer.class,p.id())==0).toList()); return "demo/select"; }
     @PostMapping("/demo") public String enter(@RequestParam long participantId, HttpSession session) {
-        participants.get(participantId); session.removeAttribute("pingEntryDraft"); session.removeAttribute("pingEntryMode"); session.setAttribute(SELECTED, participantId); return "redirect:/me";
+        participants.get(participantId); session.removeAttribute("pingEntryDraft"); session.removeAttribute("pingEntryMode"); session.setAttribute(SELECTED, participantId);session.setAttribute("pingEntryMode","demo"); return "redirect:/me";
     }
     @PostMapping("/demo/exit") public String exit(HttpSession session) { boolean ownEntry = "participant".equals(session.getAttribute("pingEntryMode")); session.removeAttribute(SELECTED); session.removeAttribute("pingEntryMode"); session.removeAttribute("pingEntryDraft"); return ownEntry ? "redirect:/join" : "redirect:/demo"; }
     private long self(HttpSession session) {

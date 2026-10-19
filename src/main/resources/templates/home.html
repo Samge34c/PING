@@ -21,7 +21,7 @@
   </ol>
 </section>
 <section class="hm-demo" aria-label="Accesos de la demo académica">
-  <div><svg th:replace="~{fragments/layout :: icon('bolt')}"></svg><p>¿Quieres probar antes?<span>Explora la demo académica con participantes de prueba.</span></p><a th:href="@{/demo}">Probar la demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
-  <nav th:if="${session.pingDemoParticipantId != null}" class="hm-session-tools" aria-label="Otros accesos"><a th:href="@{/demo}">Elegir participante demo</a><a th:href="@{/events}">Explorar eventos</a></nav>
+  <div><svg th:replace="~{fragments/layout :: icon('bolt')}"></svg><p>¿Quieres probar antes?<span>Explora la demo académica con participantes de prueba.</span></p><a th:if="${demoEnabled == true}" th:href="@{/demo}">Probar la demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
+  <nav th:if="${session.pingDemoParticipantId != null}" class="hm-session-tools" aria-label="Otros accesos"><a th:if="${demoEnabled == true}" th:href="@{/demo}">Elegir participante demo</a><a th:href="@{/events}">Explorar eventos</a></nav>
 </section>
-</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<p class="container"><a th:href="@{/login(next='/organizer')}">Organizo un evento</a> · <a th:href="@{/login}">Entrar a mi cuenta</a></p></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

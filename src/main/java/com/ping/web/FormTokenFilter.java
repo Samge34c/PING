@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-@Component @Profile("!bootstrap")
+@Component @org.springframework.core.annotation.Order(-110) @Profile("!bootstrap")
 public class FormTokenFilter extends OncePerRequestFilter {
     @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         if (!request.getMethod().equals("GET") && !request.getMethod().equals("HEAD") && !request.getMethod().equals("OPTIONS")) {

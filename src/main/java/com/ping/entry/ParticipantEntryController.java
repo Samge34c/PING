@@ -15,11 +15,12 @@ import java.util.*;
 @Controller @Profile("!bootstrap") @RequestMapping("/join")
 public class ParticipantEntryController {
     private static final String DRAFT = "pingEntryDraft";
+    private final com.ping.auth.AuthSupport auth;
     private final ParticipantService participants;
     private final InterestService interests;
     private final ParticipantEntryService entry;
     private final com.ping.event.EventService events;
-    public ParticipantEntryController(ParticipantService participants, InterestService interests, ParticipantEntryService entry, com.ping.event.EventService events) {
+    public ParticipantEntryController(ParticipantService participants, InterestService interests, ParticipantEntryService entry, com.ping.event.EventService events,com.ping.auth.AuthSupport auth) { this.auth=auth;
         this.participants = participants; this.interests = interests; this.entry = entry; this.events = events;
     }
     // The receipt and participant ID never come from request parameters.
@@ -32,7 +33,9 @@ public class ParticipantEntryController {
         if (draft == null) { draft = new Draft(); session.setAttribute(DRAFT, draft); }
         return draft;
     }
-    private boolean entered(HttpSession session) { return session.getAttribute("pingDemoParticipantId") instanceof Long; }
+    private boolean entered(HttpSession session) { return session.getAttribute("pingDemoParticipantId") instanceof Long id && (auth.legacyFixture()||auth.owned(id)||auth.demo()); }
+    private boolean needsLogin(){return !auth.legacyFixture()&&auth.current()==null;}
+    private String login(HttpSession session){session.setAttribute("pingReturnTo","/join");return "redirect:/login";}
     private String details(Draft d, Model model) {
         if (!model.containsAttribute("participantForm")) {
             ParticipantForm f = new ParticipantForm(); f.setAlias(d.alias); f.setEventId(d.eventId); model.addAttribute("participantForm", f);
@@ -47,11 +50,12 @@ public class ParticipantEntryController {
         model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision); model.addAttribute("hasEntryEvent", d.eventId != null);
         return "entry/event";
     }
-    private String chooseEvent(Draft d, String code, Model model, HttpServletResponse response) {
+    private String chooseEvent(Draft d, String code, Model model, HttpServletResponse response,HttpSession session) {
         try {
             var event = events.entryEvent(code);
             if (!event.getId().equals(d.eventId)) { d.eventId = event.getId(); d.revision++; }
-            return "redirect:/join";
+            if(!needsLogin()&&!auth.legacyFixture()){var previous=auth.existing(event.getId());if(previous.isPresent()){auth.entered(session,previous.get());return "redirect:/me";}session.removeAttribute("pingDemoParticipantId");session.removeAttribute("pingEntryMode");}
+            return needsLogin()?login(session):"redirect:/join";
         } catch (BusinessRuleException | NotFoundException error) {
             response.setStatus(error instanceof NotFoundException ? 404 : 409);
             model.addAttribute("entryError", error.getMessage()); model.addAttribute("code", code); return eventCode(d, model);
@@ -68,9 +72,11 @@ public class ParticipantEntryController {
     @GetMapping public String start(@RequestParam(required=false) String code, HttpSession session, Model model, HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-store, private");
         synchronized (session) {
-            if (entered(session)) return "redirect:/me";
-            Draft d = draft(session); if (code != null) return chooseEvent(d, code, model, response);
-            return details(d, model);
+            Draft d=draft(session);if(code!=null)return chooseEvent(d,code,model,response,session);
+            if(entered(session))return "redirect:/me";
+            if(d.eventId!=null&&needsLogin())return login(session);
+            if(d.eventId!=null&&!auth.legacyFixture()){var previous=auth.existing(d.eventId);if(previous.isPresent()){auth.entered(session,previous.get());return "redirect:/me";}}
+            return details(d,model);
         }
     }
     @GetMapping("/event") public String event(HttpSession session, Model model) {
@@ -82,7 +88,7 @@ public class ParticipantEntryController {
             if (entered(session)) return "redirect:/me";
             Draft d = draft(session);
             if (!current(d, draftKey, revision)) { response.setStatus(409); model.addAttribute("entryError", "La entrada cambió en otra pestaña. Revisa tu borrador antes de cambiar el evento."); return eventCode(d, model); }
-            return chooseEvent(d, code, model, response);
+            return chooseEvent(d, code, model, response,session);
         }
     }
     @PostMapping public String details(@Valid @ModelAttribute("participantForm") ParticipantForm form, BindingResult errors,
@@ -91,6 +97,7 @@ public class ParticipantEntryController {
             if (entered(session)) return "redirect:/me";
             Draft d = draft(session);
             if (!current(d, draftKey, revision)) { response.setStatus(409); model.asMap().remove("participantForm"); model.addAttribute("entryError", "Este paso cambió en otra pestaña. Revisa los datos guardados antes de continuar."); return details(d, model); }
+            if(needsLogin())return login(session);
             if (d.eventId == null) return "redirect:/join";
             if (!d.eventId.equals(form.getEventId())) { response.setStatus(409); model.asMap().remove("participantForm"); model.addAttribute("entryError", "Usa Cambiar evento para identificar otro evento con su código."); return details(d, model); }
             d.alias = form.getAlias();
@@ -106,6 +113,7 @@ public class ParticipantEntryController {
         response.setHeader("Cache-Control", "no-store, private");
         synchronized (session) {
             if (entered(session)) return "redirect:/me";
+            if(needsLogin())return login(session);
             Draft d = draft(session); if (d.eventId == null || d.alias.isBlank()) return "redirect:/join";
             return choices(d, model);
         }
@@ -114,6 +122,7 @@ public class ParticipantEntryController {
             @RequestParam(defaultValue="complete") String action, @RequestParam(required=false) List<Long> interestIds,
             HttpSession session, Model model, HttpServletResponse response) {
         synchronized (session) {
+            if(needsLogin())return login(session);
             Draft d = draft(session);
             if (!d.key.equals(draftKey)) { response.setStatus(409); model.addAttribute("entryError", "La entrada cambió. Revisa tu borrador."); return details(d, model); }
             if (d.receipt != null) return "redirect:/me";
@@ -130,7 +139,7 @@ public class ParticipantEntryController {
                 response.setStatus(409); model.addAttribute("entryError", "Uno de los intereses ya no está disponible. Revisa la selección; tu borrador se conserva."); return choices(d, model);
             }
             try {
-                long id = entry.create(d.alias, d.eventId, d.ids, d.avatar);
+                long id = auth.legacyFixture()?entry.create(d.alias,d.eventId,d.ids,d.avatar):entry.createForAccount(auth.require().id(),d.alias,d.eventId,d.ids,d.avatar);
                 d.receipt = id; // Set only after the transaction committed; serializes double taps/retries.
                 session.setAttribute("pingDemoParticipantId", id); session.setAttribute("pingEntryMode", "participant");
                 return "redirect:/me";

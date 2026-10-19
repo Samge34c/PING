@@ -28,6 +28,6 @@
 </div>
 <div class="mp-update"><p class="small text-secondary" data-live-status role="status" aria-live="polite">Tu estado se actualiza automáticamente.</p><a th:href="@{/me}" aria-label="Actualizar Mi Ping">Actualizar <svg th:replace="~{fragments/layout :: icon('waves')}"></svg></a></div>
 <p th:if="${experience != null}" class="mp-disclaimer">Simulación académica inspirada en SOFA · Sin vínculo oficial con el evento.</p>
-<nav class="mp-tools" aria-label="Mi espacio"><a th:href="@{/me/benefits}">Ver beneficios <svg th:replace="~{fragments/layout :: icon('gift')}"></svg></a><form method="post" th:action="@{/demo/exit}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-link" th:text="${session.pingEntryMode == 'participant' ? 'Salir de Mi Ping' : 'Cambiar participante demo'}"></button></form></nav>
+<nav class="mp-tools" aria-label="Mi espacio"><a th:href="@{/me/benefits}">Ver beneficios <svg th:replace="~{fragments/layout :: icon('gift')}"></svg></a><form method="post" th:action="${signedIn == true and session.pingEntryMode == 'participant'} ? @{/logout} : @{/demo/exit}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-link" th:text="${session.pingEntryMode == 'participant' ? 'Salir de Mi Ping' : 'Cambiar participante demo'}"></button></form></nav>
 
 </main><footer th:replace="~{fragments/layout :: footer}"></footer><script th:src="@{/js/live.js}" defer></script></body></html>
