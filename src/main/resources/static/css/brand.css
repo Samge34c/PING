@@ -457,8 +457,10 @@ small,.small {
   transition:background .16s,transform .16s,border-color .16s;
   white-space:normal
 }
+@media (hover:hover) and (pointer:fine) {
 .btn:hover {
   transform:translateY(-1px)
+}
 }
 .btn:active {
   transform:translateY(0)
@@ -482,9 +484,11 @@ small,.small {
   color:var(--ping-primary-text);
   border:1px solid var(--ping-primary)
 }
+@media (hover:hover) and (pointer:fine) {
 .btn-flow:hover {
   background:var(--ping-primary-hover);
   color:var(--ping-primary-text)
+}
 }
 .btn-outline-primary,.btn-outline-secondary,.btn-outline-danger {
   --bs-btn-color:var(--ping-text);
@@ -2319,7 +2323,9 @@ body.sofa-hub-page {padding:0;min-height:100dvh;background:var(--ping-bg)}
 .am-confirm-people li[data-confirmed="true"] strong {color:var(--ping-success)}
 .am-confirm-form {margin:0}
 .am-confirm-form>.btn {min-height:48px;width:100%;font-size:13px;line-height:1.45;white-space:normal;margin:0;padding:12px 16px;font-weight:800;background:var(--ping-yellow-light);border-color:var(--ping-yellow-light);color:var(--ping-accent-text)}
+@media (hover:hover) and (pointer:fine) {
 .am-confirm-form>.btn:hover {background:var(--ping-yellow);border-color:var(--ping-yellow);color:var(--ping-accent-text)}
+}
 .am-confirm-count {font-size:12px;color:var(--ping-muted);margin:11px 0 0;font-variant-numeric:tabular-nums}
 .am-points-note {font-size:12px;color:var(--ping-muted);margin:6px 0 0}
 .am-waiting {font-size:14px;line-height:1.5;padding:12px 14px;background:var(--ping-badge-bg);color:var(--ping-text);border-radius:6px;margin:0 0 14px;overflow-wrap:anywhere}
@@ -2383,11 +2389,15 @@ body.mi-ping-page {background-image:none}
 .mp-location .ping-icon {width:18px;height:18px;margin-top:3px;flex:none;color:#cfb1ff}
 .mp-next .btn {min-height:48px;line-height:1.4;font-size:14px;white-space:normal}
 .mp-next .mp-primary {display:flex;align-items:center;justify-content:center;gap:12px;width:100%;background:var(--ping-yellow-light);color:var(--ping-black);border:1px solid transparent;font-weight:800}
+@media (hover:hover) and (pointer:fine) {
 .mp-next .mp-primary:hover {background:#fff375;color:var(--ping-black)}
+}
 .mp-next .mp-primary:active {background:var(--ping-yellow);color:var(--ping-black)}
 .mp-next .mp-primary:focus-visible,.mp-next .mp-secondary:focus-visible,.mp-next .btn-link:focus-visible {outline:3px solid #cfb1ff;outline-offset:4px;box-shadow:none}
 .mp-next .mp-secondary {display:flex;justify-content:center;align-items:center;gap:10px;border:1px solid #826993;color:var(--ping-art-text)}
+@media (hover:hover) and (pointer:fine) {
 .mp-next .mp-secondary:hover {background:#352042;color:var(--ping-art-text)}
+}
 .mp-next .btn-link {color:#dcc6f3;text-decoration:underline;text-underline-offset:4px;padding:8px 4px}
 .mp-next .mp-availability {margin-top:8px;text-align:center}
 .mp-actions {display:flex;flex-direction:column;gap:10px}
@@ -2684,3 +2694,24 @@ body.participant-entry-page {padding-left:0}
 .pe-event strong,.cn-heading,.match-person h2,.am-person,.ping-empty p { overflow-wrap:anywhere; min-width:0; }
 @media(prefers-reduced-motion:reduce) { .is-submitting .btn[aria-disabled="true"]::after { animation:none; border-style:dotted; } }
 .am-person>div { min-width:0; }
+
+/* DEC-048: touch fields stay legible without disabling browser zoom. */
+@media (pointer: coarse) {
+  .form-control:not(.pe-code),.form-select { font-size:16px; }
+}
+/* Bootstrap's mouse-hover palette must not linger after a touch. */
+@media (hover:none), (pointer:coarse) {
+  .btn {
+    --bs-btn-hover-color:var(--bs-btn-color);
+    --bs-btn-hover-bg:var(--bs-btn-bg);
+    --bs-btn-hover-border-color:var(--bs-btn-border-color);
+  }
+}
+/* Pressure feedback complements native selection/focus and never signals success. */
+.btn,.interest-row-content { touch-action:manipulation; }
+@media (prefers-reduced-motion:no-preference) {
+  .btn { transition:background-color 120ms ease-out,transform 120ms cubic-bezier(.23,1,.32,1),border-color 120ms ease-out; }
+  .interest-row-content { transition:transform 120ms cubic-bezier(.23,1,.32,1); }
+  .btn:active:not(:disabled):not([aria-disabled="true"]):not(:focus-visible),
+  .interest-row input:not(:disabled)+.interest-row-content:active { transform:scale(.97); }
+}
