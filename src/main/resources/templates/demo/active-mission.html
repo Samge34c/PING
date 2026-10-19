@@ -40,7 +40,7 @@
         <li><span>Tú</span><strong th:text="${match.arrived ? 'Ya llegaste' : 'Sin registrar'}"></strong></li>
         <li><span th:text="${match.otherAlias}"></span><strong th:text="${match.otherArrived ? 'Ya llegó' : 'Sin registrar'}"></strong></li>
       </ul>
-      <form th:if="${!match.arrived}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-primary">Ya llegué</button></form>
+      <form th:if="${!match.arrived}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-arrive-action" class="btn btn-primary">Ya llegué</button></form>
       <p role="status" th:if="${match.arrived and !match.otherArrived}" th:text="${'Tu llegada está guardada. ' + match.otherAlias + ' aún no registró la suya.'}"></p>
       <p class="small text-secondary" th:text="${'Llegada opcional e informativa. No da puntos ni es necesaria para confirmar la actividad.'}"></p>
     </section>
@@ -56,7 +56,7 @@
       <p class="am-waiting" th:if="${match.confirmed and !match.completionPending}" role="status" th:text="${'Tú ya confirmaste. Esperando a ' + match.otherAlias + '…'}"></p>
       <p class="am-waiting" th:if="${match.otherConfirmed and !match.confirmed}" th:text="${match.otherAlias + ' ya confirmó. Falta tu confirmación.'}"></p>
       <form th:if="${!match.confirmed or match.completionPending}" class="am-confirm-form" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}">
-        <input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-primary" th:text="${match.completionPending ? 'Reintentar finalización' : 'Confirmar encuentro y actividad'}"></button>
+        <input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-primary" th:text="${match.completionPending ? 'Reintentar finalización' : 'Confirmar encuentro y actividad'}"></button>
       </form>
       <p class="am-confirm-count" th:text="${'Confirmaciones: ' + ((match.confirmed ? 1 : 0) + (match.otherConfirmed ? 1 : 0)) + ' de 2'}"></p>
       <p class="am-points-note"><span th:text="${'+' + match.rewardPoints + ' puntos para cada persona al finalizar la confirmación de ambos.'}"></span></p>

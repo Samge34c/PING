@@ -91,3 +91,7 @@ Superficie operativa en administración existente: seleccionar punto, tocar imag
 ## Plano del participante — DEC-046
 
 Acceso compacto desde ACTIVE, sin incrustar otra imagen que desplace palabra/actividad/confirmación; vista operativa con nombre/indicaciones, marcador1 y retorno arriba/abajo. Mi evento usa el snapshot del ACTIVE propio; el mapa público general permite elegir puntos existentes. Sin imagen, texto útil y sin CTA de mapa ficticio; sin marcador, advertencia y centrar deshabilitado. Plano aportado conserva colores originales en ambos temas; controles/tipografía/retorno usan Festival Social.390 oscuro primero,360 claro y1440 examinados; zoom/pan/resize mantienen ancla. SOFA anterior sigue separado de los genéricos y de versiones nuevas.
+
+## Interacción móvil — DEC-048
+
+Misma composición Festival Social. Hover de los botones afectados depende de hover/fine; presión120ms, scale.97 y cubic-bezier(.23,1,.32,1), sin retrasar acciones. Etiquetas usan una marca local de presión que se cancela al desplazar; selección nativa, teclado sin transición y reduced-motion estático. Campos de texto táctiles16px, código18px conservado. Reload automático de misma fase recupera foco por ID sin forzar scroll; sin foco heredado al cambiar de fase ni nueva celebración del resultado. No se cambian plano, áreas seguras o navegación.

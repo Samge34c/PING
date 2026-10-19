@@ -5,6 +5,27 @@
   let pendingUpdate = false, lastRevision = root.dataset.recognitionRevision || '';
   const message = document.querySelector('[data-live-status]');
   const normalMessage = message?.cloneNode(true);
+  // Presentation only: no field contents, hints or identity are retained here.
+  const focusKey = 'ping-live-focus';
+  const rememberFocus = nextPhase => {
+    const active = document.activeElement;
+    if (nextPhase !== root.dataset.livePhase || !active?.id || !root.contains(active)) return;
+    const fallback = active.closest('section[aria-labelledby]')?.getAttribute('aria-labelledby');
+    try { sessionStorage.setItem(focusKey, JSON.stringify({path:location.pathname, id:active.id, fallback, at:Date.now()})); } catch (_) { }
+  };
+  window.addEventListener('pageshow', event => {
+    if (event.persisted) return; // Keep native Back/Forward focus and scroll.
+    try {
+      const raw = sessionStorage.getItem(focusKey); sessionStorage.removeItem(focusKey);
+      if (!raw || performance.getEntriesByType('navigation')[0]?.type !== 'reload') return;
+      const saved = JSON.parse(raw);
+      if (saved.path !== location.pathname || Date.now() - saved.at > 15000) return;
+      requestAnimationFrame(() => {
+        const target = document.getElementById(saved.id) || document.getElementById(saved.fallback);
+        if (target && root.contains(target) && !target.disabled) target.focus({preventScroll:true});
+      });
+    } catch (_) { /* Storage unavailable: native navigation remains usable. */ }
+  });
   const schedule = () => {
     clearTimeout(timer);
     if (!stopped && !submitting && document.visibilityState === 'visible') timer = setTimeout(check, 5000);
@@ -51,7 +72,7 @@
       if (stopped) return;
       if (state.signature !== root.dataset.pingLive) {
         if (editorBusy()) { pendingUpdate = true; notice('El encuentro cambió. Tu borrador sigue intacto; guarda o cancela para actualizar la pantalla.'); }
-        else { location.reload(); return; }
+        else { rememberFocus(state.matchStatus); location.reload(); return; }
       } else if (normalMessage && message) {
         message.replaceChildren(...[...normalMessage.childNodes].map(node => node.cloneNode(true)));
       }

@@ -9,6 +9,25 @@
     const filter = root.querySelector('[data-interest-filter]');
     const search = root.querySelector('[data-interest-search]');
     const rows = [...root.querySelectorAll('[data-interest-name]')];
+    // Touch browsers do not consistently expose :active on labels. Visual feedback only;
+    // the native label/checkbox still owns selection and scrolling is never prevented.
+    let pressed, pointer;
+    const release = event => {
+      if (event?.pointerId != null && event.pointerId !== pointer) return;
+      if (pressed) delete pressed.dataset.pressed;
+      pressed = null; pointer = null;
+    };
+    root.addEventListener('pointerdown', event => {
+      if (!event.isPrimary || pressed) return;
+      const label = event.target.closest('.interest-row-content');
+      if (!label?.control || label.control.disabled) return;
+      pressed = label; pointer = event.pointerId; label.dataset.pressed = 'true';
+    }, {passive:true});
+    window.addEventListener('pointerup', release, {passive:true});
+    window.addEventListener('pointercancel', release, {passive:true});
+    window.addEventListener('blur', release);
+    window.addEventListener('pagehide', release);
+    document.addEventListener('scroll', release, {capture:true,passive:true});
     const updateSelection = () => {
       const selected = rows.filter(row => row.querySelector('input').checked);
       root.querySelector('[data-selection-summary]').textContent = selected.length ? selected.map(row => row.dataset.interestName).join(' · ') : 'Aún ninguno. Puedes continuar sin elegir.';

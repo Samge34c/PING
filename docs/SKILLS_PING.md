@@ -111,3 +111,17 @@ No confundir este probe con una auditoría visual. No ejecutar `context`, `detec
 - No se ejecutan las 140 pruebas Java históricamente aprobadas: esta tarea no cambia código. Esos resultados corresponden a la base `e2759ae`, no a una ejecución nueva de hoy.
 - No se modifica backend, MySQL, datos, recursos ni demo; no se reconstruye Festival Social ni se recupera el ZIP de la tarea anterior.
 - La selección expresa instrucciones disponibles, no herramientas nuevas: las skills de texto no añaden APIs, navegador, descarga de archivos, subagentes o acceso entre tareas.
+
+
+## Ampliación móvil DEC-048 — 19 octubre2026
+
+Las seis skills anteriores conservan sus hashes, licencias y configuración. Ahora hay **ocho** skills de proyecto, incluidas únicamente estas dos instrucciones de [emilkowalski/skills](https://github.com/emilkowalski/skills/tree/2d228630ba1446365f614a108cb8252f1feda202), revisión2d228630ba1446365f614a108cb8252f1feda202, licencia MIT/Emil Kowalski2026 copiada de la raíz oficial en cada carpeta:
+
+| Skill local | Usar para | Límites de integración |
+|---|---|---|
+| [mobile-native](../.agents/skills/mobile-native/SKILL.md) | Hover según capacidad, inputs, pulsación, viewport/áreas seguras de una superficie móvil concreta. | Sin sniffing, bloqueo de zoom o gestos globales. PING conserva scroll nativo; no aplicar el reset de overscroll por rutina. Emulación no demuestra Safari/teclado/notch reales. |
+| [emil-design-eng](../.agents/skills/emil-design-eng/SKILL.md) | Respuesta inmediata de componentes y movimiento breve que comunique estado. | Antes/después en tabla y evidencia de movimiento. CSS nativo; ejemplos React/Motion/Expo no autorizan dependencias. Sin efectos decorativos globales ni acciones retrasadas. |
+
+Ambas contienen solo SKILL.md y LICENSE, sin ejecutables ni dependencias necesarias. No se instaló el resto de la colección ni se ejecutó instalador global. Manifiesto conserva fuente, commit y SHA-256. Lectura manual completa: executor skills.list continúa sin enumerarlas; esto no bloquea su uso.
+
+Selección del bloque: ping-efficient-work organiza, mobile-native/emil-design-eng guían las correcciones concretas; Impeccable revisa capturas manualmente (motor no disponible, hooks siguen desactivados); verification exige evidencia. Redesign y UX se reservan a dudas estructurales/de interacción; systematic-debugging se activa solo ante fallos reproducibles. No se encadenan otras skills citadas. La exigencia upstream de hardware se registra como pendiente real de iPhone, según el alcance explícito del usuario; no se declara esa prueba por usar Chromium táctil.
