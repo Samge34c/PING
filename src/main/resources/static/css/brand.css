@@ -2677,3 +2677,9 @@ body.participant-entry-page {padding-left:0}
 .ic-admin-list { padding-left: 22px; margin-top: 24px; }
 .ic-admin-list li { margin-bottom: 24px; }
 @media (min-width: 992px) { .ic-actions { bottom: 0; } .ic-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .ic-controls > div + div { margin-top: 0; } .ic-filter-status { grid-column: 1 / -1; } }
+
+/* DEC-047: feedback stays beside the action; long real names may wrap. */
+.submit-status { margin:12px 0; font-size:14px; line-height:1.5; color:var(--ping-text); }
+.submit-status a { display:inline-flex; align-items:center; min-height:44px; }
+.pe-event strong,.cn-heading,.match-person h2,.am-person,.ping-empty p { overflow-wrap:anywhere; min-width:0; }
+@media(prefers-reduced-motion:reduce) { .is-submitting .btn[aria-disabled="true"]::after { animation:none; border-style:dotted; } }

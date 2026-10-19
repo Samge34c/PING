@@ -85,18 +85,18 @@ public class ParticipantEntryController {
         }
     }
     @PostMapping public String details(@Valid @ModelAttribute("participantForm") ParticipantForm form, BindingResult errors,
-            @RequestParam String draftKey, @RequestParam long revision, @RequestParam(defaultValue="interests") String action, HttpSession session, Model model) {
+            @RequestParam String draftKey, @RequestParam long revision, @RequestParam(defaultValue="interests") String action, HttpSession session, Model model, HttpServletResponse response) {
         synchronized (session) {
             if (entered(session)) return "redirect:/me";
             Draft d = draft(session);
-            if (!current(d, draftKey, revision)) { model.asMap().remove("participantForm"); model.addAttribute("entryError", "Este paso cambió en otra pestaña. Revisa los datos guardados antes de continuar."); return details(d, model); }
+            if (!current(d, draftKey, revision)) { response.setStatus(409); model.asMap().remove("participantForm"); model.addAttribute("entryError", "Este paso cambió en otra pestaña. Revisa los datos guardados antes de continuar."); return details(d, model); }
             if (d.eventId == null) return "redirect:/join";
-            if (!d.eventId.equals(form.getEventId())) { model.asMap().remove("participantForm"); model.addAttribute("entryError", "Usa Cambiar evento para identificar otro evento con su código."); return details(d, model); }
+            if (!d.eventId.equals(form.getEventId())) { response.setStatus(409); model.asMap().remove("participantForm"); model.addAttribute("entryError", "Usa Cambiar evento para identificar otro evento con su código."); return details(d, model); }
             d.alias = form.getAlias();
             if (action.equals("changeEvent")) { d.revision++; return "redirect:/join/event"; }
-            if (!action.equals("interests")) { model.addAttribute("entryError", "Usa los botones de esta entrada para continuar."); return details(d, model); }
+            if (!action.equals("interests")) { response.setStatus(400); model.addAttribute("entryError", "Usa los botones de esta entrada para continuar."); return details(d, model); }
             if (!errors.hasFieldErrors("eventId") && participants.registrationEvents().stream().noneMatch(e -> e.getId().equals(d.eventId))) errors.rejectValue("eventId", "closed", "Elige un evento abierto para continuar.");
-            if (errors.hasErrors()) return details(d, model);
+            if (errors.hasErrors()) { response.setStatus(400); return details(d, model); }
             d.revision++; return "redirect:/join/interests";
         }
     }

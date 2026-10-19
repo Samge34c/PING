@@ -30,6 +30,7 @@
     queueMicrotask(() => { input.value = initial; update(); editor.open = false; document.dispatchEvent(new Event('ping:hint-editor-settled')); });
   });
   window.addEventListener('pageshow', () => { saving = false; update(); });
+  document.addEventListener('ping:form-restored', () => { saving = false; update(); });
   editor.addEventListener('toggle', () => { if (editor.open) update(); });
   document.querySelector('[data-error-summary]')?.focus();
   update();
