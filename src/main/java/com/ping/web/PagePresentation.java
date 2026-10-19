@@ -15,7 +15,7 @@ public class PagePresentation {
     @ModelAttribute public void present(HttpServletRequest request, Model model) {
         String path = request.getRequestURI();
         boolean publicPage = request.getMethod().equals("GET") && java.util.Set.of("/", "/join", "/join/event", "/events").contains(path);
-        String base = links.baseUrl();
+        String base = links.baseUrl();model.addAttribute("scannerBase",base);
         model.addAttribute("publicMetadata", new PublicMetadata(publicPage, publicPage && base != null ? base + path : null,
                 publicPage && base != null ? base + "/img/ping-social.png" : null));
         model.addAttribute("interestSelectorScript", path.equals("/join/interests") || path.matches("/participants/[0-9]+/interests") || path.equals("/interests"));

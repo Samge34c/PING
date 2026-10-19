@@ -19,9 +19,10 @@ public class DemoController {
     private final MatchingService matching;
     private final MatchService matches;
     private final com.ping.event.EventService events;
+    private final com.ping.verification.CredentialService credentials;
     private final com.ping.auth.AuthSupport auth;
     private final org.springframework.jdbc.core.JdbcTemplate jdbc;
-    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc) { this.auth=auth;this.jdbc=jdbc;
+    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc,com.ping.verification.CredentialService credentials) { this.credentials=credentials;this.auth=auth;this.jdbc=jdbc;
         this.moderation = moderation; this.recognition = recognition; this.hints = hints;
         this.participants = participants; this.matching = matching; this.matches = matches; this.events = events;
     }
@@ -37,8 +38,9 @@ public class DemoController {
         return history.stream().filter(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE).findFirst().orElse(null);
     }
     private String signature(ParticipantView p, com.ping.event.EventStatus status, MatchView m) {
-        return p.id() + ":" + p.version() + ":" + status.name() + ":" + (m == null ? "waiting" : m.id() + ":" + m.status().name() + ":" + m.accepted() + ":" + m.otherAccepted() + ":" + m.confirmed() + ":" + m.otherConfirmed() + ":" + m.completionPending() + ":" + m.arrived() + ":" + m.otherArrived());
+        return p.id() + ":" + p.version() + ":" + status.name() + ":" + (m == null ? "waiting" : m.id() + ":" + m.status().name() + ":" + m.accepted() + ":" + m.otherAccepted() + ":" + m.confirmed() + ":" + m.otherConfirmed() + ":" + m.completionPending() + ":" + m.arrived() + ":" + m.otherArrived()+":"+m.verified()+":"+m.otherVerified()+":"+ownCodeRevision(p.id(),m));
     }
+    private long ownCodeRevision(long self,MatchView m){return m.status()==MatchStatus.ACTIVE&&m.verificationPolicy()>=2?jdbc.queryForObject("select count(*) from purpose_credentials where purpose='ENCOUNTER' and context_id=? and issuer_id=?",Long.class,m.id(),self):0;}
     @GetMapping("/me/state") @ResponseBody
     public java.util.Map<String, String> state(HttpSession session, jakarta.servlet.http.HttpServletResponse response) {
         long id = self(session); var p = participants.get(id); response.setHeader("Cache-Control", "no-store");
@@ -86,6 +88,9 @@ public class DemoController {
         model.addAttribute("moderation", moderation.status(id, selected));
         model.addAttribute("reportReasons", com.ping.moderation.ReportReason.values());
         var match = matches.get(id, selected); model.addAttribute("match", match);
+        model.addAttribute("credentialRequestKey",java.util.UUID.randomUUID().toString());
+        var personalCode=com.ping.verification.CredentialSession.get(session,"ENCOUNTER",id,selected);
+        model.addAttribute("myCredential",personalCode!=null&&credentials.valid(personalCode)&&!match.otherVerified()?personalCode:null);
         model.addAttribute("recognitionHintForm", hints.ownForm(selected));
         if (match.status() == MatchStatus.ACTIVE) { var authorized = hints.other(id, selected); if (authorized != null) model.addAttribute("recognitionRevision", authorized.revision()); }
         var experience = com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName());

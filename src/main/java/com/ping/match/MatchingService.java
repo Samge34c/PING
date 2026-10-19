@@ -30,13 +30,14 @@ public class MatchingService {
         if (!self.isAvailable()) throw new BusinessRuleException("Marca tu disponibilidad antes de buscar.");
         Set<Long> occupied = new HashSet<>(reservations.findAll().stream().map(MatchReservation::getParticipantId).toList());
         Set<Long> blocked = new HashSet<>(blocks.excluded(participantId));
+        Set<Long> completed=new HashSet<>(matches.successfulPartners(event.getId(),participantId));
         List<Match> rejected = matches.findByEventIdAndStatus(event.getId(), MatchStatus.CANCELLED);
         Participant candidate = participants.findByEventIdAndAvailableTrue(event.getId()).stream()
-            .filter(p -> !p.getId().equals(self.getId()) && !occupied.contains(p.getId()) && !blocked.contains(p.getId()))
+            .filter(p -> !p.getId().equals(self.getId()) && !occupied.contains(p.getId()) && !blocked.contains(p.getId()) && !completed.contains(p.getId()))
             .filter(p -> rejected.stream().noneMatch(m -> m.excludedPair(self, p)))
             .sorted(Comparator.<Participant>comparingInt(p -> common(self, p).size()).reversed()
                 .thenComparing(Participant::getWaitingSince).thenComparing(Participant::getId))
-            .findFirst().orElseThrow(() -> new BusinessRuleException("No hay personas disponibles para una nueva propuesta. Puedes volver a buscar más tarde."));
+            .findFirst().orElseThrow(() -> new BusinessRuleException("Por ahora no hay nuevas personas disponibles. Puedes volver a buscar más tarde."));
         Match match = matches.saveAndFlush(new Match(event, self, candidate, String.join(" · ", common(self, candidate)), names(self), names(candidate)));
         reservations.saveAllAndFlush(List.of(new MatchReservation(self.getId(), match), new MatchReservation(candidate.getId(), match)));
         return match.getId();

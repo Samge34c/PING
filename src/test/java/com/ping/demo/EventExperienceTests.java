@@ -230,6 +230,9 @@ class EventExperienceTests {
             assertThat(browser.get("/matches/"+m).body()).contains("Primer Ping", "SOFA Link", "Hay una promoción demo disponible");
             for(int i=0;i<2;i++) assertThat(browser.get("/me/benefits").body()).contains("PING-GAMER", "No consume puntos.", "NO VÁLIDO FUERA DE ESTA DEMO");
             assertThat(participants.get(a).points()).isEqualTo(10); assertThat(claims.count()).isZero();
+            // A completed pair cannot repeat: the next badge comes from a distinct partner.
+            var newPartner=preparation.prepare().people().stream().filter(p->p.id()!=a&&p.id()!=b).findFirst().orElseThrow();
+            AvailabilityForm off=new AvailabilityForm();off.setVersion(participants.get(b).version());off.setAvailable(false);participants.setAvailability(b,off);b=newPartner.id();available(b);
             complete(); var history = matches.list(a);
             assertThat(EventExperienceCatalog.badges(history)).containsExactly("Primer Ping","Conector","SOFA Link");
             long benefit = rewards.catalog().getFirst().getId(); String key = UUID.randomUUID().toString();

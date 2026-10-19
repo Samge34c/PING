@@ -17,9 +17,9 @@ public class Match {
     private boolean firstAccepted, secondAccepted, firstConfirmed, secondConfirmed;
     @Column(nullable = false) private Instant firstWait;
     @Column(nullable = false) private Instant secondWait;
-    @Column(nullable = false, length = 700) private String commonInterests;
-    @Column(nullable = false, length = 700) private String firstInterests;
-    @Column(nullable = false, length = 700) private String secondInterests;
+    @Column(nullable = false, columnDefinition = "TEXT") private String commonInterests;
+    @Column(nullable = false, columnDefinition = "TEXT") private String firstInterests;
+    @Column(nullable = false, columnDefinition = "TEXT") private String secondInterests;
     @Column(length = 160) private String meetingPoint;
     @Column(nullable=false) private int rewardPoints=10;
     public int getRewardPoints(){return rewardPoints;}
@@ -45,6 +45,13 @@ public class Match {
     public boolean arrived(long id) { return first.getId() == id ? firstArrived : secondArrived; }
     public boolean bothArrived() { return firstArrived && secondArrived; }
     void arrive(long id) { if (first.getId() == id) firstArrived = true; else secondArrived = true; }
+    @Column(nullable=false) private int verificationPolicy=1;
+    @Column(nullable=false) private boolean firstVerified,secondVerified;
+    public int getVerificationPolicy(){return verificationPolicy;}
+    public boolean verified(long id){return first.getId()==id?firstVerified:secondVerified;}
+    public boolean bothVerified(){return firstVerified&&secondVerified;}
+    public void verifiedBy(long id){if(!owns(id))throw new IllegalArgumentException("Not a member");if(first.getId()==id)firstVerified=true;else secondVerified=true;}
+    void policy(int value){if(value!=1&&value!=2)throw new IllegalArgumentException("Unknown policy");verificationPolicy=value;arrivalRequired=value>=2;}
     @Version private long version;
     protected Match() { }
     Match(Event event, Participant first, Participant second, String common, String firstInterests, String secondInterests) {
@@ -79,7 +86,7 @@ public class Match {
     public boolean confirmed(long id) { return first.getId() == id ? firstConfirmed : secondConfirmed; }
     void accept(long id) { if (first.getId() == id) firstAccepted = true; else secondAccepted = true; }
     boolean bothAccepted() { return firstAccepted && secondAccepted; }
-    void confirm(long id) { if (first.getId() == id) firstConfirmed = true; else secondConfirmed = true; }
+    void confirm(long id) { if(verificationPolicy>=2&&(!bothArrived()||!bothVerified()))throw new com.ping.web.BusinessRuleException("Primero registren ambas llegadas y verifiquen sus códigos personales."); if (first.getId() == id) firstConfirmed = true; else secondConfirmed = true; }
     boolean bothConfirmed() { return firstConfirmed && secondConfirmed; }
     void activate(ActivityCatalog.Encounter encounter) {
         arrivalRequired = false;

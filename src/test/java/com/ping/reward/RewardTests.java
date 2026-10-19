@@ -24,6 +24,7 @@ class RewardTests {
     @Autowired ParticipantService participants;
     @Autowired MatchingService matching;
     @Autowired MatchService matches;
+    @Autowired MatchRepository matchRecords;
     @Autowired MatchCompletionSagaSteps steps;
     @Autowired MatchCompletionSaga saga;
     @Autowired JdbcTemplate sql;
@@ -37,10 +38,16 @@ class RewardTests {
         var s=preparation.prepare(); event=s.eventId(); a=s.people().get(0).id(); b=s.people().get(1).id();
         benefit=rewards.catalog().getFirst().getId();
         for(long id:new long[]{a,b}) { AvailabilityForm f=new AvailabilityForm(); f.setAvailable(true); f.setVersion(participants.get(id).version()); participants.setAvailability(id,f); }
-        complete(); complete();
+        complete();
+        // Distinct partner fixtures: a successful pair no longer repeats in this event.
+        available(b,false);var other=new ParticipantForm();other.setAlias("Otra persona ficticia");other.setEventId(event);other.setAvailable(true);b=participants.create(other).id();
+        complete();
+        sql.update("update participants set points=20 where id=?",b); // Independent balance fixture for benefit/Saga tests.
+
         assertThat(participants.get(a).points()).isEqualTo(20);
     }
-    long active() { long m=matching.search(a); matches.accept(m,a); matches.accept(m,b); matches.arrive(m,a); matches.arrive(m,b); return m; }
+    void available(long id,boolean value){var f=new AvailabilityForm();f.setAvailable(value);f.setVersion(participants.get(id).version());participants.setAvailability(id,f);}
+    long active() { if(matchRecords.successfulPartners(event,a).contains(b)){available(b,false);var f=new ParticipantForm();f.setAlias("Otro encuentro "+UUID.randomUUID());f.setEventId(event);f.setAvailable(true);b=participants.create(f).id();sql.update("update participants set points=20 where id=?",b);}long m=matching.search(a); matches.accept(m,a); matches.accept(m,b); matches.arrive(m,a); matches.arrive(m,b); return m; }
     void complete() { long m=active(); matches.confirm(m,a); matches.confirm(m,b); }
     String key() { return UUID.randomUUID().toString(); }
     @Test void exactBalanceClaimIsIdempotentAndDoesNotAlterIssuedPointsOrHistory() {
@@ -125,7 +132,7 @@ class RewardTests {
             assertThat(browser.post("/me/benefits",form).statusCode()).isEqualTo(302); browser.post("/me/benefits",form);
             assertThat(participants.get(a).points()).isZero(); assertThat(participants.get(b).points()).isEqualTo(20);
             long claim=rewards.personal(a).getFirst().id();
-            assertThat(browser.get("/admin?eventId="+event).body()).contains("Snack del evento", "Marcar entregado", "Puntos emitidos");
+            assertThat(browser.get("/admin?eventId="+event).body()).contains("Snack del evento", "Validar código para entregar", "Puntos emitidos");
             assertThat(browser.post("/admin/claims/"+claim,Map.of("status","DELIVERED")).statusCode()).isEqualTo(302);
             assertThat(browser.get("/me/benefits").body()).contains("Entregado");
             assertThat(browser.post("/admin/claims/"+claim,Map.of("status","INVALID")).statusCode()).isEqualTo(400);

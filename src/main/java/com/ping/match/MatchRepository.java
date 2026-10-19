@@ -15,5 +15,7 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     List<Total> eventTotals();
     @EntityGraph(attributePaths = {"first", "second", "event"})
     List<Match> findByEventIdOrderByIdDesc(long eventId);
+    @Query("select case when m.first.id=:self then m.second.id else m.first.id end from Match m where m.event.id=:event and m.status=com.ping.match.MatchStatus.COMPLETED and(m.first.id=:self or m.second.id=:self)")
+    List<Long> successfulPartners(@Param("event")long event,@Param("self")long self);
     long countByStatus(MatchStatus status);
 }

@@ -70,7 +70,9 @@ class SofaDemoTests {
         service.confirm(match, b); service.confirm(match, b); service.confirm(match, a);
         assertThat(service.get(match, a).status()).isEqualTo(MatchStatus.COMPLETED);
         assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(b).points()).isEqualTo(10);
-        long next = matching.search(a); service.accept(next, a); service.accept(next, b);
+        assertThatThrownBy(()->matching.search(a)).isInstanceOf(com.ping.web.BusinessRuleException.class);
+        long c=person(event,"Tercera persona",interest);
+        long next = matching.search(a); service.accept(next, a); service.accept(next, c);
         assertThat(service.get(next, a).word()).startsWith(prefix + "-").isNotEqualTo(first.word());
         assertThat(matches.count()).isEqualTo(2);
     }

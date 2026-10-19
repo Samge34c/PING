@@ -30,7 +30,7 @@
     clearTimeout(timer);
     if (!stopped && !submitting && document.visibilityState === 'visible') timer = setTimeout(check, 5000);
   };
-  const editorBusy = () => window.PingHintEditor?.isDirty() || window.PingHintEditor?.isSaving();
+  const editorBusy = () => window.PingHintEditor?.isDirty() || window.PingHintEditor?.isSaving() || !!root.querySelector('[data-credential-dirty="true"],[data-scanner-running="true"]');
   const notice = (text, url, label) => {
     if (!message) return;
     message.replaceChildren(document.createTextNode(text));
@@ -42,7 +42,9 @@
   };
   const sessionLost = () => {
     stopped = true; withdrawHint(); clearTimeout(timer);
-    notice('Tu sesión ya no está disponible. Volver a entrar no recupera tu identidad ni tu saldo anterior.', '/join', 'Volver a entrar');
+    notice('Tu sesión ya no está disponible. Entra a tu cuenta para recuperar las participaciones vinculadas.', '/login', 'Entrar a mi cuenta');
+    document.dispatchEvent(new Event('ping:session-lost'));
+    root.querySelectorAll('[data-private-credential]').forEach(el=>{el.removeAttribute('src');el.textContent='';el.hidden=true;});
     message?.querySelector('a')?.classList.add('btn', 'btn-primary');
     root.querySelectorAll('form[method="post"] button').forEach(button => { button.disabled = true; });
   };
@@ -84,7 +86,8 @@
     if (!event.defaultPrevented) { submitting = true; clearTimeout(timer); controller?.abort(); }
   });
   document.addEventListener('ping:form-restored', () => { submitting = false; check(); });
-  document.addEventListener('ping:hint-editor-settled', () => { if (pendingUpdate) location.reload(); else { submitting = false; check(); } });
+  const settled=()=>{if(pendingUpdate&&!editorBusy())location.reload();else{submitting=false;check();}};
+  document.addEventListener('ping:hint-editor-settled',settled);document.addEventListener('ping:credential-settled',settled);
   window.addEventListener('pagehide', () => { clearTimeout(timer); controller?.abort(); });
   window.addEventListener('pageshow', event => { if (event.persisted) { submitting = false; stopped = false; withdrawHint(); lastRevision = ''; check(); } });
   document.addEventListener('visibilitychange', () => { clearTimeout(timer); if (document.visibilityState === 'visible') check(); });

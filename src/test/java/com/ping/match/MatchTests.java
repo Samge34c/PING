@@ -119,16 +119,17 @@ class MatchTests {
         var after = service.get(id, pair[0]); assertThat(after.word()).isEqualTo(before.word());
         assertThat(after.meetingPoint()).isEqualTo("Entrada principal"); assertThat(after.commonInterests()).isEqualTo("Videojuegos");
     }
-    @Test void bothConfirmAndRetriesRewardOnlyOnceAndAllowAnotherSearch() {
+    @Test void bothConfirmAndRetriesRewardOnlyOnceAndSuccessfulPairDoesNotRepeat() {
         long[] pair = pair(); long id = activate(pair);
         service.confirm(id, pair[0]); service.confirm(id, pair[0]);
         assertThat(service.get(id, pair[0]).status()).isEqualTo(MatchStatus.ACTIVE); assertThat(participants.get(pair[0]).points()).isZero();
         service.confirm(id, pair[1]); service.confirm(id, pair[1]); service.confirm(id, pair[0]);
         assertThat(service.get(id, pair[0]).status()).isEqualTo(MatchStatus.COMPLETED);
         assertThat(participants.get(pair[0]).points()).isEqualTo(10); assertThat(participants.get(pair[1]).points()).isEqualTo(10);
-        assertThat(reservations.count()).isZero(); long next = activate(pair);
-        assertThat(next).isNotEqualTo(id); service.confirm(next, pair[0]); service.confirm(next, pair[1]);
-        assertThat(participants.get(pair[0]).points()).isEqualTo(20);
+        assertThat(reservations.count()).isZero();
+        assertThatThrownBy(()->matching.search(pair[0])).isInstanceOf(BusinessRuleException.class);
+        assertThatThrownBy(()->matching.search(pair[1])).isInstanceOf(BusinessRuleException.class);
+        assertThat(participants.get(pair[0]).points()).isEqualTo(10);
     }
     @Test void rejectReleasesBothAndDoesNotImmediatelyRepeatPair() {
         long[] pair = pair(); long id = matching.search(pair[0]); service.accept(id, pair[0]); service.cancel(id, pair[1]); service.cancel(id, pair[1]);
