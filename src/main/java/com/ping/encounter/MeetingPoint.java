@@ -5,6 +5,8 @@ public class MeetingPoint {
  @Id @GeneratedValue(strategy=GenerationType.IDENTITY) private Long id;
  @Column(nullable=false) private long eventId;
  @Column(nullable=false) private boolean active=true;
+ @Column(nullable=false) private boolean archived;
+ public boolean isArchived(){return archived;} void archive(){archived=true;active=false;}
  @Version private long version;
  protected MeetingPoint(){}
  MeetingPoint(long eventId){this.eventId=eventId;}

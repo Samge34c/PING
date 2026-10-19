@@ -28,6 +28,9 @@
     window.addEventListener('blur', release);
     window.addEventListener('pagehide', release);
     document.addEventListener('scroll', release, {capture:true,passive:true});
+    const taxonomy=root.querySelector('[data-taxonomy]');let currentNode=null;
+    const nodes=taxonomy?[...taxonomy.querySelectorAll('[data-node-key]')]:[];
+    if(taxonomy){taxonomy.hidden=false;filter.closest('div').hidden=true;nodes.forEach(b=>b.addEventListener('click',()=>{currentNode=b.dataset.nodeKey;filter.value='all';if(search)search.value='';applyFilter();}));taxonomy.querySelector('[data-taxonomy-back]').onclick=()=>{currentNode=nodes.find(b=>b.dataset.nodeKey===currentNode)?.dataset.nodeParent||null;if(search)search.value='';applyFilter();};}
     const updateSelection = () => {
       const selected = rows.filter(row => row.querySelector('input').checked);
       root.querySelector('[data-selection-summary]').textContent = selected.length ? selected.map(row => row.dataset.interestName).join(' · ') : 'Aún ninguno. Puedes continuar sin elegir.';
@@ -38,15 +41,20 @@
       const query = normalize(search?.value || '');
       let visible = 0;
       groups.forEach(group => {
+        group.querySelector('legend').hidden=!!taxonomy&&filter.value==='all'&&group.dataset.interestGroup!=='retained';
         let matches = 0;
         group.querySelectorAll('[data-interest-name]').forEach(row => {
-          row.hidden = !normalize(row.dataset.interestName).includes(query);
+          const memberships=(row.dataset.interestNodes||'').split('|');
+          const descendant=key=>key===currentNode || nodes.find(b=>b.dataset.nodeKey===key)?.dataset.nodeParent===currentNode;
+          row.hidden = !normalize(row.dataset.interestName).includes(query) || (!!taxonomy&&!query&&filter.value==='all'&&(!currentNode||!memberships.some(descendant)));
+
           if (!row.hidden) matches++;
         });
         group.hidden = (filter.value !== 'all' && filter.value !== group.dataset.interestGroup) || matches === 0;
         if (!group.hidden) visible += matches;
       });
-      root.querySelector('[data-interest-empty]').hidden = visible !== 0;
+      if(taxonomy){nodes.forEach(b=>b.hidden=!!query||(b.dataset.nodeParent||null)!==currentNode);taxonomy.querySelector('[data-taxonomy-heading]').textContent=query?'Resultados':nodes.find(b=>b.dataset.nodeKey===currentNode)?.dataset.nodeLabel||'Explora tus mundos';taxonomy.querySelector('[data-taxonomy-back]').hidden=!currentNode&&!query;}
+      root.querySelector('[data-interest-empty]').hidden = visible !== 0 || (!!taxonomy&&!query&&nodes.some(b=>!b.hidden));
       root.querySelector('[data-filter-status]').textContent = query || filter.value !== 'all' ? visible + ' opciones visibles. Tus elecciones se conservan.' : '';
       // Hiding rows never disables, removes or resets their native checkboxes.
     };
@@ -59,7 +67,7 @@
         applyFilter();
       }
     });
-    root.querySelector('[data-clear-filter]').addEventListener('click', () => { filter.value = 'all'; if (search) search.value = ''; applyFilter(); filter.focus(); });
+    root.querySelector('[data-clear-filter]').addEventListener('click', () => { currentNode=null; filter.value = 'all'; if (search) search.value = ''; applyFilter(); filter.focus(); });
     form.addEventListener('change', event => { if (event.target.matches('input[name="interestIds"]')) updateSelection(); });
     updateSelection(); applyFilter();
   };

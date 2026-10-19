@@ -38,8 +38,9 @@ class InterestTests {
         InterestSelectionForm form = service.selection(participantId); form.setInterestIds(ids); return form;
     }
     @Test void demoCatalogIsSeededAndExplicitlyMarked() {
-        assertThat(service.catalog()).hasSize(8).allMatch(Interest::isDemo);
-        assertThat(service.catalog().stream().map(Interest::getName)).containsExactlyInAnyOrder("Videojuegos", "Música", "Cine", "Deportes", "Tecnología", "Anime", "Viajes", "Fotografía");
+        assertThat(service.catalog().stream().filter(Interest::isDemo)).hasSize(8);
+        assertThat(service.catalog()).hasSize(264);
+        assertThat(service.catalog().stream().filter(Interest::isDemo).map(Interest::getName)).containsExactlyInAnyOrder("Videojuegos", "Música", "Cine", "Deportes", "Tecnología", "Anime", "Viajes", "Fotografía");
     }
     @Test void selectionPersistsAsManyToManyAndIsVisibleInParticipant() {
         var participant = participant();

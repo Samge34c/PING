@@ -1,5 +1,7 @@
 # Contexto compartido para IA — Ping
 
+**Actualización vigente DEC-049:** paquete Work19 octubre2026, R01–R12 autorizados por Samuel: cuentas/roles, editor3/10/100, catálogo jerárquico, avatar, dos llegadas y verificación personal antes de confirmar nuevos encuentros, scanner con propósitos y entrega autorizada. Sustituye exclusiones antiguas sin cambiar ACTIVE/Saga históricos. Base8c94cd7/PR42, rama feature/work-functional-evolution; continuidad única ENCUENTRO_CONFIGURABLE_LLEGADA.md y especificación en work-handoff/. Sin aprobación atribuida a Julián.
+
 **Estado:** PREDEV v1.1 más decisiones registradas; MVP y demo SOFA en `feature/final-mvp` (PR #23), pendiente de revisión/merge. **Equipo:** Samuel Riveros y Julián Caicedo. **Objetivo:** MVP universitario funcional y defendible ante un profesor, sin operación comercial compleja.
 
 ## Qué es y cómo funciona

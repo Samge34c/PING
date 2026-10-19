@@ -29,7 +29,7 @@ public class Event {
     void changeMeetingPoint(String value) { meetingPoint = value; }
     @Column(name = "meeting_points", nullable = false, length = 4000)
     private String meetingPoints = "";
-    @Column(name = "encounter_words", nullable = false, length = 2000)
+    @Column(name = "encounter_words", nullable = false, length = 5000)
     private String encounterWords = "";
     @Column(name = "encounter_activities", nullable = false, columnDefinition = "TEXT")
     private String encounterActivities = "";
@@ -47,6 +47,12 @@ public class Event {
     @Column(length=36) private String floorplanId;
     public String getFloorplanId(){return floorplanId;}
     public void useFloorplan(String id){floorplanId=id;}
+    @Column(nullable=false,length=160) private String deliveryName="";
+    @Column(nullable=false,length=500) private String deliveryDirections="";
+    public String getDeliveryName(){return deliveryName;}
+    public String getDeliveryDirections(){return deliveryDirections;}
+    void delivery(EventForm f){deliveryName=f.getDeliveryName().strip();deliveryDirections=f.getDeliveryDirections().strip();}
+    public void changeWords(String value){encounterWords=value;}
     @Version
     private long version;
 

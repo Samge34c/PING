@@ -4,8 +4,12 @@ public class BenefitForm {
  @NotBlank @Size(max=120) private String name="";
  @Size(max=2000) private String description="";
  @Min(1) @Max(10000) private long pointsCost=20;
- @NotBlank @Size(max=160) private String claimLocation="";
- @NotBlank @Size(max=500) private String claimInstructions="";
+ @Size(max=160) private String claimLocation="";
+ @Size(max=500) private String claimInstructions="";
+ private boolean defaultDelivery;
+ @AssertTrue(message="Escribe lugar e indicaciones de entrega o elige el predeterminado.")
+ public boolean isDeliveryValid(){return defaultDelivery || (!claimLocation.isBlank()&&!claimInstructions.isBlank());}
+ public boolean isDefaultDelivery(){return defaultDelivery;} public void setDefaultDelivery(boolean v){defaultDelivery=v;}
  private boolean active=true;
  @PositiveOrZero private Long version;
  public String getName(){return name;}public void setName(String v){name=v;}
@@ -15,5 +19,5 @@ public class BenefitForm {
  public String getClaimInstructions(){return claimInstructions;}public void setClaimInstructions(String v){claimInstructions=v;}
  public boolean isActive(){return active;}public void setActive(boolean v){active=v;}
  public Long getVersion(){return version;}public void setVersion(Long v){version=v;}
- public static BenefitForm from(Benefit b){var f=new BenefitForm();f.name=b.getName();f.description=b.getDescription();f.pointsCost=b.getPointsCost();f.claimLocation=b.getClaimLocation();f.claimInstructions=b.getClaimInstructions();f.active=b.isActive();f.version=b.getVersion();return f;}
+ public static BenefitForm from(Benefit b){var f=new BenefitForm();f.defaultDelivery=b.isDefaultDelivery();f.name=b.getName();f.description=b.getDescription();f.pointsCost=b.getPointsCost();f.claimLocation=b.getClaimLocation();f.claimInstructions=b.getClaimInstructions();f.active=b.isActive();f.version=b.getVersion();return f;}
 }

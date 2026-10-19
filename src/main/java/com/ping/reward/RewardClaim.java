@@ -23,6 +23,7 @@ public class RewardClaim {
         this.participant = participant; this.benefit = benefit;
         benefitName=benefit.getName();benefitDescription=benefit.getDescription();claimLocation=benefit.getClaimLocation();claimInstructions=benefit.getClaimInstructions(); requestKey = key; cost = benefit.getPointsCost(); status = ClaimStatus.REQUESTED; createdAt = Instant.now();
     }
+    void defaultDelivery(com.ping.event.Event e){if(e.getDeliveryName().isBlank()||e.getDeliveryDirections().isBlank())throw new com.ping.web.BusinessRuleException("El organizador debe configurar el lugar de entrega.");claimLocation=e.getDeliveryName();claimInstructions=e.getDeliveryDirections();}
     public Long getId() { return id; }
     public Participant getParticipant() { return participant; }
     public Benefit getBenefit() { return benefit; }

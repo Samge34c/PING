@@ -46,7 +46,7 @@ public class RewardService {
         if (!benefit.isActive()) throw new BusinessRuleException("Este beneficio ya no está disponible.");
         var participant = participants.findById(self).orElseThrow();
         participant.spendPoints(benefit.getPointsCost());
-        return claims.save(new RewardClaim(participant, benefit, requestKey)).getId();
+        var claim=new RewardClaim(participant,benefit,requestKey);if(benefit.isDefaultDelivery())claim.defaultDelivery(participant.getEvent());return claims.save(claim).getId();
     }
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public long finish(long id, ClaimStatus target) {

@@ -32,6 +32,12 @@ public class Participant {
     @Column(name = "recognition_hint", length = 120) private String recognitionHint;
     public String getRecognitionHint() { return recognitionHint; }
     void changeRecognitionHint(String hint) { recognitionHint = hint; }
+    @Column(nullable=false,length=16) private String avatarAnimal="gato";
+    @Column(nullable=false,length=16) private String avatarHat="none";
+    @Column(nullable=false,length=16) private String avatarAccessory="none";
+    @Column(nullable=false,length=16) private String avatarBackground="violeta";
+    public Avatar getAvatar(){return new Avatar(avatarAnimal,avatarHat,avatarAccessory,avatarBackground);}
+    public void avatar(Avatar a){avatarAnimal=a.animal();avatarHat=a.hat();avatarAccessory=a.accessory();avatarBackground=a.background();}
     @Version private long version;
     @ManyToMany
     @JoinTable(name = "participant_interests", joinColumns = @JoinColumn(name = "participant_id"), inverseJoinColumns = @JoinColumn(name = "interest_id"))

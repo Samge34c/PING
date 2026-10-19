@@ -60,7 +60,7 @@ class EncounterConfigurationTests {
         edit=EventForm.from(events.get(event)); edit.setMeetingPoints("x".repeat(161)); EventForm invalid=edit;
         assertThatThrownBy(()->events.update(event,invalid)).isInstanceOf(jakarta.validation.ConstraintViolationException.class);
         assertThat(events.get(event).getMeetingPoints()).isEqualTo("Patio público\nMesa de bienvenida");
-        assertThatThrownBy(()->EncounterOptions.normalize("x\n".repeat(21),160,"Puntos")).isInstanceOf(BusinessRuleException.class);
+        assertThat(EncounterOptions.normalize("x\n".repeat(21),160,"Puntos")).isEqualTo("x"); // Limits count unique options, not duplicate lines.
         assertThatThrownBy(()->EncounterOptions.normalize("hola\u0000",40,"Palabras")).isInstanceOf(BusinessRuleException.class);
     }
     @ParameterizedTest @EnumSource(value=EventStatus.class,names={"PAUSED","CLOSED"})
@@ -118,7 +118,7 @@ class EncounterConfigurationTests {
         try(var browser=new TestBrowser(port)) {
             browser.get("/events/"+event+"/edit");
             var response=browser.post("/events/"+event+"/edit",Map.of("name","Conservar borrador","version",""+events.get(event).getVersion(),"encounterWords","x".repeat(41)));
-            assertThat(response.statusCode()).isEqualTo(200); assertThat(response.body()).contains("Conservar borrador","Usa hasta 20 opciones");
+            assertThat(response.statusCode()).isEqualTo(200); assertThat(response.body()).contains("Conservar borrador","Revisa los límites");
             assertThat(events.get(event).getName()).isEqualTo("Encuentro de prueba");
         }
         EventForm stale=EventForm.from(events.get(event)); EventForm valid=EventForm.from(events.get(event));valid.setEncounterWords("NUEVA");events.update(event,valid);

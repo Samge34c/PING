@@ -1,0 +1,1 @@
+Paquete aportado por Samuel,19 octubre2026. Catálogo editorial y SVG originales autorizados para PING según README/manifest del paquete. Prototipo preservado como referencia, no sustituye controladores. SHA256 del ZIP: 2e104938a49f6e40699b16c0cf310fb4ac47e75dbd3d9f32e33a34a57e7cc49d

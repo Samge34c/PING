@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "status": "original-assets-not-integrated",
+  "viewBox": "0 0 100 100",
+  "layerOrder": [
+    "animal",
+    "accessory",
+    "hat"
+  ],
+  "defaults": {
+    "animal": "gato",
+    "hat": "none",
+    "accessory": "none",
+    "background": "violeta"
+  },
+  "animals": [
+    {
+      "id": "gato",
+      "label": "Gato",
+      "file": "animales/gato.svg"
+    },
+    {
+      "id": "perro",
+      "label": "Perro",
+      "file": "animales/perro.svg"
+    },
+    {
+      "id": "zorro",
+      "label": "Zorro",
+      "file": "animales/zorro.svg"
+    },
+    {
+      "id": "oso",
+      "label": "Oso",
+      "file": "animales/oso.svg"
+    },
+    {
+      "id": "conejo",
+      "label": "Conejo",
+      "file": "animales/conejo.svg"
+    },
+    {
+      "id": "panda",
+      "label": "Panda",
+      "file": "animales/panda.svg"
+    },
+    {
+      "id": "rana",
+      "label": "Rana",
+      "file": "animales/rana.svg"
+    },
+    {
+      "id": "buho",
+      "label": "Búho",
+      "file": "animales/buho.svg"
+    }
+  ],
+  "hats": [
+    {
+      "id": "none",
+      "label": "Sin sombrero",
+      "file": null
+    },
+    {
+      "id": "gorra",
+      "label": "Gorra",
+      "file": "sombreros/gorra.svg"
+    },
+    {
+      "id": "gorro",
+      "label": "Gorro",
+      "file": "sombreros/gorro.svg"
+    },
+    {
+      "id": "fiesta",
+      "label": "Sombrero de fiesta",
+      "file": "sombreros/fiesta.svg"
+    },
+    {
+      "id": "corona",
+      "label": "Corona",
+      "file": "sombreros/corona.svg"
+    }
+  ],
+  "accessories": [
+    {
+      "id": "none",
+      "label": "Sin accesorio",
+      "file": null
+    },
+    {
+      "id": "gafas",
+      "label": "Gafas",
+      "file": "accesorios/gafas.svg"
+    },
+    {
+      "id": "pajarita",
+      "label": "Pajarita",
+      "file": "accesorios/pajarita.svg"
+    },
+    {
+      "id": "bufanda",
+      "label": "Bufanda",
+      "file": "accesorios/bufanda.svg"
+    }
+  ],
+  "backgrounds": [
+    {
+      "id": "violeta",
+      "label": "Violeta",
+      "color": "#b99bf4"
+    },
+    {
+      "id": "amarillo",
+      "label": "Amarillo",
+      "color": "#f8e95b"
+    },
+    {
+      "id": "menta",
+      "label": "Menta",
+      "color": "#b7ddc4"
+    },
+    {
+      "id": "coral",
+      "label": "Coral",
+      "color": "#efb29f"
+    },
+    {
+      "id": "azul",
+      "label": "Azul",
+      "color": "#adc8e8"
+    },
+    {
+      "id": "crema",
+      "label": "Crema",
+      "color": "#f5edd4"
+    }
+  ],
+  "validation": "Allowlisted IDs only. No URLs, uploads, arbitrary SVG, free-form paths or user CSS.",
+  "license": "Recursos originales creados para PING; se autoriza incorporación y modificación en PING."
+}
