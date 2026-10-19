@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.*;
 @Service @Profile("!bootstrap")
 @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
 public class MatchCompletionSagaSteps {
+    private final org.springframework.jdbc.core.JdbcTemplate jdbc;
     private final MatchRepository matches;
     private final MatchCompletionRepository sagas;
     private final CompletionStepRepository history;
@@ -18,7 +19,7 @@ public class MatchCompletionSagaSteps {
     private final CompletionRewardService rewards;
     private final EventService events;
     public MatchCompletionSagaSteps(MatchRepository matches, MatchCompletionRepository sagas, CompletionStepRepository history,
-            MatchReservationRepository reservations, CompletionRewardService rewards, EventService events) {
+            MatchReservationRepository reservations, CompletionRewardService rewards, EventService events,org.springframework.jdbc.core.JdbcTemplate jdbc) {this.jdbc=jdbc;
         this.matches = matches; this.sagas = sagas; this.history = history; this.reservations = reservations; this.rewards = rewards; this.events = events;
     }
     private Match lock(long id) {
@@ -57,7 +58,7 @@ public class MatchCompletionSagaSteps {
         Match match = lock(id); MatchCompletion saga = sagas.findById(id).orElseThrow();
         if (saga.getStatus() != SagaStatus.SECOND_REWARD_GRANTED) return;
         if (!saga.isFirstGranted() || !saga.isSecondGranted()) throw new IllegalStateException("Reward receipts missing");
-        match.complete(); match.getFirst().restartWaiting(); match.getSecond().restartWaiting(); reservations.deleteByMatchId(id);
+        match.complete(); jdbc.update("update purpose_credentials set revoked=true where purpose='ENCOUNTER' and context_id=? and consumed=false",id);match.getFirst().restartWaiting(); match.getSecond().restartWaiting(); reservations.deleteByMatchId(id);
         saga.completed(); record(saga, "CLOSE");
     }
     public void startCompensation(long id) {

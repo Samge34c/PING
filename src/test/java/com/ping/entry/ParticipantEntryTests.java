@@ -55,7 +55,7 @@ class ParticipantEntryTests {
             var person=people.findAll().getFirst();assertThat(person.getAlias()).isEqualTo("Alias corregido");assertThat(person.isAvailable()).isFalse();assertThat(participants.get(person.getId()).interests()).hasSize(1);assertThat(person.getPoints()).isZero();
             assertThat(b.get("/me").body()).contains("Alias corregido","Ir a Conectar").doesNotContain("/demo/prepare", "Cambiar participante demo");
             b.post("/me/availability",Map.of("available","true","version",""+person.getVersion()));
-            b.post("/me/search",Map.of());assertThat(b.get("/me").body()).contains("No hay personas disponibles");
+            b.post("/me/search",Map.of());assertThat(b.get("/me").body()).contains("Por ahora no hay nuevas personas disponibles");
             assertThat(b.post("/join/interests",f).headers().firstValue("Location").orElseThrow()).endsWith("/me");assertThat(people.count()).isEqualTo(1);
         }
     }

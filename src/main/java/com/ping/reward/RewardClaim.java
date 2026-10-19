@@ -18,6 +18,10 @@ public class RewardClaim {
     @Column(nullable=false,length=500) private String claimInstructions;
     public String getBenefitName(){return benefitName;} public String getBenefitDescription(){return benefitDescription;}
     public String getClaimLocation(){return claimLocation;} public String getClaimInstructions(){return claimInstructions;}
+    @Column(nullable=false) private int receiptPolicy=1;
+    public int getReceiptPolicy(){return receiptPolicy;}
+    void policy(int value){receiptPolicy=value;}
+    public void finishVerified(ClaimStatus target){status=target;}
     protected RewardClaim() { }
     RewardClaim(Participant participant, Benefit benefit, String key) {
         this.participant = participant; this.benefit = benefit;

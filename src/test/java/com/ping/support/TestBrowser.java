@@ -43,5 +43,6 @@ public class TestBrowser implements AutoCloseable {
         return client.send(HttpRequest.newBuilder(URI.create(base).resolve(path)).header("Content-Type","multipart/form-data; boundary="+boundary)
             .POST(HttpRequest.BodyPublishers.ofByteArray(body.toByteArray())).build(),HttpResponse.BodyHandlers.ofString());
     }
+    public HttpResponse<byte[]> bytes(String path)throws Exception{return client.send(HttpRequest.newBuilder(URI.create(base).resolve(path)).GET().build(),HttpResponse.BodyHandlers.ofByteArray());}
     public void close() { client.close(); }
 }

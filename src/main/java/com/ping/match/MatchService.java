@@ -11,12 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class MatchService {
     private final com.ping.encounter.EncounterService encounters;
     private final com.ping.floorplan.FloorplanService floorplans;
+    private final JourneyPolicy policy;
+    private final org.springframework.jdbc.core.JdbcTemplate jdbc;
     private final MatchRepository matches;
     private final MatchReservationRepository reservations;
     private final FeedbackRepository feedback;
     private final EventService events;
     private final MatchCompletionSaga completion;
-    public MatchService(MatchRepository matches, MatchReservationRepository reservations, FeedbackRepository feedback, EventService events, MatchCompletionSaga completion, com.ping.encounter.EncounterService encounters, com.ping.floorplan.FloorplanService floorplans) {
+    public MatchService(MatchRepository matches, MatchReservationRepository reservations, FeedbackRepository feedback, EventService events, MatchCompletionSaga completion, com.ping.encounter.EncounterService encounters, com.ping.floorplan.FloorplanService floorplans,JourneyPolicy policy,org.springframework.jdbc.core.JdbcTemplate jdbc) {this.policy=policy;this.jdbc=jdbc;
         this.floorplans=floorplans;
         this.encounters=encounters;
         this.matches = matches; this.reservations = reservations; this.feedback = feedback; this.events = events; this.completion = completion;
@@ -44,7 +46,7 @@ public class MatchService {
         match.accept(participantId);
         if (match.bothAccepted()) {
             var selected=encounters.assign(match.getEvent(),match.getCommonInterests(),match.getId());
-            match.activate(selected.encounter()); match.describeEncounter(selected.directions(),selected.title(),selected.rewardPoints());
+            match.activate(selected.encounter()); match.policy(policy.version()); match.describeEncounter(selected.directions(),selected.title(),selected.rewardPoints());
             match.freezeFloorplan(floorplans.snapshot(match.getEvent(),selected.pointId()));
         }
     }
@@ -58,7 +60,7 @@ public class MatchService {
         if (match.isCompletionPending()) throw new BusinessRuleException("La finalización está en curso. Reintenta confirmar antes de cancelar.");
         if (match.getStatus() == MatchStatus.CANCELLED) return;
         if (match.getStatus() == MatchStatus.COMPLETED) throw new BusinessRuleException("Una conexión completada no se puede cancelar.");
-        match.cancel(); reservations.deleteByMatchId(id);
+        match.cancel(); jdbc.update("update purpose_credentials set revoked=true where purpose='ENCOUNTER' and context_id=? and consumed=false",id);reservations.deleteByMatchId(id);
     }
     @Transactional(propagation = org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
     public void confirm(long id, long participantId) { completion.confirm(id, participantId); }
@@ -79,6 +81,6 @@ public class MatchService {
             match.getCommonInterests(), first ? match.getSecondInterests() : match.getFirstInterests(),
             match.accepted(self), match.accepted(other), match.confirmed(self), match.confirmed(other),
             active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active || match.getStatus() == MatchStatus.COMPLETED ? match.getActivity() : null,
-            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null, match.getRewardPoints(), active ? match.getFloorplanId() : null, active ? match.getFloorplanX() : null, active ? match.getFloorplanY() : null);
+            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null, match.getRewardPoints(), active ? match.getFloorplanId() : null, active ? match.getFloorplanX() : null, active ? match.getFloorplanY() : null,match.getVerificationPolicy(),match.verified(self),match.verified(other));
     }
 }

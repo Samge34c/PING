@@ -3,6 +3,6 @@
 <p th:if="${entryError}" class="ping-notice" role="alert" tabindex="-1" data-error-summary th:text="${entryError}"></p>
 <form method="post" th:action="@{/join/event}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="draftKey" th:value="${draftKey}"><input type="hidden" name="revision" th:value="${revision}">
 <label class="form-label" for="code">Código del evento</label><input class="form-control pe-code" id="code" name="code" th:value="${code}" required maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="code-help"><p id="code-help" class="pe-help">El código identifica el evento, no a una persona.</p>
-<button class="btn btn-primary pe-primary">Continuar <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></button></form>
+<div th:replace="~{verification/scanner :: scanner('EVENT_JOIN','code')}"></div><button class="btn btn-primary pe-primary">Continuar <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></button></form>
 <a th:if="${hasEntryEvent}" class="pi-back pe-return" th:href="@{/join}">Volver a mi entrada sin cambiar evento</a>
 <p class="pe-academic">Simulación académica. Sin vínculo oficial con SOFA.</p><a class="pi-back" th:if="${demoEnabled == true}" th:href="@{/demo}">¿Quieres probar? Entrar a la demo</a></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

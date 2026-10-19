@@ -73,7 +73,8 @@ class FinalMvpTests {
         assertThat(reports.count()).isEqualTo(1); assertThat(blocks.count()).isZero();
         assertThat(moderation.forEvent(event)).singleElement().satisfies(v -> { assertThat(v.reporter()).isEqualTo("Samuel"); assertThat(v.other()).isEqualTo("Julián"); assertThat(v.comment()).isEqualTo("Comentario breve"); assertThat(v.createdAt()).isNotNull(); });
         assertThat(participants.get(a).points()).isEqualTo(10); assertThat(matches.get(m,a).status()).isEqualTo(MatchStatus.COMPLETED);
-        assertThat(matching.search(a)).isNotEqualTo(m);
+        // Reporting adds no block; the independent completed-pair rule excludes this pair.
+        assertThatThrownBy(()->matching.search(a)).isInstanceOf(BusinessRuleException.class);
     }
     @Test void reportRejectsActiveInteractionInvalidReasonAndOversizedComment() {
         long m=offer(); matches.accept(m,a); matches.accept(m,b);

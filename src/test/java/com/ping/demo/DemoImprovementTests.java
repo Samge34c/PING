@@ -80,7 +80,9 @@ class DemoImprovementTests {
         var completed = metrics(s.eventId()); assertThat(completed.completed()).isEqualTo(1); assertThat(completed.points()).isEqualTo(20); assertThat(completed.free()).isEqualTo(2);
         matchService.giveFeedback(match,a,Feedback.Rating.USEFUL); matchService.giveFeedback(match,a,Feedback.Rating.USEFUL);
         assertThat(metrics(s.eventId()).useful()).isEqualTo(1); assertThat(metrics(s.eventId()).neutral()).isZero();
-        long rejected = matching.search(a); matchService.cancel(rejected,b);
+        // Use a different partner after COMPLETED; keep the same availability counts.
+        long c=s.people().stream().filter(p->p.id()!=a&&p.id()!=b).findFirst().orElseThrow().id();available(b,false);available(c,true);
+        long rejected = matching.search(a); matchService.cancel(rejected,c);
         assertThat(metrics(s.eventId()).cancelled()).isEqualTo(1); assertThat(metrics(s.eventId()).points()).isEqualTo(20);
         var detail = admin.details(s.eventId());
         assertThat(detail.meetingPoint()).isEqualTo("Meet & Greet · Pabellón 23");
@@ -222,7 +224,8 @@ class DemoImprovementTests {
         var before = matchService.get(match, a);
         matchService.arrive(match, a); matchService.arrive(match, b);
         matchService.confirm(match, a); matchService.confirm(match, b);
-        long active = matching.search(a); matchService.accept(active, a); matchService.accept(active, b);
+        long c=scenario.people().stream().filter(p->p.id()!=a&&p.id()!=b).findFirst().orElseThrow().id();available(b,false);available(c,true);
+        long active = matching.search(a); matchService.accept(active, a); matchService.accept(active, c);
         var activeBefore = matchService.get(active, a);
         eventService.transition(scenario.eventId(), EventStatus.PAUSED);
         sql.update("update participants set points = 23 where id = ?", a);

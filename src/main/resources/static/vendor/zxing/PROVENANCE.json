@@ -1,0 +1,16 @@
+{
+  "package": "@zxing/browser",
+  "version": "0.2.1",
+  "source": {
+    "url": "git+https://github.com/zxing-js/browser.git",
+    "type": "git"
+  },
+  "package_integrity": "sha512-92pVfVDUXbc15xu9vIEmhNyqIEASMEkDF92CwT6T+7sg2EHXJRktH9CQKoQSXe51UtbNsj+Fm09H/JBWHMs/Sw==",
+  "bundle_sha256": "066bc34edfcdd4a33f0964aeec967752a0dea1ccaf36e58e319ac9fcb5070f6a",
+  "bundle_sri": "sha384-HRtzk9lZgkbSgvUyQrnfC/GxiXZgwaNyD7hC9wcXlsBpDhkS80ISl73juef2FRuf",
+  "peer_declared": {
+    "@zxing/library": "^0.23.0"
+  },
+  "loading": "Only on explicit scanner start when native BarcodeDetector unavailable; local bundle, no CDN, no tracking.",
+  "licenses": "Browser MIT; library Apache-2.0; bundled source retains copyright notices."
+}
