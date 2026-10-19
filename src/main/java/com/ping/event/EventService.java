@@ -35,8 +35,9 @@ public class EventService {
     private String point(EventForm form) { String value = Objects.requireNonNullElse(form.getMeetingPoint(), "").strip(); return value.isBlank() ? "Punto Ping del evento" : value; }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public Event create(@Valid EventForm form) {
+        EncounterOptions.newLimits(form);
         Event event = new Event(normalizedName(form), Objects.requireNonNullElse(form.getDescription(), "").strip());
-        event.changeEncounterOptions(form); event.changeMeetingPoint(point(form)); return repository.save(event);
+        event.delivery(form); event.changeEncounterOptions(form); event.changeMeetingPoint(point(form)); return repository.save(event);
     }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public Event update(long id, @Valid EventForm form) {
@@ -44,7 +45,10 @@ public class EventService {
         if (form.getVersion() == null || form.getVersion() != event.getVersion()) {
             throw new BusinessRuleException("El evento cambió mientras lo editabas. Vuelve a abrir el formulario.");
         }
-        event.changeEncounterOptions(form); event.changeMeetingPoint(point(form));
+        EncounterOptions.checkGrowth(form.getMeetingPoints(),event.getMeetingPoints(),3,"Puntos");
+        EncounterOptions.checkGrowth(form.getEncounterActivities(),event.getEncounterActivities(),10,"Actividades");
+        EncounterOptions.checkGrowth(form.getEncounterWords(),event.getEncounterWords(),100,"Palabras");
+        event.delivery(form); event.changeEncounterOptions(form); event.changeMeetingPoint(point(form));
         event.changeDetails(normalizedName(form), Objects.requireNonNullElse(form.getDescription(), "").strip());
         return event;
     }

@@ -56,6 +56,8 @@ Alcance actual autorizado por **Samuel**, 16 de octubre2026: separar Conectar de
 
 ## Open Decisions
 
+DEC-049 (19 octubre2026) es el alcance vigente: cuentas y roles, catálogo jerárquico/avatar preset, editor con límites, entrega por código y verificación bilateral obligatoria tras ambas llegadas para nuevos encuentros. Sustituye las exclusiones temporales de autenticación y llegada opcional descritas abajo; estas se conservan únicamente como historia/política heredada de ACTIVE anteriores. Requisitos completos en docs/work-handoff/ESPECIFICACION.md. Autoridad: Samuel; no se atribuye aprobación a Julián.
+
 Las cinco pantallas se conservan. DEC-038 autoriza la entrada propia mediante sesión y servicios existentes; no autoriza autenticación nueva.
 
 Continuación autorizada DEC-041/Issue #35: catálogos por evento y «Ya llegué» bilateral para nuevos activos; conserva condiciones de activos anteriores, +10/Saga y compatibilidad. Sustituye la exclusión temporal de estas funciones en DEC-040. Sin mapa/recompensa configurables.

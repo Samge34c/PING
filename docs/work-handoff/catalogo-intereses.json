@@ -1,0 +1,2393 @@
+{
+  "schemaVersion": 1,
+  "status": "editorial-proposal-not-imported",
+  "locale": "es-CO",
+  "selectionPolicy": {
+    "matchOnlyExplicitSelections": true,
+    "autoSelectAncestors": false,
+    "participantLimit": "preserve-existing-project-limit"
+  },
+  "notes": [
+    "No es un ranking.",
+    "Las asociaciones musicales son editoriales y no exclusivas.",
+    "Un interés puede aparecer en más de un grupo; no duplicar su ID.",
+    "Los nombres de franquicia no limitan el gusto a una edición concreta."
+  ],
+  "nodes": [
+    {
+      "key": "legacy",
+      "label": "Gustos generales",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "music",
+      "label": "Música",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "music:pop",
+      "label": "Pop",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "music:rock",
+      "label": "Rock",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "music:metal",
+      "label": "Metal",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "music:hip-hop-y-rap",
+      "label": "Hip hop y rap",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "music:regueton-y-urbano",
+      "label": "Reguetón y urbano",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "music:electronica",
+      "label": "Electrónica",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "music:salsa-y-tropical",
+      "label": "Salsa y tropical",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "music:k-pop",
+      "label": "K-pop",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "music:otros-sonidos",
+      "label": "Otros sonidos",
+      "parentKey": "music",
+      "selectable": false
+    },
+    {
+      "key": "games",
+      "label": "Videojuegos",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "games:competitivo",
+      "label": "Competitivo",
+      "parentKey": "games",
+      "selectable": false
+    },
+    {
+      "key": "games:aventura-y-mundo-abierto",
+      "label": "Aventura y mundo abierto",
+      "parentKey": "games",
+      "selectable": false
+    },
+    {
+      "key": "games:rol-y-estrategia",
+      "label": "Rol y estrategia",
+      "parentKey": "games",
+      "selectable": false
+    },
+    {
+      "key": "games:creativos-y-tranquilos",
+      "label": "Creativos y tranquilos",
+      "parentKey": "games",
+      "selectable": false
+    },
+    {
+      "key": "games:accion-y-supervivencia",
+      "label": "Acción y supervivencia",
+      "parentKey": "games",
+      "selectable": false
+    },
+    {
+      "key": "games:movil-y-casual",
+      "label": "Móvil y casual",
+      "parentKey": "games",
+      "selectable": false
+    },
+    {
+      "key": "games:indie-y-plataformas",
+      "label": "Indie y plataformas",
+      "parentKey": "games",
+      "selectable": false
+    },
+    {
+      "key": "platforms",
+      "label": "Plataformas de juego",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "platforms:donde-juegas",
+      "label": "Dónde juegas",
+      "parentKey": "platforms",
+      "selectable": false
+    },
+    {
+      "key": "platforms:como-juegas",
+      "label": "Cómo juegas",
+      "parentKey": "platforms",
+      "selectable": false
+    },
+    {
+      "key": "anime",
+      "label": "Anime y manga",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "anime:series-y-universos",
+      "label": "Series y universos",
+      "parentKey": "anime",
+      "selectable": false
+    },
+    {
+      "key": "anime:formatos-y-comunidad",
+      "label": "Formatos y comunidad",
+      "parentKey": "anime",
+      "selectable": false
+    },
+    {
+      "key": "screen",
+      "label": "Cine y series",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "screen:generos",
+      "label": "Géneros",
+      "parentKey": "screen",
+      "selectable": false
+    },
+    {
+      "key": "screen:universos",
+      "label": "Universos",
+      "parentKey": "screen",
+      "selectable": false
+    },
+    {
+      "key": "tech",
+      "label": "Tecnología y creación digital",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "tech:crear-y-aprender",
+      "label": "Crear y aprender",
+      "parentKey": "tech",
+      "selectable": false
+    },
+    {
+      "key": "tech:herramientas-y-disciplinas",
+      "label": "Herramientas y disciplinas",
+      "parentKey": "tech",
+      "selectable": false
+    },
+    {
+      "key": "creative",
+      "label": "Arte y creatividad",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "creative:expresion",
+      "label": "Expresión",
+      "parentKey": "creative",
+      "selectable": false
+    },
+    {
+      "key": "creative:hacer-con-las-manos",
+      "label": "Hacer con las manos",
+      "parentKey": "creative",
+      "selectable": false
+    },
+    {
+      "key": "tabletop",
+      "label": "Mesa, cartas y lectura",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "tabletop:jugar-en-persona",
+      "label": "Jugar en persona",
+      "parentKey": "tabletop",
+      "selectable": false
+    },
+    {
+      "key": "tabletop:leer-y-conversar",
+      "label": "Leer y conversar",
+      "parentKey": "tabletop",
+      "selectable": false
+    },
+    {
+      "key": "active",
+      "label": "Deporte y aire libre",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "active:movimiento",
+      "label": "Movimiento",
+      "parentKey": "active",
+      "selectable": false
+    },
+    {
+      "key": "active:explorar",
+      "label": "Explorar",
+      "parentKey": "active",
+      "selectable": false
+    },
+    {
+      "key": "everyday",
+      "label": "Vida y comunidad",
+      "parentKey": null,
+      "selectable": false
+    },
+    {
+      "key": "everyday:compartir",
+      "label": "Compartir",
+      "parentKey": "everyday",
+      "selectable": false
+    },
+    {
+      "key": "everyday:aficiones",
+      "label": "Aficiones",
+      "parentKey": "everyday",
+      "selectable": false
+    }
+  ],
+  "interests": [
+    {
+      "key": "interest:videojuegos",
+      "label": "Videojuegos",
+      "legacyExactName": "Videojuegos",
+      "groupKeys": [
+        "legacy"
+      ]
+    },
+    {
+      "key": "interest:musica",
+      "label": "Música",
+      "legacyExactName": "Música",
+      "groupKeys": [
+        "legacy"
+      ]
+    },
+    {
+      "key": "interest:cine",
+      "label": "Cine",
+      "legacyExactName": "Cine",
+      "groupKeys": [
+        "legacy"
+      ]
+    },
+    {
+      "key": "interest:deportes",
+      "label": "Deportes",
+      "legacyExactName": "Deportes",
+      "groupKeys": [
+        "legacy"
+      ]
+    },
+    {
+      "key": "interest:tecnologia",
+      "label": "Tecnología",
+      "legacyExactName": "Tecnología",
+      "groupKeys": [
+        "legacy"
+      ]
+    },
+    {
+      "key": "interest:anime",
+      "label": "Anime",
+      "legacyExactName": "Anime",
+      "groupKeys": [
+        "legacy"
+      ]
+    },
+    {
+      "key": "interest:viajes",
+      "label": "Viajes",
+      "legacyExactName": "Viajes",
+      "groupKeys": [
+        "legacy",
+        "active:explorar"
+      ]
+    },
+    {
+      "key": "interest:fotografia",
+      "label": "Fotografía",
+      "legacyExactName": "Fotografía",
+      "groupKeys": [
+        "legacy",
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:pop",
+      "label": "Pop",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:lady-gaga",
+      "label": "Lady Gaga",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:michael-jackson",
+      "label": "Michael Jackson",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:madonna",
+      "label": "Madonna",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:beyonce",
+      "label": "Beyoncé",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:taylor-swift",
+      "label": "Taylor Swift",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:ariana-grande",
+      "label": "Ariana Grande",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:dua-lipa",
+      "label": "Dua Lipa",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:britney-spears",
+      "label": "Britney Spears",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:shakira",
+      "label": "Shakira",
+      "kind": "music",
+      "groupKeys": [
+        "music:pop"
+      ]
+    },
+    {
+      "key": "interest:rock",
+      "label": "Rock",
+      "kind": "music",
+      "groupKeys": [
+        "music:rock"
+      ]
+    },
+    {
+      "key": "interest:queen",
+      "label": "Queen",
+      "kind": "music",
+      "groupKeys": [
+        "music:rock"
+      ]
+    },
+    {
+      "key": "interest:the-beatles",
+      "label": "The Beatles",
+      "kind": "music",
+      "groupKeys": [
+        "music:rock"
+      ]
+    },
+    {
+      "key": "interest:soda-stereo",
+      "label": "Soda Stereo",
+      "kind": "music",
+      "groupKeys": [
+        "music:rock"
+      ]
+    },
+    {
+      "key": "interest:guns-n-roses",
+      "label": "Guns N’ Roses",
+      "kind": "music",
+      "groupKeys": [
+        "music:rock"
+      ]
+    },
+    {
+      "key": "interest:foo-fighters",
+      "label": "Foo Fighters",
+      "kind": "music",
+      "groupKeys": [
+        "music:rock"
+      ]
+    },
+    {
+      "key": "interest:paramore",
+      "label": "Paramore",
+      "kind": "music",
+      "groupKeys": [
+        "music:rock"
+      ]
+    },
+    {
+      "key": "interest:metal",
+      "label": "Metal",
+      "kind": "music",
+      "groupKeys": [
+        "music:metal"
+      ]
+    },
+    {
+      "key": "interest:metallica",
+      "label": "Metallica",
+      "kind": "music",
+      "groupKeys": [
+        "music:metal"
+      ]
+    },
+    {
+      "key": "interest:iron-maiden",
+      "label": "Iron Maiden",
+      "kind": "music",
+      "groupKeys": [
+        "music:metal"
+      ]
+    },
+    {
+      "key": "interest:black-sabbath",
+      "label": "Black Sabbath",
+      "kind": "music",
+      "groupKeys": [
+        "music:metal"
+      ]
+    },
+    {
+      "key": "interest:slipknot",
+      "label": "Slipknot",
+      "kind": "music",
+      "groupKeys": [
+        "music:metal"
+      ]
+    },
+    {
+      "key": "interest:system-of-a-down",
+      "label": "System of a Down",
+      "kind": "music",
+      "groupKeys": [
+        "music:metal"
+      ]
+    },
+    {
+      "key": "interest:hip-hop",
+      "label": "Hip hop",
+      "kind": "music",
+      "groupKeys": [
+        "music:hip-hop-y-rap"
+      ]
+    },
+    {
+      "key": "interest:rap",
+      "label": "Rap",
+      "kind": "music",
+      "groupKeys": [
+        "music:hip-hop-y-rap"
+      ]
+    },
+    {
+      "key": "interest:kendrick-lamar",
+      "label": "Kendrick Lamar",
+      "kind": "music",
+      "groupKeys": [
+        "music:hip-hop-y-rap"
+      ]
+    },
+    {
+      "key": "interest:eminem",
+      "label": "Eminem",
+      "kind": "music",
+      "groupKeys": [
+        "music:hip-hop-y-rap"
+      ]
+    },
+    {
+      "key": "interest:tupac-shakur",
+      "label": "Tupac Shakur",
+      "kind": "music",
+      "groupKeys": [
+        "music:hip-hop-y-rap"
+      ]
+    },
+    {
+      "key": "interest:canserbero",
+      "label": "Canserbero",
+      "kind": "music",
+      "groupKeys": [
+        "music:hip-hop-y-rap"
+      ]
+    },
+    {
+      "key": "interest:residente",
+      "label": "Residente",
+      "kind": "music",
+      "groupKeys": [
+        "music:hip-hop-y-rap"
+      ]
+    },
+    {
+      "key": "interest:regueton",
+      "label": "Reguetón",
+      "kind": "music",
+      "groupKeys": [
+        "music:regueton-y-urbano"
+      ]
+    },
+    {
+      "key": "interest:bad-bunny",
+      "label": "Bad Bunny",
+      "kind": "music",
+      "groupKeys": [
+        "music:regueton-y-urbano"
+      ]
+    },
+    {
+      "key": "interest:karol-g",
+      "label": "Karol G",
+      "kind": "music",
+      "groupKeys": [
+        "music:regueton-y-urbano"
+      ]
+    },
+    {
+      "key": "interest:daddy-yankee",
+      "label": "Daddy Yankee",
+      "kind": "music",
+      "groupKeys": [
+        "music:regueton-y-urbano"
+      ]
+    },
+    {
+      "key": "interest:j-balvin",
+      "label": "J Balvin",
+      "kind": "music",
+      "groupKeys": [
+        "music:regueton-y-urbano"
+      ]
+    },
+    {
+      "key": "interest:rauw-alejandro",
+      "label": "Rauw Alejandro",
+      "kind": "music",
+      "groupKeys": [
+        "music:regueton-y-urbano"
+      ]
+    },
+    {
+      "key": "interest:electronica",
+      "label": "Electrónica",
+      "kind": "music",
+      "groupKeys": [
+        "music:electronica",
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:house",
+      "label": "House",
+      "kind": "music",
+      "groupKeys": [
+        "music:electronica"
+      ]
+    },
+    {
+      "key": "interest:techno",
+      "label": "Techno",
+      "kind": "music",
+      "groupKeys": [
+        "music:electronica"
+      ]
+    },
+    {
+      "key": "interest:trance",
+      "label": "Trance",
+      "kind": "music",
+      "groupKeys": [
+        "music:electronica"
+      ]
+    },
+    {
+      "key": "interest:daft-punk",
+      "label": "Daft Punk",
+      "kind": "music",
+      "groupKeys": [
+        "music:electronica"
+      ]
+    },
+    {
+      "key": "interest:avicii",
+      "label": "Avicii",
+      "kind": "music",
+      "groupKeys": [
+        "music:electronica"
+      ]
+    },
+    {
+      "key": "interest:david-guetta",
+      "label": "David Guetta",
+      "kind": "music",
+      "groupKeys": [
+        "music:electronica"
+      ]
+    },
+    {
+      "key": "interest:tiesto",
+      "label": "Tiësto",
+      "kind": "music",
+      "groupKeys": [
+        "music:electronica"
+      ]
+    },
+    {
+      "key": "interest:salsa",
+      "label": "Salsa",
+      "kind": "music",
+      "groupKeys": [
+        "music:salsa-y-tropical"
+      ]
+    },
+    {
+      "key": "interest:celia-cruz",
+      "label": "Celia Cruz",
+      "kind": "music",
+      "groupKeys": [
+        "music:salsa-y-tropical"
+      ]
+    },
+    {
+      "key": "interest:hector-lavoe",
+      "label": "Héctor Lavoe",
+      "kind": "music",
+      "groupKeys": [
+        "music:salsa-y-tropical"
+      ]
+    },
+    {
+      "key": "interest:ruben-blades",
+      "label": "Rubén Blades",
+      "kind": "music",
+      "groupKeys": [
+        "music:salsa-y-tropical"
+      ]
+    },
+    {
+      "key": "interest:grupo-niche",
+      "label": "Grupo Niche",
+      "kind": "music",
+      "groupKeys": [
+        "music:salsa-y-tropical"
+      ]
+    },
+    {
+      "key": "interest:merengue",
+      "label": "Merengue",
+      "kind": "music",
+      "groupKeys": [
+        "music:salsa-y-tropical"
+      ]
+    },
+    {
+      "key": "interest:bachata",
+      "label": "Bachata",
+      "kind": "music",
+      "groupKeys": [
+        "music:salsa-y-tropical"
+      ]
+    },
+    {
+      "key": "interest:juan-luis-guerra",
+      "label": "Juan Luis Guerra",
+      "kind": "music",
+      "groupKeys": [
+        "music:salsa-y-tropical"
+      ]
+    },
+    {
+      "key": "interest:k-pop",
+      "label": "K-pop",
+      "kind": "music",
+      "groupKeys": [
+        "music:k-pop"
+      ]
+    },
+    {
+      "key": "interest:bts",
+      "label": "BTS",
+      "kind": "music",
+      "groupKeys": [
+        "music:k-pop"
+      ]
+    },
+    {
+      "key": "interest:blackpink",
+      "label": "BLACKPINK",
+      "kind": "music",
+      "groupKeys": [
+        "music:k-pop"
+      ]
+    },
+    {
+      "key": "interest:twice",
+      "label": "TWICE",
+      "kind": "music",
+      "groupKeys": [
+        "music:k-pop"
+      ]
+    },
+    {
+      "key": "interest:stray-kids",
+      "label": "Stray Kids",
+      "kind": "music",
+      "groupKeys": [
+        "music:k-pop"
+      ]
+    },
+    {
+      "key": "interest:seventeen",
+      "label": "SEVENTEEN",
+      "kind": "music",
+      "groupKeys": [
+        "music:k-pop"
+      ]
+    },
+    {
+      "key": "interest:jazz",
+      "label": "Jazz",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:blues",
+      "label": "Blues",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:r-b",
+      "label": "R&B",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:soul",
+      "label": "Soul",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:reggae",
+      "label": "Reggae",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:musica-clasica",
+      "label": "Música clásica",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:vallenato",
+      "label": "Vallenato",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:cumbia",
+      "label": "Cumbia",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:bandas-sonoras",
+      "label": "Bandas sonoras",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:indie",
+      "label": "Indie",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:folk",
+      "label": "Folk",
+      "kind": "music",
+      "groupKeys": [
+        "music:otros-sonidos"
+      ]
+    },
+    {
+      "key": "interest:league-of-legends",
+      "label": "League of Legends",
+      "kind": "game",
+      "groupKeys": [
+        "games:competitivo"
+      ]
+    },
+    {
+      "key": "interest:valorant",
+      "label": "VALORANT",
+      "kind": "game",
+      "groupKeys": [
+        "games:competitivo"
+      ]
+    },
+    {
+      "key": "interest:counter-strike",
+      "label": "Counter-Strike",
+      "kind": "game",
+      "groupKeys": [
+        "games:competitivo"
+      ]
+    },
+    {
+      "key": "interest:dota-2",
+      "label": "Dota 2",
+      "kind": "game",
+      "groupKeys": [
+        "games:competitivo"
+      ]
+    },
+    {
+      "key": "interest:rocket-league",
+      "label": "Rocket League",
+      "kind": "game",
+      "groupKeys": [
+        "games:competitivo"
+      ]
+    },
+    {
+      "key": "interest:overwatch",
+      "label": "Overwatch",
+      "kind": "game",
+      "groupKeys": [
+        "games:competitivo"
+      ]
+    },
+    {
+      "key": "interest:street-fighter",
+      "label": "Street Fighter",
+      "kind": "game",
+      "groupKeys": [
+        "games:competitivo"
+      ]
+    },
+    {
+      "key": "interest:tekken",
+      "label": "Tekken",
+      "kind": "game",
+      "groupKeys": [
+        "games:competitivo"
+      ]
+    },
+    {
+      "key": "interest:the-legend-of-zelda",
+      "label": "The Legend of Zelda",
+      "kind": "game",
+      "groupKeys": [
+        "games:aventura-y-mundo-abierto"
+      ]
+    },
+    {
+      "key": "interest:genshin-impact",
+      "label": "Genshin Impact",
+      "kind": "game",
+      "groupKeys": [
+        "games:aventura-y-mundo-abierto"
+      ]
+    },
+    {
+      "key": "interest:grand-theft-auto",
+      "label": "Grand Theft Auto",
+      "kind": "game",
+      "groupKeys": [
+        "games:aventura-y-mundo-abierto"
+      ]
+    },
+    {
+      "key": "interest:red-dead-redemption",
+      "label": "Red Dead Redemption",
+      "kind": "game",
+      "groupKeys": [
+        "games:aventura-y-mundo-abierto"
+      ]
+    },
+    {
+      "key": "interest:horizon",
+      "label": "Horizon",
+      "kind": "game",
+      "groupKeys": [
+        "games:aventura-y-mundo-abierto"
+      ]
+    },
+    {
+      "key": "interest:assassins-creed",
+      "label": "Assassin’s Creed",
+      "kind": "game",
+      "groupKeys": [
+        "games:aventura-y-mundo-abierto"
+      ]
+    },
+    {
+      "key": "interest:pokemon",
+      "label": "Pokémon",
+      "kind": "game",
+      "groupKeys": [
+        "games:rol-y-estrategia"
+      ]
+    },
+    {
+      "key": "interest:final-fantasy",
+      "label": "Final Fantasy",
+      "kind": "game",
+      "groupKeys": [
+        "games:rol-y-estrategia"
+      ]
+    },
+    {
+      "key": "interest:baldurs-gate",
+      "label": "Baldur’s Gate",
+      "kind": "game",
+      "groupKeys": [
+        "games:rol-y-estrategia"
+      ]
+    },
+    {
+      "key": "interest:the-elder-scrolls",
+      "label": "The Elder Scrolls",
+      "kind": "game",
+      "groupKeys": [
+        "games:rol-y-estrategia"
+      ]
+    },
+    {
+      "key": "interest:fire-emblem",
+      "label": "Fire Emblem",
+      "kind": "game",
+      "groupKeys": [
+        "games:rol-y-estrategia"
+      ]
+    },
+    {
+      "key": "interest:age-of-empires",
+      "label": "Age of Empires",
+      "kind": "game",
+      "groupKeys": [
+        "games:rol-y-estrategia"
+      ]
+    },
+    {
+      "key": "interest:civilization",
+      "label": "Civilization",
+      "kind": "game",
+      "groupKeys": [
+        "games:rol-y-estrategia"
+      ]
+    },
+    {
+      "key": "interest:starcraft",
+      "label": "StarCraft",
+      "kind": "game",
+      "groupKeys": [
+        "games:rol-y-estrategia"
+      ]
+    },
+    {
+      "key": "interest:minecraft",
+      "label": "Minecraft",
+      "kind": "game",
+      "groupKeys": [
+        "games:creativos-y-tranquilos"
+      ]
+    },
+    {
+      "key": "interest:stardew-valley",
+      "label": "Stardew Valley",
+      "kind": "game",
+      "groupKeys": [
+        "games:creativos-y-tranquilos"
+      ]
+    },
+    {
+      "key": "interest:animal-crossing",
+      "label": "Animal Crossing",
+      "kind": "game",
+      "groupKeys": [
+        "games:creativos-y-tranquilos"
+      ]
+    },
+    {
+      "key": "interest:the-sims",
+      "label": "The Sims",
+      "kind": "game",
+      "groupKeys": [
+        "games:creativos-y-tranquilos"
+      ]
+    },
+    {
+      "key": "interest:terraria",
+      "label": "Terraria",
+      "kind": "game",
+      "groupKeys": [
+        "games:creativos-y-tranquilos"
+      ]
+    },
+    {
+      "key": "interest:cities-skylines",
+      "label": "Cities: Skylines",
+      "kind": "game",
+      "groupKeys": [
+        "games:creativos-y-tranquilos"
+      ]
+    },
+    {
+      "key": "interest:fortnite",
+      "label": "Fortnite",
+      "kind": "game",
+      "groupKeys": [
+        "games:accion-y-supervivencia"
+      ]
+    },
+    {
+      "key": "interest:apex-legends",
+      "label": "Apex Legends",
+      "kind": "game",
+      "groupKeys": [
+        "games:accion-y-supervivencia"
+      ]
+    },
+    {
+      "key": "interest:call-of-duty",
+      "label": "Call of Duty",
+      "kind": "game",
+      "groupKeys": [
+        "games:accion-y-supervivencia"
+      ]
+    },
+    {
+      "key": "interest:resident-evil",
+      "label": "Resident Evil",
+      "kind": "game",
+      "groupKeys": [
+        "games:accion-y-supervivencia"
+      ]
+    },
+    {
+      "key": "interest:monster-hunter",
+      "label": "Monster Hunter",
+      "kind": "game",
+      "groupKeys": [
+        "games:accion-y-supervivencia"
+      ]
+    },
+    {
+      "key": "interest:elden-ring",
+      "label": "Elden Ring",
+      "kind": "game",
+      "groupKeys": [
+        "games:accion-y-supervivencia"
+      ]
+    },
+    {
+      "key": "interest:dark-souls",
+      "label": "Dark Souls",
+      "kind": "game",
+      "groupKeys": [
+        "games:accion-y-supervivencia"
+      ]
+    },
+    {
+      "key": "interest:hades",
+      "label": "Hades",
+      "kind": "game",
+      "groupKeys": [
+        "games:accion-y-supervivencia"
+      ]
+    },
+    {
+      "key": "interest:cookierun-kingdom",
+      "label": "CookieRun: Kingdom",
+      "kind": "game",
+      "groupKeys": [
+        "games:movil-y-casual"
+      ]
+    },
+    {
+      "key": "interest:clash-of-clans",
+      "label": "Clash of Clans",
+      "kind": "game",
+      "groupKeys": [
+        "games:movil-y-casual"
+      ]
+    },
+    {
+      "key": "interest:clash-royale",
+      "label": "Clash Royale",
+      "kind": "game",
+      "groupKeys": [
+        "games:movil-y-casual"
+      ]
+    },
+    {
+      "key": "interest:brawl-stars",
+      "label": "Brawl Stars",
+      "kind": "game",
+      "groupKeys": [
+        "games:movil-y-casual"
+      ]
+    },
+    {
+      "key": "interest:among-us",
+      "label": "Among Us",
+      "kind": "game",
+      "groupKeys": [
+        "games:movil-y-casual"
+      ]
+    },
+    {
+      "key": "interest:roblox",
+      "label": "Roblox",
+      "kind": "game",
+      "groupKeys": [
+        "games:movil-y-casual"
+      ]
+    },
+    {
+      "key": "interest:candy-crush",
+      "label": "Candy Crush",
+      "kind": "game",
+      "groupKeys": [
+        "games:movil-y-casual"
+      ]
+    },
+    {
+      "key": "interest:hollow-knight",
+      "label": "Hollow Knight",
+      "kind": "game",
+      "groupKeys": [
+        "games:indie-y-plataformas"
+      ]
+    },
+    {
+      "key": "interest:celeste",
+      "label": "Celeste",
+      "kind": "game",
+      "groupKeys": [
+        "games:indie-y-plataformas"
+      ]
+    },
+    {
+      "key": "interest:cuphead",
+      "label": "Cuphead",
+      "kind": "game",
+      "groupKeys": [
+        "games:indie-y-plataformas"
+      ]
+    },
+    {
+      "key": "interest:undertale",
+      "label": "Undertale",
+      "kind": "game",
+      "groupKeys": [
+        "games:indie-y-plataformas"
+      ]
+    },
+    {
+      "key": "interest:dead-cells",
+      "label": "Dead Cells",
+      "kind": "game",
+      "groupKeys": [
+        "games:indie-y-plataformas"
+      ]
+    },
+    {
+      "key": "interest:super-mario",
+      "label": "Super Mario",
+      "kind": "game",
+      "groupKeys": [
+        "games:indie-y-plataformas"
+      ]
+    },
+    {
+      "key": "interest:sonic",
+      "label": "Sonic",
+      "kind": "game",
+      "groupKeys": [
+        "games:indie-y-plataformas"
+      ]
+    },
+    {
+      "key": "interest:pc",
+      "label": "PC",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:donde-juegas"
+      ]
+    },
+    {
+      "key": "interest:playstation",
+      "label": "PlayStation",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:donde-juegas"
+      ]
+    },
+    {
+      "key": "interest:xbox",
+      "label": "Xbox",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:donde-juegas"
+      ]
+    },
+    {
+      "key": "interest:nintendo-switch",
+      "label": "Nintendo Switch",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:donde-juegas"
+      ]
+    },
+    {
+      "key": "interest:android",
+      "label": "Android",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:donde-juegas"
+      ]
+    },
+    {
+      "key": "interest:ios",
+      "label": "iOS",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:donde-juegas"
+      ]
+    },
+    {
+      "key": "interest:steam-deck",
+      "label": "Steam Deck",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:donde-juegas"
+      ]
+    },
+    {
+      "key": "interest:realidad-virtual",
+      "label": "Realidad virtual",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:donde-juegas"
+      ]
+    },
+    {
+      "key": "interest:cooperativo-local",
+      "label": "Cooperativo local",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:como-juegas"
+      ]
+    },
+    {
+      "key": "interest:cooperativo-online",
+      "label": "Cooperativo online",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:como-juegas"
+      ]
+    },
+    {
+      "key": "interest:juegos-en-solitario",
+      "label": "Juegos en solitario",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:como-juegas"
+      ]
+    },
+    {
+      "key": "interest:esports",
+      "label": "Esports",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:como-juegas"
+      ]
+    },
+    {
+      "key": "interest:speedrunning",
+      "label": "Speedrunning",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:como-juegas"
+      ]
+    },
+    {
+      "key": "interest:juegos-retro",
+      "label": "Juegos retro",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:como-juegas"
+      ]
+    },
+    {
+      "key": "interest:juegos-de-ritmo",
+      "label": "Juegos de ritmo",
+      "kind": "platform-or-play-style",
+      "groupKeys": [
+        "platforms:como-juegas"
+      ]
+    },
+    {
+      "key": "interest:one-piece",
+      "label": "One Piece",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:naruto",
+      "label": "Naruto",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:dragon-ball",
+      "label": "Dragon Ball",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:attack-on-titan",
+      "label": "Attack on Titan",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:demon-slayer",
+      "label": "Demon Slayer",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:jujutsu-kaisen",
+      "label": "Jujutsu Kaisen",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:my-hero-academia",
+      "label": "My Hero Academia",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:fullmetal-alchemist",
+      "label": "Fullmetal Alchemist",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:death-note",
+      "label": "Death Note",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:sailor-moon",
+      "label": "Sailor Moon",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:spy-family",
+      "label": "Spy × Family",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:haikyu",
+      "label": "Haikyu!!",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:series-y-universos"
+      ]
+    },
+    {
+      "key": "interest:manga",
+      "label": "Manga",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:formatos-y-comunidad"
+      ]
+    },
+    {
+      "key": "interest:manhwa",
+      "label": "Manhwa",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:formatos-y-comunidad"
+      ]
+    },
+    {
+      "key": "interest:webtoons",
+      "label": "Webtoons",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:formatos-y-comunidad"
+      ]
+    },
+    {
+      "key": "interest:studio-ghibli",
+      "label": "Studio Ghibli",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:formatos-y-comunidad"
+      ]
+    },
+    {
+      "key": "interest:cosplay",
+      "label": "Cosplay",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:formatos-y-comunidad"
+      ]
+    },
+    {
+      "key": "interest:dibujo-manga",
+      "label": "Dibujo manga",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:formatos-y-comunidad"
+      ]
+    },
+    {
+      "key": "interest:coleccionismo-de-figuras",
+      "label": "Coleccionismo de figuras",
+      "kind": "anime",
+      "groupKeys": [
+        "anime:formatos-y-comunidad"
+      ]
+    },
+    {
+      "key": "interest:ciencia-ficcion",
+      "label": "Ciencia ficción",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:generos"
+      ]
+    },
+    {
+      "key": "interest:fantasia",
+      "label": "Fantasía",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:generos"
+      ]
+    },
+    {
+      "key": "interest:terror",
+      "label": "Terror",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:generos"
+      ]
+    },
+    {
+      "key": "interest:comedia",
+      "label": "Comedia",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:generos"
+      ]
+    },
+    {
+      "key": "interest:drama",
+      "label": "Drama",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:generos"
+      ]
+    },
+    {
+      "key": "interest:animacion",
+      "label": "Animación",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:generos"
+      ]
+    },
+    {
+      "key": "interest:documentales",
+      "label": "Documentales",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:generos"
+      ]
+    },
+    {
+      "key": "interest:cine-colombiano",
+      "label": "Cine colombiano",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:generos"
+      ]
+    },
+    {
+      "key": "interest:star-wars",
+      "label": "Star Wars",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:universos"
+      ]
+    },
+    {
+      "key": "interest:marvel",
+      "label": "Marvel",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:universos"
+      ]
+    },
+    {
+      "key": "interest:dc",
+      "label": "DC",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:universos"
+      ]
+    },
+    {
+      "key": "interest:harry-potter",
+      "label": "Harry Potter",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:universos"
+      ]
+    },
+    {
+      "key": "interest:el-senor-de-los-anillos",
+      "label": "El señor de los anillos",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:universos"
+      ]
+    },
+    {
+      "key": "interest:jurassic-park",
+      "label": "Jurassic Park",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:universos"
+      ]
+    },
+    {
+      "key": "interest:stranger-things",
+      "label": "Stranger Things",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:universos"
+      ]
+    },
+    {
+      "key": "interest:doctor-who",
+      "label": "Doctor Who",
+      "kind": "screen",
+      "groupKeys": [
+        "screen:universos"
+      ]
+    },
+    {
+      "key": "interest:programacion",
+      "label": "Programación",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:desarrollo-web",
+      "label": "Desarrollo web",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:desarrollo-de-videojuegos",
+      "label": "Desarrollo de videojuegos",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:inteligencia-artificial",
+      "label": "Inteligencia artificial",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:robotica",
+      "label": "Robótica",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:impresion-3d",
+      "label": "Impresión 3D",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:ciberseguridad",
+      "label": "Ciberseguridad",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:software-libre",
+      "label": "Software libre",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:crear-y-aprender"
+      ]
+    },
+    {
+      "key": "interest:java",
+      "label": "Java",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:python",
+      "label": "Python",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:javascript",
+      "label": "JavaScript",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:blender",
+      "label": "Blender",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:godot",
+      "label": "Godot",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:unity",
+      "label": "Unity",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:unreal-engine",
+      "label": "Unreal Engine",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:diseno-ux-ui",
+      "label": "Diseño UX/UI",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:arte-digital",
+      "label": "Arte digital",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:edicion-de-video",
+      "label": "Edición de video",
+      "kind": "technology",
+      "groupKeys": [
+        "tech:herramientas-y-disciplinas"
+      ]
+    },
+    {
+      "key": "interest:ilustracion",
+      "label": "Ilustración",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:pintura",
+      "label": "Pintura",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:dibujo",
+      "label": "Dibujo",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:escritura-creativa",
+      "label": "Escritura creativa",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:poesia",
+      "label": "Poesía",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:teatro",
+      "label": "Teatro",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:danza",
+      "label": "Danza",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:canto",
+      "label": "Canto",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:diseno-grafico",
+      "label": "Diseño gráfico",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:expresion"
+      ]
+    },
+    {
+      "key": "interest:manualidades",
+      "label": "Manualidades",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:hacer-con-las-manos"
+      ]
+    },
+    {
+      "key": "interest:crochet",
+      "label": "Crochet",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:hacer-con-las-manos"
+      ]
+    },
+    {
+      "key": "interest:bordado",
+      "label": "Bordado",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:hacer-con-las-manos"
+      ]
+    },
+    {
+      "key": "interest:ceramica",
+      "label": "Cerámica",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:hacer-con-las-manos"
+      ]
+    },
+    {
+      "key": "interest:origami",
+      "label": "Origami",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:hacer-con-las-manos"
+      ]
+    },
+    {
+      "key": "interest:costura",
+      "label": "Costura",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:hacer-con-las-manos"
+      ]
+    },
+    {
+      "key": "interest:diseno-de-vestuario",
+      "label": "Diseño de vestuario",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:hacer-con-las-manos"
+      ]
+    },
+    {
+      "key": "interest:maquillaje-artistico",
+      "label": "Maquillaje artístico",
+      "kind": "creative",
+      "groupKeys": [
+        "creative:hacer-con-las-manos"
+      ]
+    },
+    {
+      "key": "interest:juegos-de-mesa",
+      "label": "Juegos de mesa",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:juegos-de-rol",
+      "label": "Juegos de rol",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:dungeons-dragons",
+      "label": "Dungeons & Dragons",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:magic-the-gathering",
+      "label": "Magic: The Gathering",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:yu-gi-oh",
+      "label": "Yu-Gi-Oh!",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:pokemon-tcg",
+      "label": "Pokémon TCG",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:ajedrez",
+      "label": "Ajedrez",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:catan",
+      "label": "Catan",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:dixit",
+      "label": "Dixit",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:jugar-en-persona"
+      ]
+    },
+    {
+      "key": "interest:lectura",
+      "label": "Lectura",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:leer-y-conversar"
+      ]
+    },
+    {
+      "key": "interest:comics",
+      "label": "Cómics",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:leer-y-conversar"
+      ]
+    },
+    {
+      "key": "interest:novela-grafica",
+      "label": "Novela gráfica",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:leer-y-conversar"
+      ]
+    },
+    {
+      "key": "interest:literatura-fantastica",
+      "label": "Literatura fantástica",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:leer-y-conversar"
+      ]
+    },
+    {
+      "key": "interest:literatura-de-ciencia-ficcion",
+      "label": "Literatura de ciencia ficción",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:leer-y-conversar"
+      ]
+    },
+    {
+      "key": "interest:novela-de-misterio",
+      "label": "Novela de misterio",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:leer-y-conversar"
+      ]
+    },
+    {
+      "key": "interest:clubes-de-lectura",
+      "label": "Clubes de lectura",
+      "kind": "tabletop-or-reading",
+      "groupKeys": [
+        "tabletop:leer-y-conversar"
+      ]
+    },
+    {
+      "key": "interest:futbol",
+      "label": "Fútbol",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:baloncesto",
+      "label": "Baloncesto",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:voleibol",
+      "label": "Voleibol",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:ciclismo",
+      "label": "Ciclismo",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:running",
+      "label": "Running",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:natacion",
+      "label": "Natación",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:patinaje",
+      "label": "Patinaje",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:skate",
+      "label": "Skate",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:tenis",
+      "label": "Tenis",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:artes-marciales",
+      "label": "Artes marciales",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:yoga",
+      "label": "Yoga",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:gimnasio",
+      "label": "Gimnasio",
+      "kind": "active",
+      "groupKeys": [
+        "active:movimiento"
+      ]
+    },
+    {
+      "key": "interest:senderismo",
+      "label": "Senderismo",
+      "kind": "active",
+      "groupKeys": [
+        "active:explorar"
+      ]
+    },
+    {
+      "key": "interest:camping",
+      "label": "Camping",
+      "kind": "active",
+      "groupKeys": [
+        "active:explorar"
+      ]
+    },
+    {
+      "key": "interest:observacion-de-aves",
+      "label": "Observación de aves",
+      "kind": "active",
+      "groupKeys": [
+        "active:explorar"
+      ]
+    },
+    {
+      "key": "interest:jardineria",
+      "label": "Jardinería",
+      "kind": "active",
+      "groupKeys": [
+        "active:explorar"
+      ]
+    },
+    {
+      "key": "interest:turismo-cultural",
+      "label": "Turismo cultural",
+      "kind": "active",
+      "groupKeys": [
+        "active:explorar"
+      ]
+    },
+    {
+      "key": "interest:naturaleza",
+      "label": "Naturaleza",
+      "kind": "active",
+      "groupKeys": [
+        "active:explorar"
+      ]
+    },
+    {
+      "key": "interest:cafe",
+      "label": "Café",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:compartir"
+      ]
+    },
+    {
+      "key": "interest:cocina",
+      "label": "Cocina",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:compartir"
+      ]
+    },
+    {
+      "key": "interest:reposteria",
+      "label": "Repostería",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:compartir"
+      ]
+    },
+    {
+      "key": "interest:gastronomia-colombiana",
+      "label": "Gastronomía colombiana",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:compartir"
+      ]
+    },
+    {
+      "key": "interest:intercambio-de-idiomas",
+      "label": "Intercambio de idiomas",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:compartir"
+      ]
+    },
+    {
+      "key": "interest:aprender-ingles",
+      "label": "Aprender inglés",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:compartir"
+      ]
+    },
+    {
+      "key": "interest:aprender-japones",
+      "label": "Aprender japonés",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:compartir"
+      ]
+    },
+    {
+      "key": "interest:voluntariado",
+      "label": "Voluntariado",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:compartir"
+      ]
+    },
+    {
+      "key": "interest:mascotas",
+      "label": "Mascotas",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:gatos",
+      "label": "Gatos",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:perros",
+      "label": "Perros",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:astronomia",
+      "label": "Astronomía",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:historia",
+      "label": "Historia",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:ciencia",
+      "label": "Ciencia",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:podcasts",
+      "label": "Podcasts",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:moda",
+      "label": "Moda",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:coleccionismo",
+      "label": "Coleccionismo",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    },
+    {
+      "key": "interest:rompecabezas",
+      "label": "Rompecabezas",
+      "kind": "everyday",
+      "groupKeys": [
+        "everyday:aficiones"
+      ]
+    }
+  ]
+}

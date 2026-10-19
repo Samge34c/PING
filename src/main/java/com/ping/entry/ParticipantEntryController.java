@@ -25,7 +25,7 @@ public class ParticipantEntryController {
     // The receipt and participant ID never come from request parameters.
     private static class Draft {
         final String key = UUID.randomUUID().toString();
-        long revision; String alias = ""; Long eventId; List<Long> ids = List.of(); Long receipt;
+        Avatar avatar=Avatar.defaults(); long revision; String alias = ""; Long eventId; List<Long> ids = List.of(); Long receipt;
     }
     private Draft draft(HttpSession session) {
         Draft draft = (Draft) session.getAttribute(DRAFT);
@@ -37,6 +37,7 @@ public class ParticipantEntryController {
         if (!model.containsAttribute("participantForm")) {
             ParticipantForm f = new ParticipantForm(); f.setAlias(d.alias); f.setEventId(d.eventId); model.addAttribute("participantForm", f);
         }
+        model.addAttribute("avatar",d.avatar);model.addAttribute("avatarAnimals",Avatar.ANIMALS);model.addAttribute("avatarHats",Avatar.HATS);model.addAttribute("avatarAccessories",Avatar.ACCESSORIES);model.addAttribute("avatarColors",Avatar.COLORS);
         if (d.eventId == null) return eventCode(d, model);
         var event = events.get(d.eventId); model.addAttribute("entryEvent", event); model.addAttribute("entryEventOpen", event.canStartNewMatches());
         model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision);
@@ -85,7 +86,7 @@ public class ParticipantEntryController {
         }
     }
     @PostMapping public String details(@Valid @ModelAttribute("participantForm") ParticipantForm form, BindingResult errors,
-            @RequestParam String draftKey, @RequestParam long revision, @RequestParam(defaultValue="interests") String action, HttpSession session, Model model, HttpServletResponse response) {
+            @RequestParam String draftKey, @RequestParam long revision, @RequestParam(defaultValue="gato") String animal,@RequestParam(defaultValue="none") String hat,@RequestParam(defaultValue="none") String accessory,@RequestParam(defaultValue="violeta") String background, @RequestParam(defaultValue="interests") String action, HttpSession session, Model model, HttpServletResponse response) {
         synchronized (session) {
             if (entered(session)) return "redirect:/me";
             Draft d = draft(session);
@@ -93,6 +94,7 @@ public class ParticipantEntryController {
             if (d.eventId == null) return "redirect:/join";
             if (!d.eventId.equals(form.getEventId())) { response.setStatus(409); model.asMap().remove("participantForm"); model.addAttribute("entryError", "Usa Cambiar evento para identificar otro evento con su código."); return details(d, model); }
             d.alias = form.getAlias();
+            try{d.avatar=new Avatar(animal,hat,accessory,background);}catch(BusinessRuleException ex){response.setStatus(400);model.addAttribute("entryError",ex.getMessage());return details(d,model);}
             if (action.equals("changeEvent")) { d.revision++; return "redirect:/join/event"; }
             if (!action.equals("interests")) { response.setStatus(400); model.addAttribute("entryError", "Usa los botones de esta entrada para continuar."); return details(d, model); }
             if (!errors.hasFieldErrors("eventId") && participants.registrationEvents().stream().noneMatch(e -> e.getId().equals(d.eventId))) errors.rejectValue("eventId", "closed", "Elige un evento abierto para continuar.");
@@ -128,7 +130,7 @@ public class ParticipantEntryController {
                 response.setStatus(409); model.addAttribute("entryError", "Uno de los intereses ya no está disponible. Revisa la selección; tu borrador se conserva."); return choices(d, model);
             }
             try {
-                long id = entry.create(d.alias, d.eventId, d.ids);
+                long id = entry.create(d.alias, d.eventId, d.ids, d.avatar);
                 d.receipt = id; // Set only after the transaction committed; serializes double taps/retries.
                 session.setAttribute("pingDemoParticipantId", id); session.setAttribute("pingEntryMode", "participant");
                 return "redirect:/me";

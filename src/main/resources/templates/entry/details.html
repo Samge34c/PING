@@ -5,6 +5,7 @@
 <p th:unless="${entryEventOpen}" class="ping-notice" role="status">Este evento no admite entradas ahora. Conservamos tus datos; puedes cambiar de evento.</p>
 <form method="post" th:action="@{/join}" th:object="${participantForm}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="draftKey" th:value="${draftKey}"><input type="hidden" name="revision" th:value="${revision}"><input type="hidden" th:field="*{eventId}">
 <label class="form-label" for="alias">Tu alias</label><input class="form-control" th:field="*{alias}" maxlength="80" required autocomplete="nickname" aria-describedby="alias-help alias-error" th:attr="aria-invalid=${#fields.hasErrors('alias')}"><p id="alias-help" class="pe-help">El nombre con el que quieres que te reconozcan.</p><p id="alias-error" class="text-danger small" th:errors="*{alias}"></p><p class="text-danger small" th:errors="*{eventId}"></p>
+<fieldset th:replace="~{entry/avatar :: picker}"></fieldset>
 <button class="btn btn-primary pe-primary" name="action" value="interests" th:disabled="${!entryEventOpen}">Elegir intereses <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></button>
 <button class="btn btn-link pe-return" name="action" value="changeEvent" formnovalidate>Cambiar evento</button></form>
 <p class="pe-academic">Simulación académica. Sin vínculo oficial con SOFA.</p></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

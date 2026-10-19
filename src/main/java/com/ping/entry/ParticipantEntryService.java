@@ -15,6 +15,8 @@ public class ParticipantEntryService {
         this.participants = participants; this.interests = interests;
     }
     @Transactional(isolation = Isolation.READ_COMMITTED)
+    public long create(String alias,Long eventId,List<Long> ids,Avatar avatar){long id=create(alias,eventId,ids);participants.avatar(id,avatar);return id;}
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public long create(String alias, Long eventId, List<Long> ids) {
         ParticipantForm form = new ParticipantForm();
         form.setAlias(alias); form.setEventId(eventId); form.setAvailable(false);

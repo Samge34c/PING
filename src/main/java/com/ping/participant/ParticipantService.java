@@ -34,6 +34,9 @@ public class ParticipantService {
         repository.flush();
         return view(participant);
     }
+    public Avatar avatar(long id){return require(id).getAvatar();}
+    @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
+    public void avatar(long id,Avatar value){events.lock(repository.eventId(id).orElseThrow());require(id).avatar(value);}
     private Participant require(long id) { return repository.findById(id).orElseThrow(() -> new NotFoundException("No encontramos ese participante.")); }
     private ParticipantView view(Participant participant) {
         return new ParticipantView(participant.getId(), participant.getAlias(), participant.getEvent().getId(), participant.getEvent().getName(), participant.isAvailable(), participant.getVersion(), participant.getInterests().stream().map(com.ping.interest.Interest::getName).sorted().toList(), participant.getPoints());

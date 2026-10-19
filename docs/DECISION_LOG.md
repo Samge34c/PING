@@ -1,5 +1,13 @@
 # Registro de decisiones — Ping
 
+## DEC-049 — Evolución funcional Work, R01–R12
+
+Solicitud explícita de Samuel,19 octubre2026 Bogotá, ZIP PING_WORK_CODEX_ENTREGA leído íntegramente. Base remota comprobada8c94cd7/PR42, árbol limpio; rama propia feature/work-functional-evolution. No se atribuye aprobación a Julián. La autorización actual sustituye las exclusiones temporales de cuentas/permisos, QR de encuentro y llegada opcional en nuevos ACTIVE; no cambia políticas/snapshots de activos anteriores ni Saga iniciadas. El alcance concreto queda en docs/work-handoff/ESPECIFICACION.md y PROMPT_CODEX.md.
+
+Cuatro bloques: editor/recursos (límites3/10/100, entrega predeterminada, jerarquía editorial y avatar preset); cuentas/permisos (correo, recuperación, OAuth configurado externamente, autorización por evento y demo aislada); encuentro/canje (pareja exitosa no repetida, política versionada, ambas llegadas/verificaciones, scanner por propósito y recibo/entrega); integración móvil/MySQL. Conservar stack/identidad, importes/IDs y datos históricos. No fusionar identidades por alias/correo ni simular OAuth/cámara real. Código sin proveedores externos continúa operativo por correo cuando hay transporte configurado; capacidades ausentes se muestran como pendientes, sin botones falsos. Registrar decisiones técnicas verificables y límites por bloque en la continuidad única.
+
+Usar bloqueos transaccionales existentes para límites/idempotencia. Filas inactivas siguen consumiendo cupo; archivar explícitamente conserva historial, impide asignación y libera cupo. Excesos heredados se preservan y solo permiten edición/reducción sin aumentar cantidades. No truncar ni reutilizar coordenadas históricas. Respaldos por bloques, push contrastado y PR borrador hacia feature/mobile-interaction-polish, sin merge/main/force-push.
+
 Fuente principal: [PREDEV v1.1](PING_PREDEV_v1.1.md), fechado el **12 de octubre de 2026**, y solicitud de preparación del usuario. Este registro resume decisiones conocidas; no constituye una aprobación nueva ni atribuye una aceptación individual no documentada.
 
 ## DEC-033 — Mi Ping operativo con prioridad móvil
