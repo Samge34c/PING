@@ -177,5 +177,51 @@
       "executor_discovery": false,
       "runtime_cli": "none; instructions only"
     }
+  },
+  {
+    "name": "mobile-native",
+    "source": "https://github.com/emilkowalski/skills",
+    "commit": "2d228630ba1446365f614a108cb8252f1feda202",
+    "source_directory": "skills/mobile-native",
+    "project_directory": ".agents/skills/mobile-native",
+    "skill_sha256": "888b7651d66d66dbac4e72b7c554638eb19bd971d686d6cbdf030a5ef3788f55",
+    "license": "MIT",
+    "attribution": "Copyright (c) 2026 Emil Kowalski",
+    "dependencies": [],
+    "installed_files": [
+      "SKILL.md",
+      "LICENSE"
+    ],
+    "automatic_hooks": false,
+    "installation": "selected instructions and root license, project scope; no global installer",
+    "adaptation": "Upstream SKILL.md unchanged; scope and manual usage in docs/SKILLS_PING.md",
+    "verification": {
+      "manual_read": true,
+      "executor_discovery": false,
+      "runtime_cli": "none; instructions only"
+    }
+  },
+  {
+    "name": "emil-design-eng",
+    "source": "https://github.com/emilkowalski/skills",
+    "commit": "2d228630ba1446365f614a108cb8252f1feda202",
+    "source_directory": "skills/emil-design-eng",
+    "project_directory": ".agents/skills/emil-design-eng",
+    "skill_sha256": "ffbe68e6007fb42cb8149f089b400a1ca007d59ba23e8948e2be4476f3175939",
+    "license": "MIT",
+    "attribution": "Copyright (c) 2026 Emil Kowalski",
+    "dependencies": [],
+    "installed_files": [
+      "SKILL.md",
+      "LICENSE"
+    ],
+    "automatic_hooks": false,
+    "installation": "selected instructions and root license, project scope; no global installer",
+    "adaptation": "Upstream SKILL.md unchanged; scope and manual usage in docs/SKILLS_PING.md",
+    "verification": {
+      "manual_read": true,
+      "executor_discovery": false,
+      "runtime_cli": "none; instructions only"
+    }
   }
 ]
