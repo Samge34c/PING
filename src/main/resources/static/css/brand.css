@@ -2712,6 +2712,11 @@ body.participant-entry-page {padding-left:0}
 @media (prefers-reduced-motion:no-preference) {
   .btn { transition:background-color 120ms ease-out,transform 120ms cubic-bezier(.23,1,.32,1),border-color 120ms ease-out; }
   .interest-row-content { transition:transform 120ms cubic-bezier(.23,1,.32,1); }
+  .btn:focus-visible { transition:none; }
   .btn:active:not(:disabled):not([aria-disabled="true"]):not(:focus-visible),
+  .interest-row-content[data-pressed="true"] { transform:scale(.97); }
+}
+
+@media (prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine) {
   .interest-row input:not(:disabled)+.interest-row-content:active { transform:scale(.97); }
 }
