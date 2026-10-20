@@ -27,7 +27,14 @@ public class LoginSuccess implements AuthenticationSuccessHandler {
    }else user=(PingUser)auth.getPrincipal();
    Object previous=session.getAttribute("pingDemoParticipantId");if(previous instanceof Long id&&accounts.unlinked(id)&&"participant".equals(session.getAttribute("pingEntryMode")))session.setAttribute("pingLegacyOwnedParticipant",id);
    session.removeAttribute("pingDemoParticipantId");session.removeAttribute("pingEntryMode");
-   var existing=accounts.participations(user.id());if(!existing.isEmpty())support.entered(session,existing.getFirst().participantId());String destination=support.next((String)session.getAttribute("pingReturnTo"));session.removeAttribute("pingReturnTo");
+   String destination=support.next((String)session.getAttribute("pingReturnTo"));
+   var selectedEvent=com.ping.entry.ParticipantEntryController.pendingEventId(session);
+   if(destination.equals("/join")&&selectedEvent.isPresent()) {
+    accounts.participant(user.id(),selectedEvent.get()).ifPresent(id->support.entered(session,id));
+   } else {
+    var existing=accounts.participations(user.id());if(!existing.isEmpty())support.entered(session,existing.getFirst().participantId());
+   }
+   session.removeAttribute("pingReturnTo");
    if(session.getAttribute("pingLegacyOwnedParticipant")!=null)destination="/account/link-session";
    accounts.audit(user.id(),"LOGIN",user.id(),null);response.sendRedirect(destination);
   }catch(com.ping.web.BusinessRuleException error){SecurityContextHolder.clearContext();session.removeAttribute("SPRING_SECURITY_CONTEXT");response.sendRedirect("/login?oauthError=true");}
