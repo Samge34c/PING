@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.*;
     properties = "spring.datasource.url=jdbc:h2:mem:event-experience;MODE=MySQL;DB_CLOSE_DELAY=-1")
 @ActiveProfiles("test")
 class EventExperienceTests {
+    @Autowired org.springframework.web.servlet.resource.ResourceUrlProvider assetUrls;
     @Autowired DemoPreparationService preparation;
     @Autowired ParticipantService participants;
     @Autowired ParticipantRepository people;
@@ -77,7 +78,7 @@ class EventExperienceTests {
             enter(browser,a);
             String path = "/events/"+event+"/map?zone=gamer&matchId="+m;
             var page = browser.get(path); assertThat(page.statusCode()).isEqualTo(200);
-            assertThat(page.body()).contains("Zona Gamer · Pabellón 18", "aria-current=\"location\"", "href=\"/matches/"+m+"\"", "/js/event-map.js");
+            assertThat(page.body()).contains("Zona Gamer · Pabellón 18", "aria-current=\"location\"", "href=\"/matches/"+m+"\"", assetUrls.getForLookupPath("/js/event-map.js"));
             assertThat(browser.get("/events/"+event+"/map?zone=unknown").statusCode()).isEqualTo(404);
             var scenario = preparation.current(); enter(browser,scenario.people().get(2).id());
             assertThat(browser.get(path).statusCode()).isEqualTo(404);
@@ -104,7 +105,7 @@ class EventExperienceTests {
         try(var browser = new TestBrowser(port)) {
             var guest = browser.get(path);
             assertThat(guest.statusCode()).isEqualTo(200);
-            assertThat(guest.body()).contains("Entrar al evento", "Encuentra tu mundo", "Sin vínculo oficial", "convencion-social.webp")
+            assertThat(guest.body()).contains("Entrar al evento", "Encuentra tu mundo", "Sin vínculo oficial", assetUrls.getForLookupPath("/img/sofa/convencion-social.webp"))
                 .doesNotContain("data-meeting=\"true\"", "Volver al encuentro", "action=\"/me/search\"");
             enter(browser,a);
             AvailabilityForm f = new AvailabilityForm(); f.setVersion(participants.get(a).version()); f.setAvailable(false); participants.setAvailability(a,f);
@@ -172,13 +173,13 @@ class EventExperienceTests {
         long m = matching.search(a); String path = "/matches/"+m;
         try(var sam = new TestBrowser(port); var jul = new TestBrowser(port)) {
             enter(sam,a); enter(jul,b);
-            assertThat(sam.get(path).body()).contains("Aceptar conexión").doesNotContain("am-grid", "Gorra roja", "active-map.js");
+            assertThat(sam.get(path).body()).contains("Aceptar conexión").doesNotContain("am-grid", "Gorra roja", assetUrls.getForLookupPath("/js/active-map.js"));
             assertThat(sam.post(path+"/accept",Map.of()).statusCode()).isEqualTo(302);
             assertThat(sam.get(path).body()).doesNotContain("am-grid", "Gorra roja");
             jul.get(path); assertThat(jul.post(path+"/accept",Map.of()).statusCode()).isEqualTo(302);
             sam.post(path+"/arrive",Map.of()); jul.post(path+"/arrive",Map.of());
             var active = matches.get(m,a);
-            assertThat(sam.get(path).body()).contains("class=\"am-grid\"", "Su palabra de encuentro", active.word(), active.meetingPoint(), active.activity(), "Gorra roja", "Confirmaciones: 0 de 2", "active-map.js");
+            assertThat(sam.get(path).body()).contains("class=\"am-grid\"", "Su palabra de encuentro", active.word(), active.meetingPoint(), active.activity(), "Gorra roja", "Confirmaciones: 0 de 2", assetUrls.getForLookupPath("/js/active-map.js"));
             assertThat(sam.post(path+"/confirm",Map.of()).statusCode()).isEqualTo(302);
             assertThat(sam.get(path).body()).contains("Tú ya confirmaste. Esperando a Julián", "Confirmaciones: 1 de 2")
                 .doesNotContain("action=\""+path+"/confirm\"", "Conexión completada");
@@ -189,7 +190,7 @@ class EventExperienceTests {
             jul.post(path+"/confirm",Map.of()); sam.post(path+"/confirm",Map.of()); jul.post(path+"/confirm",Map.of());
             assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(b).points()).isEqualTo(10);
             assertThat(sam.get(path).body()).contains("Conexión completada", "Feedback opcional")
-                .doesNotContain("am-grid", "active-map.js", "Gorra roja");
+                .doesNotContain("am-grid", assetUrls.getForLookupPath("/js/active-map.js"), "Gorra roja");
         }
     }
     @Test void activeMissionRetainsDurablePendingSagaAndRetryWithoutPrematureCompletion() throws Exception {

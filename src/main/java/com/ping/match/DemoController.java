@@ -18,11 +18,12 @@ public class DemoController {
     private final ParticipantService participants;
     private final MatchingService matching;
     private final MatchService matches;
+    private final MatchLiveState liveState;
     private final com.ping.event.EventService events;
     private final com.ping.verification.CredentialService credentials;
     private final com.ping.auth.AuthSupport auth;
     private final org.springframework.jdbc.core.JdbcTemplate jdbc;
-    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc,com.ping.verification.CredentialService credentials) { this.credentials=credentials;this.auth=auth;this.jdbc=jdbc;
+    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc,com.ping.verification.CredentialService credentials, MatchLiveState liveState) { this.liveState=liveState;this.credentials=credentials;this.auth=auth;this.jdbc=jdbc;
         this.moderation = moderation; this.recognition = recognition; this.hints = hints;
         this.participants = participants; this.matching = matching; this.matches = matches; this.events = events;
     }
@@ -43,16 +44,8 @@ public class DemoController {
     private long ownCodeRevision(long self,MatchView m){return m.status()==MatchStatus.ACTIVE&&m.verificationPolicy()>=2?jdbc.queryForObject("select count(*) from purpose_credentials where purpose='ENCOUNTER' and context_id=? and issuer_id=?",Long.class,m.id(),self):0;}
     @GetMapping("/me/state") @ResponseBody
     public java.util.Map<String, String> state(HttpSession session, jakarta.servlet.http.HttpServletResponse response) {
-        long id = self(session); var p = participants.get(id); response.setHeader("Cache-Control", "no-store");
-        var current = current(matches.list(id));
-        var state = new java.util.LinkedHashMap<String, String>();
-        state.put("signature", signature(p, events.get(p.eventId()).getStatus(), current));
-        state.put("matchStatus", current == null ? "NONE" : current.status().name());
-        if (current != null && current.status() == MatchStatus.ACTIVE) {
-            var hint = hints.other(current.id(), id);
-            if (hint != null) state.put("recognitionRevision", hint.revision());
-        }
-        return state;
+        response.setHeader("Cache-Control", "no-store");
+        return liveState.forParticipant(self(session));
     }
     @GetMapping("/me") public String dashboard(HttpSession session, Model model) {
         if (session.getAttribute(SELECTED) == null) return "redirect:/join";

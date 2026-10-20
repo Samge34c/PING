@@ -14,7 +14,12 @@ public class TestBrowser implements AutoCloseable {
     private String csrf;
     public TestBrowser(int port) { base = "http://127.0.0.1:" + port; }
     public HttpResponse<String> get(String path) throws Exception {
-        var response = client.send(HttpRequest.newBuilder(URI.create(base).resolve(path)).GET().build(), HttpResponse.BodyHandlers.ofString());
+        return get(path, Map.of());
+    }
+    public HttpResponse<String> get(String path, Map<String, String> headers) throws Exception {
+        var request = HttpRequest.newBuilder(URI.create(base).resolve(path));
+        headers.forEach(request::header);
+        var response = client.send(request.GET().build(), HttpResponse.BodyHandlers.ofString());
         var match = Pattern.compile("name=\"_csrf\"[^>]*value=\"([^\"]+)\"").matcher(response.body());
         if (match.find()) csrf = match.group(1);
         return response;
