@@ -2742,3 +2742,20 @@ body.participant-entry-page {padding-left:0}
 .account-context p { margin: .5rem 0 0; font-size: .875rem; }
 .account-new a { display: inline-flex; align-items: center; min-height: 44px; }
 .account-page .pi-back { min-height: 44px; align-content: center; margin: .5rem 0; }
+
+/* DEC-050: short stage guidance and operational links, using the existing surfaces. */
+.am-next-step { margin: .75rem 0 1rem; font-size: .875rem; line-height: 1.5; }
+.am-next-step strong { display: block; }
+.am-next-step a { display: inline-flex; min-height: 44px; align-items: center; }
+.am-verification h3 { font-weight: 800; }
+.am-verification .personal-code summary { font-weight: 800; }
+.am-verification form > .btn, .am-verification .action-row > .btn { min-height: 48px; }
+.receipt-reference { margin: 1.25rem 0 .5rem; color: var(--ping-muted); }
+.receipt-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding-block: 1rem; border-block: 1px solid var(--ping-border); margin: 1rem 0 .5rem; }
+.receipt-totals dt { font-size: .875rem; font-weight: 500; }
+.receipt-totals dd { margin: .375rem 0 0; }
+.receipt-totals strong { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.event-operations, .organizer-event-actions { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-block: .75rem; }
+.event-operations a, .organizer-event-actions a { display: inline-flex; align-items: center; min-height: 44px; }
+.receipt-page a, .receipt-page button { min-height: 44px; }
+@media (max-width: 575.98px) { .account-page .editor-rows li { display: block; } }

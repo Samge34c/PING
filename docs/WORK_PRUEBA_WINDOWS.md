@@ -1,6 +1,8 @@
 # Probar la entrega Work en Windows y móvil
 
-Código en cuatro PR apiladas:43(editor/recursos),44(cuentas),45(conexión/recibos),46(integración final; comprobar enlace/SHA en la continuidad y GitHub). Todas son borradores. No se necesita merge para probar la última rama, que contiene los bloques anteriores. No borrar `.codex/`, bundles ni otros archivos locales.
+Revisión móvil actual: **PR47, rama fix/mobile-journey-clarity**, basada en PR46 e incluida la cadena anterior. No hace falta merge para probarla. La continuidad y GitHub contienen el SHA remoto comprobado.
+
+Base conservada en cuatro PR apiladas:43(editor/recursos),44(cuentas),45(conexión/recibos),46(integración final; comprobar enlace/SHA en la continuidad y GitHub). Todas son borradores. No se necesita merge para probar la última rama, que contiene los bloques anteriores. No borrar `.codex/`, bundles ni otros archivos locales.
 
 ## Recuperar la rama aunque el clon fuera single-branch
 
@@ -9,10 +11,10 @@ Desde la PowerShell del clon, revisar primero `git status --short`. Si hay cambi
 ```powershell
 cd C:\Users\river\PING
 git remote -v
-git remote set-branches --add origin feature/work-mobile-integration
-git fetch origin refs/heads/feature/work-mobile-integration:refs/remotes/origin/feature/work-mobile-integration
-git switch feature/work-mobile-integration
-git pull --ff-only origin feature/work-mobile-integration
+git remote set-branches --add origin fix/mobile-journey-clarity
+git fetch origin refs/heads/fix/mobile-journey-clarity:refs/remotes/origin/fix/mobile-journey-clarity
+git switch fix/mobile-journey-clarity
+git pull --ff-only origin fix/mobile-journey-clarity
 git rev-parse HEAD
 git status --short
 ```
@@ -93,3 +95,11 @@ Estos dos overrides SMTP sin TLS son solo para el buzón loopback anterior; con 
 GitHub conserva código, migraciones, catálogo, SVG y evidencia ficticia. **No conserva datos de uso.** MySQL conserva cuentas, selecciones, puntos, Saga, recibos, planos/bytes/versiones y coordenadas; copiar solo la rama no recupera estos datos. El respaldo de MySQL debe incluir blobs y todas las tablas, preferentemente con `mysqldump --single-transaction --hex-blob --no-tablespaces` y archivo de salida fuera del repositorio. Conservar acceso seguro al respaldo y comprobar restauración en una base exclusiva. No borrar versiones antiguas del plano que requieren encuentros activos.
 
 No se incluyen contraseñas, cuentas sociales, correo privado, cookies, dumps ni planos privados en Git. Cerrar PING y el buzón con Ctrl+C al terminar; limpiar variables de contraseña cerrando esas PowerShell. No hacer merge ni modificar main para este ensayo.
+
+## Qué revisar de la revisión móvil PR47
+
+Con PING arrancado y la dirección LAN mostrada por los comandos anteriores, usa dos celulares o navegadores con sesiones separadas. En /organizer, el admin encuentra Código y QR, Editar configuración, Recompensas, Plano y Validar y entregar un canje. Comparte el código del evento que TÚ creaste: los datos ficticios del executor no se descargan con Git.
+
+Introduce ese código en el celular. Debe mantenerse el nombre al crear cuenta, verificar el correo y entrar. Si verificas en otro navegador, vuelve a la pestaña original y pulsa Ya verifiqué mi correo · Entrar. Una cuenta con participación en otro evento debe continuar en el evento elegido. Alias y avatar son públicos en el evento; el correo no.
+
+Elige gustos, busca otro y vuelve al alias: la selección debe seguir. Completa el recorrido de aceptación anterior; ACTIVE orienta qué falta de ti y de la otra persona. Generar mi código abre el panel personal: cada uno muestra el suyo e introduce el del otro. No usar la palabra compartida ni un código de canje para verificar el encuentro. Tras ambas confirmaciones, el recibo reúne coste, saldo actual, estado y entrega. Renovar no descuenta otra vez. El encargado debe ser otra cuenta autorizada para ese evento.
