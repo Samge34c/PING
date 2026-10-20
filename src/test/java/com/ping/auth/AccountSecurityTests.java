@@ -39,4 +39,26 @@ class AccountSecurityTests {
  @Test void oauthNeverAutomaticallyLinksMatchingEmailsAndProviderIdentityIsUnique(){String email=address();long a=account(email),b=account(address());assertThatThrownBy(()->accounts.external("google","subject-"+UUID.randomUUID(),email,true,null)).isInstanceOf(BusinessRuleException.class);String subject="subject-"+UUID.randomUUID();assertThat(accounts.external("google",subject,email,true,a)).isEqualTo(a);assertThatThrownBy(()->accounts.external("google",subject,email,true,b)).isInstanceOf(BusinessRuleException.class);}
  @Test void missingProvidersHaveNoActiveButtonsAndReturnDestinationCannotBeExternal()throws Exception{String email=address();account(email);try(var b=new TestBrowser(port)){var page=b.get("/login?next=https://evil.example");assertThat(page.body()).doesNotContain("Continuar con Google","Continuar con Facebook");var result=b.post("/login",Map.of("email",email,"password",PASSWORD));var destination=java.net.URI.create(result.headers().firstValue("Location").orElseThrow());assertThat(destination.getPath()).isEqualTo("/me");assertThat(destination.getHost()).isIn(null,"127.0.0.1");}}
  @Test void repeatedAttemptsHaveRecoverableRateLimit(){String key=UUID.randomUUID().toString();throttle.check("test",key,1,1);assertThatThrownBy(()->throttle.check("test",key,1,1)).isInstanceOf(BusinessRuleException.class).hasMessageContaining("Espera");}
+ @Test void loginToNewEventDoesNotResumeAnUnrelatedParticipation()throws Exception{
+  String email=address();long a=account(email),old=event("Anterior"),target=event("Destino");
+  var f=new ParticipantForm();f.setAlias("Alias anterior privado");f.setEventId(old);long person=participants.create(f).id();accounts.bind(a,person,old);
+  try(var b=new TestBrowser(port)){
+   assertThat(b.get("/join?code="+events.get(target).getEntryCode()).statusCode()).isEqualTo(302);
+   for(String route:List.of("/login","/register","/account/recover"))assertThat(b.get(route).body()).contains(events.get(target).getName());
+   login(b,email);
+   var response=b.get("/join");assertThat(response.statusCode()).isEqualTo(200);
+   assertThat(response.body()).contains(events.get(target).getName()).doesNotContain("Alias anterior privado");
+   assertThat(accounts.participant(a,target)).isEmpty();assertThat(participants.get(person).points()).isZero();
+  }
+ }
+ @Test void loginResumesTheParticipationOfTheChosenEvent()throws Exception{
+  String email=address();long a=account(email),first=event("Primero"),target=event("Elegido");
+  for(long e:List.of(target,first)){var f=new ParticipantForm();f.setAlias(e==target?"Alias del elegido":"Alias del primero");f.setEventId(e);accounts.bind(a,participants.create(f).id(),e);}
+  try(var b=new TestBrowser(port)){
+   b.get("/join?code="+events.get(target).getEntryCode());login(b,email);
+   assertThat(b.get("/join").headers().firstValue("Location").orElse("")).endsWith("/me");
+   assertThat(b.get("/me").body()).contains("Alias del elegido").doesNotContain("Alias del primero");
+  }
+ }
+
 }

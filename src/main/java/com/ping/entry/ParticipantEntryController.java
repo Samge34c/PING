@@ -28,6 +28,13 @@ public class ParticipantEntryController {
         final String key = UUID.randomUUID().toString();
         Avatar avatar=Avatar.defaults(); long revision; String alias = ""; Long eventId; List<Long> ids = List.of(); Long receipt;
     }
+    /** Read-only context chosen through the validated event-code flow; never an identity grant. */
+    public static Optional<Long> pendingEventId(HttpSession session) {
+        synchronized (session) {
+            Object value = session.getAttribute(DRAFT);
+            return value instanceof Draft d ? Optional.ofNullable(d.eventId) : Optional.empty();
+        }
+    }
     private Draft draft(HttpSession session) {
         Draft draft = (Draft) session.getAttribute(DRAFT);
         if (draft == null) { draft = new Draft(); session.setAttribute(DRAFT, draft); }

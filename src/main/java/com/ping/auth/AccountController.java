@@ -9,8 +9,13 @@ import com.ping.participant.ParticipantService;
 import com.ping.web.BusinessRuleException;
 @Controller @Profile("!bootstrap")
 public class AccountController {
- private final AccountService accounts;private final AuthSupport auth;private final PrivateMail mail;private final AuthThrottle throttle;private final AuthConfiguration.ProviderCatalog providers;private final ParticipantService people;
- public AccountController(AccountService a,AuthSupport s,PrivateMail m,AuthThrottle t,AuthConfiguration.ProviderCatalog p,ParticipantService people){accounts=a;auth=s;mail=m;throttle=t;providers=p;this.people=people;}
+ private final AccountService accounts;private final AuthSupport auth;private final PrivateMail mail;private final AuthThrottle throttle;private final AuthConfiguration.ProviderCatalog providers;private final ParticipantService people;private final com.ping.event.EventService events;
+ public AccountController(AccountService a,AuthSupport s,PrivateMail m,AuthThrottle t,AuthConfiguration.ProviderCatalog p,ParticipantService people,com.ping.event.EventService events){accounts=a;auth=s;mail=m;throttle=t;providers=p;this.people=people;this.events=events;}
+ @ModelAttribute public void context(HttpSession s,HttpServletRequest r,Model m){
+  String destination=auth.next(r.getParameter("next")!=null?r.getParameter("next"):(String)s.getAttribute("pingReturnTo"));
+  m.addAttribute("accountDestination",destination);
+  if(destination.equals("/join"))com.ping.entry.ParticipantEntryController.pendingEventId(s).ifPresent(id->m.addAttribute("entryEventName",events.get(id).getName()));
+ }
  @GetMapping("/login") public String login(@RequestParam(required=false) String next,HttpSession s,Model m){if(next!=null)s.setAttribute("pingReturnTo",auth.next(next));m.addAttribute("providers",providers.available());return "account/login";}
  @GetMapping("/register") public String register(Model m){m.addAttribute("mailAvailable",mail.available());return "account/register";}
  @PostMapping("/register") public String register(@RequestParam String email,@RequestParam String password,@RequestParam String repeat,HttpServletRequest r,Model m){m.addAttribute("mailAvailable",mail.available());try{throttle.check("register-ip",r.getRemoteAddr(),5,15);if(!password.equals(repeat))throw new BusinessRuleException("Las contraseñas no coinciden.");accounts.register(email,password);m.addAttribute("sent",true);}catch(BusinessRuleException ex){m.addAttribute("formError",ex.getMessage());m.addAttribute("email",email);}return "account/register";}

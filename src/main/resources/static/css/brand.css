@@ -2734,3 +2734,28 @@ body.participant-entry-page {padding-left:0}
 /* Work integration: same preset portrait beside the alias, no external image sources. */
 .preset-avatar.avatar-public{display:inline-block;width:48px;height:48px;flex:0 0 48px;margin:0;vertical-align:middle;overflow:hidden}.match-person .avatar-public{width:72px;height:72px;flex-basis:72px}.mp-history-row .avatar-public{width:36px;height:36px;flex-basis:36px}.editor-rows li>a{min-height:44px;display:inline-flex;align-items:center}.event-editor [data-editor-status]{margin:1rem 0}.word-add input{flex:1;min-width:120px}.event-editor h2{scroll-margin-top:6rem}.event-editor #words-input{margin-top:1rem}.event-editor [aria-busy=true]{opacity:.75}
 @media(min-width:1200px){.event-editor{display:grid;grid-template-columns:160px minmax(0,1fr) 180px;gap:0 1.5rem;align-items:start}.event-editor>header,.event-editor>[data-editor-status]{grid-column:1/-1}.event-editor>header{grid-row:1}.event-editor>[data-editor-status]{grid-row:2}.event-editor .editor-index{position:sticky;top:6rem;display:flex;flex-direction:column;grid-column:1;grid-row:3;margin-top:1.5rem}.event-editor .editor-sections{grid-column:2;grid-row:3}.event-editor .editor-summary{grid-column:3;grid-row:3;position:sticky;top:6rem}}
+
+/* DEC-050: keep the selected event visible through account access. */
+.account-context { margin: 1rem 0; padding: .875rem 1rem; background: var(--bs-tertiary-bg); border-radius: .75rem; }
+.account-context > span { display: block; font-size: .875rem; color: var(--ping-muted); }
+.account-context > strong { display: block; line-height: 1.4; overflow-wrap: anywhere; }
+.account-context p { margin: .5rem 0 0; font-size: .875rem; }
+.account-new a { display: inline-flex; align-items: center; min-height: 44px; }
+.account-page .pi-back { min-height: 44px; align-content: center; margin: .5rem 0; }
+
+/* DEC-050: short stage guidance and operational links, using the existing surfaces. */
+.am-next-step { margin: .75rem 0 1rem; font-size: .875rem; line-height: 1.5; }
+.am-next-step strong { display: block; }
+.am-next-step a { display: inline-flex; min-height: 44px; align-items: center; }
+.am-verification h3 { font-weight: 800; }
+.am-verification .personal-code summary { font-weight: 800; }
+.am-verification form > .btn, .am-verification .action-row > .btn { min-height: 48px; }
+.receipt-reference { margin: 1.25rem 0 .5rem; color: var(--ping-muted); }
+.receipt-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding-block: 1rem; border-block: 1px solid var(--ping-border); margin: 1rem 0 .5rem; }
+.receipt-totals dt { font-size: .875rem; font-weight: 500; }
+.receipt-totals dd { margin: .375rem 0 0; }
+.receipt-totals strong { font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.event-operations, .organizer-event-actions { display: flex; flex-wrap: wrap; gap: .5rem 1rem; margin-block: .75rem; }
+.event-operations a, .organizer-event-actions a { display: inline-flex; align-items: center; min-height: 44px; }
+.receipt-page a, .receipt-page button { min-height: 44px; }
+@media (max-width: 575.98px) { .account-page .editor-rows li { display: block; } }

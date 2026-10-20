@@ -4,6 +4,15 @@
   <header class="am-person"><span th:replace="~{entry/avatar :: portrait(${match.otherAvatar})}"></span><div><p>Tu encuentro con</p><h1 th:text="${match.otherAlias}"></h1></div></header>
   <div class="am-affinity"><span th:if="${!#strings.isEmpty(match.commonInterests)}" th:text="${match.commonPreview() + ' en común · '}"></span><span th:if="${#strings.isEmpty(match.commonInterests)}">Alternativa sin intereses compartidos · </span>Aceptaron ambos<details th:if="${match.commonTopics().size()>3}"><summary th:text="${'Ver los '+match.commonTopics().size()+' intereses compartidos'}"></summary><p th:text="${match.commonInterests}"></p></details></div>
   <p class="ping-notice" th:if="${event.status.name() != 'OPEN'}">El evento no está abierto para nuevas propuestas. Puedes terminar esta conexión activa.</p>
+  <p class="am-next-step" th:if="${match.verificationPolicy>=2 and !match.completionPending}" role="status">
+    <th:block th:if="${!match.arrived}"><strong>Ahora: llega al punto.</strong> <a href="#am-arrival-title">Registrar mi llegada</a></th:block>
+    <th:block th:if="${match.arrived and !match.otherArrived}"><strong>Tu llegada está guardada.</strong> Falta la llegada de <span th:text="${match.otherAlias}"></span>.</th:block>
+    <th:block th:if="${match.arrived and match.otherArrived and !match.verified and !match.otherVerified}"><strong>Ahora: intercambien sus códigos.</strong> <a href="#am-verify-title">Ir a la verificación</a></th:block>
+    <th:block th:if="${match.verified and !match.otherVerified}"><strong>Tu verificación está guardada.</strong> Falta que <span th:text="${match.otherAlias}"></span> verifique tu código. <a href="#am-verify-title">Ver mi código</a></th:block>
+    <th:block th:if="${match.otherVerified and !match.verified}"><strong th:text="${match.otherAlias+' ya verificó tu código.'}"></strong> <a href="#am-verify-title">Verificar a la otra persona</a></th:block>
+    <th:block th:if="${match.canConfirm() and !match.confirmed}"><strong>Ahora: hagan la actividad.</strong> <a href="#am-activity-title">Ver actividad y confirmar</a></th:block>
+    <th:block th:if="${match.confirmed}"><strong>Tu actividad está confirmada.</strong> Falta que <span th:text="${match.otherAlias}"></span> confirme.</th:block>
+  </p>
   <div class="am-grid" th:classappend="${match.verificationPolicy>=2}?'am-policy2':''">
     <section class="am-recognition" aria-labelledby="am-word-title">
       <h2 id="am-word-title"><svg th:replace="~{fragments/layout :: icon('key')}"></svg>Su palabra de encuentro</h2>
@@ -35,31 +44,31 @@
       <p th:if="${match.floorplanId == null and meetingZone == null}" class="am-word-help">Plano no disponible para este encuentro. Usa las indicaciones del punto.</p>
     </section>
     <section class="am-arrival" aria-labelledby="am-arrival-title" th:if="${!match.completionPending}">
-      <h2 id="am-arrival-title" tabindex="-1" th:text="${match.arrived and match.otherArrived ? 'Ambos llegaron' : '¿Ya estás en el punto?'}"></h2>
+      <h2 id="am-arrival-title" tabindex="-1" th:text="${match.arrived and match.otherArrived ? 'Ambos llegaron' : (match.verificationPolicy>=2 ? '1 · ¿Ya estás en el punto?' : '¿Ya estás en el punto?')}"></h2>
       <ul class="am-confirm-people" aria-label="Llegadas al punto de encuentro">
         <li><span>Tú</span><strong th:text="${match.arrived ? 'Ya llegaste' : 'Sin registrar'}"></strong></li>
         <li><span th:text="${match.otherAlias}"></span><strong th:text="${match.otherArrived ? 'Ya llegó' : 'Sin registrar'}"></strong></li>
       </ul>
       <form th:if="${!match.arrived}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-arrive-action" class="btn btn-primary">Ya llegué</button></form>
       <p role="status" th:if="${match.arrived and !match.otherArrived}" th:text="${'Tu llegada está guardada. ' + match.otherAlias + ' aún no registró la suya.'}"></p>
-      <p class="small text-secondary" th:text="${match.verificationPolicy >= 2 ? 'Cuando ambos lleguen, podrán verificar sus códigos personales. Llegar no da puntos.' : 'Política anterior: llegada opcional e informativa. No da puntos ni condiciona confirmar.'}"></p>
+      <p class="small text-secondary" th:text="${match.verificationPolicy >= 2 ? (match.arrived and match.otherArrived ? 'Ambas llegadas están guardadas. Llegar no da puntos.' : 'Cuando ambos lleguen, podrán verificar sus códigos personales. Llegar no da puntos.') : 'Política anterior: llegada opcional e informativa. No da puntos ni condiciona confirmar.'}"></p>
     </section>
     <section class="am-verification" aria-labelledby="am-verify-title" th:if="${match.verificationPolicy>=2 and !match.completionPending}">
-      <h2 id="am-verify-title" tabindex="-1">Verifiquen a la otra persona</h2>
+      <h2 id="am-verify-title" tabindex="-1">2 · Verifiquen sus códigos</h2>
       <p th:unless="${match.arrived and match.otherArrived}" th:text="${!match.arrived?'Marca tu llegada al punto para continuar.':'Falta que '+match.otherAlias+' marque su llegada.'}"></p>
       <th:block th:if="${match.arrived and match.otherArrived}">
        <p class="ping-notice" th:if="${verificationError}" th:text="${verificationError}" role="alert"></p>
        <ul class="am-confirm-people"><li><span>Tú verificaste a la otra persona</span><strong th:text="${match.verified?'Verificado':'Pendiente'}"></strong></li><li><span>La otra persona te verificó</span><strong th:text="${match.otherVerified?'Verificado':'Pendiente'}"></strong></li></ul>
        <th:block th:unless="${match.otherVerified}">
-        <p>Tu código es personal. Muéstraselo a la otra persona; la palabra compartida de arriba sirve solo para reconocerse.</p>
-        <details th:if="${myCredential != null}" class="personal-code"><summary>Mostrar mi código personal / QR</summary><p><code data-private-credential th:text="${myCredential.manual}"></code></p><img data-private-credential class="credential-qr" th:src="@{/matches/{id}/my-code.png(id=${match.id})}" alt="Tu QR personal para este encuentro" loading="lazy"><p class="small">Válido 10 minutos. Renovar invalida únicamente tu código pendiente anterior.</p></details>
+        <h3 class="h6 mt-3" th:text="${'Muestra tu código a '+match.otherAlias}"></h3><p class="small">La otra persona lo verifica en su celular. Es distinto de la palabra compartida y del código de canje.</p>
+        <details id="am-my-code" tabindex="-1" th:if="${myCredential != null}" th:open="${showPersonalCredential == true}" class="personal-code"><summary>Mostrar mi código personal / QR</summary><p><code data-private-credential th:text="${myCredential.manual}"></code></p><img data-private-credential class="credential-qr" th:src="@{/matches/{id}/my-code.png(id=${match.id})}" alt="Tu QR personal para este encuentro" loading="lazy"><p class="small">Válido 10 minutos. Renovar invalida únicamente tu código pendiente anterior.</p></details>
         <form method="post" th:action="@{/matches/{id}/code(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="requestKey" th:value="${credentialRequestKey}"><input type="hidden" name="renew" th:value="${myCredential != null}"><button id="am-code-generate" class="btn btn-outline-primary my-2" th:text="${myCredential != null?'Renovar mi código':'Generar mi código personal'}"></button></form>
        </th:block>
-       <form th:unless="${match.verified}" method="post" th:action="@{/matches/{id}/verify(id=${match.id})}" data-credential-form><input type="hidden" name="_csrf" th:value="${csrfToken}"><label class="form-label" for="encounter-credential">Código que te muestra la otra persona</label><input class="form-control" name="credential" id="encounter-credential" maxlength="96" autocomplete="off" autocapitalize="characters" spellcheck="false" required><div th:replace="~{verification/scanner :: scanner('ENCOUNTER','encounter-credential')}"></div><div class="action-row my-3"><button id="am-verify-action" class="btn btn-primary">Verificar a la otra persona</button><button type="button" class="btn btn-outline-secondary" data-clear-credential>Limpiar</button></div></form>
+       <h3 th:unless="${match.verified}" class="h6 mt-4" th:text="${'Verifica el código de '+match.otherAlias}"></h3><form th:unless="${match.verified}" method="post" th:action="@{/matches/{id}/verify(id=${match.id})}" data-credential-form><input type="hidden" name="_csrf" th:value="${csrfToken}"><label class="form-label" for="encounter-credential">Código que te muestra la otra persona</label><input class="form-control" name="credential" id="encounter-credential" maxlength="96" autocomplete="off" autocapitalize="characters" spellcheck="false" required><div th:replace="~{verification/scanner :: scanner('ENCOUNTER','encounter-credential')}"></div><div class="action-row my-3"><button id="am-verify-action" class="btn btn-primary">Verificar a la otra persona</button><button type="button" class="btn btn-outline-secondary" data-clear-credential>Limpiar</button></div></form>
        <p th:if="${match.verified and !match.otherVerified}" role="status" th:text="${'Tu verificación está guardada. Falta que '+match.otherAlias+' verifique tu código.'}"></p>
       </th:block>
     </section>
-    <section class="am-activity" aria-labelledby="am-activity-title"><h2 id="am-activity-title"><svg th:replace="~{fragments/layout :: icon('chat')}"></svg>Hagan algo juntos</h2><h3 th:if="${!#strings.isEmpty(match.activityTitle)}" th:text="${match.activityTitle}" class="h5 mt-2"></h3><p class="mission-activity-text" th:text="${match.activity}"></p></section>
+    <section class="am-activity" aria-labelledby="am-activity-title"><h2 id="am-activity-title"><svg th:replace="~{fragments/layout :: icon('chat')}"></svg><span th:text="${match.verificationPolicy>=2 ? '3 · Hagan algo juntos' : 'Hagan algo juntos'}"></span></h2><h3 th:if="${!#strings.isEmpty(match.activityTitle)}" th:text="${match.activityTitle}" class="h5 mt-2"></h3><p class="mission-activity-text" th:text="${match.activity}"></p></section>
     <section class="am-confirmation" aria-labelledby="am-confirm-title" th:if="${match.canConfirm() or match.completionPending}">
       <h2 id="am-confirm-title" tabindex="-1" th:text="${match.completionPending ? 'Finalizando la conexión' : (match.confirmed ? 'Tu parte está confirmada' : '¿Terminaron la actividad?')}"></h2>
       <p class="am-confirm-help" th:if="${!match.confirmed and !match.completionPending}">Confirma después del encuentro y de realizar la actividad.</p>
