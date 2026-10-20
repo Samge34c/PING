@@ -1,105 +1,80 @@
-# Probar la entrega Work en Windows y móvil
+# PING en Windows: diagnosticar, arrancar y respaldar
 
-Revisión móvil actual: **PR47, rama fix/mobile-journey-clarity**, basada en PR46 e incluida la cadena anterior. No hace falta merge para probarla. La continuidad y GitHub contienen el SHA remoto comprobado.
+Bloque operativo DEC-051, [PR48 en borrador](https://github.com/Samge34c/PING/pull/48), rama **feature/windows-operations**, basada en d481cc1/PR47 e incluida toda la integración anterior. La [continuidad única](ENCUENTRO_CONFIGURABLE_LLEGADA.md) y la PR contienen el respaldo remoto actual. No hay que hacer merge ni cambiar main para probar.
 
-Base conservada en cuatro PR apiladas:43(editor/recursos),44(cuentas),45(conexión/recibos),46(integración final; comprobar enlace/SHA en la continuidad y GitHub). Todas son borradores. No se necesita merge para probar la última rama, que contiene los bloques anteriores. No borrar `.codex/`, bundles ni otros archivos locales.
+El clon de Samuel está en `C:\Users\river\PING-movil`. **Los scripts resuelven la raíz desde su propia ubicación**, también si cambias de carpeta o el clon tiene espacios. Reutilizan JDK21, Maven Wrapper, Python3.10+ (también usado por el buzón) y clientes MySQL8.4 ya instalados. No instalan herramientas, paquetes ni skills. No cambian firewall, ExecutionPolicy, router, certificados o servicios ajenos.
 
-## Recuperar la rama aunque el clon fuera single-branch
-
-Desde la PowerShell del clon, revisar primero `git status --short`. Si hay cambios **versionados**, conservarlos antes de cambiar de rama; no usar reset/clean. Los archivos ajenos sin seguimiento no requieren borrado.
+Antes de actualizar, `git status --short`: conserva cambios versionados en su rama; no uses reset/clean ni borres `.codex/`, bundles u otros archivos. Para un clon `--single-branch`:
 
 ```powershell
-cd C:\Users\river\PING
+cd C:\Users\river\PING-movil
 git remote -v
-git remote set-branches --add origin fix/mobile-journey-clarity
-git fetch origin refs/heads/fix/mobile-journey-clarity:refs/remotes/origin/fix/mobile-journey-clarity
-git switch fix/mobile-journey-clarity
-git pull --ff-only origin fix/mobile-journey-clarity
+git remote set-branches --add origin feature/windows-operations
+git fetch origin refs/heads/feature/windows-operations:refs/remotes/origin/feature/windows-operations
+git switch feature/windows-operations
+git pull --ff-only origin feature/windows-operations
 git rev-parse HEAD
 git status --short
 ```
 
-GitHub usa la conexión/autenticación Git instalada. No pegar tokens por chat. Si Git señala que sobrescribiría un archivo, conservarlo y resolver ese conflicto concreto; no borrar directorios para forzar el cambio.
-
-## Antes de arrancar
-
-JDK21 y MySQL8.4 deben estar disponibles. Usar la base MySQL que realmente contiene tus datos y respaldarla antes de aplicar V19–V22. No existe una contraseña MySQL o PING universal. La contraseña del usuario técnico MySQL no es una cuenta de participante.
-
-La aplicación aplica migraciones nuevas automáticamente con `ddl-auto=validate`; no editar migraciones publicadas ni usar `ddl-auto=create`. Probar en una copia exclusiva si quieres conservar intactos los datos de uso.
-
-Puedes introducir las variables locales sin sustituir texto dentro de comandos ni mostrar la contraseña:
+## 1. Diagnosticar
 
 ```powershell
-if (-not $env:DB_URL) { $env:DB_URL = Read-Host 'Pega tu URL JDBC MySQL existente, sin contraseña' }
-if (-not $env:DB_USERNAME) { $env:DB_USERNAME = Read-Host 'Usuario técnico de MySQL' }
-$pingDbCredential = Get-Credential -UserName $env:DB_USERNAME -Message 'Contraseña de MySQL: queda solo en esta PowerShell'
-$env:DB_PASSWORD = $pingDbCredential.GetNetworkCredential().Password
-Remove-Variable pingDbCredential
+.\tools\windows\Test-Ping.ps1
 ```
 
-Conservar TLS de la conexión MySQL que corresponda a tu instalación. No se conoce desde este entorno la URL ni la contraseña de tu ordenador, y no se inventan valores.
+Consulta versiones de Java/JDK21, Python, clientes MySQL y Maven declarado por el wrapper (sin ejecutarlo/descargarlo), presencia/ausencia de configuración sin mostrar secretos, escuchas TCP, ruta pública local `/login`, IPv4 elegida/base pública, servicio MySQL si Windows lo expone y conexión SQL si ya están las variables/clientes. Propone consultar8081; si PING usa otro puerto: `Test-Ping.ps1 -Port 8080`. Puedes seleccionar IPv4 por número; no presupone que la primera interfaz sea Wi-Fi. `-LanIPv4` permite indicar explícitamente una de las IPv4 activas.
 
-Para la **primera cuenta general**, una vez, antes de arrancar:
+Es de lectura: no pide contraseñas ni cambia variables, procesos, servicios o configuraciones. Si faltan datos/clientes, informa qué no comprobó. Una respuesta200 local no demuestra acceso entre celulares, firewall, aislamiento de clientes del router, Safari ni permisos de cámara. Una escucha solo127.0.0.1 no admite el celular;0.0.0.0 incluye las IPv4 locales, pero no prueba la red del teléfono. Una base pública diferente puede corresponder a un proxy HTTPS real: el diagnóstico no la reemplaza.
+
+## 2. Arrancar para el celular
 
 ```powershell
-$env:PING_BOOTSTRAP_EMAIL = Read-Host 'Correo nuevo para la cuenta general de PING'
-$pingGeneralCredential = Get-Credential -UserName $env:PING_BOOTSTRAP_EMAIL -Message 'Nueva contraseña PING: entre12 y128 caracteres'
-$env:PING_BOOTSTRAP_PASSWORD = $pingGeneralCredential.GetNetworkCredential().Password
-Remove-Variable pingGeneralCredential
+.\tools\windows\Start-Ping.ps1
 ```
 
-Si auth_setup_state ya fue consumido, entrar con la cuenta general existente o usar recuperación de acceso; no reconfigurar otra contraseña esperando reemplazarla. Después del primer inicio correcto, retirar ambas variables bootstrap y reiniciar. Más detalle, SMTP/Google/Facebook y sus redirects en [ACCOUNTS_SETUP.md](ACCOUNTS_SETUP.md).
+El asistente propone **8081** o tu SERVER_PORT existente y permite elegir otro. Comprueba que esté libre, sin detener al ocupante, y exige elegir la interfaz compartida con el celular. Reutiliza `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`; solo solicita lo que falta, con contraseña oculta. La URL JDBC no debe incluir usuario/contraseña: se pasan por sus variables separadas. La cuenta MySQL es distinta de una cuenta PING. No existe contraseña universal y no se solicita por chat.
 
-## Correo de ensayo controlado
+Busca `mysql.exe` en PATH o en la instalación habitual `Program Files\MySQL\MySQL Server 8.4\bin`. Si tu instalación está en otro lugar, puedes usar `-MySqlPath` y, en respaldo, `-MySqlDumpPath` con sus rutas existentes. No instala MySQL ni cambia su servicio. La configuración admite un servidor JDBC, puerto, base de letras/números/guion bajo y TLS; no implementa URLs multi-host/SRV. Respeta sslMode y las opciones anteriores useSSL/requireSSL; no rebaja TLS. Con VERIFY_CA/VERIFY_IDENTITY y truststore Java, indica `-SslCa` con el PEM del servidor existente para los clientes MySQL: un truststore Java no es un PEM. Su contraseña permanece oculta en diagnóstico/backup y no se pasa al cliente CLI. El arranque guiado rechaza CUALQUIER contraseña dentro de DB_URL, también la del truststore: los registros Java pueden mostrar la URL. En ese caso conserva tu arranque TLS existente o separa esa configuración de forma explícita; el asistente no reescribe ni rebaja TLS.
 
-En otra PowerShell, desde el clon, con Python ya instalado:
+Con MySQL comprobado, ofrece el **buzón local de ensayo existente**. Si aceptas, abre Python en otra ventana, solo127.0.0.1:1025, y muestra dónde leer los `.eml` privados: `PING-dev-mailbox` del perfil del usuario, fuera del clon. No envía a Internet. Si1025 está ocupado, exige confirmar que es TU buzón existente; no lo supone ni lo detiene. Solo cierra el buzón que él mismo inició. Si mantienes SMTP remoto, no desactiva su TLS ni inventa credenciales. Sin correo configurado no hay registro/recuperación por correo; las cuentas existentes pueden entrar. [Configuración de cuentas y primer general](ACCOUNTS_SETUP.md): el asistente no crea/promueve cuentas ni activa demo/proveedores.
+
+Muestra la **dirección exacta** para PC y celulares de la misma red, configura temporalmente0.0.0.0/puerto/base LAN y ejecuta Maven Wrapper con perfil mysql. Espera `Started PingApplication`. Mantén la consola abierta; Ctrl+C termina tu ejecución. Si la base pública existente difiere, pide confirmación LAN antes de cambiarla temporalmente; `-UseLanHttp` expresa esa elección. Si tu configuración exige TLS/cookie Secure, se detiene en vez de degradarla. Restaura las variables previas al salir, incluso ante error; no guarda contraseñas en archivos.
+
+**HTTP LAN sirve para navegación y códigos manuales; el escáner interno requiere HTTPS con certificado confiado por el teléfono.** Cambiar una variable a https no crea TLS. No desactives protecciones del navegador. Si no abre en el celular, ejecuta diagnóstico y comprueba en el teléfono la misma red efectiva, la IP actual y posible aislamiento del router. No se reutiliza la antigua IP172.20.10.4.
+
+Recorrido breve: Organización→Código y QR proporciona el código de TU evento. Los datos ficticios del executor no vienen con Git. En dos celulares/sesiones: código→registro/verificación→alias/avatar→gustos→Mi Ping/Conectar→aceptación de ambos→punto/plano→ambas llegadas→códigos personales cruzados→confirmaciones→puntos→beneficio/recibo. La palabra compartida sirve para reconocerse, no como código personal ni de canje. Un encargado que sea otra cuenta autorizada valida y entrega el recibo.
+
+## 3. Respaldar y comprobar recuperación
 
 ```powershell
-py tools/dev-mailbox.py
+.\tools\windows\Backup-Ping.ps1
 ```
 
-El buzón escucha solo127.0.0.1:1025. Guarda mensajes `.eml` privados en `PING-dev-mailbox` del perfil del usuario, fuera del clon. Permite probar verificación/recuperación, pero **no envía correos a Internet**. Abrir los mensajes localmente; no adjuntarlos a Git ni al chat.
+Reutiliza o solicita la conexión como el arranque. Evita escrituras y cambios de estructura durante el respaldo; puedes detener TU PING explícitamente con Ctrl+C antes, manteniendo MySQL. El script no reinicia ni detiene servicios. Usa mysqldump binario de todas las tablas InnoDB con single-transaction, hex-blob, no-tablespaces y GTID_PURGED=OFF; incluye cuentas, saldos, Saga, canjes, planos, versiones y coordenadas. No redirige SQL mediante PowerShell5.1, que podría alterar su codificación.
 
-En la PowerShell de PING:
+Destino predeterminado: `%LOCALAPPDATA%\PING\backups`, en una subcarpeta NUEVA con fecha UTC y sufijo aleatorio. `-Destination` permite otra carpeta privada FUERA del repositorio, incluso al resolver enlaces. En Windows limita la ACL de la subcarpeta nueva al usuario actual, sin cambiar permisos globales ni de carpetas existentes. Si no puede protegerla, no genera el dump. No sobrescribe archivos anteriores. Captura TODAS las tablas presentes, también de un esquema PING anterior a cuentas/planos, para permitir respaldo antes de aplicar migraciones; restaura ese esquema real sin adelantar sus versiones.
+
+Entrega tres archivos que debes conservar juntos y sin renombrar: `.sql`, `.sql.sha256`, `.sql.json`. Verifica código de salida, tamaño no vacío, SHA-256 y huellas de estructura/datos antes/después. El manifiesto solo guarda huellas/recuentos y metadatos técnicos, pero TODO el paquete es privado. Contraseña solo en memoria/entorno del proceso hijo, nunca en argumentos, archivos temporales o logs; no hay archivo de credenciales que limpiar. `MYSQL_PWD` puede ser visible para el propietario/administrador del proceso: usa un PC de confianza y no captures su entorno. El script limpia su copia al terminar y restaura las variables previas.
+
+**Archivo no vacío + checksum no demuestran restaurabilidad.** Si la fuente cambió durante la captura, se conserva el SQL privado sin manifiesto válido y se pide repetir en otra carpeta cuando no haya escrituras. Un fallo de mysqldump deja un parcial privado, nunca un respaldo declarado válido. No publiques SQL, manifiestos privados, correos, cookies ni planos de uso.
+
+Para el ensayo opcional, dentro de este mismo paso:
 
 ```powershell
-$env:SPRING_MAIL_HOST = '127.0.0.1'
-$env:SPRING_MAIL_PORT = '1025'
-$env:PING_MAIL_FROM = 'pruebas@ping.test'
-$env:PING_DEMO_ENABLED = 'false'
-$env:PING_OAUTH_ENABLED = 'false'
-$pingWifi = Get-NetIPConfiguration | Where-Object { $_.IPv4DefaultGateway -and $_.NetAdapter.Status -eq 'Up' -and $_.NetAdapter.InterfaceDescription -notmatch 'Hyper-V|WSL|Virtual' } | Select-Object -First 1
-if (-not $pingWifi) { throw 'No encontramos una conexión con puerta de enlace. Conecta el PC a tu Wi-Fi y repite.' }
-$pingLanIp = $pingWifi.IPv4Address.IPAddress | Select-Object -First 1
-$env:PING_PUBLIC_BASE_URL = "http://${pingLanIp}:8080"
-$env:SERVER_ADDRESS = '0.0.0.0'
-Write-Host "Abre en el PC y los celulares de la misma red: $env:PING_PUBLIC_BASE_URL"
-.\mvnw.cmd spring-boot:run '-Dspring-boot.run.arguments=--spring.mail.properties.mail.smtp.starttls.enable=false --spring.mail.properties.mail.smtp.starttls.required=false'
+.\tools\windows\Restore-PingBackup.ps1
 ```
 
-Estos dos overrides SMTP sin TLS son solo para el buzón loopback anterior; con SMTP remoto conservar STARTTLS y usar su configuración autorizada. Si hay varias conexiones, verificar que la IP mostrada es la de la red compartida. La IP antigua172.20.10.4 no se presupone vigente. Mantener la consola abierta. Si Windows solicita acceso, permitirlo únicamente en la red privada de ensayo; no abrir el puerto de MySQL ni exponer el buzón. El aislamiento de clientes de algunos puntos Wi-Fi puede impedir el acceso entre dispositivos.
+Pide la ruta SQL, valida sus sidecars/checksum, propone una base `ping_restore_exclusive_...`, muestra origen/servidor/destino y exige escribir el nombre NUEVO exacto. Rechaza cualquier destino existente, incluso vacío, y jamás hace DROP DATABASE/clean ni importa sobre la base habitual. Necesita permisos MySQL para crear base, crear usuario y conceder permisos solo en esa base. Si no los tienes, falla sin promover cuentas ni cambiar permisos existentes.
 
-**HTTP por IP LAN permite navegación y códigos manuales, no cámara web.** Para usar “Escanear QR” desde el teléfono se necesita un origen HTTPS con certificado confiado por ese teléfono y `PING_PUBLIC_BASE_URL` de ese origen. Cambiar solo una variable a https sin configurar TLS no crea HTTPS. No desactivar las protecciones del navegador. El lector externo de la cámara del sistema puede abrir un QR de entrada, pero eso no prueba el escáner interno del navegador. Google/Facebook requieren clientes reales y redirects del propietario; no se simula su configuración.
+Comprueba de nuevo el SHA-256 del mismo archivo abierto justo antes y después de importar, para detectar cambios durante el ensayo. Importa con una cuenta temporal limitada a la base nueva y a tu host de conexión, sin privilegios globales/FILE ni grant option. El cliente desactiva comandos de shell y local-infile durante el batch. Compara todas las tablas/definiciones, recuentos y SHA-256 de filas ordenadas, incluidos bytes de planos y estados/saldos. Retira el usuario temporal tanto al terminar como al fallar. No cambia DB_URL habitual. Conserva base de ensayo, respaldo y registro privado `restore_...json`; un error deja identificada una base NUEVA parcial, que no debe reutilizarse como destino. Si no consigue retirar el usuario, informa su nombre para retirada privilegiada explícita; no lo oculta como éxito.
 
-## Recorrido de aceptación
+El checksum detecta alteración accidental, no acredita autoría: importa únicamente tu paquete privado conocido. Si decides abrir PING contra el ensayo, hazlo en otra PowerShell, con una asignación explícita de DB_URL a ESA base y otro puerto. El script de restauración no hace ese cambio por ti. No borres versiones antiguas de planos que aún necesitan encuentros activos.
 
-1. General: entrar por “Organizo un evento”, crear un **evento ficticio** propio y abrirlo. En “Editar configuración” añadir punto, palabras, actividad con37 puntos y lugar de entrega; crear recompensa de20 puntos. Probar guardar una sección con otra en borrador: esta se conserva. El catálogo anterior puede revisarse/reducirse/importarse explícitamente.
-2. Opcional: cargar un plano esquemático ficticio, colocar el punto por toque o coordenadas y guardar. No subir planos privados a Git. Sin plano, nombre/indicaciones siguen funcionando.
-3. En dos navegadores/perfiles o celulares: código del evento → registrar cuenta → verificar el correo recibido → alias/avatar → intereses. Elegir Lady Gaga no selecciona Pop ni sus otros artistas. Entrar a Mi Ping y comprobar avatar.
-4. Activar disponibilidad, buscar, aceptar ambos. Antes de ambas llegadas no hay confirmación final. Cada persona marca su llegada, muestra su **propio** código/QR y verifica el que presenta la otra. La palabra compartida sirve para reconocerse, no como prueba.
-5. Confirmar la actividad por ambos:37 puntos por persona una vez. Solicitar recompensa20: recibo pendiente, lugar congelado y saldo17. Renovar código no vuelve a descontar. Solo otro encargado autorizado del evento valida y confirma entrega.
-6. Buscar otra vez: la pareja completada queda excluida en ambos órdenes. Reiniciar PING y volver a entrar: misma participación, saldo17 y recibo con su estado; las sesiones/códigos en claro no se prometen persistentes y se pueden renovar sin otro cobro.
+GitHub respalda **código, migraciones y evidencia ficticia**. MySQL respalda **datos de uso y planos**; actualizar la rama no recupera cuentas, imágenes ni saldos perdidos.
 
-## Qué respalda GitHub y qué debes respaldar aparte
+### Qué se comprobó y qué falta en tu PC
 
-GitHub conserva código, migraciones, catálogo, SVG y evidencia ficticia. **No conserva datos de uso.** MySQL conserva cuentas, selecciones, puntos, Saga, recibos, planos/bytes/versiones y coordenadas; copiar solo la rama no recupera estos datos. El respaldo de MySQL debe incluir blobs y todas las tablas, preferentemente con `mysqldump --single-transaction --hex-blob --no-tablespaces` y archivo de salida fuera del repositorio. Conservar acceso seguro al respaldo y comprobar restauración en una base exclusiva. No borrar versiones antiguas del plano que requieren encuentros activos.
+En este entorno Linux: compilación Python,17 pruebas unitarias dirigidas; conexión MySQL8.4.11 con VERIFY_CA, respaldo binario real de35 tablas/260430bytes y restauración real en base exclusiva con todas las huellas coincidentes. Destino existente y checksum alterado rechazados; SQL de ensayo que intenta cambiar a otra base exclusiva denegado por el usuario restringido1044. Segundo restore con el lector final vuelve a coincidir en35 tablas; comando de shell en SQL rechazado sin crear su archivo de prueba. Origen y destino previo no recibieron el cambio de saldo intentado; blobs conservan cantidad/bytes y quedan0 cuentas temporales. Dumps/logs quedan fuera de Git. No se repitió la suite Java porque la aplicación no cambia.
 
-No se incluyen contraseñas, cuentas sociales, correo privado, cookies, dumps ni planos privados en Git. Cerrar PING y el buzón con Ctrl+C al terminar; limpiar variables de contraseña cerrando esas PowerShell. No hacer merge ni modificar main para este ensayo.
-
-## Qué revisar de la revisión móvil PR47
-
-Con PING arrancado y la dirección LAN mostrada por los comandos anteriores, usa dos celulares o navegadores con sesiones separadas. En /organizer, el admin encuentra Código y QR, Editar configuración, Recompensas, Plano y Validar y entregar un canje. Comparte el código del evento que TÚ creaste: los datos ficticios del executor no se descargan con Git.
-
-Introduce ese código en el celular. Debe mantenerse el nombre al crear cuenta, verificar el correo y entrar. Si verificas en otro navegador, vuelve a la pestaña original y pulsa Ya verifiqué mi correo · Entrar. Una cuenta con participación en otro evento debe continuar en el evento elegido. Alias y avatar son públicos en el evento; el correo no.
-
-Elige gustos, busca otro y vuelve al alias: la selección debe seguir. Completa el recorrido de aceptación anterior; ACTIVE orienta qué falta de ti y de la otra persona. Generar mi código abre el panel personal: cada uno muestra el suyo e introduce el del otro. No usar la palabra compartida ni un código de canje para verificar el encuentro. Tras ambas confirmaciones, el recibo reúne coste, saldo actual, estado y entrega. Renovar no descuenta otra vez. El encargado debe ser otra cuenta autorizada para ese evento.
+**No hay Windows ni PowerShell aquí.** Los `.ps1` tienen revisión estática y UTF-8 BOM para Windows PowerShell5.1; no se presentan como ejecutados. Quedan por comprobar en tu PC: parser/host PowerShell5.1+, descubrimiento de Java/Python/clientes, prompt de red/puerto, ACL NTFS, ventana del buzón, Ctrl+C y acceso Wi-Fi del teléfono. Incluimos `tools/windows/Test-Scripts.ps1`, que usa el parser nativo sin ejecutar operaciones ni instalar Pester, para comprobar sintaxis cuando haya PowerShell. Si una política bloquea scripts, no la cambies automáticamente: usa la política autorizada de tu PC.
