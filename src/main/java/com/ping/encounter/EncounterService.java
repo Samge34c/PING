@@ -28,14 +28,14 @@ public class EncounterService {
     private void revision(Long expected,long current){if(expected==null || expected!=current)throw new BusinessRuleException("La configuración cambió. Vuelve a abrir el editor.");}
     @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public long savePoint(long event,Long id,@Valid PointForm form){
-        var e=events.lock(event);var p=id==null?new MeetingPoint(event):point(event,id);
+        var e=events.lock(event);requireLegacyImport(e);var p=id==null?new MeetingPoint(event):point(event,id);
         if(id==null && points(event).stream().filter(x->!x.isArchived()).count()>=3)throw new BusinessRuleException("Máximo3 puntos. Archiva uno para añadir otro.");
         if(p.isArchived())throw new BusinessRuleException("El punto está archivado.");if(id!=null)revision(form.getVersion(),p.getVersion());
         p.change(form);e.enableStructuredEncounter();return points.save(p).getId();
     }
     @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public long saveActivity(long event,Long id,@Valid ActivityForm form){
-        var e=events.lock(event);var a=id==null?new EventActivity(event):activity(event,id);
+        var e=events.lock(event);requireLegacyImport(e);var a=id==null?new EventActivity(event):activity(event,id);
         if(id==null && activities(event).stream().filter(x->!x.isArchived()).count()>=10)throw new BusinessRuleException("Máximo10 actividades. Archiva una para añadir otra.");
         if(a.isArchived())throw new BusinessRuleException("La actividad está archivada.");if(id!=null)revision(form.getVersion(),a.getVersion());
         if(points.findAllById(form.getPointIds()).size()!=form.getPointIds().size() || points.findAllById(form.getPointIds()).stream().anyMatch(p->p.getEventId()!=event))throw new BusinessRuleException("Elige puntos de este evento.");
@@ -52,6 +52,7 @@ public class EncounterService {
         var rows=EncounterOptions.lines(e.getEncounterActivities());if(rows.isEmpty())rows=List.of(ActivityCatalog.activity(""));
         // Preflight before mutation: over-limit legacy data remains intact and editable.
         if(new LinkedHashSet<>(names).size()>3 || new LinkedHashSet<>(rows).size()>10)throw new BusinessRuleException("El catálogo anterior supera3 puntos o10 actividades. Reduce las listas antes de importar; no se borró nada.");
+        e.enableStructuredEncounter();
         Set<Long> ids=new LinkedHashSet<>();
         for(String name:new LinkedHashSet<>(names)){var f=new PointForm();f.setName(name);f.setDirections("Busca el punto público «"+name+"». Si no lo identificas, consulta al organizador.");ids.add(savePoint(event,null,f));}
         for(String text:new LinkedHashSet<>(rows)){var f=new ActivityForm();f.setTitle(text.substring(0,Math.min(120,text.length())));f.setInstructions(text);f.setPointIds(ids);saveActivity(event,null,f);}
@@ -62,6 +63,9 @@ public class EncounterService {
     public void archiveActivity(long event,long id){events.lock(event);activity(event,id).archive();}
     @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public void words(long event,String value,long version){var e=events.lock(event);revision(version,e.getVersion());value=value.replace(",","\n");EncounterOptions.checkGrowth(value,e.getEncounterWords(),100,"Palabras");e.changeWords(EncounterOptions.normalize(value,40,"Palabras"));}
+    private void requireLegacyImport(Event e){if(!e.isStructuredEncounter()&&(!EncounterOptions.unique(e.getMeetingPoints()).isEmpty()||!EncounterOptions.unique(e.getEncounterActivities()).isEmpty()))throw new BusinessRuleException("Importa primero el catálogo anterior. Puedes reducir sus listas sin borrar encuentros activos.");}
+    @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
+    public void legacy(long event,String names,String tasks,long version){var e=events.lock(event);revision(version,e.getVersion());if(e.isStructuredEncounter())throw new BusinessRuleException("El catálogo ya se importó. Usa las filas editables.");if(names.length()>4000||tasks.length()>12000)throw new BusinessRuleException("Las listas superan el tamaño permitido.");EncounterOptions.checkGrowth(names,e.getMeetingPoints(),3,"Puntos");EncounterOptions.checkGrowth(tasks,e.getEncounterActivities(),10,"Actividades");var f=EventForm.from(e);f.setMeetingPoints(EncounterOptions.normalize(names,160,"Puntos"));f.setEncounterActivities(EncounterOptions.normalize(tasks,500,"Actividades"));events.update(event,f);}
     public record Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints,Long pointId){}
     public Assignment assign(Event event,String common,long matchId){
         if((!event.isStructuredEncounter() && (EncounterOptions.unique(event.getMeetingPoints()).size()>3 || EncounterOptions.unique(event.getEncounterActivities()).size()>10)) || EncounterOptions.unique(event.getEncounterWords()).size()>100 || (event.isStructuredEncounter() && (points(event.getId()).stream().filter(p->!p.isArchived()).count()>3 || activities(event.getId()).stream().filter(a->!a.isArchived()).count()>10)))throw new EncounterUnavailableException("La configuración anterior supera los límites. Pide al organizador reducirla; la propuesta y los encuentros anteriores se conservan.");

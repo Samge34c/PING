@@ -1,18 +1,48 @@
 (() => {
- document.querySelectorAll('.editor-sections section>details').forEach(d=>{const f=d.querySelector('form'),s=d.querySelector('summary');if(f){f.dataset.originalAction=f.action;s.dataset.originalText=s.textContent;s.dataset.originalHidden=String(s.hidden);}});
- document.querySelectorAll('[data-edit-point],[data-edit-activity]').forEach(link=>link.addEventListener('click',event=>{
- if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey)return;
- const section=link.closest('section'),details=section.querySelector(':scope>details'),form=details?.querySelector('form');if(!form)return;
- event.preventDefault();form.reset();form.action=link.dataset.saveUrl;
- for(const name of ['name','directions','title','instructions','rewardPoints','version']){const input=form.elements.namedItem(name);if(input&&link.dataset[name]!=null)input.value=link.dataset[name];}
- form.querySelector('input[name="active"]').checked=link.dataset.active==='true';
- for(const name of ['pointIds','interestIds']){const selected=(link.dataset[name]||'').split(',');form.querySelectorAll(`input[name="${name}"]`).forEach(i=>i.checked=selected.includes(i.value));}
- details.querySelector('summary').hidden=false;details.open=true;form.querySelector('input:not([type=hidden])').focus();
- }));
- document.querySelectorAll('[data-cancel-section]').forEach(b=>b.addEventListener('click',()=>{const d=b.closest('details'),s=d.querySelector('summary');b.form.reset();if(b.form.dataset.originalAction)b.form.action=b.form.dataset.originalAction;if(s.dataset.originalText)s.textContent=s.dataset.originalText;s.hidden=s.dataset.originalHidden==='true';d.open=false;if(!s.hidden)s.focus();}));
- document.querySelectorAll('[data-words-editor]').forEach(form=>{const input=form.querySelector('textarea'),chips=form.querySelector('[data-word-chips]');
- const words=()=>{const unique=new Map();for(const s of input.value.split(/[,\n]/).map(s=>s.trim().replace(/\s+/g,' ')).filter(Boolean)){const key=s.normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();if(!unique.has(key))unique.set(key,s);}return [...unique.values()];};
- const render=()=>{chips.replaceChildren();words().forEach((w,i)=>{const b=document.createElement('button');b.type='button';b.className='btn btn-outline-secondary';b.textContent=w+' ×';b.setAttribute('aria-label','Quitar '+w);b.onclick=()=>{const next=words();next.splice(i,1);input.value=next.join('\n');render();form.querySelector('details').open=true;};chips.append(b);});};
- input.addEventListener('input',render);form.addEventListener('reset',()=>queueMicrotask(render));form.addEventListener('submit',()=>input.value=words().join('\n'));render();
+ const root=document.querySelector('.editor-sections');if(!root)return;
+ const status=document.querySelector('[data-editor-status]'),baselines=new WeakMap();
+ const snapshot=form=>JSON.stringify({action:form.getAttribute('action'),fields:[...new FormData(form)].filter(([key])=>!['_csrf','version'].includes(key))});
+ const changed=section=>{section.dataset.dirty='true';if(status)status.textContent='Borrador pendiente en '+section.querySelector('h2')?.textContent+'. Guarda esta sección para aplicarlo.';};
+ const init=scope=>{
+  scope.querySelectorAll('form').forEach(f=>{if(!baselines.has(f))baselines.set(f,snapshot(f));});
+  scope.querySelectorAll('section>details').forEach(d=>{const f=d.querySelector('form'),s=d.querySelector('summary');if(f){f.dataset.originalAction=f.action;s.dataset.originalText=s.textContent;s.dataset.originalHidden=String(s.hidden);}});
+  scope.querySelectorAll('[data-edit-point],[data-edit-activity]').forEach(link=>link.addEventListener('click',event=>{
+   if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey)return;const section=link.closest('section'),details=section.querySelector(':scope>details'),form=details?.querySelector('form');if(!form)return;
+   event.preventDefault();form.reset();form.action=link.dataset.saveUrl;
+   for(const name of ['name','directions','title','instructions','rewardPoints','version']){const input=form.elements.namedItem(name);if(input&&link.dataset[name]!=null)input.value=link.dataset[name];}
+   form.querySelector('input[name=active]').checked=link.dataset.active==='true';
+   for(const name of ['pointIds','interestIds']){const selected=(link.dataset[name]||'').split(',');form.querySelectorAll(`input[name=${name}]`).forEach(i=>i.checked=selected.includes(i.value));}
+   details.querySelector('summary').hidden=false;details.querySelector('summary').textContent=link.hasAttribute('data-edit-point')?'Editar punto':'Editar actividad';details.open=true;changed(section);form.querySelector('input:not([type=hidden])').focus();
+  }));
+  scope.querySelectorAll('[data-cancel-section]').forEach(b=>b.addEventListener('click',()=>{const d=b.closest('details'),s=d.querySelector('summary');b.form.reset();if(b.form.dataset.originalAction)b.form.action=b.form.dataset.originalAction;if(s.dataset.originalText)s.textContent=s.dataset.originalText;s.hidden=s.dataset.originalHidden==='true';d.open=false;delete b.closest('section').dataset.dirty;if(!s.hidden)s.focus();if(status)status.textContent='Borrador de esta sección cancelado. Las demás secciones se conservan.';}));
+  scope.querySelectorAll('[data-words-editor]').forEach(form=>{
+   const input=form.querySelector('textarea'),chips=form.querySelector('[data-word-chips]'),add=form.querySelector('[data-word-add]'),entry=form.querySelector('[data-word-new]'),preview=form.querySelector('[data-word-preview]');
+   const key=s=>s.normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase();
+   const words=()=>{const unique=new Map();for(const s of input.value.split(/[,\n]/).map(s=>s.trim().replace(/\s+/g,' ')).filter(Boolean))if(!unique.has(key(s)))unique.set(key(s),s);return [...unique.values()];};
+   const render=()=>{chips.replaceChildren();const all=words(),raw=input.value.split(/[,\n]/).filter(s=>s.trim());all.forEach((w,i)=>{const b=document.createElement('button');b.type='button';b.className='btn btn-outline-secondary';b.textContent=w+' ×';b.setAttribute('aria-label','Quitar '+w);b.onclick=()=>{const next=words();next.splice(i,1);input.value=next.join('\n');render();changed(form.closest('section'));form.querySelector('details').open=true;};chips.append(b);});if(preview)preview.textContent=all.length+' palabras únicas · '+(raw.length-all.length)+' repetidas'+(all.some(w=>w.length>40)?' · Hay palabras de más de40 caracteres. Revísalas.':(all.length>100?' · Reduce a100 antes de guardar.':''));};
+   if(add){add.hidden=false;form.querySelector('[data-word-insert]').onclick=()=>{const word=entry.value.trim().replace(/\s+/g,' ');if(!word||word.length>40||/[\n,]/.test(word)){preview.textContent='Escribe una palabra de hasta40 caracteres. Usa la lista para pegar varias.';return;}if(words().some(w=>key(w)===key(word))){preview.textContent='Ya estaba en la lista. Se conserva su escritura original.';return;}if(words().length>=100){preview.textContent='Máximo100 palabras. Quita una antes de añadir.';return;}input.value=[...words(),word].join('\n');entry.value='';render();changed(form.closest('section'));entry.focus();};entry.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();form.querySelector('[data-word-insert]').click();}});}
+   input.addEventListener('input',render);form.addEventListener('reset',()=>queueMicrotask(render));form.addEventListener('submit',()=>input.value=words().join('\n'));render();
+  });
+ };
+ init(root);
+ root.addEventListener('input',event=>{const section=event.target.closest('section');if(section)changed(section);});root.addEventListener('change',event=>{const section=event.target.closest('section');if(section)changed(section);});
+ const failed=(section,message)=>{if(status){status.replaceChildren(document.createTextNode(message+' Tus otros borradores se conservan. '));const a=document.createElement('a');a.href=location.pathname+'#'+section.id;a.target='_blank';a.rel='noopener';a.textContent='Comprobar lo guardado en otra pestaña';status.append(a);status.focus();}};
+ root.addEventListener('submit',async event=>{
+  const form=event.target,section=form.closest('section');if(!section||event.defaultPrevented||!window.fetch)return;
+  event.preventDefault();if(form.dataset.saving)return;if(!navigator.onLine){failed(section,'Necesitas conexión para guardar.');return;}
+  const body=new URLSearchParams(new FormData(form));if(event.submitter?.name)body.append(event.submitter.name,event.submitter.value);form.dataset.saving='true';form.setAttribute('aria-busy','true');form.querySelectorAll('button[type=submit],button:not([type])').forEach(b=>b.disabled=true);
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),20000);
+  try{
+   const response=await fetch(form.action,{method:'POST',body,credentials:'same-origin',headers:{Accept:'text/html'},signal:controller.signal});const doc=new DOMParser().parseFromString(await response.text(),'text/html'),next=doc.getElementById(section.id);
+   if(!next||!(new URL(response.url).pathname===location.pathname||new URL(response.url).pathname.startsWith(location.pathname+'/'))){failed(section,'No pudimos confirmar el guardado. Puede haber finalizado tu sesión o haberse guardado la solicitud; comprueba antes de repetir.');return;}
+   // Update event versions only when that section has the same server baseline. Never bless a concurrent edit.
+   for(const id of ['essentials','words','delivery','legacy'])if(id!==section.id){const old=document.getElementById(id)?.querySelector('form'),fresh=doc.getElementById(id)?.querySelector('form');if(old&&fresh&&baselines.get(old)===snapshot(fresh)){const v=old.querySelector('[name=version]'),nv=fresh.querySelector('[name=version]');if(v&&nv){v.value=nv.value;v.defaultValue=nv.value;}}}
+   if(section.id==='points'){const field=root.querySelector('#activities fieldset'),fresh=doc.querySelector('#activities fieldset');if(field&&fresh){const choices=new Map([...field.querySelectorAll('input[name=pointIds]')].map(i=>[i.value,i]));for(const label of fresh.querySelectorAll('label')){const input=label.querySelector('input[name=pointIds]');if(!input)continue;const old=choices.get(input.value);if(old){const span=old.closest('label').querySelector('span');if(span)span.textContent=label.querySelector('span').textContent;}else{input.checked=false;input.defaultChecked=false;field.append(label.cloneNode(true));}}}}
+   const legacy=root.querySelector('[data-legacy-tools]');if(legacy&&!doc.querySelector('[data-legacy-tools]')){if(!legacy.querySelector('[data-dirty=true]'))legacy.remove();else{const warning=document.createElement('p');warning.className='ping-notice';warning.textContent='Se activó el catálogo de filas. Tu borrador anterior sigue visible para copiarlo; no se aplicó ni se importará automáticamente.';legacy.prepend(warning);legacy.querySelectorAll('button').forEach(b=>b.disabled=true);}}
+   section.replaceWith(next);init(next.parentElement===root?next:root);const aside=document.querySelector('.editor-summary'),newAside=doc.querySelector('.editor-summary');if(aside&&newAside)aside.replaceWith(newAside);const heading=document.querySelector('.event-editor>header h1'),newHeading=doc.querySelector('.event-editor>header h1');if(heading&&newHeading)heading.textContent=newHeading.textContent;
+   const error=next.querySelector('[data-error-summary],[role=alert]');if(error){next.dataset.dirty='true';error.tabIndex=-1;error.focus();if(status)status.textContent='Revisa esta sección. Los demás borradores se conservan.';}else{next.querySelector('h2')?.setAttribute('tabindex','-1');next.querySelector('h2')?.focus({preventScroll:true});if(status)status.textContent='Sección guardada: '+next.querySelector('h2')?.textContent+'. '+(root.querySelector('[data-dirty=true]')?'Hay otros borradores pendientes.':'No hay otros borradores pendientes.');}
+  }catch(_){failed(section,'No pudimos confirmar el guardado. Comprueba antes de repetir; no reenviamos automáticamente.');}
+  finally{clearTimeout(timeout);form.removeAttribute('aria-busy');/* On uncertain delivery keep this submission locked until the saved state is checked. */}
  });
+ window.addEventListener('beforeunload',event=>{if(root.querySelector('[data-dirty=true]')){event.preventDefault();event.returnValue='';}});
 })();

@@ -7,5 +7,6 @@ public record Avatar(String animal,String hat,String accessory,String background
  public static final Map<String,String> ACCESSORIES=Map.of("none","Sin accesorio","gafas","Gafas","pajarita","Pajarita","bufanda","Bufanda");
  public static final Map<String,String> COLORS=Map.of("violeta","Violeta","amarillo","Amarillo","menta","Menta","coral","Coral","azul","Azul","crema","Crema");
  public Avatar{if(!ANIMALS.containsKey(animal)||!HATS.containsKey(hat)||!ACCESSORIES.containsKey(accessory)||!COLORS.containsKey(background))throw new BusinessRuleException("Elige un avatar del catálogo de PING.");}
+ public String label(){return ANIMALS.get(animal)+", "+HATS.get(hat)+", "+ACCESSORIES.get(accessory)+", fondo "+COLORS.get(background);}
  public static Avatar defaults(){return new Avatar("gato","none","none","violeta");}
 }

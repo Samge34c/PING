@@ -33,7 +33,8 @@
     if(taxonomy){taxonomy.hidden=false;filter.closest('div').hidden=true;nodes.forEach(b=>b.addEventListener('click',()=>{currentNode=b.dataset.nodeKey;filter.value='all';if(search)search.value='';applyFilter();}));taxonomy.querySelector('[data-taxonomy-back]').onclick=()=>{currentNode=nodes.find(b=>b.dataset.nodeKey===currentNode)?.dataset.nodeParent||null;if(search)search.value='';applyFilter();};}
     const updateSelection = () => {
       const selected = rows.filter(row => row.querySelector('input').checked);
-      root.querySelector('[data-selection-summary]').textContent = selected.length ? selected.map(row => row.dataset.interestName).join(' · ') : 'Aún ninguno. Puedes continuar sin elegir.';
+      root.querySelector('[data-selection-summary]').textContent = selected.length ? selected.slice(0,3).map(row => row.dataset.interestName).join(' · ')+(selected.length>3?' · +'+(selected.length-3)+' más':'') : 'Aún ninguno. Puedes continuar sin elegir.';
+      const details=root.querySelector('[data-selected-details]');if(details){details.hidden=selected.length<=3;details.querySelector('[data-selected-list]').textContent=selected.map(row=>row.dataset.interestName).join(' · ');}
       const count = form.querySelector('[data-selected-count]');
       if (count) count.textContent = selected.length === 1 ? '1 interés seleccionado' : selected.length + ' intereses seleccionados';
     };
@@ -41,7 +42,7 @@
       const query = normalize(search?.value || '');
       let visible = 0;
       groups.forEach(group => {
-        group.querySelector('legend').hidden=!!taxonomy&&filter.value==='all'&&group.dataset.interestGroup!=='retained';
+        group.querySelector('legend').classList.toggle('visually-hidden',!!taxonomy&&filter.value==='all'&&group.dataset.interestGroup!=='retained');
         let matches = 0;
         group.querySelectorAll('[data-interest-name]').forEach(row => {
           const memberships=(row.dataset.interestNodes||'').split('|');

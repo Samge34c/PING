@@ -8,6 +8,6 @@ public class InterestTaxonomy {
  private final JdbcTemplate jdbc;
  public InterestTaxonomy(JdbcTemplate j){jdbc=j;}
  public record Node(String key,String label,String parent){}
- public List<Node> nodes(){return jdbc.query("select node_key,label,parent_key from interest_nodes where active=true",(r,n)->new Node(r.getString(1),r.getString(2),r.getString(3)));}
+ public List<Node> nodes(){var all=jdbc.query("select node_key,label,parent_key from interest_nodes where active=true order by label,node_key",(r,n)->new Node(r.getString(1),r.getString(2),r.getString(3)));var valid=new LinkedHashMap<String,Node>();for(var node:all)valid.put(node.key(),node);boolean changed;do{changed=valid.values().removeIf(n->n.parent()!=null&&!valid.containsKey(n.parent()));}while(changed);return List.copyOf(valid.values());}
  public Map<Long,List<String>> memberships(){var map=new LinkedHashMap<Long,List<String>>();jdbc.query("select m.interest_id,m.node_key from interest_node_members m join interest_nodes n on n.node_key=m.node_key where n.active=true",(org.springframework.jdbc.core.RowCallbackHandler)r->map.computeIfAbsent(r.getLong(1),id->new ArrayList<>()).add(r.getString(2)));return map;}
 }

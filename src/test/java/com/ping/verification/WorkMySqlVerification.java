@@ -21,7 +21,7 @@ public class WorkMySqlVerification {
    s.executeUpdate("insert into match_completion_sagas(match_id,status,attempt,trigger_participant_id,first_granted,second_granted,reward_points) values(502,'FIRST_REWARD_GRANTED',1,504,true,false,22)");
    s.executeUpdate("insert into reward_claims(participant_id,benefit_id,request_key,cost,status,created_at,benefit_name,claim_location,claim_instructions) values(501,1,'legacy-paid-fixture',20,'REQUESTED',CURRENT_TIMESTAMP,'Beneficio anterior','Mesa anterior','Indicaciones anteriores')");
   }
-  var current=Flyway.configure().dataSource(url,user,password).load();require(current.migrate().migrationsExecuted==1,"Expected only V21");require(current.migrate().migrationsExecuted==0,"Migration rerun must be zero");
+  var current=Flyway.configure().dataSource(url,user,password).target("21").load();require(current.migrate().migrationsExecuted==1,"Expected only V21");require(current.migrate().migrationsExecuted==0,"Migration rerun must be zero");
   try(var c=DriverManager.getConnection(url,user,password);var s=c.createStatement();var r=s.executeQuery("select verification_policy,first_arrived,second_arrived,first_verified,second_verified,first_confirmed,word,reward_points from ping_matches where id=501")){r.next();require(r.getInt(1)==1&&!r.getBoolean(2)&&!r.getBoolean(3)&&!r.getBoolean(4)&&!r.getBoolean(5)&&r.getBoolean(6)&&r.getString(7).equals("ANTERIOR-FICTICIO-501")&&r.getInt(8)==37,"Historical policy/data changed");}
   try(var context=SpringApplication.run(PingApplication.class,"--spring.profiles.active=mysql","--server.port=0")){
    var matches=context.getBean(MatchService.class);var people=context.getBean(ParticipantService.class);
