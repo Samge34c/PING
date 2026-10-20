@@ -36,3 +36,5 @@
 .fp-browse { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px; margin: 20px 0; }
 .fp-browse label { grid-column: 1/-1; margin: 0; }
 .fp-browse .btn { min-height: 44px; }
+
+.fp-controls .btn:disabled{color:var(--ping-muted);border-color:var(--ping-border);background:transparent;opacity:.65}

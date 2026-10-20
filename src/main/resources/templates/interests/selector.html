@@ -1,6 +1,6 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
 <div th:fragment="choices" class="interest-category-selector" data-interest-selector>
-  <div class="ic-summary"><strong>Elegidos</strong><p data-selection-summary th:text="${#lists.isEmpty(selectedNames) ? 'Aún ninguno. Puedes continuar sin elegir.' : #strings.listJoin(selectedNames, ' · ')}"></p></div>
+  <div class="ic-summary"><strong>Elegidos</strong><p data-selection-summary th:text="${#lists.isEmpty(selectedNames) ? 'Aún ninguno. Puedes continuar sin elegir.' : #strings.listJoin(selectedNames, ' · ')}"></p><details data-selected-details hidden><summary>Ver todos los intereses elegidos</summary><p data-selected-list></p></details></div>
   <div class="ic-controls" data-filter-controls hidden>
     <div><label for="interest-category-filter" class="form-label">Mostrar</label><select class="form-select" id="interest-category-filter" data-interest-filter><option value="all">Todos los intereses</option><option th:each="group : ${interestGroups}" th:value="${group.id}" th:text="${group.name}"></option></select></div>
     <div th:if="${interestOptionCount > 12}"><label for="interest-search" class="form-label">Buscar un interés</label><input class="form-control" type="search" id="interest-search" data-interest-search autocomplete="off" placeholder="Escribe un nombre"></div>

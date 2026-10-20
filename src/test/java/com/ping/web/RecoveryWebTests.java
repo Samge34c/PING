@@ -33,7 +33,7 @@ class RecoveryWebTests {
                 assertThat(r.body()).contains("SESSION_REQUIRED","/join").doesNotContain("<html","signature","recognitionRevision");
             }
             var r=b.get("/matches/42");assertThat(r.statusCode()).isEqualTo(401);
-            assertThat(r.body()).contains("no recupera tu identidad", "href=\"/join\"").doesNotContain("Seleccionar participante");
+            assertThat(r.body()).contains("sin vincular", "href=\"/join\"").doesNotContain("Seleccionar participante");
         }
     }
     @Test void missingResourceAndCsrfKeepHttpCodesAndOfferSessionAppropriateRecovery() throws Exception {
@@ -41,7 +41,7 @@ class RecoveryWebTests {
             var missing=b.get("/un-enlace-que-no-existe");assertThat(missing.statusCode()).isEqualTo(404);
             assertThat(missing.body()).contains("href=\"/join\"").doesNotContain("NoResourceFoundException","static resource","Seleccionar participante");
             var expired=b.post("/me/search",Map.of());assertThat(expired.statusCode()).isEqualTo(403);
-            assertThat(expired.body()).contains("No se guardaron cambios", "no podemos recuperar aquí tu identidad");
+            assertThat(expired.body()).contains("No se guardaron cambios", "Las entradas antiguas sin vincular");
             enter(b,person("Propietaria"));missing=b.get("/matches/99999999");assertThat(missing.statusCode()).isEqualTo(404);
             assertThat(missing.body()).contains("href=\"/connect\"", "Ir a Conectar");
             var method=b.get("/me/search");assertThat(method.statusCode()).isEqualTo(405);

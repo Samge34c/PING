@@ -17,7 +17,7 @@ public class ErrorPageController {
         response.setStatus(403); model.addAttribute("errorTitle", "Vuelve a abrir el formulario");
         var session = request.getSession(false);
         boolean entered = session != null && session.getAttribute("pingDemoParticipantId") instanceof Long;
-        model.addAttribute("errorMessage", entered ? "Este formulario caducó o ya no es válido. No se guardaron cambios. Revisa el estado antes de repetir la acción." : "El formulario o la sesión ya no son válidos. No se guardaron cambios. Vuelve a entrar; si perdiste la sesión, no podemos recuperar aquí tu identidad ni tu saldo anterior.");
+        model.addAttribute("errorMessage", entered ? "Este formulario caducó o ya no es válido. No se guardaron cambios. Revisa el estado antes de repetir la acción." : "El formulario o la sesión ya no son válidos. No se guardaron cambios. Entra de nuevo a tu cuenta para recuperar la participación y el saldo vinculados. Las entradas antiguas sin vincular requieren su sesión original.");
         return "errors/message";
     }
 }

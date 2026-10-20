@@ -1,0 +1,1 @@
+ALTER TABLE interest_nodes ADD COLUMN revision BIGINT NOT NULL DEFAULT 0;

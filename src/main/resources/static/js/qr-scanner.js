@@ -7,8 +7,8 @@
   if(root.dataset.ready)return;root.dataset.ready='true';
   const start=root.querySelector('[data-scan-start]'),cancel=root.querySelector('[data-scan-stop]'),video=root.querySelector('video'),status=root.querySelector('[data-scan-status]'),input=document.getElementById(root.dataset.target),camera=root.querySelector('[data-scan-camera]'),cameraLabel=root.querySelector('[data-scan-camera-label]');
   const capable=window.isSecureContext&&!!navigator.mediaDevices?.getUserMedia;let sessionGone=false;
-  let stream,controls,timer,running=false,generation=0;
-  const stop=(notify=true)=>{generation++;running=false;root.dataset.scannerRunning='false';clearTimeout(timer);controls?.stop();controls=null;stream?.getTracks().forEach(t=>t.stop());stream=null;video.srcObject=null;video.hidden=true;cancel.hidden=true;cameraLabel.hidden=true;start.disabled=!capable||sessionGone;if(notify)document.dispatchEvent(new Event('ping:credential-settled'));};
+  let stream,capture,timer,running=false,generation=0;
+  const stop=(notify=true)=>{generation++;running=false;root.dataset.scannerRunning='false';clearTimeout(timer);if(capture){capture.width=0;capture.height=0;capture=null;}stream?.getTracks().forEach(t=>t.stop());stream=null;video.srcObject=null;video.hidden=true;cancel.hidden=true;cameraLabel.hidden=true;start.disabled=!capable||sessionGone;if(notify)document.dispatchEvent(new Event('ping:credential-settled'));};
   const parse=text=>{
    if(root.dataset.purpose==='EVENT_JOIN'){
     if(/^[A-Z0-9]{5,32}$/.test(text))return text;
@@ -30,7 +30,18 @@
     let native;
     try{if(window.BarcodeDetector&&(await BarcodeDetector.getSupportedFormats()).includes('qr_code'))native=new BarcodeDetector({formats:['qr_code']});}catch(_){}
     if(native){const scan=async()=>{if(!running||revision!==generation)return;try{const found=await native.detect(video);if(found.length)accept(found[0].rawValue,revision);}catch(_){}if(running&&revision===generation)timer=setTimeout(scan,220);};scan();}
-    else{const lib=await loadDecoder();if(!running||revision!==generation)return;const active=await new lib.BrowserQRCodeReader().decodeFromStream(stream,video,result=>{if(result)accept(result.getText(),revision);});if(!running||revision!==generation)active.stop();else controls=active;}
+    else{
+     const lib=await loadDecoder();if(!running||revision!==generation)return;
+     const reader=new lib.BrowserQRCodeReader();capture=document.createElement('canvas');let turn=0;
+     // Some QR alignment patterns fail in one orientation in the pinned JS detector.
+     // Retry one quarter-turn per frame locally; no bitmap URLs, uploads or frame retention.
+     const scanLocal=()=>{if(!running||revision!==generation)return;
+      try{if(video.videoWidth&&video.videoHeight){const angle=(turn++%4)*Math.PI/2,scale=Math.min(1,960/Math.max(video.videoWidth,video.videoHeight)),w=Math.round(video.videoWidth*scale),h=Math.round(video.videoHeight*scale),quarter=Math.round(angle/(Math.PI/2))%2;
+       capture.width=quarter?h:w;capture.height=quarter?w:h;const ctx=capture.getContext('2d',{willReadFrequently:true});ctx.imageSmoothingEnabled=false;ctx.translate(capture.width/2,capture.height/2);ctx.rotate(angle);ctx.drawImage(video,-w/2,-h/2,w,h);accept(reader.decodeFromCanvas(capture).getText(),revision);
+      }}catch(_){/* No readable QR in this frame: keep scanning until cancelled. */}
+      if(running&&revision===generation)timer=setTimeout(scanLocal,220);
+     };scanLocal();
+    }
    }catch(error){if(revision!==generation)return;stop();const messages={NotAllowedError:'Permiso de cámara denegado. Puedes introducir el código o cambiar el permiso del navegador.',NotFoundError:'No encontramos una cámara. Introduce el código.',NotReadableError:'La cámara está ocupada. Cierra la otra aplicación y reintenta.'};status.textContent=messages[error.name]||'No pudimos abrir el lector. Reintenta o introduce el código manualmente.';}
   });
  });

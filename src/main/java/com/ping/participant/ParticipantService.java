@@ -20,7 +20,7 @@ public class ParticipantService {
     public ParticipantView get(long id) { return view(require(id)); }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public ParticipantView create(@Valid ParticipantForm form) {
         Event event = events.lock(form.getEventId());
-        if (event.getStatus() != EventStatus.OPEN) throw new BusinessRuleException("Por ahora, el registro de demo necesita un evento abierto.");
+        if (event.getStatus() != EventStatus.OPEN) throw new BusinessRuleException("La entrada necesita un evento abierto.");
         String alias = form.getAlias().strip();
         if (alias.isBlank()) throw new BusinessRuleException("Escribe un alias.");
         return view(repository.save(new Participant(alias, event, form.isAvailable())));
@@ -39,6 +39,6 @@ public class ParticipantService {
     public void avatar(long id,Avatar value){events.lock(repository.eventId(id).orElseThrow());require(id).avatar(value);}
     private Participant require(long id) { return repository.findById(id).orElseThrow(() -> new NotFoundException("No encontramos ese participante.")); }
     private ParticipantView view(Participant participant) {
-        return new ParticipantView(participant.getId(), participant.getAlias(), participant.getEvent().getId(), participant.getEvent().getName(), participant.isAvailable(), participant.getVersion(), participant.getInterests().stream().map(com.ping.interest.Interest::getName).sorted().toList(), participant.getPoints());
+        return new ParticipantView(participant.getId(), participant.getAlias(), participant.getEvent().getId(), participant.getEvent().getName(), participant.isAvailable(), participant.getVersion(), participant.getInterests().stream().map(com.ping.interest.Interest::getName).sorted().toList(), participant.getPoints(), participant.getAvatar());
     }
 }

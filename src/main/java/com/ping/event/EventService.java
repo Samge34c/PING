@@ -65,6 +65,8 @@ public class EventService {
         event.changeStatus(target);
         return event;
     }
+    @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
+    public void section(long id,boolean delivery,@Valid EventSectionForm form){var e=lock(id);if(form.getVersion()==null||form.getVersion()!=e.getVersion())throw new BusinessRuleException("El evento cambió. Conserva tu borrador y comprueba la versión guardada antes de repetir.");if(delivery){var f=new EventForm();f.setDeliveryName(form.getDeliveryName());f.setDeliveryDirections(form.getDeliveryDirections());e.delivery(f);}else{if(form.getName().isBlank())throw new BusinessRuleException("Escribe el nombre del evento.");e.changeDetails(form.getName().strip(),form.getDescription().strip());}}
     private String normalizedName(EventForm form) {
         String name = form.getName().strip();
         if (name.isBlank()) throw new BusinessRuleException("Escribe el nombre del evento.");
