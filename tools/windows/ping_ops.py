@@ -151,11 +151,15 @@ class MySQL:
         self.env.pop('MYSQL_PWD', None)
 
 
-def safe_config() -> dict:
+def safe_config(for_startup: bool = False) -> dict:
     missing = [name for name in ('DB_URL', 'DB_USERNAME', 'DB_PASSWORD') if not os.environ.get(name)]
     result = {'missing': missing}
     if os.environ.get('DB_URL'):
         config = db_config()
+        # Hibernate/driver startup logs may echo a JDBC URL. Do not feed URL passwords to that process.
+        if for_startup and any(any(part in key.lower() for part in ('password','passwd','secret'))
+                               for key,_ in parse_qsl(urlsplit(os.environ['DB_URL'][5:]).query)):
+            raise OpsError('El arranque no admite contraseñas dentro de DB_URL: los registros Java pueden mostrarla. Conserva tu arranque TLS existente o separa esa configuración de forma explícita; no se cambió la URL.')
         result.update({key: config[key] for key in ('host', 'port', 'database', 'ssl_mode')})
     return result
 
@@ -170,9 +174,9 @@ def check_database(args):
         client.close()
 
 
-REQUIRED_TABLES = {'flyway_schema_history','events','participants','ping_matches','match_completion_sagas',
-                   'match_completion_steps','reward_claims','ping_accounts','account_participations',
-                   'event_floorplans','event_floorplan_images','event_floorplan_positions','purpose_credentials'}
+# Recognize PING without requiring future tables before a user's first migration.
+# Every table actually present is inventoried/dumped/compared, including older schemas.
+REQUIRED_TABLES = {'flyway_schema_history','events','participants'}
 
 
 def outside_repo(path: Path) -> Path:
@@ -204,19 +208,23 @@ def private_directory(parent: Path) -> Path:
 def private_write(path: Path, data: bytes):
     # Never truncates an existing file, even if a timestamp/path is accidentally reused.
     with os.fdopen(os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600),'wb') as stream:
-        stream.write(data)
+        stream.write(data);stream.flush();os.fsync(stream.fileno())
 
 
 def json_write(path: Path, value):
     private_write(path,(json.dumps(value,ensure_ascii=False,indent=2)+'\n').encode('utf-8'))
 
 
-def file_hash(path: Path) -> str:
+def stream_hash(stream) -> str:
     digest = hashlib.sha256()
-    with path.open('rb') as stream:
-        for chunk in iter(lambda: stream.read(1024*1024),b''):
-            digest.update(chunk)
+    for chunk in iter(lambda: stream.read(1024*1024),b''):
+        digest.update(chunk)
     return digest.hexdigest()
+
+
+def file_hash(path: Path) -> str:
+    with path.open('rb') as stream:
+        return stream_hash(stream)
 
 
 def streamed_query_hash(client: MySQL, sql: str, database: str) -> str:
@@ -266,7 +274,7 @@ def inventory(client: MySQL, database: str) -> dict:
         tables[table]={'rows':count,'schema_sha256':hashlib.sha256(definition).hexdigest(),
                        'data_sha256':streamed_query_hash(client,'SELECT '+encoded+' FROM `'+table+'` ORDER BY '+order+';',database)}
     if not REQUIRED_TABLES.issubset(tables):
-        raise OpsError('La base no contiene la estructura completa de esta versión PING (incluidos cuentas, Saga, recibos y planos).')
+        raise OpsError('La base no contiene la estructura mínima reconocible de PING (Flyway, eventos y participantes).')
     return tables
 
 
@@ -287,13 +295,15 @@ def backup_database(args):
         with os.fdopen(os.open(dump,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600),'wb') as stream:
             try:result=subprocess.run(command,stdout=stream,stderr=subprocess.PIPE,env=client.env,timeout=600)
             except subprocess.TimeoutExpired:raise OpsError('mysqldump excedió600s. El archivo privado parcial se conserva; no tiene certificado de respaldo válido.') from None
+            stream.flush();os.fsync(stream.fileno())
         if result.returncode:raise mysql_error(result.stderr,'mysqldump; archivo privado parcial conservado',result.returncode)
         if dump.stat().st_size==0:raise OpsError('mysqldump devolvió un archivo vacío. No se declara respaldo correcto.')
         after=inventory(client,config['database'])
         if before!=after:
             raise OpsError('La base cambió durante el respaldo. Archivo privado conservado sin manifiesto válido; detén escrituras/DDL de forma explícita y repite en otro respaldo.')
         digest=file_hash(dump)
-        metadata={'format':'ping-backup-v1','source_database':config['database'],'server_version':version,
+        source_schema=client.run("SELECT version FROM flyway_schema_history WHERE success=1 AND version IS NOT NULL ORDER BY installed_rank DESC LIMIT 1;",config['database']).decode('utf-8').strip()
+        metadata={'format':'ping-backup-v1','source_database':config['database'],'server_version':version,'source_schema_version':source_schema,
                   'created_utc':datetime.now(timezone.utc).isoformat(),'bytes':dump.stat().st_size,
                   'sha256':digest,'tables':before,'source_stable_observed':True}
         private_write(Path(str(dump)+'.sha256'),(digest+'  '+dump.name+'\n').encode('utf-8'))
@@ -339,7 +349,7 @@ def restore_database(args):
     if (args.confirm_target or input('Escribe el nombre exacto de la base NUEVA para confirmar: '))!=target:
         raise OpsError('Confirmación distinta del destino. No se conectó ni importó nada.')
     client=MySQL(config,args.mysql,args.ssl_ca);created=False;account_created=False;limited=None
-    token=secrets.token_hex(10);user='ping_restore_'+token[:16];password=secrets.token_urlsafe(36);host=''
+    token=secrets.token_hex(10);user='ping_restore_'+token[:16];password='Aa1!'+secrets.token_urlsafe(36);host=''
     record={'target':target,'source_database':metadata['source_database'],'status':'preflight','backup_sha256':metadata['sha256']}
     report=dump.parent/('restore_'+target+'_'+uuid.uuid4().hex[:8]+'.json')
     try:
@@ -356,8 +366,13 @@ def restore_database(args):
         limited=MySQL(config,args.mysql,args.ssl_ca,username=user,password=password)
         command=[limited.executable,*limited.args,'--database='+target,'--binary-mode=1','--local-infile=0','--batch']
         with dump.open('rb') as stream:
+            # Hash the same opened handle that will feed mysql; replacing a pathname cannot switch input.
+            if stream_hash(stream)!=metadata['sha256']:raise OpsError('El SQL cambió después de validar. No se importó; la base NUEVA se conserva.')
+            stream.seek(0)
             try:result=subprocess.run(command,stdin=stream,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE,env=limited.env,timeout=600)
             except subprocess.TimeoutExpired:raise OpsError('Importación excedió600s. La base NUEVA parcial se conserva; no la reutilices como destino.') from None
+            stream.seek(0)
+            if stream_hash(stream)!=metadata['sha256']:raise OpsError('El archivo cambió durante la importación. La base NUEVA se conserva sin declarar éxito.')
         if result.returncode:raise mysql_error(result.stderr,'Importación en base nueva parcial conservada',result.returncode)
         actual=inventory(limited,target)
         if actual!=metadata['tables']:raise OpsError('Importó, pero estructura/filas/huellas no coinciden. La base NUEVA se conserva y NO se declara verificada.')
@@ -380,10 +395,25 @@ def restore_database(args):
         if cleanup_failed:raise OpsError('No se pudo retirar el usuario temporal '+user+'@'+host+'. La base nueva y el registro se conservan; requiere retirada privilegiada explícita.')
 
 
+def client_versions(args):
+    result={}
+    env=os.environ.copy();env.pop('DB_PASSWORD',None);env.pop('MYSQL_PWD',None)
+    for name,explicit in [('mysql',args.mysql),('mysqldump',args.mysqldump)]:
+        try:
+            tool=find_tool(name,explicit)
+            version=subprocess.run([tool,'--no-defaults','--no-login-paths','--version'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env,timeout=10)
+            lines=version.stdout.decode('utf-8',errors='replace').splitlines()
+            if version.returncode or not lines:result[name]={'available':False,'reason':'no respondió a --version'}
+            else:result[name]={'available':True,'version':lines[0][:256]}
+        except OpsError:result[name]={'available':False,'reason':'no encontrado; indica ruta instalada'}
+    return result
+
+
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     sub = p.add_subparsers(dest='command', required=True)
-    sub.add_parser('config')
+    config_parser=sub.add_parser('config');config_parser.add_argument('--for-startup',action='store_true')
+    versions=sub.add_parser('versions');versions.add_argument('--mysql');versions.add_argument('--mysqldump')
     check = sub.add_parser('check-db')
     check.add_argument('--mysql')
     check.add_argument('--ssl-ca')
@@ -399,7 +429,7 @@ def parser():
 def main(argv=None):
     args = parser().parse_args(argv)
     try:
-        actions = {'config':lambda _:safe_config(),'check-db':check_database,'backup':backup_database,'restore':restore_database}
+        actions = {'versions':client_versions,'config':lambda options:safe_config(options.for_startup),'check-db':check_database,'backup':backup_database,'restore':restore_database}
         result = actions[args.command](args)
         print(json.dumps(result, ensure_ascii=False))
         return 0

@@ -52,6 +52,23 @@ class ConfigurationTests(unittest.TestCase):
             result=str(ops.safe_config());self.assertNotIn('private-',result);self.assertIn('PREFERRED',result)
 
 
+    def test_version_probe_does_not_connect_or_receive_database_secrets(self):
+        args=argparse.Namespace(mysql=None,mysqldump=None)
+        with mock.patch.dict(os.environ,{'DB_PASSWORD':'PRIVATE','MYSQL_PWD':'PRIVATE'},clear=True), mock.patch.object(ops,'find_tool',side_effect=lambda name,explicit:name), mock.patch.object(ops.subprocess,'run',return_value=subprocess.CompletedProcess([],0,b'mysql Ver 8.4.11\n',b'')) as run:
+            result=ops.client_versions(args)
+            self.assertTrue(result['mysql']['available'])
+            for call in run.call_args_list:
+                self.assertEqual(call.args[0][1:],['--no-defaults','--no-login-paths','--version'])
+                self.assertNotIn('MYSQL_PWD',call.kwargs['env']);self.assertNotIn('DB_PASSWORD',call.kwargs['env'])
+    def test_truststore_password_is_not_echoed_or_forwarded_to_cli(self):
+        with mock.patch.dict(os.environ,{'DB_URL':'jdbc:mysql://localhost/ping?sslMode=VERIFY_CA&trustCertificateKeyStoreUrl=file:/trust.p12&trustCertificateKeyStorePassword=PRIVATE'},clear=True):
+            result=ops.safe_config();self.assertEqual(result['ssl_mode'],'VERIFY_CA');self.assertNotIn('PRIVATE',str(result));self.assertNotIn('/trust.p12',str(result))
+
+    def test_startup_refuses_url_password_before_java_can_echo_it(self):
+        with mock.patch.dict(os.environ,{'DB_URL':'jdbc:mysql://localhost/ping?sslMode=VERIFY_CA&trustCertificateKeyStorePassword=PRIVATE'},clear=True):
+            with self.assertRaises(ops.OpsError) as error:ops.safe_config(for_startup=True)
+            self.assertNotIn('PRIVATE',str(error.exception))
+
 class BackupRestoreTests(unittest.TestCase):
     def fixture(self, parent):
         path=Path(parent)/'respaldo ficticio á.sql';data=b'-- fictitious test SQL only\n'
@@ -67,6 +84,13 @@ class BackupRestoreTests(unittest.TestCase):
             with mock.patch.object(ops,'MySQL') as client:
                 with self.assertRaises(ops.OpsError):ops.restore_database(argparse.Namespace(backup=str(path),target='ping_restore_exclusive_test',confirm_target='ping_restore_exclusive_test'))
                 client.assert_not_called()
+    def test_legacy_backup_is_not_rejected_for_tables_that_did_not_exist_yet(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path,metadata=self.fixture(directory)
+            metadata['source_schema_version']='7'
+            self.assertNotIn('ping_accounts',metadata['tables'])
+            Path(str(path)+'.json').write_text(json.dumps(metadata),encoding='utf-8')
+            self.assertEqual(ops.validate_backup(path)[1]['source_schema_version'],'7')
     def test_invalid_manifest_and_existing_file_are_not_accepted_or_overwritten(self):
         with tempfile.TemporaryDirectory() as directory:
             path,_=self.fixture(directory);Path(str(path)+'.json').write_text('[]',encoding='utf-8')

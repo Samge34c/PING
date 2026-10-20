@@ -10,6 +10,7 @@ try {
     Test-PingJava
     $wrapper = Join-Path $script:PingRoot 'mvnw.cmd'
     if (-not (Test-Path -LiteralPath $wrapper -PathType Leaf) -or -not (Test-Path -LiteralPath (Join-Path $script:PingRoot '.mvn\wrapper\maven-wrapper.properties'))) { throw 'Falta Maven Wrapper del repositorio. Recupera sus archivos desde Git; no se instalará Maven global.' }
+    if ($env:SPRING_PROFILES_INCLUDE -match '(^|[,;\s])bootstrap([,;\s]|$)') { throw 'SPRING_PROFILES_INCLUDE incorpora bootstrap. Retíralo explícitamente para un arranque real mysql; el asistente no modifica esa configuración.' }
     $python = Get-PingPython
     $chosenPort = Get-PingPort $Port -Ask
     while (-not (Test-PingPortFree $chosenPort)) {
@@ -27,6 +28,7 @@ try {
         if ((Read-Host 'Escribe LAN para usarla temporalmente, o Enter para cancelar') -cne 'LAN') { throw 'Arranque cancelado. Conservamos la configuración existente.' }
     }
     Request-PingDatabase
+    Invoke-PingOps @('config','--for-startup')
     $arguments = @('check-db'); if ($MySqlPath) { $arguments += @('--mysql',$MySqlPath) }; if ($SslCa) { $arguments += @('--ssl-ca',$SslCa) }
     Invoke-PingOps $arguments
     $runArguments = '--spring.profiles.active=mysql'

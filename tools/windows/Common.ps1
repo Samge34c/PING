@@ -28,8 +28,8 @@ function Get-PingPython {
         $command = Get-Command $name -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
         if (-not $command) { continue }
         $prefix = @(); if ($name -eq 'py.exe') { $prefix = @('-3') }
-        & $command.Source @prefix -c 'import sys; sys.exit(0 if sys.version_info >= (3,10) else 1)' 2>$null
-        if ($LASTEXITCODE -eq 0) { return @{ File = $command.Source; Prefix = $prefix } }
+        $version = & $command.Source @prefix -c 'import sys; print(sys.version.split()[0]); sys.exit(0 if sys.version_info >= (3,10) else 1)' 2>$null
+        if ($LASTEXITCODE -eq 0) { return @{ File = $command.Source; Prefix = $prefix; Version = $version } }
     }
     throw 'No encontramos Python 3.10+ ya instalado (también lo usa el buzón). No se descargó nada.'
 }
@@ -49,11 +49,14 @@ function Test-PingJava {
     $info.RedirectStandardOutput = $true; $info.RedirectStandardError = $true; $info.CreateNoWindow = $true
     $process = New-Object System.Diagnostics.Process; $process.StartInfo = $info
     try {
-        $null = $process.Start(); $output = $process.StandardOutput.ReadToEnd() + $process.StandardError.ReadToEnd(); $process.WaitForExit()
+        $null = $process.Start()
+        $stdout = $process.StandardOutput.ReadToEndAsync(); $stderr = $process.StandardError.ReadToEndAsync()
+        if (-not $process.WaitForExit(10000)) { $process.Kill(); throw 'El proceso de comprobación Java no respondió en10 segundos; no se tocaron servicios.' }
+        $output = $stdout.Result + $stderr.Result
         if ($process.ExitCode -ne 0 -or $output -notmatch 'version\s+"21(?:[.\-+\"]|$)') { throw 'Se requiere Java 21. Revisa JAVA_HOME y PATH; no se instalará otra versión automáticamente.' }
         $javac = Join-Path (Split-Path -Parent $java) 'javac.exe'
         if (-not (Test-Path -LiteralPath $javac -PathType Leaf)) { throw 'Java 21 está disponible, pero falta javac del JDK completo en la misma carpeta.' }
-        Write-Host 'JDK Java 21: disponible.'
+        Write-Host ('JDK: ' + ($output -split '[\r\n]')[0])
     } finally { $process.Dispose() }
 }
 function Get-PingIPv4 {

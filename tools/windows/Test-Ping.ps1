@@ -1,12 +1,21 @@
 ﻿<# Read-only diagnosis. Does not prompt for credentials, change env, restart services or edit firewall. #>
 [CmdletBinding()]
-param([ValidateRange(0,65535)][int]$Port = 0, [string]$LanIPv4, [string]$MySqlPath, [string]$SslCa)
+param([ValidateRange(0,65535)][int]$Port = 0, [string]$LanIPv4, [string]$MySqlPath, [string]$MySqlDumpPath, [string]$SslCa)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'Common.ps1')
 Write-Host "PING | diagnóstico de lectura | raíz: $script:PingRoot"
 try { Test-PingJava } catch { Write-Warning $_.Exception.Message }
 Write-Host ('Maven Wrapper: ' + (Test-Path -LiteralPath (Join-Path $script:PingRoot 'mvnw.cmd')))
-try { $python = Get-PingPython; Write-Host 'Python 3.10+: disponible.' } catch { Write-Warning $_.Exception.Message }
+try { $python = Get-PingPython; Write-Host ('Python: ' + $python.Version) } catch { Write-Warning $_.Exception.Message }
+try {
+    $versions = @('versions'); if ($MySqlPath) { $versions += @('--mysql',$MySqlPath) }; if ($MySqlDumpPath) { $versions += @('--mysqldump',$MySqlDumpPath) }
+    Invoke-PingOps $versions
+} catch { Write-Warning $_.Exception.Message }
+$properties = Join-Path $script:PingRoot '.mvn\wrapper\maven-wrapper.properties'
+if (Test-Path -LiteralPath $properties) {
+    $declared = [regex]::Match((Get-Content -Raw -LiteralPath $properties), 'apache-maven-([0-9.]+)-bin')
+    if ($declared.Success) { Write-Host ('Maven declarado por Wrapper: ' + $declared.Groups[1].Value + ' (no se ejecuta ni descarga en diagnóstico).') }
+}
 foreach ($name in @('DB_URL','DB_USERNAME','DB_PASSWORD','PING_PUBLIC_BASE_URL','SPRING_MAIL_HOST','PING_MAIL_FROM','PING_BOOTSTRAP_PASSWORD','PING_OAUTH_ENABLED')) {
     $present = -not [string]::IsNullOrEmpty([Environment]::GetEnvironmentVariable($name, 'Process'))
     Write-Host ("{0}: {1}" -f $name, $(if ($present) { 'presente (valor oculto)' } else { 'ausente' }))

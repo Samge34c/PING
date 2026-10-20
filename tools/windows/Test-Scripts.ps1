@@ -6,7 +6,7 @@ $failed = $false
 foreach ($file in Get-ChildItem -LiteralPath $PSScriptRoot -Filter '*.ps1') {
     $tokens = $null; $parseErrors = $null
     $null = [Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$tokens, [ref]$parseErrors)
-    if (@($parseErrors).Count) {
+    if ($parseErrors -and $parseErrors.Count) {
         $failed = $true
         foreach ($problem in $parseErrors) { Write-Warning ($file.Name + ':' + $problem.Extent.StartLineNumber + ' | ' + $problem.Message) }
     } else { Write-Host ('Sintaxis PowerShell: ' + $file.Name + ' OK') }
