@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.*;
     properties = "spring.datasource.url=jdbc:h2:mem:final-mvp;MODE=MySQL;DB_CLOSE_DELAY=-1")
 @ActiveProfiles("test")
 class FinalMvpTests {
+    @Autowired org.springframework.web.servlet.resource.ResourceUrlProvider assetUrls;
     @Autowired DemoPreparationService preparation;
     @Autowired ParticipantService participants;
     @Autowired MatchingService matching;
@@ -178,7 +179,9 @@ class FinalMvpTests {
             var invalid=browser.get("/admin?eventId=incorrecto");
             assertThat(unknown.statusCode()).isEqualTo(404); assertThat(wrongMethod.statusCode()).isEqualTo(405); assertThat(invalid.statusCode()).isEqualTo(400);
             for(var response:List.of(unknown,wrongMethod,invalid))
-                assertThat(response.body()).contains("/css/brand.css", "Volver al inicio").doesNotContain("Exception", "Hibernate", "stacktrace");
+                assertThat(response.body()).contains("Volver al inicio")
+                    .containsAnyOf("/css/brand.css", assetUrls.getForLookupPath("/css/brand.css"))
+                    .doesNotContain("Exception", "Hibernate", "stacktrace");
             assertThat(events.get(event).getStatus()).isEqualTo(EventStatus.OPEN);
         }
     }
@@ -189,7 +192,7 @@ class FinalMvpTests {
             assertThat(browser.post("/me/availability",Map.of("available","true","version",oldVersion)).statusCode()).isEqualTo(302);
             var repeat=browser.post("/me/availability",Map.of("available","false","version",oldVersion));
             assertThat(repeat.statusCode()).isEqualTo(409); assertThat(participants.get(a).available()).isTrue();
-            assertThat(repeat.body()).contains("Recarga la página", "/css/brand.css").doesNotContain("Exception");
+            assertThat(repeat.body()).contains("Recarga la página", assetUrls.getForLookupPath("/css/brand.css")).doesNotContain("Exception");
         }
     }
 

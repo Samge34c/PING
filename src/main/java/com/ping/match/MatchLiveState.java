@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ping.web.NotFoundException;
 
-/** A single consistent read of the public state signature, independent of history size. */
+/** Read only state fields instead of hydrating the participant's history. */
 @Service @Profile("!bootstrap") @Transactional(readOnly = true)
 public class MatchLiveState {
     private final JdbcTemplate jdbc;

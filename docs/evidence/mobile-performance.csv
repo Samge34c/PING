@@ -1,0 +1,15 @@
+screen,cache,before_bytes,after_bytes,before_network_requests,after_network_requests,before_load_plus500_ms,after_load_plus500_ms
+entrada,cold,556173,143311,10,10,3869,1814
+entrada,warm,556084,5407,10,1,3662,805
+acceso,cold,547642,138975,10,10,3765,1697
+acceso,warm,547553,3791,10,1,3636,854
+intereses,cold,733969,332566,12,11,5754,2872
+intereses,warm,733969,195816,12,2,5245,3166
+mi-ping,cold,567041,155222,13,13,3936,1867
+mi-ping,warm,567041,13388,13,1,3750,917
+conectar,cold,558734,146708,10,10,4077,1869
+conectar,warm,558734,9544,10,1,3704,819
+beneficios,cold,555423,147578,9,9,3860,2100
+beneficios,warm,555423,13221,9,1,3637,880
+recibo,cold,551361,142804,9,9,3790,1982
+recibo,warm,551361,8447,9,1,3645,815

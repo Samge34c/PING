@@ -39,6 +39,30 @@ class AccountSecurityTests {
  @Test void oauthNeverAutomaticallyLinksMatchingEmailsAndProviderIdentityIsUnique(){String email=address();long a=account(email),b=account(address());assertThatThrownBy(()->accounts.external("google","subject-"+UUID.randomUUID(),email,true,null)).isInstanceOf(BusinessRuleException.class);String subject="subject-"+UUID.randomUUID();assertThat(accounts.external("google",subject,email,true,a)).isEqualTo(a);assertThatThrownBy(()->accounts.external("google",subject,email,true,b)).isInstanceOf(BusinessRuleException.class);}
  @Test void missingProvidersHaveNoActiveButtonsAndReturnDestinationCannotBeExternal()throws Exception{String email=address();account(email);try(var b=new TestBrowser(port)){var page=b.get("/login?next=https://evil.example");assertThat(page.body()).doesNotContain("Continuar con Google","Continuar con Facebook");var result=b.post("/login",Map.of("email",email,"password",PASSWORD));var destination=java.net.URI.create(result.headers().firstValue("Location").orElseThrow());assertThat(destination.getPath()).isEqualTo("/me");assertThat(destination.getHost()).isIn(null,"127.0.0.1");}}
  @Test void repeatedAttemptsHaveRecoverableRateLimit(){String key=UUID.randomUUID().toString();throttle.check("test",key,1,1);assertThatThrownBy(()->throttle.check("test",key,1,1)).isInstanceOf(BusinessRuleException.class).hasMessageContaining("Espera");}
+ @Test void liveStateAndHtmlStayPrivateAcrossConcurrentAccountsAndFreshRevocation()throws Exception{
+  String first=address(),second=address();long a=account(first),b=account(second),e=event("Privado A"),f=event("Privado B");
+  var p=new ParticipantForm();p.setAlias("Persona privada A");p.setEventId(e);long x=participants.create(p).id();accounts.bind(a,x,e);
+  p.setAlias("Persona privada B");p.setEventId(f);long y=participants.create(p).id();accounts.bind(b,y,f);
+  try(var one=new TestBrowser(port);var two=new TestBrowser(port);var executor=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor()){
+   login(one,first);login(two,second);
+   var left=executor.submit(()->one.get("/me/state?participantId="+y));
+   var right=executor.submit(()->two.get("/me/state?participantId="+x));
+   var leftState=left.get();var rightState=right.get();
+   assertThat(leftState.statusCode()).isEqualTo(200);assertThat(rightState.statusCode()).isEqualTo(200);
+   assertThat(leftState.body()).contains("\"signature\":\""+x+":").doesNotContain("Persona privada","recognitionHint");
+   assertThat(rightState.body()).contains("\"signature\":\""+y+":");
+   for(var response:List.of(leftState,rightState,one.get("/me",Map.of("Accept-Encoding","gzip")))){
+    assertThat(response.headers().firstValue("Cache-Control").orElse("")).contains("no-store").doesNotContain("public","immutable");
+    assertThat(response.headers().firstValue("Content-Encoding")).isEmpty();
+   }
+   assertThat(one.get("/events/"+f+"/plan").statusCode()).isEqualTo(403);
+   events.transition(e,EventStatus.PAUSED);
+   assertThat(one.get("/me/state").body()).contains(":PAUSED:");
+   jdbc.update("update ping_accounts set auth_epoch=auth_epoch+1 where id=?",a);
+   assertThat(one.get("/me/state").statusCode()).isEqualTo(401);
+   assertThat(two.get("/me/state").statusCode()).isEqualTo(200);
+  }
+ }
  @Test void loginToNewEventDoesNotResumeAnUnrelatedParticipation()throws Exception{
   String email=address();long a=account(email),old=event("Anterior"),target=event("Destino");
   var f=new ParticipantForm();f.setAlias("Alias anterior privado");f.setEventId(old);long person=participants.create(f).id();accounts.bind(a,person,old);
