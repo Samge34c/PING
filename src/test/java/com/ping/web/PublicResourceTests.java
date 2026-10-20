@@ -15,6 +15,23 @@ class PublicResourceTests {
     @LocalServerPort int port;
     @Autowired ResourceUrlProvider urls;
 
+    @Test void gzipPreservesAssetBytesAndVariesOnEncoding() throws Exception {
+        String path = urls.getForLookupPath("/css/brand.css");
+        try (var client = java.net.http.HttpClient.newHttpClient(); var browser = new TestBrowser(port)) {
+            var zipped = client.send(java.net.http.HttpRequest.newBuilder(
+                    java.net.URI.create("http://127.0.0.1:" + port + path))
+                    .header("Accept-Encoding", "gzip").GET().build(), java.net.http.HttpResponse.BodyHandlers.ofByteArray());
+            assertThat(zipped.statusCode()).isEqualTo(200);
+            assertThat(zipped.headers().firstValue("Content-Encoding")).hasValue("gzip");
+            assertThat(String.join(",", zipped.headers().allValues("Vary")).toLowerCase()).contains("accept-encoding");
+            try (var decoded = new java.util.zip.GZIPInputStream(new java.io.ByteArrayInputStream(zipped.body()))) {
+                byte[] plain = browser.bytes(path).body();
+                assertThat(decoded.readAllBytes()).isEqualTo(plain);
+                assertThat(zipped.body().length).isLessThan(plain.length);
+            }
+        }
+    }
+
     @Test void onlyValidatedPublicFingerprintsAreImmutable() throws Exception {
         String path = urls.getForLookupPath("/css/brand.css");
         assertThat(path).matches("/css/brand-[a-f0-9]{32}\\.css");
