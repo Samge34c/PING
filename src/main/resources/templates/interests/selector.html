@@ -1,21 +1,75 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Selector compartido: alta (/join/interests), edición (/participants/{id}/interests) y editor en línea del catálogo.
+     Los checkboxes name=interestIds con el ID real son el único estado; interest-selector.js solo muestra, filtra y resume.
+     Sin JavaScript queda la lista completa por categorías. -->
 <div th:fragment="choices" class="interest-category-selector" data-interest-selector>
-  <div class="ic-summary"><strong>Elegidos</strong><p data-selection-summary th:text="${#lists.isEmpty(selectedNames) ? 'Aún ninguno. Puedes continuar sin elegir.' : #strings.listJoin(selectedNames, ' · ')}"></p><details data-selected-details hidden><summary>Ver todos los intereses elegidos</summary><p data-selected-list></p></details></div>
+  <div class="ic-tray" data-tray hidden>
+    <div class="ic-tray-line">
+      <div class="ic-tray-head"><strong>Elegidos</strong><output data-tray-count aria-hidden="true">0</output></div>
+      <div class="ic-tray-chips" data-tray-chips></div>
+      <button type="button" class="ic-tray-more" data-tray-more aria-expanded="false" aria-controls="ic-tray-all" hidden></button>
+    </div>
+    <div class="ic-tray-all" id="ic-tray-all" data-tray-all hidden></div>
+  </div>
+  <div class="ic-summary">
+    <strong>Elegidos</strong>
+    <p data-selection-summary th:text="${#lists.isEmpty(selectedNames) ? 'Aún ninguno. Puedes continuar sin elegir.' : #strings.listJoin(selectedNames, ' · ')}"></p>
+    <details data-selected-details hidden><summary>Ver todos los intereses elegidos</summary><p data-selected-list></p></details>
+  </div>
   <div class="ic-controls" data-filter-controls hidden>
-    <div><label for="interest-category-filter" class="form-label">Mostrar</label><select class="form-select" id="interest-category-filter" data-interest-filter><option value="all">Todos los intereses</option><option th:each="group : ${interestGroups}" th:value="${group.id}" th:text="${group.name}"></option></select></div>
-    <div th:if="${interestOptionCount > 12}"><label for="interest-search" class="form-label">Buscar un interés</label><input class="form-control" type="search" id="interest-search" data-interest-search autocomplete="off" placeholder="Escribe un nombre"></div>
+    <div>
+      <label for="interest-category-filter" class="form-label">Mostrar</label>
+      <select class="form-select" id="interest-category-filter" data-interest-filter>
+        <option value="all">Todos los intereses</option>
+        <option th:each="group : ${interestGroups}" th:value="${group.id}" th:text="${group.name}"></option>
+      </select>
+    </div>
+    <div th:if="${interestOptionCount > 12}">
+      <label for="interest-search" class="form-label">Buscar un interés</label>
+      <input class="form-control" type="search" id="interest-search" data-interest-search autocomplete="off" placeholder="Escribe un nombre">
+    </div>
     <p class="ic-filter-status" data-filter-status role="status" aria-live="polite"></p>
   </div>
-  <div th:if="${taxonomyNodes != null}" data-taxonomy hidden><button type="button" class="btn btn-link" data-taxonomy-back>← Volver a familias</button><p data-taxonomy-heading class="h5">Explora tus mundos</p><div class="taxonomy-nav"><button th:each="node:${taxonomyNodes}" type="button" class="btn btn-outline-primary" th:attr="data-node-key=${node.key},data-node-parent=${node.parent},data-node-label=${node.label}" th:text="${node.label}"></button></div></div>
+  <div th:if="${taxonomyNodes != null}" class="ic-taxonomy" data-taxonomy hidden>
+    <div class="ic-nav" data-taxonomy-nav hidden>
+      <button type="button" class="ic-back" data-taxonomy-back><svg class="ping-icon" aria-hidden="true"><use href="" data-back-icon></use></svg>Mundos</button>
+      <h2 class="ic-world-title" data-taxonomy-heading tabindex="-1">Explora tus mundos</h2>
+    </div>
+    <div class="ic-worlds">
+      <button th:each="node : ${taxonomyNodes}" th:if="${node.parent == null}" type="button" class="ic-world" th:attr="data-node-key=${node.key},data-node-parent=${node.parent},data-node-label=${node.label}">
+        <span class="ic-world-name" th:text="${node.label}"></span>
+        <span class="ic-world-meta"><b data-node-selected hidden></b><span data-node-count></span></span>
+        <svg class="ping-icon ic-world-icon" aria-hidden="true"><use href="" data-world-icon></use></svg>
+      </button>
+    </div>
+    <div class="ic-subs" data-subs hidden>
+      <button type="button" class="ic-sub" data-sub-all aria-pressed="true">Todo</button>
+      <button th:each="node : ${taxonomyNodes}" th:if="${node.parent != null}" type="button" class="ic-sub" aria-pressed="false" th:attr="data-node-key=${node.key},data-node-parent=${node.parent},data-node-label=${node.label}" th:text="${node.label}"></button>
+    </div>
+  </div>
   <div class="ic-groups">
-    <fieldset th:each="group : ${interestGroups}" class="ic-group" th:attr="data-interest-group=${group.id}"><legend th:text="${group.name}"></legend>
+    <fieldset th:each="group : ${interestGroups}" class="ic-group" th:attr="data-interest-group=${group.id}">
+      <legend th:text="${group.name}"></legend>
       <p class="ic-retained-help" th:if="${group.id == 'retained'}" th:text="${selectionContext == 'entry' ? 'Estas opciones dejaron de estar disponibles. Quítalas para terminar tu entrada; el resto del borrador se conserva.' : 'Tu selección anterior se conserva. Puedes mantener estos intereses o quitarlos; una vez guardada la retirada, no podrás añadirlos mientras la categoría esté inactiva.'}"></p>
-      <div class="interest-list"><div class="interest-row" th:each="interest : ${group.choices}" th:attr="data-interest-name=${interest.name},data-interest-nodes=${taxonomyMemberships != null and taxonomyMemberships.containsKey(interest.id) ? #strings.listJoin(taxonomyMemberships.get(interest.id),'|') : ''}">
-        <input type="checkbox" name="interestIds" th:id="${'interestIds' + interest.id}" th:value="${interest.id}" th:checked="${selectedIds.contains(interest.id)}">
-        <label class="interest-row-content" th:for="${'interestIds' + interest.id}"><span class="interest-icon"><svg th:replace="~{fragments/layout :: icon('heart')}"></svg></span><span class="interest-check"><svg th:replace="~{fragments/layout :: icon('check')}"></svg></span><strong th:text="${interest.name}"></strong><small th:unless="${interest.available}">No disponible para añadir</small></label>
-      </div></div>
+      <div class="interest-list">
+        <div class="interest-row" th:each="interest : ${group.choices}" th:attr="data-interest-name=${interest.name},data-interest-nodes=${taxonomyMemberships != null and taxonomyMemberships.containsKey(interest.id) ? #strings.listJoin(taxonomyMemberships.get(interest.id),'|') : ''}">
+          <input type="checkbox" name="interestIds" th:id="${'interestIds' + interest.id}" th:value="${interest.id}" th:checked="${selectedIds.contains(interest.id)}">
+          <label class="interest-row-content" th:for="${'interestIds' + interest.id}">
+            <span class="interest-icon"><svg th:replace="~{fragments/layout :: icon('heart')}"></svg></span>
+            <span class="interest-check"><svg th:replace="~{fragments/layout :: icon('check')}"></svg></span>
+            <strong th:text="${interest.name}"></strong>
+            <small th:unless="${interest.available}">No disponible para añadir</small>
+          </label>
+        </div>
+      </div>
     </fieldset>
   </div>
-  <div data-interest-empty th:hidden="${!#lists.isEmpty(interestGroups)}" class="ping-notice ic-empty"><p>No hay intereses que coincidan con este filtro. Prueba otro nombre o muestra todas las categorías. Si el catálogo está vacío, puedes continuar sin elegir.</p><button type="button" class="btn btn-outline-primary" data-clear-filter>Mostrar todos</button></div>
+  <div data-interest-empty th:hidden="${!#lists.isEmpty(interestGroups)}" class="ping-notice ic-empty">
+    <p>No hay intereses que coincidan con este filtro. Prueba otro nombre o muestra todas las categorías. Si el catálogo está vacío, puedes continuar sin elegir.</p>
+    <button type="button" class="btn btn-outline-primary" data-clear-filter>Mostrar todos</button>
+  </div>
 </div>
-</body></html>
+</body>
+</html>

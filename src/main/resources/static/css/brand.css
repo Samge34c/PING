@@ -2617,15 +2617,6 @@ html:has(body.home-festival-page) {scroll-padding-bottom:calc(var(--ping-nav-h,8
 .pi-heading h1 {font-size:28px;margin:0 0 8px}
 .pi-heading p {font-size:14px;color:var(--ping-muted);margin:0 0 12px}
 .pi-heading p strong {color:var(--ping-text);font-weight:600}
-.pi-page .interest-list {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;border:0}
-.pi-page .interest-row {min-width:0;min-height:84px;border:1px solid var(--ping-control-border);border-radius:12px;background:var(--ping-surface)}
-.pi-page .interest-row-content {grid-template-columns:minmax(0,1fr) 24px;grid-template-rows:24px auto;gap:10px;min-height:84px;padding:12px;align-items:start}
-.pi-page .interest-row-content .interest-icon {grid-column:1;grid-row:1;line-height:1}
-.pi-page .interest-row-content .interest-check {grid-column:2;grid-row:1}
-.pi-page .interest-row-content strong {grid-column:1/-1;grid-row:2;font-size:16px;font-weight:650;line-height:1.4}
-.pi-page .interest-row:has(input:checked) {border-color:var(--ping-primary);background:var(--ping-badge-bg)}
-.pi-page .interest-row:has(input:checked) strong::after {content:none}
-.pi-page .interest-row:has(input:focus-visible) {outline:2px solid var(--ping-focus);outline-offset:3px}
 .pi-page .interest-selection-footer {display:flex;flex-direction:column;align-items:stretch;gap:12px;margin-top:20px;padding-top:0;border:0}
 .pi-page .interest-selection-footer p {font-size:13px;margin:0;color:var(--ping-muted)}
 .pi-page .interest-selection-footer>.btn {min-height:48px}
@@ -2687,10 +2678,8 @@ body.participant-entry-page {padding-left:0}
 .ic-filter-status:empty { display: none; }
 .ic-group { min-width: 0; padding: 0; border: 0; margin: 0 0 22px; }
 .ic-group legend { float: none; width: auto; font-size: 16px; font-weight: 800; line-height: 1.4; margin-bottom: 10px; }
-.ic-group .interest-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
 .ic-group .interest-row { margin: 0; min-width: 0; }
 .ic-group[hidden],.ic-group .interest-row[hidden] { display: none !important; }
-.ic-group .interest-row-content { min-height: 64px; }
 .ic-group .interest-row-content small { grid-column: 1 / -1; font-size: 12px; line-height: 1.4; color: var(--ping-muted); }
 .ic-retained-help { font-size: 14px; line-height: 1.5; color: var(--ping-muted); }
 .ic-actions { position: relative; background: var(--ping-bg); padding: 10px 0 12px; border-top: 1px solid var(--ping-border); }
@@ -2858,3 +2847,66 @@ body.participant-entry-page {padding-left:0}
 .recovery-banner[data-sticky] {position:sticky;top:8px;z-index:30;box-shadow:var(--ping-shadow)}
 .recovery-banner span {display:block}
 .recovery-banner .btn {display:flex;align-items:center;justify-content:center;width:max-content;max-width:100%;min-height:44px;margin-top:10px}
+
+/* DEC-055 · Intereses: bandeja de elegidos, mundos con icono local y gustos como chips.
+   Todo bajo .interest-category-selector para que sirva igual en el alta, la edición y el editor en línea. */
+.ic-top {display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:4px 12px;min-height:44px;padding-top:4px}
+.ic-me {min-width:0;font-size:13px;line-height:1.3;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ic-me span {color:var(--ping-muted)}
+.ic-top .pe-step {margin:0;white-space:nowrap}
+.pe-page.ic-page>h1 {margin:0 0 12px;font-size:26px;line-height:1.15;text-wrap:balance}
+.ic-lede {margin:-6px 0 12px;font-size:13px;color:var(--ping-muted);text-wrap:balance}
+.ic-tray {margin-bottom:14px;padding:8px 14px;border:1px solid var(--ping-border);border-radius:14px;background:var(--ping-surface)}
+.ic-tray[hidden] {display:none}
+.ic-tray-line {display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.ic-tray-head {display:flex;flex:none;align-items:center;gap:6px}
+.ic-tray-head strong {font-size:13px}
+.ic-tray-head output {padding:1px 10px;border-radius:999px;background:var(--ping-badge-bg);color:var(--ping-badge-text);font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
+.ic-tray-chips {display:flex;flex:1 1 8rem;gap:6px;min-width:8rem;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
+.ic-tray-chips::-webkit-scrollbar {display:none}
+.ic-tray-chips[hidden],.ic-tray-all[hidden],.ic-tray-more[hidden] {display:none}
+.ic-tray-more {flex:none;min-height:44px;padding:0 4px;border:0;background:none;color:var(--ping-primary);font-size:13px;font-weight:700}
+.ic-tray-all {display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.ic-chip {display:inline-flex;flex:none;align-items:center;gap:8px;max-width:78%;min-height:44px;padding:0 6px 0 14px;border:1px solid var(--ping-control-border);border-radius:22px;background:var(--ping-badge-bg);color:var(--ping-badge-text);font-size:14px;font-weight:650;touch-action:manipulation}
+.ic-chip span {overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ic-chip i {display:grid;flex:none;place-items:center;width:32px;height:32px;border-radius:50%;font-style:normal;font-size:18px;line-height:1}
+.ic-tray-all .ic-chip {max-width:100%;height:auto;padding-block:4px;text-align:left}
+.ic-tray-all .ic-chip span {white-space:normal;overflow-wrap:anywhere}
+.ic-chip[data-new] {animation:ic-pop 160ms cubic-bezier(.23,1,.32,1)}
+@keyframes ic-pop {from {opacity:0;transform:scale(.9)}}
+[data-categories-ready] .ic-summary strong {display:none}
+[data-categories-ready] .ic-summary {margin:0 0 12px}
+.ic-summary.is-tray {display:none}
+.ic-taxonomy {margin:0 0 16px}
+.ic-taxonomy[hidden],.ic-nav[hidden],.ic-subs[hidden],.ic-worlds[hidden],.ic-world[hidden],.ic-sub[hidden] {display:none}
+.ic-nav {display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin-bottom:10px}
+.ic-back {display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 10px;border:1px solid var(--ping-control-border);border-radius:22px;background:var(--ping-surface);color:var(--ping-primary);font-size:14px;font-weight:700;touch-action:manipulation}
+.ic-back .ping-icon {width:18px;height:18px;transform:scaleX(-1)}
+.ic-world-title {flex:1 1 8rem;min-width:0;margin:0;font-size:20px;line-height:1.25;overflow-wrap:break-word}
+.ic-worlds {display:grid;grid-template-columns:repeat(auto-fill,minmax(9.5rem,1fr));gap:10px}
+.ic-world {display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:1fr auto;gap:4px 8px;min-height:76px;padding:10px 12px;border:1px solid var(--ping-control-border);border-radius:14px;background:var(--ping-surface);color:var(--ping-text);text-align:left;touch-action:manipulation}
+.ic-world-name {grid-column:1 / -1;font-size:15px;font-weight:750;line-height:1.25;overflow-wrap:break-word}
+.ic-world-meta {display:flex;align-items:center;gap:6px;align-self:end;font-size:12px;line-height:1.2;color:var(--ping-muted)}
+.ic-world-meta b {display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--ping-accent);color:var(--ping-accent-text);font-size:12px;font-variant-numeric:tabular-nums}
+.ic-world-meta b[hidden] {display:none}
+.ic-world-icon {grid-row:2;grid-column:2;align-self:end;width:24px;height:24px;color:var(--ping-primary)}
+.ic-world[data-chosen="true"] {border-color:var(--ping-primary);background:var(--ping-badge-bg)}
+.ic-subs {display:flex;gap:8px;margin-bottom:10px;padding:2px 2px 6px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
+.ic-subs::-webkit-scrollbar {display:none}
+.ic-sub {flex:none;max-width:80vw;min-height:44px;padding:0 16px;border:1px solid var(--ping-control-border);border-radius:22px;background:var(--ping-surface);color:var(--ping-text);font-size:14px;font-weight:650;text-align:left;touch-action:manipulation}
+.ic-sub[aria-pressed="true"] {border-color:var(--ping-primary);background:var(--ping-badge-bg);color:var(--ping-badge-text);box-shadow:inset 0 -3px 0 var(--ping-primary)}
+.interest-category-selector .interest-list {display:flex;flex-wrap:wrap;gap:8px;border:0}
+.interest-category-selector .interest-row {position:relative;display:block;min-width:0;max-width:100%;min-height:0;border:0}
+.interest-category-selector .interest-row-content {display:inline-flex;align-items:center;gap:8px;max-width:100%;min-height:44px;padding:6px 16px 6px 8px;border:1px solid var(--ping-control-border);border-radius:22px;background:var(--ping-surface);cursor:pointer}
+.interest-category-selector .interest-icon {display:none}
+.interest-category-selector .interest-row .interest-check {flex:none;width:26px;height:26px;border-radius:50%;border:2px solid var(--ping-control-border);background:transparent}
+.interest-category-selector .interest-row-content strong {font-size:15px;font-weight:650;line-height:1.3;overflow-wrap:anywhere}
+.interest-category-selector .interest-row-content small {margin-left:4px;font-size:12px}
+.interest-category-selector .interest-row:has(input:checked) .interest-row-content {border-color:var(--ping-primary);background:var(--ping-badge-bg)}
+.interest-category-selector .interest-row:has(input:checked) .interest-check {border-color:var(--ping-primary);background:var(--ping-primary);color:var(--ping-primary-text)}
+.interest-category-selector .interest-row:has(input:checked) strong::after {content:none}
+.interest-category-selector .interest-row:has(input:focus-visible) {outline:none}
+.interest-category-selector .interest-row:has(input:focus-visible) .interest-row-content {outline:3px solid var(--ping-focus);outline-offset:3px}
+@media (hover:hover) and (pointer:fine) {.ic-world:hover,.ic-sub:hover,.ic-back:hover,.interest-category-selector .interest-row-content:hover {border-color:var(--ping-primary)}}
+@media (prefers-reduced-motion:no-preference) {.ic-world,.ic-sub,.ic-back,.ic-chip {transition:transform 120ms cubic-bezier(.23,1,.32,1),background-color 120ms ease-out,border-color 120ms ease-out}.ic-world:active,.ic-sub:active,.ic-back:active,.ic-chip:active {transform:scale(.97)}}
+@media (prefers-reduced-motion:reduce) {.ic-chip[data-new] {animation:none}}
