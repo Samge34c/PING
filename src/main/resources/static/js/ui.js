@@ -1,6 +1,6 @@
 (() => {
   const path = location.pathname;
-  const section = path === '/' ? 'home' : path.startsWith('/me/benefits') || path.startsWith('/me/claims') ? 'benefits' : path.includes('/interests') ? 'interests' : path.startsWith('/me') ? 'me' : path.startsWith('/connect') || path.startsWith('/matches') || path.startsWith('/demo') ? 'connect' : path.startsWith('/events') ? 'events' : path.startsWith('/participants') ? 'people' : path.startsWith('/admin') ? 'admin' : '';
+  const section = path === '/' ? 'home' : path.startsWith('/me/benefits') || path.startsWith('/me/claims') ? 'benefits' : path.includes('/interests') ? 'interests' : path.startsWith('/me') ? 'me' : path.startsWith('/connect') || path.startsWith('/matches') || path.startsWith('/demo') ? 'connect' : path.startsWith('/events') || path.startsWith('/organizer') ? 'events' : path.startsWith('/participants') ? 'people' : path.startsWith('/admin') ? 'admin' : path.startsWith('/account') ? 'account' : path.startsWith('/login') ? 'login' : path.startsWith('/join') ? 'join' : '';
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === section) a.setAttribute('aria-current', 'page'); });
   document.querySelectorAll('[data-page-title]').forEach(el => { el.textContent = document.title.split(' · ')[0]; });
   document.querySelectorAll('.session-chip').forEach(chip => {
@@ -10,8 +10,15 @@
     if (alias) { chip.querySelector('[data-session-alias]').textContent = alias; chip.querySelector('[data-session-initial]').textContent = alias.slice(0, 1).toUpperCase(); }
   });
   const menu = document.querySelector('#mobile-menu'), toggle = document.querySelector('[data-more-toggle]');
-  if (toggle && section && !['me','connect','events','benefits'].includes(section)) toggle.setAttribute('aria-current','page');
-  const background = [...document.querySelectorAll('main,.ping-topbar,.ping-sidebar,.ping-bottom-nav,.ping-footer')];
+  if (toggle && ['home', 'interests', 'account'].includes(section)) toggle.setAttribute('aria-current', 'page');
+  // La navegación inferior puede ocupar varias filas con texto ampliado: se mide para reservar el espacio bajo el contenido.
+  const bottomNav = document.querySelector('.ping-bottom-nav');
+  if (bottomNav) {
+    const reserve = () => document.documentElement.style.setProperty('--ping-nav-h', Math.ceil(bottomNav.getBoundingClientRect().height) + 'px');
+    reserve();
+    if ('ResizeObserver' in window) new ResizeObserver(reserve).observe(bottomNav); else addEventListener('resize', reserve);
+  }
+  const background = [...document.querySelectorAll('main,.ping-topbar,.ping-sidebar,.ping-bottom-nav,.ping-footer,.h-header,.h-scroll')];
   const closeMenu = () => { if (!menu || menu.hidden) return; menu.hidden = true; background.forEach(el => { el.inert = false; }); toggle.setAttribute('aria-expanded', 'false'); document.body.classList.remove('menu-open'); toggle.focus(); };
   toggle?.addEventListener('click', () => { menu.hidden = false; background.forEach(el => { el.inert = true; }); toggle.setAttribute('aria-expanded', 'true'); document.body.classList.add('menu-open'); menu.querySelector('button').focus(); });
   document.querySelectorAll('[data-more-close]').forEach(el => el.addEventListener('click', closeMenu));

@@ -3,8 +3,8 @@
   <a class="ping-skip" href="#main-content">Saltar al contenido</a>
   <a th:replace="~{fragments/layout :: brand}"></a>
   <nav class="h-desktop-nav" aria-label="Navegación principal del Hub">
-    <a th:href="@{/me}">Mi Ping</a><a th:href="@{/connect}">Conectar</a>
-    <a aria-current="page" th:href="@{/events/{id}/hub(id=${event.id})}">Mi evento</a><a th:href="${participant != null} ? @{/me/benefits} : @{/demo}">Beneficios</a>
+    <a th:if="${participant != null}" th:href="@{/me}">Mi Ping</a><a th:if="${participant != null}" th:href="@{/connect}">Conectar</a>
+    <a aria-current="page" th:href="@{/events/{id}/hub(id=${event.id})}">Evento</a><a th:if="${participant != null}" th:href="@{/me/benefits}">Beneficios</a>
   </nav>
   <div class="h-account"><div th:replace="~{fragments/layout :: theme}"></div>
     <div th:if="${participant != null}" class="h-account-name"><strong th:text="${participant.alias}"></strong><span th:text="${participant.points + ' PTS'}"></span></div>
@@ -12,13 +12,7 @@
     <a th:if="${participant == null}" class="h-guest" th:href="@{/demo}">Entrar</a>
   </div>
 </header>
-<nav th:fragment="mobileNav" class="h-mobile-nav" aria-label="Navegación móvil del Hub">
-  <a th:href="@{/me}"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg><span>Mi Ping</span></a>
-  <a th:href="@{/connect}"><svg th:replace="~{fragments/layout :: icon('spark')}"></svg><span>Conectar</span></a>
-  <a aria-current="page" th:href="@{/events/{id}/hub(id=${event.id})}"><svg th:replace="~{fragments/layout :: icon('calendar')}"></svg><span>Mi evento</span></a>
-  <a th:href="@{/events/{id}/map(id=${event.id})}"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span>Mapa</span></a>
-  <a th:href="${participant != null} ? @{/me/benefits} : @{/demo}"><svg th:replace="~{fragments/layout :: icon('gift')}"></svg><span>Beneficios</span></a>
-</nav>
+<th:block th:fragment="mobileNav"><nav th:replace="~{fragments/navigation :: bottomNav}"></nav><div th:replace="~{fragments/navigation :: moreMenu}"></div></th:block>
 <div th:fragment="zoneArt(id)" class="h-zone-visual" aria-hidden="true" th:switch="${id}">
   <th:block th:case="'cosplay'"><svg class="h-zone-art" viewBox="0 0 100 90" aria-hidden="true"><path d="M10 22h21l8-12h23l9 12h19v57H10Z"/><circle cx="50" cy="50" r="22"/><circle cx="50" cy="50" r="11"/><path d="M75 32h6"/></svg></th:block>
   <th:block th:case="'technology'"><svg class="h-zone-art" viewBox="0 0 96 78" aria-hidden="true"><rect x="17" y="13" width="60" height="52" rx="8"/><rect x="32" y="25" width="30" height="28" rx="3"/><path d="M28 5v8m18-8v8m18-8v8M28 65v8m18-8v8m18-8v8M9 24h8m-8 15h8m-8 15h8m60-30h8m-8 15h8m-8 15h8"/><path d="m41 34-4 5 4 5m12-10 4 5-4 5"/></svg></th:block>

@@ -1661,8 +1661,9 @@ a.interest-row {display:grid;grid-template-columns:24px minmax(0,1fr);gap:4px 16
 @media(max-width:1023px) {
   body {
     padding-left:0;
-    padding-bottom:calc(80px + env(safe-area-inset-bottom))
+    padding-bottom:calc(var(--ping-nav-h,80px) + 8px)
   }
+  html {scroll-padding-bottom:calc(var(--ping-nav-h,80px) + 16px)}
   .ping-topbar>.ping-wordmark {display:block;font-size:28px}
   .ping-sidebar {
     display:none
@@ -1687,8 +1688,9 @@ a.interest-row {display:grid;grid-template-columns:24px minmax(0,1fr);gap:4px 16
     left:0;
     right:0;
     padding:8px 8px calc(8px + env(safe-area-inset-bottom));
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
+    display:flex;
+    flex-wrap:wrap;
+    gap:2px;
     background:color-mix(in srgb,var(--ping-nav-bg) 95%,transparent);
     backdrop-filter:blur(16px);
     border-top:1px solid var(--ping-border);
@@ -1708,12 +1710,13 @@ a.interest-row {display:grid;grid-template-columns:24px minmax(0,1fr);gap:4px 16
     font-size:10px;
     font-weight:600;
     min-height:48px;
-    min-width:0;
-    padding-inline:2px;
+    flex:1 1 0;
+    min-width:max-content;
+    padding-inline:6px;
     line-height:1.15;
     text-align:center
   }
-  .ping-bottom-nav a>span,.ping-bottom-nav button>span {max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ping-bottom-nav a>span,.ping-bottom-nav button>span {white-space:nowrap}
   .ping-bottom-nav .ping-icon {
     width:24px;
     height:24px
@@ -2219,7 +2222,6 @@ body.sofa-hub-page {padding:0;min-height:100dvh;background:var(--ping-bg)}
 .h-footer {display:flex;align-items:center;gap:30px;padding:30px 0 36px}
 .h-footer .ping-wordmark {font-size:25px}
 .h-footer p {font-size:11px;color:var(--ping-muted);margin:0}
-.h-mobile-nav {display:none}
 .sofa-hub-page :is(a,button):focus-visible {outline:3px solid var(--ping-focus);outline-offset:4px;box-shadow:none}
 .sofa-hub-page .h-zone:focus-visible {outline-offset:-4px;outline-color:var(--hub-ink)}
 .sofa-hub-page .h-zone:not([data-zone="gamer"]):not([data-zone="cosplay"]):focus-visible {outline-color:var(--ping-focus)}
@@ -2235,7 +2237,7 @@ body.sofa-hub-page {padding:0;min-height:100dvh;background:var(--ping-bg)}
 }
 @media(max-width:700px) {
  body.sofa-hub-page {height:100dvh;min-height:0;overflow:hidden}
- .h-scroll {height:calc(100dvh - 68px - env(safe-area-inset-bottom));overflow:auto;scroll-padding-top:18px}
+ .h-scroll {height:calc(100dvh - var(--ping-nav-h,72px));overflow:auto;scroll-padding-top:18px;scroll-padding-bottom:16px}
  .h-header,.h-main {width:calc(100% - 32px)}
  .h-header {height:64px;gap:12px}.h-header .ping-wordmark {font-size:30px}.h-desktop-nav {display:none}.h-account {gap:8px}.h-account-name {font-size:11px;max-width:83px}.h-account-name span {font-size:11px}.h-avatar {height:30px;width:30px;font-size:12px}
  .h-account .theme-control button {min-width:44px;min-height:44px;padding:8px}
@@ -2267,9 +2269,6 @@ body.sofa-hub-page {padding:0;min-height:100dvh;background:var(--ping-bg)}
  .h-zone[data-meeting="true"]:not([data-zone="gamer"]) {padding-top:39px;min-height:132px}
  .h-benefits {gap:14px;flex-wrap:wrap;padding:18px 0;margin-top:23px}.h-benefits p {font-size:14px;flex:1}.h-benefits>a {margin-left:40px}
  .h-footer {padding:25px 0 32px;gap:20px}.h-footer p {font-size:11px}
- .h-mobile-nav {position:fixed;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));height:calc(68px + env(safe-area-inset-bottom));padding:7px 7px calc(7px + env(safe-area-inset-bottom));border-top:1px solid var(--ping-border);background:var(--ping-bg);z-index:40}
- .h-mobile-nav a {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:44px;min-width:0;font-size:11px;font-weight:650;color:var(--ping-muted);text-decoration:none}
- .h-mobile-nav .ping-icon {width:22px;height:22px}.h-mobile-nav [aria-current] {color:var(--ping-primary)}
 }
 @media(max-width:370px) {
  .h-festival h1 {font-size:48px}.h-festival-copy {padding-inline:20px}.h-facts {font-size:10px}.h-account-name {max-width:65px}.h-context-actions {gap:7px}
@@ -2349,7 +2348,7 @@ body.sofa-hub-page {padding:0;min-height:100dvh;background:var(--ping-bg)}
 .active-encounter-page :is(a,button,summary,[tabindex="0"]):focus-visible {outline:3px solid var(--ping-focus);outline-offset:3px;box-shadow:none}
 .active-encounter-page .am-map-marker:focus-visible {outline-offset:4px}
 @media(max-width:1023px) {
- html:has(body.active-encounter-page) {scroll-padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+ html:has(body.active-encounter-page) {scroll-padding-bottom:calc(var(--ping-nav-h,80px) + 24px)}
  .active-encounter-page main :is(a,button,summary,textarea,select,input,[tabindex="0"]) {scroll-margin-bottom:calc(96px + env(safe-area-inset-bottom))}
  .am-grid {grid-template-columns:1fr;grid-template-areas:"word" "location" "activity" "confirm";gap:24px}
  .am-map-pan {height:230px}
@@ -2387,7 +2386,7 @@ body.mi-ping-page {background-image:none}
 .mp-event .ping-icon {width:16px;height:16px;flex:none}
 .mp-identity {display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
 .mp-identity>.avatar {flex:none;width:44px;height:44px;font-size:20px}
-.mp-identity h1 {font-size:28px;line-height:1.2;letter-spacing:-.03em;margin:0;font-weight:800;min-width:0;flex:1 1 min-content}
+.mp-identity h1 {font-size:28px;line-height:1.2;letter-spacing:-.03em;margin:0;font-weight:800;min-width:0;flex:1 1 min-content;overflow-wrap:break-word}
 .mp-balance {margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:44px;min-height:44px;gap:0;color:var(--ping-muted);font-size:12px}
 .mp-balance strong {font-size:24px;line-height:1.2;color:var(--ping-highlight-text);font-variant-numeric:tabular-nums}
 .mp-flow {display:flex;flex-direction:column;gap:24px}
@@ -2446,7 +2445,7 @@ body.mi-ping-page {background-image:none}
 .mp-tools>a {display:flex;align-items:center;min-height:44px;gap:8px;font-size:14px}.mp-tools .btn {font-size:13px;min-height:44px;padding-inline:0}.mp-tools .ping-icon {width:18px;height:18px}
 .mi-ping-page :is(a,button,summary,textarea) {scroll-margin-block:90px 112px}
 .mi-ping-page :is(a,button,summary,textarea):focus-visible {outline:3px solid var(--ping-focus);outline-offset:3px;box-shadow:none}
-html:has(body.mi-ping-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+html:has(body.mi-ping-page) {scroll-padding-bottom:calc(var(--ping-nav-h,80px) + 24px)}
 @media(min-width:1024px) {
  .mi-ping-page main.mp-page {width:calc(100% - 64px);margin-top:24px}
  .mp-header {max-width:620px;margin-bottom:24px}
@@ -2523,7 +2522,7 @@ body.benefits-page {background-image:none}
 .bf-academic {font-size:12px;line-height:1.6;color:var(--ping-muted);margin:24px 0 0}
 .benefits-page :is(a,button,[tabindex]) {scroll-margin-block:90px 112px}
 .benefits-page :is(a,button,[tabindex]):focus-visible {outline:3px solid var(--ping-focus);outline-offset:3px;box-shadow:none}
-html:has(body.benefits-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+html:has(body.benefits-page) {scroll-padding-bottom:calc(var(--ping-nav-h,80px) + 24px)}
 @media(min-width:1024px) {
  .benefits-page main.bf-page {width:calc(100% - 64px);margin-top:24px}
  .bf-header {margin-bottom:28px}.bf-context {max-width:620px}.bf-heading {max-width:620px}
@@ -2573,7 +2572,7 @@ body.home-festival-page {background-image:none}
 .hm-session-tools a {display:flex;align-items:center;min-height:44px;font-size:13px}
 .home-festival-page :is(a,button) {scroll-margin-block:90px 112px}
 .home-festival-page :is(a,button):focus-visible {outline:3px solid var(--ping-focus);outline-offset:3px;box-shadow:none}
-html:has(body.home-festival-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+html:has(body.home-festival-page) {scroll-padding-bottom:calc(var(--ping-nav-h,80px) + 24px)}
 @media(min-width:1024px) {
  .home-festival-page main.hm-page {width:calc(100% - 64px);margin-top:28px}
  .hm-intro {display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:36px;align-items:center}
@@ -2630,7 +2629,7 @@ html:has(body.home-festival-page) {scroll-padding-bottom:calc(100px + env(safe-a
 .pi-page .interest-selection-footer {display:flex;flex-direction:column;align-items:stretch;gap:12px;margin-top:20px;padding-top:0;border:0}
 .pi-page .interest-selection-footer p {font-size:13px;margin:0;color:var(--ping-muted)}
 .pi-page .interest-selection-footer>.btn {min-height:48px}
-html:has(body.participant-interests-page) {scroll-padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+html:has(body.participant-interests-page) {scroll-padding-bottom:calc(var(--ping-nav-h,80px) + 24px)}
 
 /* DEC-038: compact participant entry; no administrative or shared navigation redesign. */
 body.participant-entry-page {padding-left:0}
@@ -2848,3 +2847,6 @@ body.participant-entry-page {padding-left:0}
   .id-page>form>.id-card {grid-column:1;grid-row:1 / span 4}
   .id-page>form>:not(.id-card):not([type="hidden"]) {grid-column:2}
 }
+
+/* DEC-055 · Navegación: una sola barra inferior para Hub y resto, y sin barra de destinos personales para el Hub en tablet. */
+@media (max-width: 1023px) {.h-desktop-nav {display:none}}
