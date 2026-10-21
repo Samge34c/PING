@@ -95,3 +95,5 @@ try {
     # Only the unique directory created above, never user files or repository data.
     if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Recurse -Force }
 }
+# Expected negative subprocess tests leave LASTEXITCODE nonzero. Only a completed suite exits0.
+exit 0
