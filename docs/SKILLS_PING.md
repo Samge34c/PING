@@ -125,3 +125,48 @@ Las seis skills anteriores conservan sus hashes, licencias y configuración. Aho
 Ambas contienen solo SKILL.md y LICENSE, sin ejecutables ni dependencias necesarias. No se instaló el resto de la colección ni se ejecutó instalador global. Manifiesto conserva fuente, commit y SHA-256. Lectura manual completa: executor skills.list continúa sin enumerarlas; esto no bloquea su uso.
 
 Selección del bloque: ping-efficient-work organiza, mobile-native/emil-design-eng guían las correcciones concretas; Impeccable revisa capturas manualmente (motor no disponible, hooks siguen desactivados); verification exige evidencia. Redesign y UX se reservan a dudas estructurales/de interacción; systematic-debugging se activa solo ante fallos reproducibles. No se encadenan otras skills citadas. La exigencia upstream de hardware se registra como pendiente real de iPhone, según el alcance explícito del usuario; no se declara esa prueba por usar Chromium táctil.
+
+
+## Integración con Claude Code — 21 octubre 2026
+
+Autorización expresa del usuario de la sesión de Claude Code, 21 octubre 2026: preparar las skills pertinentes con alcance de proyecto en la rama `claude/sweet-ritchie-ja97c7`, creada desde `ci/development-validation` @ `f2923b98ff893c22138ef6552859e5a323ffa7c3` (sin avances posteriores comprobados en el remoto; PR #50 abierta en borrador). No se atribuye aprobación a ningún integrante concreto; la aceptación de Samuel y Julián sigue pendiente.
+
+**Qué se añadió.** `CLAUDE.md` (breve: importa AGENTS.md y fija la regla de selección) y `.claude/skills/<nombre>/SKILL.md` para las ocho skills. Cada archivo es un **puntero de texto** de unas diez líneas con `name`, una `description` breve y la ruta de la fuente fijada en `.agents/skills/`. No copia contenido, scripts, referencias ni licencias; no cambia revisiones. Motivos: Claude Code descubre `.claude/skills/` y documenta que una entrada puede ser un enlace simbólico a otra carpeta ([documentación oficial](https://code.claude.com/docs/en/skills)), pero el repositorio no usa enlaces simbólicos y el equipo trabaja también en Windows, donde Git puede dejarlos como archivos de texto; una copia duplicaría 6 MB y abriría una divergencia de versiones. `.agents/skills/` queda intacta para Codex.
+
+**Invocación.** Automática (por descripción) solo en `ping-efficient-work`, `mobile-native`, `systematic-debugging` y `verification-before-completion`. Manual (`disable-model-invocation: true`) en `redesign-existing-projects`, `emil-design-eng`, `ui-ux-pro-max` e `impeccable`, para que sus descripciones no se carguen por defecto y no se encadenen. No se midió el ahorro de contexto de esta decisión.
+
+**Impeccable.** Hooks desactivados (`.impeccable/config.json`, `hook.enabled: false`); no se creó `.claude/settings*.json`. Según su repositorio oficial, el instalador de Claude Code añade un hook en `.claude/settings.local.json`, el lanzador descarga un motor en `~/.impeccable/` y la skill consulta un servicio externo al iniciar un diseño nuevo; por eso su puntero prohíbe ejecutar `scripts/impeccable` y los comandos `hooks`, `live`, `init` y `pin`. El motor no está instalado en esta sesión y no se descargó.
+
+### Estado comprobado el 21 octubre 2026 (base f2923b9)
+
+| Skill | 1. Archivos | 2. Leída | 3. Descubierta automáticamente | 4. Herramienta ejecutada |
+|---|---|---|---|---|
+| ping-efficient-work | Sí; SHA-256 de SKILL.md coincide | Sí | No en la sesión inicial; puntero añadido después | No aplica |
+| redesign-existing-projects | Sí; coincide | Sí | Ídem | No aplica |
+| mobile-native | Sí; coincide | Sí | Ídem | No aplica |
+| emil-design-eng | Sí; coincide | Solo frontmatter | Ídem | No aplica |
+| ui-ux-pro-max | Sí; coincide | Solo frontmatter | Ídem | No ejecutada (script Python local, sin red) |
+| impeccable | Sí; coincide | Frontmatter y partes | Ídem | **No** ejecutada (descarga motor) |
+| systematic-debugging | Sí; coincide | Solo frontmatter | Ídem | No aplica |
+| verification-before-completion | Sí; coincide | Solo frontmatter | Ídem | No aplica |
+
+El catálogo de skills de la sesión (`ListSkills`) solo mostraba skills de cuenta, no las de PING. Tras crear los punteros, invocar `mobile-native` con la herramienta `Skill` devolvió `Unknown skill` en esa misma sesión: el directorio `.claude/skills/` no existía al iniciarla y la documentación oficial indica que entonces requiere `/reload-skills` o una sesión nueva. **Pendiente de verificar en una sesión nueva** que los punteros se descubren; mientras tanto, lectura manual de `.agents/skills/<nombre>/SKILL.md`. Una skill de instrucciones no necesita un CLI para usarse.
+
+### Cuándo usar cada una
+
+| Situación | Skill | No usar cuando |
+|---|---|---|
+| Trabajo con exploración y varios pasos | ping-efficient-work | Pregunta sencilla |
+| Cambio estructural de una pantalla | redesign-existing-projects | Ajuste menor de CSS; si exigiría cambiar identidad, tipografía o datos |
+| Hover, zoom de campos, pulsación, áreas seguras, teclado | mobile-native | Se pretende aplicar reglas globales o bloquear zoom |
+| Feedback de selección, transiciones de estado | emil-design-eng | Efecto decorativo o que retrase una acción |
+| Duda concreta de UX/accesibilidad | ui-ux-pro-max | Elegir un estilo o generar un sistema completo |
+| Revisión visual final de una pantalla, sobre capturas | impeccable | Como rutina; no repetir si ya hubo una revisión equivalente |
+| Defecto reproducible | systematic-debugging | Sin fallo observado |
+| Antes de afirmar «funciona/terminado» | verification-before-completion | Para repetir suites sin cambios |
+
+Una tarea no carga las ocho. Un cambio estructural puede usar redesign y, después, una sola revisión con Impeccable.
+
+### Qué no se hizo
+
+No se instalaron plugins, colecciones ni servicios; no se actualizó ninguna revisión (Taste ahora publica `design-taste-frontend`; PING conserva su revisión fijada); no se añadieron skills nuevas, porque las ocho cubren el encargo; no se activaron hooks; no se ejecutaron binarios. Evaluación de las quince referencias: `docs/REFERENCIAS_VISUALES_Y_SKILLS.md`.
