@@ -65,6 +65,13 @@
       action: { label: 'Entrar a mi cuenta', url: '/login' } });
     document.dispatchEvent(new Event('ping:session-lost'));
     root.querySelectorAll('[data-private-credential]').forEach(el=>{el.removeAttribute('src');el.textContent='';el.hidden=true;});
+    // A manually entered or scanned personal code is private too. Keep ordinary drafts
+    // during network failures, but withdraw credentials when the session is gone.
+    root.querySelectorAll('[data-credential-form]').forEach(form => {
+      const input = form.querySelector('[name="credential"]');
+      if (input) { input.value = ''; input.defaultValue = ''; }
+      form.dataset.credentialDirty = 'false';
+    });
     root.querySelectorAll('form[method="post"] button').forEach(button => { button.disabled = true; button.setAttribute('aria-describedby', bannerId); });
   };
   const refreshHint = async signal => {

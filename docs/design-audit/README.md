@@ -1,57 +1,48 @@
-# Auditoría visual integral de PING — índice y continuidad
+# Revisión visual de PING — estado vigente y evidencia
 
-Rama `claude/sweet-ritchie-ja97c7` sobre `ci/development-validation` @ `f2923b9`. Sin merge, sin force-push, sin cambios en `main`. **Es una revisión de un agente con Chromium emulado, no una prueba con personas; no certifica accesibilidad ni producción.** Decisión registrada: DEC-054 (sin aprobación atribuida a Samuel ni a Julián).
+**DEC-056,21 octubre2026.** Rama `fix/mobile-visual-finish` desde la base comprobada de Claude `3755c129cee95f6ece533b52a226c21969c6a52e`, sin avances posteriores al recuperar. [Issue51](https://github.com/Samge34c/PING/issues/51), [PR52 en borrador](https://github.com/Samge34c/PING/pull/52) hacia `claude/sweet-ritchie-ja97c7`. Autorización explícita de Samuel, sin atribuir aprobación a Julián. Sin merge, force-push ni cambios en main.
 
-## Qué hay aquí
+Es evidencia de un agente con Chromium táctil emulado y datos ficticios aislados, no pruebas con personas, teléfonos físicos, Safari, cámara o certificación de accesibilidad/producción. La auditoría original DEC-054 y la integración DEC-055 se conservan como historia en el diagnóstico.
+
+## Documentos
 
 | Documento | Contenido |
 |---|---|
-| [DIAGNOSTICO.md](DIAGNOSTICO.md) | Cobertura, revisión de primer uso, hallazgos F01–F18 con prioridad y tipo (defecto/mejora), mediciones y, por bloque, qué cambió, qué se comprobó y qué no |
-| [REFERENCIAS.md](REFERENCIAS.md) | 10 referencias con fuente primaria, patrón aprovechado, qué se descartó y por qué; fuentes no accesibles |
-| `evidencia/` | Hojas de contacto del recorrido real (01–17) y capturas antes/después de los bloques (A1–A6, B1–B2, E1, F1) |
-| [../design-proposals/identidad-intereses-movil/](../design-proposals/identidad-intereses-movil/) | Prototipo aislado de Identidad e Intereses y `HANDOFF_CODEX.md` |
+| [DIAGNOSTICO.md](DIAGNOSTICO.md) | Hallazgos y checkpoints históricos (§1–11); estado, mediciones y comprobaciones actuales DEC-056 (§12) |
+| [REFERENCIAS.md](REFERENCIAS.md) | Fuentes consultadas por Claude y adaptación vigente; no se atribuyen nuevas consultas a esta tarea |
+| [evidencia/DEC-056/](evidencia/DEC-056/) | Capturas individuales reales antes/después y de los estados comprobados; códigos personales/QR enmascarados |
+| [Continuidad única](../ENCUENTRO_CONFIGURABLE_LLEGADA.md) | SHA remotos, servicios de ensayo, respaldos y siguiente acción |
+| [Prototipo e instrucciones anteriores](../design-proposals/identidad-intereses-movil/) | Referencia histórica integrada en la app por DEC-055, no producto alternativo |
 
-## Estado por bloque
+## Estado actual por bloque
 
-| Bloque | Estado | Dónde |
+| Bloque | Estado vigente | Evidencia / límite |
 |---|---|---|
-| A · Táctil, foco y navegación | **Implementado** | DIAGNOSTICO §7 |
-| B · Comprobante de canje | **Implementado**; entregado/incidencia sin capturar | §8 |
-| C · Identidad e Intereses (F02) | **Integrado en la app** (DEC-055: orden de Samuel; Julián sin aprobar) | §11 |
-| Navegación coherente (F05, F13) | **Implementado** | §11 |
-| Recuperación junto a la acción (F07) | **Implementado** | §11 |
-| D · Estados de paso del encuentro (F08) | **Propuesto** (DEC-032, sin defecto) | §4 |
-| E · Avatares coherentes (F09) | **Implementado** | §9 |
-| F · Organización (F10, F11) | **Implementado en parte** | §10 |
-| Sin bloque: F14–F18 | **Propuesto** | §4 |
+| Alta e identidad compacta | **Integrado y comprobado** | Alta real con avatar; formularios sin JS y retorno con borrador conservado. No teclado físico ni áreas seguras reales |
+| Intereses compartidos | **Corregido y comprobado** | Botón831,45–879,45px a390, frente a944,39–992,39; directorio con iconos/contadores;3 y24 elegidos, expansión/retirada,23 IDs conservados al volver; inline y Conservados. Sin máximo nuevo |
+| Avatar: etiquetas y pestañas | **Corregido y comprobado** | Amarillo y su marca juntos; pestañas redistribuyen con texto×2 en edición y alta compartidas. Datos/radios completos |
+| Hub y navegación con texto ampliado | **Corregido y comprobado** | Alias/título/acciones cambian de distribución; caso largo sin palabras partidas (328px a360/×2), comparación final del Hub con mismo saldo17/estado en ambas versiones. Las etiquetas inferiores ya no se recortan con puntos suspensivos (DEC-055), no es una limitación actual |
+| Recuperación en ACTIVE | **Corregido y comprobado** | Fallo de sondeo simulado conserva borrador y reintenta; cambio ajeno no recarga mientras se escribe; logout real/401 retira pista, códigos/QR y credencial escrita. Cámara real no comprobada |
+| Comprobantes | **Comprobado** | Pendiente, entregado e incidencia por recorridos reales; lugar guardado visible. Sin ubicación: fixture histórica NUEVA, solo prueba de presentación, no tercer canje operativo |
+| Plano con imagen | **Comprobado** | Imagen ficticia cargada por el organizador; marcador, zoom, gesto nativo emulado, resize360, centrado/restablecer y retorno. Persistencia leída tras reinicios de la app; sin ensayo nuevo de backup |
+| Avatares coherentes / organización | **Conservado** | DEC-054/055; no nuevo rediseño de administración ni datos demo |
+| F08 estados de pasos, F14–F16 | **Propuestas fuera de este bloque** | No se presentan como funciones implementadas; navegación de /organizer sigue independiente |
 
-Todos los cambios implementados son de **presentación e interacción** (CSS, JS y plantillas). Backend, datos, migraciones, rutas, formularios, CSRF y permisos no cambian. Evidencia: `evidencia/` (A, B, E, F, I, N, R, P).
+## Verificación y límites
 
-## Verificación (resumen)
+- App real en base NUEVA `ping_visual_finish_exclusive`, MySQL **8.4.11**; no se modificó la demo existente. La auditoría histórica de Claude usó8.0.46 y sigue identificada así.
+- 390×844 y360×740; ambos temas; escritorio1440; texto×2 simulado y nombres largos reales. Botones/controles afectados conservan áreas táctiles; el contenido puede requerir scroll.
+-11 pruebas Java dirigidas correctas y sintaxis JS/diff revisados; suite completa mediante CI real de la PR, una vez por ejecución, sin repetirla localmente. Resultados y enlaces en diagnóstico/PR.
+- Recorrido nuevo: dos cuentas verificadas por SMTP loopback, aceptación/llegadas/verificación/confirmación bilaterales,37 puntos cada una; canje20→saldo17, renovación sin nuevo débito, una entrega y una incidencia autorizadas.
+- No correos externos, cámaras, teléfonos físicos, lector de pantalla, evaluación con personas, pruebas nuevas de bloqueo/reporte ni ensayo de teclado/ventanas Windows. Las15 publicaciones sociales y productos de referencia siguen sin inspección directa; no se reintentaron por rutina.
 
-- Capturas reales de viewport a 390×844 y 360×740 (oscuro y claro según el bloque) y 1440 en escritorio; texto ampliado **simulado** ×1,5 y ×2 (no es el ajuste real de un teléfono).
-- Mediciones propias: sin desbordes horizontales, sin fallos de contraste sobre fondos sólidos, sin controles bajo 44 px de alto en las pantallas de participante medidas; quedan excepciones puntuales (enlace «Plano» de 41 px de ancho en `/organizer`, «Mi cuenta» de 24 px en escritorio, pestañas de configuración de 43 px).
-- Pruebas Java **solo las pertinentes** a cada bloque (`FinalMvpTests`, `DemoImprovementTests`, `PagePresentationTests`, `VerificationTests`, `RewardTests`, `ParticipantTests`, `EventEntryFlowTests`, `EventTests`, `InterestCategoryAdminTests`, `FloorplanTests`), todas verdes. **No se ejecutó la suite completa** ni se repitió sin cambios; no se añadieron pruebas de clases CSS.
-- MySQL local 8.0.46 (el proyecto apunta a 8.4.11).
+## Pendientes independientes
 
-## Límites que siguen abiertos
+- **Máximo de intereses:** la especificación histórica dice «máximo actual», pero el código no impone ninguno. Se conserva ese comportamiento por orden de Samuel; no se inventó un límite. Aclarar la redacción en una decisión futura.
+- **Revisión humana:** la autorización de Samuel para DEC-055/056 no acredita aceptación de Julián. Revisar la PR antes de cualquier merge.
+- **Avatares demo distintos:** dato fuera de alcance, sin cambios.
+- **Organización:** posible integración de /organizer en la barra compartida, propuesta pendiente; no bloquea este acabado.
 
-Estados no alcanzados: «sin candidatos», consulta y entrega del canje por el organizador (recibos entregados o con incidencia), plano con imagen, envío de bloqueo o reporte, lector de QR con cámara, correos de verificación, «Enviando…/Está tardando» (solo revisados en el código). No se probó en iPhone ni Android reales (teclado, áreas seguras), ni con lectores de pantalla, ni con personas. Las 15 publicaciones sociales siguen sin poder abrirse; Apple HIG y productos de eventos no se inspeccionaron (REFERENCIAS.md). En la navegación inferior, a texto ×1,5 en 360 px se recortan con «…» «Conectar» y «Beneficios» (el nombre accesible completo se conserva).
+## Continuidad
 
-## Preguntas materiales (para decidir; copiables a ChatGPT)
-
-**Q1 · Máximo de intereses (pendiente independiente).** `ESPECIFICACION.md` pide conservar «el máximo actual», pero el código **no impone ninguno**; la integración de Intereses no introduce límite. *Decisión:* ¿existe un máximo que deba aplicarse (regla nueva, con DEC y pruebas) o se corrige la especificación? *Recomendación:* corregir el texto de la especificación y no inventar un número. *Si se aplaza:* el selector sigue sin límite y muestra el contador real.
-
-**Q2 · Aceptación de Julián.** El alta (identidad e intereses) y la navegación cambian DEC-037/045; DEC-055 recoge solo la autorización de Samuel. *Recomendación:* revisión conjunta de `evidencia/I*` y `P*` antes del merge.
-
-**Q3 · Avatares demo distintos** (dato, no presentación): los participantes demo comparten el gato violeta. Sigue fuera de alcance.
-
-**Q4 · Navegación del organizador.** `/organizer` y la jerarquía de gustos no usan la barra inferior unificada. *Alternativa:* incluirlos (cambio pequeño) o dejarlos como pantallas de administración. *Recomendación:* incluir `/organizer` si el organizador opera desde móvil.
-
-## Continuidad para el siguiente agente
-
-1. Comprobar el remoto: `git ls-remote origin claude/sweet-ritchie-ja97c7` debe coincidir con el último SHA de la rama; base funcional `ci/development-validation` @ `f2923b9`.
-2. Siguiente trabajo razonable: pruebas en **iPhone y Android reales** (teclado, áreas seguras; decidir si añadir `viewport-fit=cover`), encuentro ACTIVE con los nuevos avisos de recuperación, `/organizer` con la barra unificada (Q4), F14–F16.
-3. Intereses: el inicio mide 941 px hasta el botón (antes 834). Si se quiere recortar, reducir el tamaño de los mosaicos o decidir un dock fijo (otra decisión; DEC-045 mantiene la acción tras el catálogo).
-4. No editar `.claude/skills/` ni actualizar revisiones fijadas; el descubrimiento de skills en sesión nueva sigue **pendiente de verificar** (`docs/SKILLS_PING.md`).
-5. Aprendizajes técnicos: en `layout.html` no definir elementos `<nav>` fuera del fragmento `nav` (el selector `layout :: nav` los reutiliza; las barras nuevas viven en `fragments/navigation.html`); los mapas `Map.of` del servidor no tienen orden estable.
+Respaldos visual/privacidad contrastados: `f15c867` y `366ff5b`; Cierre2fec949 con CI verde; HEAD añade el ajuste de ancho intrínseco del alias largo/evidencia final. Consultar el SHA completo y los checks de [PR52](https://github.com/Samge34c/PING/pull/52). Siguiente prioridad: revisión en teléfono físico de texto ampliado, teclado, navegación y cámara/HTTPS con configuración propia, conservando la revisión humana antes del merge. No editar skills ni activar hooks para retomar.
