@@ -104,7 +104,7 @@
       tray.hidden = !selected.length;
       root.querySelector('.ic-summary')?.classList.toggle('is-tray', selected.length > 0);
       trayCount.textContent = selected.length;
-      trayChips.replaceChildren(...selected.map(row => chip(row, !previous.has(checkbox(row).value))));
+      trayChips.replaceChildren(...selected.slice(0, 3).map(row => chip(row, !previous.has(checkbox(row).value))));
       trayAll.replaceChildren(...selected.map(row => chip(row, false)));
       const extra = selected.length > 3;
       trayMore.hidden = !extra;

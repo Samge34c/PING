@@ -159,3 +159,28 @@ Autorización de Samuel (DEC-055); sin aprobación atribuida a Julián. Todos lo
 - No se añadió `viewport-fit=cover`: las áreas seguras (muesca, indicador de inicio) **no se verificaron** en dispositivo.
 - Hub con texto ×2: la cabecera propia del Hub aún desborda (previo, fuera de alcance).
 - No probado: iPhone/Android reales, lectores de pantalla, ni personas.
+
+
+## 12. DEC-056 — acabado móvil vigente (bloque visual)
+
+Autorización explícita de Samuel, Issue #51; base remota3755c129cee95f6ece533b52a226c21969c6a52e, rama fix/mobile-visual-finish. Las secciones anteriores son evidencia histórica, no pendientes automáticos. Conservados los componentes de Claude y sus contratos, sin cambios Java/datos/migraciones.
+
+**Intereses:** directorio de familias con los iconos locales existentes, nombres y contadores reales; separadores en lugar de cajas iguales. Se conserva el orden del catálogo, sin dar prioridad mediante colores nuevos. Menos altura en cabecera y filas de al menos68px, controles de elección/chips≥44px y botón48px. Bandeja: tres chips completos visibles, +N coincide con los restantes; expandir/quitar conserva los checkboxes como única fuente de estado.
+
+Medición comparable a390×844, oscuro, alias Valentina/evento SOFA2026 ficticio,264 intereses,0 seleccionados, fuente local cargada, coordenadas de documento CSS (superior/inferior del botón):
+
+| Referencia | Superior | Inferior |
+|---|---:|---:|
+| 3d66508, referencia anterior citada por Claude |837,25|885,25|
+| 3755c12, base de esta tarea |944,39|992,39|
+| DEC-056 |813,06|861,06|
+
+La diferencia histórica107,14px coincide con941→834 publicados; en la primera entrada de las cuentas nuevas también se midió941,39/989,39. La repetición controlada quedó3px más abajo en ambas referencias, sin alterar la diferencia. DEC-056 recupera una altura comparable (24px por encima de la referencia antigua), sin fijar la acción al viewport. Se conservaron los fallos de la sonda inicial: recursos de referencias mezclados (comparación descartada), radio tapado por su label, búsqueda de guitarra inexistente y lectura parcial del HTML antes del script diferido; corregidos los instrumentos, sin debilitar la aplicación. Esperando categoriesReady, los23 IDs coinciden antes/después de volver al alias.
+
+**Avatar:** reproducido el salto de marca en400px (columnas de110px), y Amarillo partido con pestañas solapadas a360px/texto×2. Distribución por ancho intrínseco y flex-wrap en el fragmento compartido: texto y marca juntos, pestañas con etiquetas completas; valores/radios/lógica intactos. A390 normal ya cabía en2 columnas; no se declara fallo normal en esa variante.
+
+**Hub:** a texto×2, título de552px en312px disponibles (390) y493 en288 (360); alias recortado. Con autoaltura, redistribución de cabecera/acciones, alias sin ellipsis y título con salto por espacio:312/312 y288/288, alias completo, botones dentro del ancho. Composición normal y arte conservados. Misma misión ACTIVE, punto y saldos0 en ambas referencias de Hub.
+
+**Comprobado:** Chromium táctil emulado390/360 oscuro y claro, escritorio1440, avatar/Hub×2; búsqueda, familias, subgrupos,3/24 selecciones, expandir/quitar,23 guardadas en borrador y retorno. Sin errores JS en la sonda final. Java dirigido EventEntryFlowTests/InterestCategoryTests/PagePresentationTests:11/0/0/0. Primer intento restringido falló por SocketException Operation not permitted al abrir Tomcat; mismo comando con permiso de sockets pasó, sin cambios de producto. Node --check y diff --check correctos. Evidencia individual en evidencia/DEC-056; sin datos personales ni credenciales.
+
+**Pendiente de este bloque:** comprobaciones dirigidas de ACTIVE con recuperación, recibos y plano, fallback sin JS/edición, y cierre documental. No dispositivo físico/Safari/cámara ni certificación de accesibilidad. Servicios propios:8096 fuente actual,8097 referencia3755c12, SMTP loopback1026, MySQL8.4.11 conservado3308/base NUEVA ping_visual_finish_exclusive. No se reutilizó la demo existente. Skills versionadas manuales; launcher Impeccable no disponible, revisión directa con PRODUCT/DESIGN/polish/craft-floor; sin reinstalaciones/hooks/subagentes.
