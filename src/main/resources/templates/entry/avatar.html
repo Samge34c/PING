@@ -1,5 +1,58 @@
-<!doctype html><html xmlns:th="http://www.thymeleaf.org"><body><fieldset th:fragment="picker" data-avatar-picker><legend class="h4">Tu avatar</legend><div class="preset-avatar" th:classappend="${'avatar-bg-'+avatar.background}" data-avatar-preview role="img" aria-label="Vista previa de tu avatar"><img th:src="@{/img/avatars/animales/{id}.svg(id=${avatar.animal})}" alt="" data-layer="animal"><img th:if="${avatar.accessory!='none'}" th:src="@{/img/avatars/accesorios/{id}.svg(id=${avatar.accessory})}" alt="" data-layer="accessory"><img th:if="${avatar.hat!='none'}" th:src="@{/img/avatars/sombreros/{id}.svg(id=${avatar.hat})}" alt="" data-layer="hat"></div>
-<details open><summary>Animal</summary><div class="avatar-options"><label th:each="a:${avatarAnimals}"><input type="radio" name="animal" th:value="${a.key}" th:checked="${a.key==avatar.animal}"><img th:src="@{/img/avatars/animales/{id}.svg(id=${a.key})}" alt=""><span th:text="${a.value}"></span></label></div></details>
-<details><summary>Sombrero</summary><div class="avatar-options"><label th:each="a:${avatarHats}"><input type="radio" name="hat" th:value="${a.key}" th:checked="${a.key==avatar.hat}"><span th:text="${a.value}"></span></label></div></details>
-<details><summary>Accesorio</summary><div class="avatar-options"><label th:each="a:${avatarAccessories}"><input type="radio" name="accessory" th:value="${a.key}" th:checked="${a.key==avatar.accessory}"><span th:text="${a.value}"></span></label></div></details>
-<details><summary>Color</summary><div class="avatar-options"><label th:each="a:${avatarColors}" th:classappend="${'avatar-swatch-'+a.key}"><input type="radio" name="background" th:value="${a.key}" th:checked="${a.key==avatar.background}"><span th:text="${a.value}"></span></label></div></details><script th:src="@{/js/avatar.js}" defer></script></fieldset><span th:fragment="portrait(value)" class="preset-avatar avatar-public" th:classappend="${'avatar-bg-'+value.background}" role="img" th:attr="aria-label=${'Avatar: '+value.label()}"><img th:src="@{/img/avatars/animales/{id}.svg(id=${value.animal})}" alt=""><img th:if="${value.accessory!='none'}" th:src="@{/img/avatars/accesorios/{id}.svg(id=${value.accessory})}" alt=""><img th:if="${value.hat!='none'}" th:src="@{/img/avatars/sombreros/{id}.svg(id=${value.hat})}" alt=""></span></body></html>
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Vista previa del avatar elegido: la actualiza avatar.js dentro del mismo formulario. -->
+<span th:fragment="preview" class="preset-avatar av-preview" th:classappend="${'avatar-bg-'+avatar.background}" data-avatar-preview role="img" aria-label="Vista previa de tu avatar">
+<img th:src="@{/img/avatars/animales/{id}.svg(id=${avatar.animal})}" alt="" width="100" height="100" data-layer="animal">
+<img th:if="${avatar.accessory!='none'}" th:src="@{/img/avatars/accesorios/{id}.svg(id=${avatar.accessory})}" alt="" width="100" height="100" data-layer="accessory">
+<img th:if="${avatar.hat!='none'}" th:src="@{/img/avatars/sombreros/{id}.svg(id=${avatar.hat})}" alt="" width="100" height="100" data-layer="hat">
+</span>
+<!-- Editor compartido por /join y /me/avatar. Radios nativos name=animal|hat|accessory|background con las listas del servidor.
+     Sin JavaScript se ven todos los grupos; avatar.js los convierte en pestañas y compone las miniaturas solo del grupo visible.
+     Los mapas del servidor no tienen orden estable: se ordenan por clave para que las opciones no cambien entre arranques. -->
+<fieldset th:fragment="editor" class="av-editor" data-avatar-picker>
+<legend class="visually-hidden">Personaliza tu avatar</legend>
+<section class="av-panel" data-av-panel="animal" data-label="Animal">
+<h3 class="av-title">Animal</h3>
+<div class="av-opts" data-cols="4">
+<label class="av-opt" th:each="k : ${#lists.sort(#lists.toList(avatarAnimals.keySet()))}">
+<input type="radio" name="animal" th:value="${k}" th:checked="${k==avatar.animal}" th:attr="data-label=${avatarAnimals.get(k)}">
+<span class="av-face" data-kind="animal" th:attr="data-id=${k}"><img th:src="@{/img/avatars/animales/{id}.svg(id=${k})}" alt="" width="100" height="100" loading="lazy"></span>
+<span class="av-name" th:text="${avatarAnimals.get(k)}"></span>
+</label>
+</div>
+</section>
+<section class="av-panel" data-av-panel="hat" data-label="Sombrero">
+<h3 class="av-title">Sombrero</h3>
+<div class="av-opts" data-cols="5">
+<label class="av-opt" th:each="k : ${#lists.sort(#lists.toList(avatarHats.keySet()))}" th:classappend="${k=='none'} ? 'is-none' : ''">
+<input type="radio" name="hat" th:value="${k}" th:checked="${k==avatar.hat}" th:attr="data-label=${avatarHats.get(k)}">
+<span class="av-face" data-kind="hat" th:attr="data-id=${k}"></span>
+<span class="av-name" th:text="${avatarHats.get(k)}"></span>
+</label>
+</div>
+</section>
+<section class="av-panel" data-av-panel="accessory" data-label="Accesorio">
+<h3 class="av-title">Accesorio</h3>
+<div class="av-opts" data-cols="4">
+<label class="av-opt" th:each="k : ${#lists.sort(#lists.toList(avatarAccessories.keySet()))}" th:classappend="${k=='none'} ? 'is-none' : ''">
+<input type="radio" name="accessory" th:value="${k}" th:checked="${k==avatar.accessory}" th:attr="data-label=${avatarAccessories.get(k)}">
+<span class="av-face" data-kind="accessory" th:attr="data-id=${k}"></span>
+<span class="av-name" th:text="${avatarAccessories.get(k)}"></span>
+</label>
+</div>
+</section>
+<section class="av-panel" data-av-panel="background" data-label="Color">
+<h3 class="av-title">Color</h3>
+<div class="av-opts av-colors">
+<label class="av-color" th:each="k : ${#lists.sort(#lists.toList(avatarColors.keySet()))}">
+<input type="radio" name="background" th:value="${k}" th:checked="${k==avatar.background}" th:attr="data-label=${avatarColors.get(k)}">
+<i th:classappend="${'avatar-bg-'+k}"></i><span th:text="${avatarColors.get(k)}"></span>
+</label>
+</div>
+</section>
+<script th:src="@{/js/avatar.js}" defer></script>
+</fieldset>
+<span th:fragment="portrait(value)" class="preset-avatar avatar-public" th:classappend="${'avatar-bg-'+value.background}" role="img" th:attr="aria-label=${'Avatar: '+value.label()}"><img th:src="@{/img/avatars/animales/{id}.svg(id=${value.animal})}" alt=""><img th:if="${value.accessory!='none'}" th:src="@{/img/avatars/accesorios/{id}.svg(id=${value.accessory})}" alt=""><img th:if="${value.hat!='none'}" th:src="@{/img/avatars/sombreros/{id}.svg(id=${value.hat})}" alt=""></span>
+</body>
+</html>
