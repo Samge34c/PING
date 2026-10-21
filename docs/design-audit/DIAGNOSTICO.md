@@ -1,0 +1,91 @@
+# Auditoría visual integral — diagnóstico
+
+Fecha: 21 de octubre de 2026. Base: rama `claude/sweet-ritchie-ja97c7` @ `dc44008` sobre `ci/development-validation` @ `f2923b9` (sin avances posteriores en el remoto). Build local de esa base con MySQL 8.0.46 (el proyecto apunta a 8.4.11), escenario demo SOFA y datos ficticios. **Es una revisión de primer uso hecha por un agente con Chromium emulado; no es una prueba con personas.**
+
+Las imágenes de `evidencia/` son hojas de contacto de capturas reales (390×844, oscuro, salvo que se indique). Los estados se alcanzaron con recorridos reales (dos participantes demo y una cuenta general), no con maquetas.
+
+## 1. Cobertura del recorrido
+
+| Área | Estado de la revisión | Evidencia |
+|---|---|---|
+| Home (visitante y con sesión), claro/oscuro | Revisada | 01, 17 |
+| Código de evento, acceso, registro, recuperación | Pantallas revisadas; el escáner de cámara y los correos de verificación **no** se ejercitaron | 01 |
+| Alias y avatar; intereses y categorías (alta y edición) | Revisadas en el bloque anterior con capturas reales; edición `/participants/{id}/interests` y `/me/avatar` revisadas aquí | bloque anterior; 13 |
+| Mi Ping, Conectar, disponibilidad | Revisadas | 02 |
+| Búsqueda, propuesta, aceptación y espera | Revisadas. **«Sin candidatos» no se alcanzó**: la búsqueda de Ana encontró una propuesta con Samuel | 03 |
+| Encuentro activo, llegadas, código personal y verificación cruzada (incluido código inválido) | Revisados; el QR de cámara no se ejercitó | 03–06 |
+| Confirmación bilateral, finalización y puntos, feedback | Revisadas | 07 |
+| Beneficios, solicitud, recibo y código de canje | Revisados | 08 |
+| Entrega por el organizador | Pantalla «Entregar un beneficio» revisada; consulta y entrega **no** ejecutadas en esta pasada | 11 |
+| Hub, mapa, plano (sin imagen cargada), perfil e historial | Revisados; plano **con** imagen no | 13 |
+| Bloqueo y reporte | Formularios localizados (plegados en «Cuidemos este encuentro»); no se enviaron | 04 |
+| Organización y configuración del evento | Pantallas revisadas; no se guardaron cambios | 09–11 |
+| Errores, sesión caducada y sin conexión | 404, código inválido, **sin red al enviar** y **sesión perdida** capturados; «Enviando…» y «Está tardando» revisados solo por código (`ui.js`), sin captura fiable | 12 |
+| Escritorio 1440 | Participante y organización, parcial | 14, 15 |
+| Texto ampliado | Simulado (todos los textos ×1,5 y ×2 a 360/390); no es el ajuste real de un teléfono | 16 |
+
+## 2. Revisión de primer uso
+
+Qué entiende una persona sin conocer el producto (juicio del agente, no medición):
+
+- **Qué hace PING:** claro en Home («Comparte gustos. Conecta en persona.», tres pasos y la ilustración).
+- **Cómo entrar:** el código/QR del evento se explica en una frase; «El código identifica el evento, no a una persona» evita confundirlo con credenciales.
+- **Qué es público:** el alias lo dice en el campo («Tu alias es público… tu correo sigue siendo privado»).
+- **Siguiente paso y estado:** muy buena en el encuentro: una línea «Ahora: …» y estados «Ya llegó / Pendiente / Verificado».
+- **Qué falta de la otra persona:** se nombra («Falta la llegada de Julián»).
+- **Tres códigos distintos:** palabra compartida, código personal y código de canje se distinguen por texto («Es distinto de la palabra compartida y del código de canje»). Visualmente son tres cajas parecidas.
+- **Confusión leve:** Mi Ping y Conectar repiten el mismo mensaje («Tu siguiente conexión, en Conectar» → «¿Con quién vas a conectar?»).
+
+## 3. Qué ya funciona y se conserva
+
+Identidad Festival Social reconocible y sobria; paneles morados de acción con botón amarillo único por pantalla; estados vacíos con siguiente acción; recuperación de errores (código inválido, sin red, sesión perdida con botón); **ningún desbordamiento horizontal a 360 px ni con texto ×2 en 7 pantallas**; **contraste suficiente** en 19 pantallas × 4 variantes (el único valor bajo es el punto amarillo del logotipo, exento por ser logotipo); todas las imágenes con `alt` y todos los campos con etiqueta; páginas de texto de 128–134 KB y CLS = 0 en la carga fría local (la ilustración de 312 KB solo en Home/Hub); reserva de `scroll-padding-bottom` para la navegación inferior (WCAG 2.4.11).
+
+## 4. Hallazgos
+
+Prioridad: **P0** impide actuar o produce un error serio; **P1** confusión importante o dificultad móvil; **P2** coherencia, identidad y calidad visual; **P3** acabado. **No encontré P0.** «Defecto» = observado y reproducible; «mejora» = criterio de diseño.
+
+| ID | P | Pantalla · estado | Evidencia | Consecuencia | Cambio | Depende de | Tipo |
+|---|---|---|---|---|---|---|---|
+| F01 | **P1** | Recibo de canje, tras «Generar código» | 08; `receipt.html` tiene `<details>` sin `open` | En el mostrador hace falta otro toque para ver el código; el botón amarillo dominante es «Renovar código sin nuevo cobro» | Abrir el código al generarlo; composición de comprobante; renovar pasa a secundario; pestaña «Beneficios» activa | — | Defecto |
+| F02 | **P1** | Alta: alias/avatar e intereses | Bloque anterior: botón a 1311 px, 11 familias iguales | Desplazar ~1,5 pantallas para continuar; el catálogo de 264 gustos no transmite estructura | Integrar la propuesta aislada | Aceptación de Samuel y Julián (cambia DEC-037/045); pregunta Q1 | Defecto + mejora |
+| F03 | P2 | Casi todas: selector de tema | 36×36 px en 69 de 81 capturas | Bajo el estándar de 44 px del proyecto (cumple el mínimo AA de 24) | Botones de 44×44 | — | Defecto |
+| F04 | P2 | Enlaces independientes: «← Mi Ping», «Actualizar estado», «Ver participante», «Editar categoría…» | 18–22 px de alto en 11, 9, 4 y 3 pantallas | Difíciles de tocar; por debajo de 24 px solo pasan WCAG 2.5.8 si se cumple la excepción de espaciado (no verificada) | Alto mínimo de 44 px con padding | — | Defecto |
+| F05 | P2 | Navegación inferior | Etiquetas de 10 px en 69/81; con texto ×2 se pegan («ConectarEventoBeneficios»); recibo marca «Mi Ping» en vez de «Beneficios»; «Más» queda activo en Home; el Hub tiene otra navegación | Legibilidad y orientación | Etiqueta de 11 px con tope de crecimiento; activo coherente; resto como propuesta | Decidir si el Hub unifica navegación (Q3) | Defecto parcial |
+| F06 | P2 | Tras cada envío: título o mensaje enfocado | 07, 12: recuadro blanco rectangular | Aspecto tosco; no usa el foco amarillo de la marca | Foco de marca con radio y desplazamiento | — | Defecto |
+| F07 | P2 | Mensajes de recuperación | 12: «sesión perdida» al final, lejos del botón desactivado; «sin red» con recuadro dentro del panel | El motivo del bloqueo queda lejos de lo bloqueado | Mensaje junto a la acción; patrón de aviso | — | Propuesta (ver sección 6) |
+| F08 | P2 | Encuentro activo: pasos 1·2·3 | 04, 05: los tres pasos con el mismo peso; estados como texto gris a la derecha | Para ver qué falta hay que leer todo | Estado visual por paso (hecho / actual / bloqueado) | Pantalla aprobada: DEC-032; solo con defecto observado | Mejora |
+| F09 | P2 | Avatares incoherentes | 13, 09: inicial en círculo (Hub, lista y perfil) frente al retrato preset (Mi Ping, encuentro) | Mismo participante con dos identidades visuales | Usar el retrato preset donde hay dato | — | Defecto |
+| F10 | P2 | Organización: detalle y listado | 09, 11: «Compartir código / QR», «Editar configuración» y «Entregar un canje» como enlaces de texto; `/organizer` sin menú lateral en escritorio; títulos de 3–4 líneas junto a un botón | La tarea principal del organizador (compartir el código) es la menos visible | Acción principal visible; título y botón apilados | — | Mejora |
+| F11 | P2 | Organización: textos de desarrollo visibles | 10: «sin autenticación nueva», «Los planos se guardan en MySQL y requieren su propio respaldo», claves `games:accion-y-supervivencia` | Mensajes que no son para quien organiza | Copy orientado a la tarea | — | Defecto de texto |
+| F12 | P2 | Texto ampliado | 16: «Benefici/os» a ×1,5; «Samu/el» a ×2 | Palabras partidas a la mitad | Cabeceras que envuelven por palabra | — | Defecto |
+| F13 | P2 | Home para visitante | 01: navegación inferior de Mi Ping / Conectar / Beneficios | Lleva a «Entrar» (enlaces sin destino útil antes de tener cuenta) | Ocultarla sin sesión | Q3 | Defecto |
+| F14 | P3 | Mi Ping ↔ Conectar | 02 | Mensaje duplicado | Reducir copy | — | Mejora |
+| F15 | P3 | Plano admin | 10: «Choose File / No file chosen» | Idioma del navegador, no de la página | Control propio con etiqueta | — | Mejora |
+| F16 | P3 | Pies y créditos | Textos de 9–11 px repetidos en todas las pantallas | Ruido | Un único pie compacto | — | Mejora |
+| F17 | P3 | Escritorio | 14: Conectar en columna estrecha con gran aire lateral | Aprovechamiento | Composición lateral | — | Mejora |
+| F18 | P3 | Participantes demo | 03: Samuel y Julián con el mismo avatar por defecto | No se distinguen en la propuesta | Q2 (dato, no presentación) | Q2 | Pregunta |
+
+## 5. Mediciones
+
+| Medida | Resultado |
+|---|---|
+| Contraste (texto, cálculo propio sobre fondos sólidos) | 0 fallos en 19 pantallas × (claro 390, oscuro 360, claro 360) salvo el punto del logotipo. No evalúa fondos con imagen o degradado |
+| Desbordamiento horizontal | 0 en 57 mediciones; 0 con texto ×1,5 y ×2 |
+| Texto < 11,5 px | Navegación (10 px) en 69/81; pie «Conexiones en tu evento» (10 px) en 23; créditos (9 px) en 10 |
+| Áreas táctiles < 44 px | Tema 36×36 (69); logotipo 66×28 (79); «← Mi Ping» 60×18 (11); «Actualizar estado» 105×18 (9) |
+| Etiquetas / `alt` | 0 campos sin etiqueta; 0 imágenes sin `alt` |
+| Rendimiento (carga fría, sin throttling, caché desactivada) | Mi Ping 134 KB / 11 peticiones; Conectar 131 KB; Home y Hub 441 KB (312 KB de ilustración). CLS = 0. **No es comparable con las cifras de DEC-052** (otras condiciones de red y CPU) |
+
+## 6. Estado de los bloques
+
+Se actualiza al cerrar cada bloque (ver `README.md`).
+
+| Bloque | Hallazgos | Estado |
+|---|---|---|
+| A · Táctil, foco y navegación | F03 F04 F05 F06 F12 | Propuesto |
+| B · Canje: comprobante | F01 (y F05 en recibo) | Propuesto |
+| C · Alta: identidad e intereses | F02 | Propuesto |
+| D · Encuentro: estados de paso | F08 | Propuesto |
+| E · Avatares coherentes | F09 | Propuesto |
+| F · Organización | F10 F11 | Propuesto |
+| Pendientes sin bloque | F07 F13 F14 F15 F16 F17 F18 | Propuesto |
