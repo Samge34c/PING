@@ -31,22 +31,41 @@
     if (!stopped && !submitting && document.visibilityState === 'visible') timer = setTimeout(check, 5000);
   };
   const editorBusy = () => window.PingHintEditor?.isDirty() || window.PingHintEditor?.isSaving() || !!root.querySelector('[data-credential-dirty="true"],[data-scanner-running="true"]');
-  const notice = (text, url, label) => {
-    if (!message) return;
-    message.replaceChildren(document.createTextNode(text));
-    if (url) { const link = document.createElement('a'); link.href = url; link.textContent = label; message.append(' ', link); }
+  // Avisos de recuperación: arriba del contenido de la pantalla (no al final de una página larga) y uno solo.
+  const bannerId = 'ping-recovery';
+  const banner = ({ tone, title, text, action }) => {
+    let box = document.getElementById(bannerId);
+    if (!box) { box = document.createElement('div'); box.id = bannerId; box.className = 'recovery-banner'; root.prepend(box); }
+    box.dataset.tone = tone;
+    if (tone === 'error') box.dataset.sticky = ''; else delete box.dataset.sticky;
+    box.setAttribute('role', tone === 'error' ? 'alert' : 'status');
+    const heading = document.createElement('strong'); heading.textContent = title;
+    const body = document.createElement('span'); body.textContent = text;
+    box.replaceChildren(heading, body);
+    if (action) {
+      const control = document.createElement(action.url ? 'a' : 'button');
+      control.className = 'btn ' + (tone === 'error' ? 'btn-primary' : 'btn-outline-primary');
+      control.textContent = action.label;
+      if (action.url) control.href = action.url; else { control.type = 'button'; control.addEventListener('click', action.run); }
+      box.append(control);
+    }
+    // El aviso sustituye al estado del pie para no duplicar el mensaje.
+    if (message) message.hidden = true;
+    return box;
   };
+  const clearBanner = () => { document.getElementById(bannerId)?.remove(); if (message) message.hidden = false; };
   const withdrawHint = () => {
     const hint = document.querySelector('[data-other-hint]');
     if (hint) { hint.querySelector('[data-hint-text]')?.replaceChildren(); hint.hidden = true; }
   };
   const sessionLost = () => {
     stopped = true; withdrawHint(); clearTimeout(timer);
-    notice('Tu sesión ya no está disponible. Entra a tu cuenta para recuperar las participaciones vinculadas.', '/login', 'Entrar a mi cuenta');
+    banner({ tone: 'error', title: 'Tu sesión ya no está disponible',
+      text: 'Los botones de esta pantalla están desactivados. Entra a tu cuenta para recuperar tus participaciones.',
+      action: { label: 'Entrar a mi cuenta', url: '/login' } });
     document.dispatchEvent(new Event('ping:session-lost'));
     root.querySelectorAll('[data-private-credential]').forEach(el=>{el.removeAttribute('src');el.textContent='';el.hidden=true;});
-    message?.querySelector('a')?.classList.add('btn', 'btn-primary');
-    root.querySelectorAll('form[method="post"] button').forEach(button => { button.disabled = true; });
+    root.querySelectorAll('form[method="post"] button').forEach(button => { button.disabled = true; button.setAttribute('aria-describedby', bannerId); });
   };
   const refreshHint = async signal => {
     if (!root.dataset.hintUrl) return;
@@ -73,13 +92,16 @@
       else if (state.recognitionRevision !== lastRevision) await refreshHint(controller.signal);
       if (stopped) return;
       if (state.signature !== root.dataset.pingLive) {
-        if (editorBusy()) { pendingUpdate = true; notice('El encuentro cambió. Tu borrador sigue intacto; guarda o cancela para actualizar la pantalla.'); }
+        if (editorBusy()) { pendingUpdate = true; banner({ tone: 'wait', title: 'El encuentro cambió', text: 'Tu borrador sigue intacto; guarda o cancela para actualizar la pantalla.' }); }
         else { rememberFocus(state.matchStatus); location.reload(); return; }
-      } else if (normalMessage && message) {
-        message.replaceChildren(...[...normalMessage.childNodes].map(node => node.cloneNode(true)));
+      } else {
+        clearBanner();
+        if (normalMessage && message) message.replaceChildren(...[...normalMessage.childNodes].map(node => node.cloneNode(true)));
       }
     } catch (_) {
-      if (!submitting && !stopped && document.visibilityState === 'visible') notice('Actualización pendiente. Conservamos el último estado; necesitas conexión para comprobar los cambios.', location.pathname, 'Actualizar estado');
+      if (!submitting && !stopped && document.visibilityState === 'visible') banner({ tone: 'wait', title: 'Sin conexión',
+        text: 'Mostramos el último estado y seguimos intentando. Lo que escribiste en esta pantalla se conserva.',
+        action: { label: 'Reintentar ahora', run: () => { clearTimeout(timer); check(); } } });
     } finally { clearTimeout(timeout); running = false; schedule(); }
   };
   document.addEventListener('submit', event => {

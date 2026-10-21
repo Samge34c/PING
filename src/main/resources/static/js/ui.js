@@ -57,9 +57,13 @@
     form.querySelectorAll('[data-submit-lock]').forEach(btn => { btn.removeAttribute('aria-disabled'); delete btn.dataset.submitLock; });
     form.querySelector('[data-submit-status]')?.remove();
   };
-  const feedback = (form, text, focus = false) => {
+  const feedback = (form, text, focus = false, anchor = null) => {
     let status = form.querySelector('[data-submit-status]');
-    if (!status) { status = document.createElement('p'); status.dataset.submitStatus = ''; status.className = 'submit-status'; status.setAttribute('role','status'); status.tabIndex = -1; form.append(status); }
+    if (!status) {
+      status = document.createElement('p'); status.dataset.submitStatus = ''; status.className = 'submit-status'; status.setAttribute('role','status'); status.tabIndex = -1;
+      // Junto al botón pulsado cuando es hijo directo del formulario; si no, al final, para no romper filas de botones.
+      if (anchor && anchor.parentElement === form) anchor.after(status); else form.append(status);
+    }
     status.textContent = text;
     if (focus) status.focus();
     return status;
@@ -70,13 +74,13 @@
     if (form.dataset.submitting) { e.preventDefault(); return; }
     if (!navigator.onLine) {
       e.preventDefault();
-      feedback(form, 'Necesitas conexión para enviar. Tus datos siguen en este formulario; vuelve a intentarlo cuando tengas red.', true);
+      feedback(form, 'Necesitas conexión para enviar. Tus datos siguen en este formulario; vuelve a intentarlo cuando tengas red.', true, e.submitter);
       document.dispatchEvent(new Event('ping:form-restored')); return;
     }
     form.dataset.submitting = 'true'; form.classList.add('is-submitting'); form.setAttribute('aria-busy','true');
     // Keep original button labels and name/value in native POSTs (feedback/delivery).
     form.querySelectorAll('button:not([type="button"]):not([type="reset"]),input[type="submit"]').forEach(btn => { btn.dataset.submitLock = ''; btn.setAttribute('aria-disabled','true'); });
-    feedback(form, 'Enviando…');
+    feedback(form, 'Enviando…', false, e.submitter);
     pending.set(form, setTimeout(() => {
       const status = feedback(form, 'Está tardando. Puede haberse guardado: comprueba el estado antes de repetir la acción.');
       const link = document.createElement('a');

@@ -2702,7 +2702,7 @@ body.participant-entry-page {padding-left:0}
 @media (min-width: 992px) { .ic-actions { bottom: 0; } .ic-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .ic-controls > div + div { margin-top: 0; } .ic-filter-status { grid-column: 1 / -1; } }
 
 /* DEC-047: feedback stays beside the action; long real names may wrap. */
-.submit-status { margin:12px 0; font-size:14px; line-height:1.5; color:var(--ping-text); }
+.submit-status { margin:12px 0; padding:8px 12px; border-left:3px solid var(--ping-accent); border-radius:8px; background:var(--ping-surface-alt); font-size:14px; line-height:1.5; color:var(--ping-text); }
 .submit-status a { display:inline-flex; align-items:center; min-height:44px; }
 .pe-event strong,.cn-heading,.match-person h2,.am-person,.ping-empty p { overflow-wrap:anywhere; min-width:0; }
 @media(prefers-reduced-motion:reduce) { .is-submitting .btn[aria-disabled="true"]::after { animation:none; border-style:dotted; } }
@@ -2850,3 +2850,11 @@ body.participant-entry-page {padding-left:0}
 
 /* DEC-055 · Navegación: una sola barra inferior para Hub y resto, y sin barra de destinos personales para el Hub en tablet. */
 @media (max-width: 1023px) {.h-desktop-nav {display:none}}
+
+/* DEC-055 · Recuperación: el aviso va arriba del contenido; el de sesión perdida queda visible al desplazarse. */
+.recovery-banner {margin:0 0 16px;padding:14px 16px;border:1px solid var(--ping-border);border-left:4px solid var(--ping-accent);border-radius:14px;background:var(--ping-surface-alt);color:var(--ping-text);font-size:14px;line-height:1.5}
+.recovery-banner strong {display:block;margin-bottom:2px;font-size:15px}
+.recovery-banner[data-tone="error"] {border-left-color:var(--ping-danger)}
+.recovery-banner[data-sticky] {position:sticky;top:8px;z-index:30;box-shadow:var(--ping-shadow)}
+.recovery-banner span {display:block}
+.recovery-banner .btn {display:flex;align-items:center;justify-content:center;width:max-content;max-width:100%;min-height:44px;margin-top:10px}
