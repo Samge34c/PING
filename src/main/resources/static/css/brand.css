@@ -2659,7 +2659,9 @@ body.participant-entry-page {padding-left:0}
 .cn-interests>.ping-icon {color:var(--ping-primary);flex-shrink:0;margin-top:3px}.cn-interests p {flex:1;min-width:180px;margin:0;font-size:14px;color:var(--ping-muted)}
 .cn-interests a {display:inline-flex;align-items:center;min-height:44px}.connect-page .mp-update {margin-block:12px}.connect-page .mp-update p {font-size:13px}
 .event-entry-share {border-top:1px solid var(--ping-border);margin-top:24px;padding-top:24px}.event-entry-share h2 {font-size:22px}
-.event-entry-share code {display:inline-block;font-size:21px;letter-spacing:.06em;padding:12px 0;color:var(--ping-text);overflow-wrap:anywhere}
+.event-entry-share code {display:inline-block;font-size:26px;font-weight:800;letter-spacing:.08em;padding:12px 0;color:var(--ping-highlight-text);overflow-wrap:anywhere}
+.summary-44 {min-height:44px;padding-block:10px;cursor:pointer}
+.event-operations .btn {min-height:44px}
 .event-entry-share img {display:block;width:min(100%,256px);height:auto;margin:16px 0;background:#fff}
 .event-entry-share .entry-link-row {display:flex;gap:8px;flex-wrap:wrap}.entry-link-row input {min-width:0;flex:1 1 220px}
 @media (min-width:992px) {.connect-page main.cn-page {margin-top:28px}.cn-heading h1 {font-size:34px}}

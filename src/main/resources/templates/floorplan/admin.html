@@ -30,5 +30,5 @@
     <button class="btn btn-primary" th:text="${plan == null ? 'Cargar plano' : 'Sustituir plano'}"></button>
   </form>
 </details>
-<p class="fp-help">Administración académica con los permisos existentes. Los planos se guardan en MySQL y requieren su propio respaldo; GitHub conserva el código.</p>
+<p class="fp-help">Los planos se guardan en la base de datos de PING y requieren su propio respaldo; el repositorio solo conserva el código.</p>
 </main><footer th:replace="~{fragments/layout :: footer}"></footer><script th:src="@{/js/floorplan.js}" defer></script></body></html>

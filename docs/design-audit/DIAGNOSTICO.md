@@ -87,7 +87,7 @@ Se actualiza al cerrar cada bloque (ver `README.md`).
 | C · Alta: identidad e intereses | F02 | Propuesto |
 | D · Encuentro: estados de paso | F08 | Propuesto |
 | E · Avatares coherentes | F09 | **Implementado** (sección 9) |
-| F · Organización | F10 F11 | Propuesto |
+| F · Organización | F10 F11 | **Implementado en parte** (sección 10) |
 | Pendientes sin bloque | F07 F13 F14 F15 F16 F17 F18 | Propuesto |
 
 ## 7. Bloque A — qué cambió y qué se comprobó
@@ -127,3 +127,16 @@ Tres plantillas (`experience/hub-fragments.html`, `participants/list.html`, `par
 Comprobado: Hub a 390 y 1440 px, lista y perfil a 390 px sin desbordes, sin fallos de contraste (cálculo propio) y sin controles bajo 44 px; las tres plantillas pasan `ParticipantTests`, `FinalMvpTests`, `DemoImprovementTests`, `PagePresentationTests`. En el perfil, «← Volver a participantes», el evento y «Entrar con este participante» pasan a 44 px.
 
 **Límites:** los tres participantes de la demo tienen el mismo avatar por defecto (gato violeta), así que la captura no muestra variedad; es un dato, no una decisión de presentación (Q2). No se revisó el tema claro ni 360 px en estas tres pantallas, y `demo/prepare.html` (organización) conserva la inicial.
+
+## 10. Bloque F — organización (F10, F11)
+
+Prioridad de producto: el participante; este bloque se limitó a la tarea principal del organizador y a textos de desarrollo. Plantillas `events/detail.html`, `interests/categories.html`, `floorplan/admin.html` y tres reglas CSS. Captura: `evidencia/F1` (detalle del evento a 390 px, antes → después).
+
+| Cambio | Detalle |
+|---|---|
+| Compartir el código, primera tarea | «Entrada de participantes» sube justo bajo el título y las dos acciones; el código se muestra a 26 px en amarillo (antes 21 px, en blanco, tras ~1,5 pantallas). El enlace de texto «Compartir código / QR» se quitó porque la sección ya está visible; la ancla `#entry-share-title` se conserva |
+| Acciones operativas | «Editar configuración» y «Entregar un canje» pasan de enlaces de texto a botones secundarios de 44 px |
+| Toques | «← Mis eventos», «Ver resultados del evento», «Preparar demo rápida» y el resumen «Configuración del encuentro» a 44 px; medición a 390 px: 0 controles bajo 44 px en el detalle (antes 4) |
+| F11 textos | Se retiró «Administración académica existente, sin autenticación nueva.» (categorías); el pie del plano deja de nombrar MySQL y GitHub; el aviso de enlace/QR sin dirección pública conserva el nombre de la variable (`PING_PUBLIC_BASE_URL`) porque es la acción técnica real, pero lo expresa como estado |
+
+**No hecho / límites:** las claves de nodo (`games:accion-y-supervivencia`) siguen visibles en la jerarquía de gustos: son el identificador con el que se edita cada nodo, no se tocó. El plano de `/organizer` sin menú lateral en escritorio, el control de archivo en inglés (F15) y la tabla de configuración no se rediseñaron (sin dashboards ni embellecimiento de administración, AGENTS.md). Comprobado: detalle del evento a 390 y 1440 px sin desbordes ni fallos de contraste (cálculo propio). Pruebas: `EventEntryFlowTests`, `EventTests`, `InterestCategoryAdminTests`, `FloorplanTests`, `PagePresentationTests` (verdes). No se revisó el tema claro ni 360 px en estas pantallas.
