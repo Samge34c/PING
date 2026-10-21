@@ -83,7 +83,7 @@ Se actualiza al cerrar cada bloque (ver `README.md`).
 | Bloque | Hallazgos | Estado |
 |---|---|---|
 | A · Táctil, foco y navegación | F03 F04 F05 F06 F12 | **Implementado** y comprobado en 8 pantallas con sesión (ver sección 7). F05 parcial; ver nota |
-| B · Canje: comprobante | F01 (y F05 en recibo) | Propuesto |
+| B · Canje: comprobante | F01 (y F05 en recibo) | **Implementado** (sección 8) |
 | C · Alta: identidad e intereses | F02 | Propuesto |
 | D · Encuentro: estados de paso | F08 | Propuesto |
 | E · Avatares coherentes | F09 | Propuesto |
@@ -105,3 +105,17 @@ Implementado en `brand.css`, `ui.js` y 9 plantillas (solo clases; destinos, form
 Pruebas: `FinalMvpTests`, `DemoImprovementTests` y `PagePresentationTests` (29, verdes). No se añadieron pruebas de clases CSS (AGENTS.md).
 
 Rectificación durante el bloque: una primera versión partía las palabras de la navegación a ×2 («Con/ctar») y apilaba el saldo bajo el nombre también a tamaño normal; ambas se corrigieron antes de este checkpoint.
+
+## 8. Bloque B — comprobante de canje
+
+Plantilla `rewards/receipt.html` y bloque `.receipt-*` de `brand.css`. Mismos datos, rutas, campos del formulario (`_csrf`, `requestKey`, `renew`), `data-private-credential` (que `live.js` borra si la sesión se pierde) y texto de coste «ya se descontó una sola vez». Capturas: `evidencia/B1` (antes → después, 390 px) y `B2` (390, 360 y claro).
+
+| Antes (F01) | Después |
+|---|---|
+| Tras «Generar código» el código y el QR seguían dentro de un `<details>` cerrado: otro toque en el mostrador; el botón amarillo dominante era «Renovar código sin nuevo cobro» | El código y el QR se ven al abrir la pantalla (se renderizan en la misma respuesta que los genera) dentro de una tarjeta «Muestra este código»; **renovar** pasa a botón secundario; «Generar» sigue siendo el botón principal cuando no hay código |
+| Orden: saldos, aviso, lugar de entrega, instrucción, código | Orden: referencia y estado, código/acción, lugar de entrega, coste y saldo. Incidencia y entrega registrada suben junto al título |
+| Estado y referencia en dos bloques | Referencia y estado en una fila |
+
+Comprobado: 390 y 360 px oscuro y 390 claro sin desbordes, sin fallos de contraste (cálculo propio) ni controles bajo 44 px; el código se parte en dos líneas limpias a 390 y 360 tras ajustar el tamaño (una primera versión dejaba un carácter huérfano a 360 y se corrigió). Pruebas: `VerificationTests`, `RewardTests`, `FinalMvpTests`, `PagePresentationTests` (verdes).
+
+**No comprobado:** recibos entregados o con incidencia (no se ejecutó la entrega por el organizador), recibo con ubicación guardada, escritorio, ni lectura real del QR con una cámara. La copia «Es para el encargado autorizado del evento. Válido 24 horas.» condensa los dos textos anteriores sin cambiar su sentido.

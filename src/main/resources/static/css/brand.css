@@ -2759,6 +2759,16 @@ body.participant-entry-page {padding-left:0}
 .am-verification h3 { font-weight: 800; }
 .am-verification .personal-code summary { font-weight: 800; }
 .am-verification form > .btn, .am-verification .action-row > .btn { min-height: 48px; }
+.receipt-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; margin: 1rem 0 .5rem; }
+.receipt-head .receipt-reference { margin: 0; }
+.receipt-ticket { margin: 1.5rem 0; padding: 1.25rem; border: 1px solid var(--ping-border); border-radius: 20px; background: var(--ping-surface); }
+.receipt-ticket h2 { font-size: 1.25rem; margin: 0 0 .75rem; }
+.receipt-ticket .ticket-code { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin: 0 0 .75rem; padding: 1rem 0; border-block: 1px dashed var(--ping-border); }
+.receipt-ticket code { max-width: 100%; font-family: inherit; font-size: 1.25rem; font-weight: 800; letter-spacing: .03em; color: var(--ping-highlight-text); overflow-wrap: anywhere; text-wrap: balance; text-align: center; }
+.receipt-ticket .credential-qr { display: block; width: min(100%, 220px); height: auto; padding: 12px; border-radius: 12px; background: #fff; }
+.receipt-ticket form .btn { width: 100%; }
+@media (max-width: 379.98px) { .receipt-ticket code { font-size: 1.0625rem; letter-spacing: .02em; } }
+.receipt-delivery h2 { margin-top: 0; }
 .receipt-reference { margin: 1.25rem 0 .5rem; color: var(--ping-muted); }
 .receipt-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; padding-block: 1rem; border-block: 1px solid var(--ping-border); margin: 1rem 0 .5rem; }
 .receipt-totals dt { font-size: .875rem; font-weight: 500; }
