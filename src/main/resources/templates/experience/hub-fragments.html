@@ -8,7 +8,7 @@
   </nav>
   <div class="h-account"><div th:replace="~{fragments/layout :: theme}"></div>
     <div th:if="${participant != null}" class="h-account-name"><strong th:text="${participant.alias}"></strong><span th:text="${participant.points + ' PTS'}"></span></div>
-    <span th:if="${participant != null}" class="h-avatar" aria-hidden="true" th:text="${#strings.toUpperCase(#strings.substring(participant.alias,0,1))}"></span>
+    <span th:if="${participant != null}" class="h-avatar" aria-hidden="true"><span th:replace="~{entry/avatar :: portrait(${participant.avatar})}"></span></span>
     <a th:if="${participant == null}" class="h-guest" th:href="@{/demo}">Entrar</a>
   </div>
 </header>

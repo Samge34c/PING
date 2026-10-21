@@ -86,7 +86,7 @@ Se actualiza al cerrar cada bloque (ver `README.md`).
 | B · Canje: comprobante | F01 (y F05 en recibo) | **Implementado** (sección 8) |
 | C · Alta: identidad e intereses | F02 | Propuesto |
 | D · Encuentro: estados de paso | F08 | Propuesto |
-| E · Avatares coherentes | F09 | Propuesto |
+| E · Avatares coherentes | F09 | **Implementado** (sección 9) |
 | F · Organización | F10 F11 | Propuesto |
 | Pendientes sin bloque | F07 F13 F14 F15 F16 F17 F18 | Propuesto |
 
@@ -119,3 +119,11 @@ Plantilla `rewards/receipt.html` y bloque `.receipt-*` de `brand.css`. Mismos da
 Comprobado: 390 y 360 px oscuro y 390 claro sin desbordes, sin fallos de contraste (cálculo propio) ni controles bajo 44 px; el código se parte en dos líneas limpias a 390 y 360 tras ajustar el tamaño (una primera versión dejaba un carácter huérfano a 360 y se corrigió). Pruebas: `VerificationTests`, `RewardTests`, `FinalMvpTests`, `PagePresentationTests` (verdes).
 
 **No comprobado:** recibos entregados o con incidencia (no se ejecutó la entrega por el organizador), recibo con ubicación guardada, escritorio, ni lectura real del QR con una cámara. La copia «Es para el encargado autorizado del evento. Válido 24 horas.» condensa los dos textos anteriores sin cambiar su sentido.
+
+## 9. Bloque E — avatares coherentes (F09)
+
+Tres plantillas (`experience/hub-fragments.html`, `participants/list.html`, `participants/detail.html`) usan ahora el fragmento existente `entry/avatar :: portrait(...)` con el avatar que ya viaja en `ParticipantView`; ningún controlador ni dato cambió. CSS: tres reglas de tamaño (`brand.css`, junto a `.h-avatar`). Captura: `evidencia/E1` (Hub, lista y perfil a 390 px, oscuro).
+
+Comprobado: Hub a 390 y 1440 px, lista y perfil a 390 px sin desbordes, sin fallos de contraste (cálculo propio) y sin controles bajo 44 px; las tres plantillas pasan `ParticipantTests`, `FinalMvpTests`, `DemoImprovementTests`, `PagePresentationTests`. En el perfil, «← Volver a participantes», el evento y «Entrar con este participante» pasan a 44 px.
+
+**Límites:** los tres participantes de la demo tienen el mismo avatar por defecto (gato violeta), así que la captura no muestra variedad; es un dato, no una decisión de presentación (Q2). No se revisó el tema claro ni 360 px en estas tres pantallas, y `demo/prepare.html` (organización) conserva la inicial.
