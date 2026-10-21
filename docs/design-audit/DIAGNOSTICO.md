@@ -84,11 +84,11 @@ Se actualiza al cerrar cada bloque (ver `README.md`).
 |---|---|---|
 | A · Táctil, foco y navegación | F03 F04 F05 F06 F12 | **Implementado** y comprobado en 8 pantallas con sesión (ver sección 7). F05 parcial; ver nota |
 | B · Canje: comprobante | F01 (y F05 en recibo) | **Implementado** (sección 8) |
-| C · Alta: identidad e intereses | F02 | Propuesto |
+| C · Alta: identidad e intereses | F02 | **Integrado en la app** (DEC-055, §11); aceptación de Julián pendiente |
 | D · Encuentro: estados de paso | F08 | Propuesto |
 | E · Avatares coherentes | F09 | **Implementado** (sección 9) |
 | F · Organización | F10 F11 | **Implementado en parte** (sección 10) |
-| Pendientes sin bloque | F07 F13 F14 F15 F16 F17 F18 | Propuesto |
+| Pendientes sin bloque | F07 F13 → **implementados** (DEC-055, §11). F14 F15 F16 F17 F18 | Propuesto |
 
 ## 7. Bloque A — qué cambió y qué se comprobó
 
@@ -140,3 +140,22 @@ Prioridad de producto: el participante; este bloque se limitó a la tarea princi
 | F11 textos | Se retiró «Administración académica existente, sin autenticación nueva.» (categorías); el pie del plano deja de nombrar MySQL y GitHub; el aviso de enlace/QR sin dirección pública conserva el nombre de la variable (`PING_PUBLIC_BASE_URL`) porque es la acción técnica real, pero lo expresa como estado |
 
 **No hecho / límites:** las claves de nodo (`games:accion-y-supervivencia`) siguen visibles en la jerarquía de gustos: son el identificador con el que se edita cada nodo, no se tocó. El plano de `/organizer` sin menú lateral en escritorio, el control de archivo en inglés (F15) y la tabla de configuración no se rediseñaron (sin dashboards ni embellecimiento de administración, AGENTS.md). Comprobado: detalle del evento a 390 y 1440 px sin desbordes ni fallos de contraste (cálculo propio). Pruebas: `EventEntryFlowTests`, `EventTests`, `InterestCategoryAdminTests`, `FloorplanTests`, `PagePresentationTests` (verdes). Tema claro a 390 px revisado en el detalle del evento (sin desbordes ni fallos de contraste); 360 px no.
+
+## 11. Iteración DEC-055 — Identidad, navegación, recuperación e Intereses en la aplicación
+
+Autorización de Samuel (DEC-055); sin aprobación atribuida a Julián. Todos los cambios son de presentación e interacción: plantillas, CSS y JS; ni backend, ni datos, ni migraciones. «Antes» = commit `3d66508` (tras el bloque anterior) servido junto a la versión nueva sobre la **misma base de datos**, mismo participante y mismo estado. Capturas: `evidencia/I*` (identidad), `N*` (navegación), `R1` (recuperación), `P*` (intereses).
+
+| Bloque | Cambio | Comprobado |
+|---|---|---|
+| 1 · Identidad (`/join`, `/me/avatar`) | Gafete con evento y estado, avatar, alias y vista previa; progreso de 3 pasos; editor de avatar con pestañas (radios nativos del servidor); miniaturas de sombrero/accesorio compuestas solo al abrir su panel | Botón principal de 1309 → 670 px a 390 y 360 px (escritorio 1173 → 444). 9 imágenes de avatar al cargar. Corregir alias/evento conserva alias y avatar; alias vacío muestra el error del servidor junto al campo; edición en Mi Ping guarda; alta real hasta Mi Ping con avatar elegido; **sin JavaScript** el alta se completa (grupos apilados) |
+| 2 · Navegación | Una barra inferior para Hub y resto (`fragments/navigation`): participante, organización y visitante (sin destinos personales: Inicio, Unirme a un evento, Entrar / Mi cuenta). Hub sin «Mapa» en la barra (sigue en su pantalla). Varias filas con texto ampliado sin recortar etiquetas; altura medida y reservada bajo el contenido; «Más» ya no se activa en Inicio | Etiquetas completas hasta ×2 a 360 px (2 filas, 123 px); el final de página no queda bajo la barra; menú «Más» en Hub y resto con foco, Escape e `inert`. La pantalla `/organizer` no usa esta barra |
+| 3 · Recuperación | Aviso único arriba (sesión perdida: alerta y visible al desplazarse; sin conexión: estado de espera con «Reintentar ahora» sin recargar); botones bloqueados enlazados a su motivo; feedback de envío junto al botón pulsado | Sesión perdida y sondeo sin red simulados con rutas interceptadas en Conectar; envío sin red; se mantienen limpieza de credenciales privadas, bloqueo de doble envío y sondeo. **No** se reprodujo con un encuentro ACTIVE (mismo código, otra pantalla) |
+| 4 · Intereses | Mundos en mosaico uniforme con icono local y contador; subgrupos como chips con «Todo»; gustos como chips con marca; bandeja de elegidos (quitar, «+N más»); búsqueda que conserva elecciones; «Conservados» visibles | Alta → Mi Ping con 3 elegidos tras buscar y volver; edición desde Mi Ping (3 → 2) guarda; editor en línea de `/interests`; 24 elegidos, 360 px y ×1,5/×2 sin desbordes; categoría inactiva muestra «Conservados»; alta completa sin JavaScript |
+
+**Desviaciones respecto al prototipo y límites**
+- Intereses: el inicio mide **941 px hasta el botón (antes 834)**; el prototipo anunciaba lo contrario. Se aceptó por pedido (iconos, contadores y mosaico uniforme); el mosaico no usa los tonos ciruela/lila «solo Hub» (no hay tokens nuevos). La cabecera no muestra el avatar: el modelo de ese paso no lo incluye y no se cambió backend.
+- Los mapas de opciones de avatar del servidor no tienen orden estable (`Map.of`); la plantilla las ordena por clave. Es un defecto previo.
+- «Conservados» (selecciones de categorías inactivas) quedan bajo el mosaico; antes se ocultaban en la vista de mundos.
+- No se añadió `viewport-fit=cover`: las áreas seguras (muesca, indicador de inicio) **no se verificaron** en dispositivo.
+- Hub con texto ×2: la cabecera propia del Hub aún desborda (previo, fuera de alcance).
+- No probado: iPhone/Android reales, lectores de pantalla, ni personas.

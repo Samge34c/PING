@@ -1,3 +1,5 @@
+> **Estado (DEC-055, 21 oct 2026): integrado en la aplicación** por orden de Samuel, sin aprobación atribuida a Julián. No se copió el prototipo: se reutilizaron el fragmento de avatar, `avatar.js`, `interest-selector.js` y `brand.css`. Desviaciones y comprobaciones en `docs/design-audit/DIAGNOSTICO.md` §11. Este documento queda como referencia de contratos.
+
 # Handoff para Codex · Identidad e Intereses
 
 Base verificada: `ci/development-validation` @ `f2923b98ff893c22138ef6552859e5a323ffa7c3`. Antes de empezar, comprobar el remoto; no partir de `main`. **No integrar sin** Issue, entrada en `docs/DECISION_LOG.md` y aceptación de Samuel y Julián (AGENTS.md). El prototipo no sustituye a los controladores ni a las plantillas.

@@ -15,15 +15,17 @@ Rama `claude/sweet-ritchie-ja97c7` sobre `ci/development-validation` @ `f2923b9`
 
 | Bloque | Estado | Dónde |
 |---|---|---|
-| A · Táctil, foco y navegación (F03 F04 F06 F12; F05 parcial) | **Implementado y comprobado** | DIAGNOSTICO §7 |
-| B · Comprobante de canje (F01) | **Implementado y comprobado**; estados entregado/incidencia sin capturar | §8 |
-| C · Alta: identidad e intereses (F02) | **Propuesto**, no integrado: cambia la presentación de DEC-037/045 y exige aceptación de Samuel y Julián. Handoff para Codex listo | prototipo + HANDOFF_CODEX.md |
-| D · Estados de paso del encuentro (F08) | **Propuesto**: pantalla aprobada (DEC-032), sin defecto que lo justifique | §4 |
-| E · Avatares coherentes (F09) | **Implementado y comprobado** (Hub, lista, perfil) | §9 |
+| A · Táctil, foco y navegación | **Implementado** | DIAGNOSTICO §7 |
+| B · Comprobante de canje | **Implementado**; entregado/incidencia sin capturar | §8 |
+| C · Identidad e Intereses (F02) | **Integrado en la app** (DEC-055: orden de Samuel; Julián sin aprobar) | §11 |
+| Navegación coherente (F05, F13) | **Implementado** | §11 |
+| Recuperación junto a la acción (F07) | **Implementado** | §11 |
+| D · Estados de paso del encuentro (F08) | **Propuesto** (DEC-032, sin defecto) | §4 |
+| E · Avatares coherentes (F09) | **Implementado** | §9 |
 | F · Organización (F10, F11) | **Implementado en parte** | §10 |
-| Sin bloque: F07 F13 F14–F18 | **Propuesto** | §4 |
+| Sin bloque: F14–F18 | **Propuesto** | §4 |
 
-Todos los cambios implementados son de **presentación**: CSS, una línea de `ui.js` (qué ítem de la navegación se marca en el comprobante) y plantillas (clases, orden de secciones, fragmento de avatar ya existente y textos). Rutas, formularios, campos, CSRF, controladores, datos y migraciones no se tocaron.
+Todos los cambios implementados son de **presentación e interacción** (CSS, JS y plantillas). Backend, datos, migraciones, rutas, formularios, CSRF y permisos no cambian. Evidencia: `evidencia/` (A, B, E, F, I, N, R, P).
 
 ## Verificación (resumen)
 
@@ -38,20 +40,18 @@ Estados no alcanzados: «sin candidatos», consulta y entrega del canje por el o
 
 ## Preguntas materiales (para decidir; copiables a ChatGPT)
 
-**Q1 · Integrar Identidad + Intereses (bloque C) y el máximo de intereses**
-- *Contexto y evidencia:* el botón para continuar queda a 1311 px en la identidad y el catálogo muestra 11 familias iguales (DIAGNOSTICO F02; prototipo: 646 px y mosaico con bandeja). `ESPECIFICACION.md` pide conservar «el máximo actual» de intereses, pero el código base **no impone ninguno**.
-- *Decisión necesaria:* ¿se acepta (Samuel y Julián) cambiar la presentación de DEC-037/045 y se confirma que no hay máximo?
-- *Alternativas:* (a) integrar el prototipo tal cual; (b) integrar solo la identidad compacta y dejar intereses como está; (c) no integrar.
-- *Recomendación:* (b) como primer paso, porque no toca el catálogo y gana ~650 px; luego (a) con revisión sobre dispositivo.
-- *Si se aplaza:* el alta sigue pidiendo ~1,5 pantallas de desplazamiento antes de continuar.
+**Q1 · Máximo de intereses (pendiente independiente).** `ESPECIFICACION.md` pide conservar «el máximo actual», pero el código **no impone ninguno**; la integración de Intereses no introduce límite. *Decisión:* ¿existe un máximo que deba aplicarse (regla nueva, con DEC y pruebas) o se corrige la especificación? *Recomendación:* corregir el texto de la especificación y no inventar un número. *Si se aplaza:* el selector sigue sin límite y muestra el contador real.
 
-**Q2 · Avatares distintos por defecto para participantes demo.** Samuel, Julián y Carlos comparten el gato violeta, por lo que el avatar coherente (bloque E) no los distingue. Es un dato de la demo, no de presentación. *Recomendación:* diversificar los datos de la demo en una tarea aparte; si se aplaza, la identidad visual sigue siendo coherente pero uniforme.
+**Q2 · Aceptación de Julián.** El alta (identidad e intereses) y la navegación cambian DEC-037/045; DEC-055 recoge solo la autorización de Samuel. *Recomendación:* revisión conjunta de `evidencia/I*` y `P*` antes del merge.
 
-**Q3 · Navegación inferior para visitantes y en el Hub.** Un visitante sin cuenta ve Mi Ping/Conectar/Beneficios (F13); el Hub tiene otra navegación (F05). *Alternativas:* ocultarla sin sesión; unificar Hub y resto; dejarla. *Recomendación:* ocultarla sin sesión (cambio pequeño y reversible) y decidir la unificación con Samuel y Julián. *Si se aplaza:* los visitantes siguen llegando a «Entrar» desde botones que parecen destinos propios.
+**Q3 · Avatares demo distintos** (dato, no presentación): los participantes demo comparten el gato violeta. Sigue fuera de alcance.
+
+**Q4 · Navegación del organizador.** `/organizer` y la jerarquía de gustos no usan la barra inferior unificada. *Alternativa:* incluirlos (cambio pequeño) o dejarlos como pantallas de administración. *Recomendación:* incluir `/organizer` si el organizador opera desde móvil.
 
 ## Continuidad para el siguiente agente
 
-1. Comprobar el remoto: `git ls-remote origin claude/sweet-ritchie-ja97c7` debe coincidir con el último SHA de la rama; la base funcional es `ci/development-validation` @ `f2923b9`.
-2. Para integrar el bloque C: seguir `docs/design-proposals/identidad-intereses-movil/HANDOFF_CODEX.md` **solo tras** Q1 y su aceptación.
-3. Siguiente trabajo independiente razonable (si se decide): F13 (ocultar navegación sin sesión), F07 (mensaje de sesión perdida junto a la acción bloqueada), F14–F16.
-4. No editar `.claude/skills/` ni actualizar revisiones fijadas; el descubrimiento de skills en una sesión nueva sigue **pendiente de verificar** (`docs/SKILLS_PING.md`).
+1. Comprobar el remoto: `git ls-remote origin claude/sweet-ritchie-ja97c7` debe coincidir con el último SHA de la rama; base funcional `ci/development-validation` @ `f2923b9`.
+2. Siguiente trabajo razonable: pruebas en **iPhone y Android reales** (teclado, áreas seguras; decidir si añadir `viewport-fit=cover`), encuentro ACTIVE con los nuevos avisos de recuperación, `/organizer` con la barra unificada (Q4), F14–F16.
+3. Intereses: el inicio mide 941 px hasta el botón (antes 834). Si se quiere recortar, reducir el tamaño de los mosaicos o decidir un dock fijo (otra decisión; DEC-045 mantiene la acción tras el catálogo).
+4. No editar `.claude/skills/` ni actualizar revisiones fijadas; el descubrimiento de skills en sesión nueva sigue **pendiente de verificar** (`docs/SKILLS_PING.md`).
+5. Aprendizajes técnicos: en `layout.html` no definir elementos `<nav>` fuera del fragmento `nav` (el selector `layout :: nav` los reutiliza; las barras nuevas viven en `fragments/navigation.html`); los mapas `Map.of` del servidor no tienen orden estable.
