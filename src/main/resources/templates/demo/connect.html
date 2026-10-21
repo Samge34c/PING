@@ -13,5 +13,5 @@
   </div>
 </section>
 <div class="cn-interests"><svg th:replace="~{fragments/layout :: icon('heart')}"></svg><p>Tu afinidad empieza con <strong th:text="${#lists.isEmpty(participant.interests) ? 'los intereses que elijas' : #strings.listJoin(participant.interests, ', ')}"></strong>.</p><a th:href="@{/participants/{id}/interests(id=${participant.id})}">Editar intereses</a></div>
-<div class="mp-update"><p data-live-status role="status" aria-live="polite">Mientras esta pantalla esté visible, revisamos si recibes una propuesta.</p><a th:href="@{/connect}">Actualizar estado</a></div>
+<div class="mp-update"><p data-live-status role="status" aria-live="polite">Mientras esta pantalla esté visible, revisamos si recibes una propuesta.</p><a class="link-44" th:href="@{/connect}">Actualizar estado</a></div>
 <a class="pi-back" th:href="@{/me}">Volver a Mi Ping</a><p class="pe-academic">Simulación académica. Sin vínculo oficial con SOFA.</p></main><footer th:replace="~{fragments/layout :: footer}"></footer><script th:src="@{/js/live.js}" defer></script></body></html>

@@ -1,6 +1,6 @@
 (() => {
   const path = location.pathname;
-  const section = path === '/' ? 'home' : path.startsWith('/me/benefits') ? 'benefits' : path.includes('/interests') ? 'interests' : path.startsWith('/me') ? 'me' : path.startsWith('/connect') || path.startsWith('/matches') || path.startsWith('/demo') ? 'connect' : path.startsWith('/events') ? 'events' : path.startsWith('/participants') ? 'people' : path.startsWith('/admin') ? 'admin' : '';
+  const section = path === '/' ? 'home' : path.startsWith('/me/benefits') || path.startsWith('/me/claims') ? 'benefits' : path.includes('/interests') ? 'interests' : path.startsWith('/me') ? 'me' : path.startsWith('/connect') || path.startsWith('/matches') || path.startsWith('/demo') ? 'connect' : path.startsWith('/events') ? 'events' : path.startsWith('/participants') ? 'people' : path.startsWith('/admin') ? 'admin' : '';
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === section) a.setAttribute('aria-current', 'page'); });
   document.querySelectorAll('[data-page-title]').forEach(el => { el.textContent = document.title.split(' · ')[0]; });
   document.querySelectorAll('.session-chip').forEach(chip => {

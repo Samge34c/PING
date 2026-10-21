@@ -191,7 +191,7 @@ small,.small {
   background:var(--ping-surface-alt);
   color:var(--ping-text)
 }
-.ping-wordmark {font-size:36px;font-weight:800;letter-spacing:-.065em;color:var(--ping-text);line-height:1}
+.ping-wordmark {font-size:36px;font-weight:800;letter-spacing:-.065em;color:var(--ping-text);line-height:1;padding-block:8px;margin-block:-8px}
 .ping-wordmark:hover {color:var(--ping-text)}
 .ping-topbar>.ping-wordmark,.mobile-theme,.ping-bottom-nav {display:none}
 .ping-sidebar {
@@ -692,6 +692,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,su
   outline:2px solid var(--ping-focus);
   outline-offset:3px
 }
+/* DEC-054: títulos y mensajes que reciben foco por script usan el mismo foco de marca, con radio. */
+[tabindex="-1"]:focus-visible {outline:2px solid var(--ping-focus);outline-offset:4px;border-radius:6px}
 .ping-form-layout {
   max-width:760px;
   margin:0 auto
@@ -1122,7 +1124,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,su
 .safety-panel summary {
   color:var(--ping-muted);
   font-size:13px;
-  cursor:pointer
+  cursor:pointer;
+  min-height:44px;padding-block:10px
 }
 .safety-panel .safety-content {
   padding-top:24px
@@ -1567,6 +1570,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,su
   position:absolute;transform:translate(-50%,-50%);display:grid;place-items:center;width:20px;height:20px;font-size:11px;font-weight:700;background:var(--ping-surface);color:var(--ping-muted);border:1px solid var(--ping-border);border-radius:4px
 }
 .mini-marker.selected {background:var(--ping-accent);color:var(--ping-accent-text);border-color:var(--ping-accent)}
+.link-44 {display:inline-flex;align-items:center;min-height:44px;min-width:44px;padding-block:8px}
 .secondary-action {display:inline-flex;align-items:center;gap:8px;min-height:44px;font-weight:700;color:var(--ping-primary);border:0;background:none;padding:8px 0}
 .map-link {float:none;justify-content:flex-start}.map-link .ping-icon {width:20px;height:20px}
 .recognition-note {display:flex;align-items:flex-start;gap:12px;margin-top:24px;padding:0;background:none;border:0;border-radius:0}
@@ -1703,8 +1707,13 @@ a.interest-row {display:grid;grid-template-columns:24px minmax(0,1fr);gap:4px 16
     color:var(--ping-muted);
     font-size:10px;
     font-weight:600;
-    min-height:48px
+    min-height:48px;
+    min-width:0;
+    padding-inline:2px;
+    line-height:1.15;
+    text-align:center
   }
+  .ping-bottom-nav a>span,.ping-bottom-nav button>span {max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .ping-bottom-nav .ping-icon {
     width:24px;
     height:24px
@@ -1926,8 +1935,8 @@ body.menu-open {
   overflow:hidden
 }
 .mobile-theme .theme-control button {
-  width:36px;
-  height:36px
+  width:44px;
+  height:44px
 }
 .identity-header>p {
   font-size:13px;
@@ -2373,10 +2382,10 @@ body.mi-ping-page {background-image:none}
 .mp-event {display:flex;align-items:baseline;justify-content:space-between;gap:16px;font-size:13px;color:var(--ping-muted);margin-bottom:16px}
 .mp-event a {display:flex;align-items:center;gap:8px;min-height:44px;min-width:0}
 .mp-event .ping-icon {width:16px;height:16px;flex:none}
-.mp-identity {display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px}
-.mp-identity>.avatar {width:44px;height:44px;font-size:20px}
-.mp-identity h1 {font-size:28px;line-height:1.2;letter-spacing:-.03em;margin:0;font-weight:800;min-width:0}
-.mp-balance {display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:44px;min-height:44px;gap:0;color:var(--ping-muted);font-size:12px}
+.mp-identity {display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.mp-identity>.avatar {flex:none;width:44px;height:44px;font-size:20px}
+.mp-identity h1 {font-size:28px;line-height:1.2;letter-spacing:-.03em;margin:0;font-weight:800;min-width:0;flex:1 1 min-content}
+.mp-balance {margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;justify-content:center;min-width:44px;min-height:44px;gap:0;color:var(--ping-muted);font-size:12px}
 .mp-balance strong {font-size:24px;line-height:1.2;color:var(--ping-highlight-text);font-variant-numeric:tabular-nums}
 .mp-flow {display:flex;flex-direction:column;gap:24px}
 .mp-settings {display:flex;flex-direction:column;gap:24px}
@@ -2452,9 +2461,9 @@ body.benefits-page {background-image:none}
 .bf-context {display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:13px;color:var(--ping-muted);margin-bottom:12px}
 .bf-context a {display:flex;align-items:center;min-height:44px;flex:none}
 .bf-context>span {text-align:right;min-width:0}
-.bf-heading {display:flex;align-items:center;justify-content:space-between;gap:20px}
-.bf-heading>div {min-width:0}
-.bf-heading h1 {font-size:28px;line-height:1.2;letter-spacing:-.03em;font-weight:800;margin:0 0 8px}
+.bf-heading {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px}
+.bf-heading>div {min-width:min-content;flex:1 1 min-content}
+.bf-heading h1 {font-size:28px;line-height:1.2;letter-spacing:-.03em;font-weight:800;margin:0 0 8px;overflow-wrap:break-word}
 .bf-heading p {font-size:14px;color:var(--ping-muted);margin:0}
 .bf-claims-link {display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font-size:13px;font-weight:650;flex:none}
 .bf-claims-link>span {display:inline-flex;align-items:center;justify-content:center;min-width:24px;min-height:24px;border-radius:6px;background:var(--ping-badge-bg);color:var(--ping-badge-text);font-variant-numeric:tabular-nums}

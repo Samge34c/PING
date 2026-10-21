@@ -82,10 +82,26 @@ Se actualiza al cerrar cada bloque (ver `README.md`).
 
 | Bloque | Hallazgos | Estado |
 |---|---|---|
-| A · Táctil, foco y navegación | F03 F04 F05 F06 F12 | Propuesto |
+| A · Táctil, foco y navegación | F03 F04 F05 F06 F12 | **Implementado** y comprobado en 8 pantallas con sesión (ver sección 7). F05 parcial; ver nota |
 | B · Canje: comprobante | F01 (y F05 en recibo) | Propuesto |
 | C · Alta: identidad e intereses | F02 | Propuesto |
 | D · Encuentro: estados de paso | F08 | Propuesto |
 | E · Avatares coherentes | F09 | Propuesto |
 | F · Organización | F10 F11 | Propuesto |
 | Pendientes sin bloque | F07 F13 F14 F15 F16 F17 F18 | Propuesto |
+
+## 7. Bloque A — qué cambió y qué se comprobó
+
+Implementado en `brand.css`, `ui.js` y 9 plantillas (solo clases; destinos, formularios y contratos intactos). Capturas antes/después: `evidencia/A1…A5`.
+
+| Hallazgo | Cambio | Comprobado |
+|---|---|---|
+| F03 | Selector de tema de 44×44 px | Cabecera a 390 y 360 px sin desbordes (A1) |
+| F04 | Clase `.link-44` en «← Mi Ping», «Actualizar estado», «Omitir», «Ver participante», «Editar categoría…», «← Mi evento», «← Volver al encuentro», «Beneficios», «← Mis canjes», «Volver al inicio»; logotipo y resumen de «Cuidemos este encuentro» a 44 px de alto | Medición en 8 pantallas con sesión a 390 px: 0 controles por debajo de 44 px (antes: 1–2 por pantalla). No cubre pantallas de organización ni todas las pantallas |
+| F05 | Un solo estado activo en el comprobante (Beneficios); las etiquetas ya no se pisan | **Parcial.** Se probó subir la etiqueta a 11 px y se **descartó**: adelantaba el recorte de «Beneficios» a ×1,3 en 360 px. Se mantiene 10 px. A ×1,5 (360 px) se recortan «Conectar» y «Beneficios» con «…» y a ×2 casi todas: el icono y el nombre accesible completo se conservan, pero **el texto visible se recorta**. «Más» activo en Home, Hub con otra navegación y navegación visible para visitantes siguen sin resolver (Q3) |
+| F06 | Foco de marca (amarillo en oscuro, morado en claro, radio 6 px) en elementos con `tabindex="-1"` | Con teclado: anillo visible en ambos temas (A4, A5). Sin teclado, el navegador decide cuándo mostrar el foco; no se forzó |
+| F12 | Cabeceras de Mi Ping y de Beneficios que envuelven por palabra (en Beneficios el título heredaba `overflow-wrap:anywhere`; se acotó a `break-word`) | «Samuel» ya no se parte a ×2 y «Beneficios» tampoco a ×1,5 (A2, A6); el saldo o «Mis canjes» bajan a otra línea solo cuando no caben. A texto normal la pantalla es igual que antes (A1). Sin desbordes a ×1,5 y ×2 en 7 pantallas |
+
+Pruebas: `FinalMvpTests`, `DemoImprovementTests` y `PagePresentationTests` (29, verdes). No se añadieron pruebas de clases CSS (AGENTS.md).
+
+Rectificación durante el bloque: una primera versión partía las palabras de la navegación a ×2 («Con/ctar») y apilaba el saldo bajo el nombre también a tamaño normal; ambas se corrigieron antes de este checkpoint.
