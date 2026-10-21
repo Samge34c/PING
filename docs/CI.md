@@ -39,6 +39,8 @@ Acciones oficiales consultadas y tags resueltos mediante git ls-remote (20 octub
 
 Se leyó también action.yml de cada commit: Node24 e inputs utilizados confirmados. Sintaxis/eventos/concurrencia/permisos: [referencia oficial de workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax). No se eligen hashes de ejemplos sin comprobarlos. Las actualizaciones futuras requieren revisar la fuente y actualizar conscientemente el pin.
 
+La prueba nativa reprodujo una diferencia real de PowerShell7.5+: la llamada .NET con null conserva un valor vacío. Restore-PingEnvironment ahora elimina explícitamente entradas originalmente ausentes mediante el proveedor Env:, manteniendo valores presentes/vacíos. [Semántica oficial de Microsoft](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.5). Regresión de los tres casos en5.1/7; no se modifica entorno User/Machine.
+
 No se cambian protecciones de ramas. Después de revisar la PR, un administrador puede elegir los checks `Java 21 / Linux` y `Tools / Windows` como obligatorios; esa configuración queda fuera de este bloque.
 
 ## Resultado de esta entrega

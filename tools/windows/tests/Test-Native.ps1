@@ -12,7 +12,7 @@ function Assert-PingTest([bool]$Condition, [string]$Message) {
 $source = Split-Path -Parent $PSScriptRoot
 $temp = Join-Path ([IO.Path]::GetTempPath()) ('PING pruebas á ñ ' + [Guid]::NewGuid().ToString('N'))
 $savedTest = @{}
-foreach ($name in @('JAVA_HOME','PING_TEST_CLIENT_FAIL','PING_TEST_CA')) {
+foreach ($name in @('JAVA_HOME','PING_TEST_CLIENT_FAIL','PING_TEST_CA','PING_TEST_RESTORE_ABSENT','PING_TEST_RESTORE_PRESENT','PING_TEST_RESTORE_EMPTY')) {
     $savedTest[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
 }
 $saved = $null
@@ -80,18 +80,33 @@ try {
     Assert-PingTest (-not $text.Contains($fixtureSecret) -and -not $text.Contains('synthetic private diagnostic')) 'Raw server diagnostics or password escaped redaction.'
     Write-Host 'PASS native failure propagation and output redaction'
 
+    $checkpoint = @{ PING_TEST_RESTORE_ABSENT = $null; PING_TEST_RESTORE_PRESENT = 'valor á anterior' }
+    $env:PING_TEST_RESTORE_ABSENT = 'temporary'
+    $env:PING_TEST_RESTORE_PRESENT = 'temporary'
+    if ($PSVersionTable.PSVersion -ge [Version]'7.5') {
+        $checkpoint['PING_TEST_RESTORE_EMPTY'] = ''
+        $env:PING_TEST_RESTORE_EMPTY = 'temporary'
+    }
+    Restore-PingEnvironment $checkpoint
+    Assert-PingTest ($null -eq [Environment]::GetEnvironmentVariable('PING_TEST_RESTORE_ABSENT', 'Process')) 'Absent environment entry must be removed, not made empty.'
+    Assert-PingTest ($env:PING_TEST_RESTORE_PRESENT -ceq 'valor á anterior') 'Present environment entry must keep its original value.'
+    if ($checkpoint.ContainsKey('PING_TEST_RESTORE_EMPTY')) {
+        Assert-PingTest ((Test-Path -LiteralPath 'Env:PING_TEST_RESTORE_EMPTY') -and $env:PING_TEST_RESTORE_EMPTY -ceq '') 'An existing empty environment entry must stay present and empty.'
+    }
+    Write-Host 'PASS absent/present/empty environment semantics'
+
     $env:SERVER_PORT = 'not-a-port'
     $rejected = $false
     try { Get-PingPort } catch { $rejected = $true }
     Assert-PingTest $rejected 'Invalid port must fail before operational startup.'
     Restore-PingEnvironment $saved
     foreach ($name in $saved.Keys) {
-        Assert-PingTest ([Environment]::GetEnvironmentVariable($name, 'Process') -ceq $saved[$name]) 'Process environment was not restored.'
+        Assert-PingTest ([Environment]::GetEnvironmentVariable($name, 'Process') -ceq $saved[$name]) ('Process environment was not restored: ' + $name)
     }
     Write-Host ('PASS environment restore; native checks complete on PowerShell ' + $PSVersionTable.PSVersion.ToString())
 } finally {
     if ($saved) { Restore-PingEnvironment $saved }
-    foreach ($name in $savedTest.Keys) { [Environment]::SetEnvironmentVariable($name, $savedTest[$name], 'Process') }
+    Restore-PingEnvironment $savedTest
     # Only the unique directory created above, never user files or repository data.
     if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Recurse -Force }
 }
