@@ -117,8 +117,9 @@
 
   const worldsBox = $('[data-worlds]');
   fams.forEach((f, i) => {
-    const b = el('button', { type: 'button', class: 'world', 'data-node': f.key, 'data-tone': i % 3, 'data-wide': f.key === 'legacy' ? '' : null }, icon(f.icon),
-      el('span', {}, el('b', { text: f.label }), el('small', { text: `${f.ids.length} opciones` })), el('span', { class: 'world-count', hidden: true }));
+    const b = el('button', { type: 'button', class: 'world', 'data-node': f.key, 'data-tone': i % 3 }, // el tono es decorativo; todas las familias tienen el mismo tamaño
+      el('b', { text: f.label }),
+      el('span', { class: 'world-foot' }, el('span', { class: 'world-count', hidden: true }), el('small', { text: `${f.ids.length} opciones` }), icon(f.icon)));
     b.addEventListener('click', () => openFamily(f.key, b));
     worldsBox.append(b);
   });
@@ -171,16 +172,16 @@
     const sel = new Set(ids);
     $$('.world').forEach(w => {
       const f = fams.find(x => x.key === w.dataset.node), c = f.ids.filter(id => sel.has(id)).length, badge = $('.world-count', w);
-      const had = badge.textContent; badge.textContent = c; badge.hidden = c === 0;
+      badge.textContent = c; badge.hidden = c === 0; $('small', w).textContent = c ? `de ${f.ids.length}` : `${f.ids.length} opciones`;
       w.setAttribute('aria-label', `${f.label}, ${f.ids.length} opciones${c ? ', ' + (c === 1 ? '1 elegido' : c + ' elegidos') : ''}`);
-      if (had !== String(c) && c) { badge.classList.remove('bump'); void badge.offsetWidth; badge.classList.add('bump'); }
     });
     // Bandeja «Elegidos»: CONTRATO = resumen de hasta 3 nombres + «+N más» y detalle con todos.
     $('[data-tray]').classList.toggle('is-empty', n === 0);
-    $('[data-tray-empty]').hidden = n > 0; $('[data-tray-body]').hidden = n === 0;
+    $('[data-skip-hint]').hidden = n > 0; $('[data-tray-body]').hidden = n === 0;
     $('[data-tray-count]').textContent = n;
     const chips = $('[data-tray-chips]'), all = $('[data-tray-all]');
-    const mk = id => { const b = el('button', { type: 'button', class: 'tray-chip', 'aria-label': 'Quitar ' + nameOf(id) }, el('span', { text: nameOf(id) }), icon('close')); b.addEventListener('click', () => { const i = chipFor.get(id).querySelector('input'); i.checked = false; i.dispatchEvent(new Event('change', { bubbles: true })); }); return b; };
+    const prevTray = st.tray || new Set(); st.tray = new Set(ids);
+    const mk = id => { const b = el('button', { type: 'button', class: 'tray-chip', 'data-new': prevTray.has(id) ? null : '', 'aria-label': 'Quitar ' + nameOf(id) }, el('span', { text: nameOf(id) }), icon('close')); b.addEventListener('click', () => { const i = chipFor.get(id).querySelector('input'); i.checked = false; i.dispatchEvent(new Event('change', { bubbles: true })); }); return b; };
     const more = el('button', { type: 'button', class: 'tray-chip more', 'aria-controls': 'tray-all', 'aria-expanded': String(!all.hidden), 'aria-label': 'Ver todos los intereses elegidos' }, el('span', { text: all.hidden ? `+${n - 3} más` : 'Ocultar' }));
     more.addEventListener('click', () => { all.hidden = !all.hidden; refreshSelection(); });
     if (n <= 3) all.hidden = true;

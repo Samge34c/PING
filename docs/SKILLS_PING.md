@@ -131,26 +131,54 @@ Selección del bloque: ping-efficient-work organiza, mobile-native/emil-design-e
 
 Autorización expresa del usuario de la sesión de Claude Code, 21 octubre 2026: preparar las skills pertinentes con alcance de proyecto en la rama `claude/sweet-ritchie-ja97c7`, creada desde `ci/development-validation` @ `f2923b98ff893c22138ef6552859e5a323ffa7c3` (sin avances posteriores comprobados en el remoto; PR #50 abierta en borrador). No se atribuye aprobación a ningún integrante concreto; la aceptación de Samuel y Julián sigue pendiente.
 
+**Estado: preparada; el descubrimiento NO está verificado de forma definitiva.** La verificación en una sesión nueva sigue **pendiente** (ver «Cómo verificarlo»). Lo observado hasta ahora es parcial y se detalla abajo.
+
 **Qué se añadió.** `CLAUDE.md` (breve: importa AGENTS.md y fija la regla de selección) y `.claude/skills/<nombre>/SKILL.md` para las ocho skills. Cada archivo es un **puntero de texto** de unas diez líneas con `name`, una `description` breve y la ruta de la fuente fijada en `.agents/skills/`. No copia contenido, scripts, referencias ni licencias; no cambia revisiones. Motivos: Claude Code descubre `.claude/skills/` y documenta que una entrada puede ser un enlace simbólico a otra carpeta ([documentación oficial](https://code.claude.com/docs/en/skills)), pero el repositorio no usa enlaces simbólicos y el equipo trabaja también en Windows, donde Git puede dejarlos como archivos de texto; una copia duplicaría 6 MB y abriría una divergencia de versiones. `.agents/skills/` queda intacta para Codex.
 
 **Invocación.** Automática (por descripción) solo en `ping-efficient-work`, `mobile-native`, `systematic-debugging` y `verification-before-completion`. Manual (`disable-model-invocation: true`) en `redesign-existing-projects`, `emil-design-eng`, `ui-ux-pro-max` e `impeccable`, para que sus descripciones no se carguen por defecto y no se encadenen. No se midió el ahorro de contexto de esta decisión.
 
-**Impeccable.** Hooks desactivados (`.impeccable/config.json`, `hook.enabled: false`); no se creó `.claude/settings*.json`. Según su repositorio oficial, el instalador de Claude Code añade un hook en `.claude/settings.local.json`, el lanzador descarga un motor en `~/.impeccable/` y la skill consulta un servicio externo al iniciar un diseño nuevo; por eso su puntero prohíbe ejecutar `scripts/impeccable` y los comandos `hooks`, `live`, `init` y `pin`. El motor no está instalado en esta sesión y no se descargó.
+**Impeccable.** Hooks desactivados (`.impeccable/config.json`, `hook.enabled: false`); no se creó `.claude/settings*.json`. Según su repositorio oficial, el instalador de Claude Code añade un hook en `.claude/settings.local.json`, el lanzador descarga un motor en `~/.impeccable/` y la skill consulta un servicio externo al iniciar un diseño nuevo; por eso su puntero prohíbe ejecutar `scripts/impeccable` y los comandos `hooks`, `live`, `init` y `pin`. El motor no está instalado y no se descargó.
 
-### Estado comprobado el 21 octubre 2026 (base f2923b9)
+### Observado en la sesión de trabajo (21 octubre 2026) — parcial
 
-| Skill | 1. Archivos | 2. Leída | 3. Descubierta automáticamente | 4. Herramienta ejecutada |
+| Momento | Observación |
+|---|---|
+| Justo tras crear los punteros, en la misma sesión | La herramienta `Skill` devolvió `Unknown skill: mobile-native`. Coincide con la documentación: un `.claude/skills/` que no existía al iniciar necesita `/reload-skills` o sesión nueva |
+| Tras un turno posterior de esa sesión | El listado de skills disponibles incluyó las **4 automáticas** (`mobile-native`, `ping-efficient-work`, `systematic-debugging`, `verification-before-completion`) y **no** las 4 manuales |
+| Invocar `mobile-native` con `Skill` | Cargó el puntero («Launching skill: mobile-native») |
+| Invocar `emil-design-eng` con `Skill` | Rechazada: «cannot be used with Skill tool due to disable-model-invocation… ask the user to run /emil-design-eng». Es el comportamiento diseñado de una skill manual, no un fallo |
+
+Esto **no sustituye** la comprobación en una sesión nueva ni la invocación manual por el usuario (`/emil-design-eng`), que una sesión del modelo no puede realizar. Tampoco se probó en Codex ni en Windows.
+
+### Cómo verificarlo (sin motores ni hooks)
+
+Hacerlo en una **sesión nueva** de Claude Code abierta en la raíz del repositorio y en esta rama; o, en una sesión ya abierta, tras ejecutar `/reload-skills`. Comprobar antes que existen `CLAUDE.md` y `.claude/skills/mobile-native/SKILL.md`.
+
+1. **Automática — `mobile-native`.**
+   1. Comprobar que figura entre las skills disponibles (el listado de skills del cliente o, si no, preguntar «¿qué skills de proyecto tienes disponibles?»).
+   2. Sin nombrarla, pedir una tarea móvil concreta, por ejemplo: «Revisa si el campo de alias del prototipo provoca zoom en iOS».
+   3. **Éxito:** la sesión carga `mobile-native` y lee `.agents/skills/mobile-native/SKILL.md` (visible como lectura de archivo). **Fallo:** no aparece o no lee el archivo fuente; entonces `/reload-skills`, revisar que el `name:` del puntero coincide con su carpeta y anotar la versión de Claude Code.
+2. **Manual — `emil-design-eng`.**
+   1. Escribir `/emil-design-eng`: debe ofrecerse y poder invocarse.
+   2. Comprobar que **no** aparece en el listado que el modelo usa por su cuenta y que, si se le pide «usa emil-design-eng», responde que está reservada a la invocación del usuario.
+   3. **Éxito:** tras `/emil-design-eng`, lee `.agents/skills/emil-design-eng/SKILL.md`. **Fallo:** no se ofrece o no lee el archivo fuente.
+3. **No ejecutar** en esta comprobación: `scripts/impeccable`, `/impeccable …`, instaladores, plugins ni hooks, y no usar `impeccable` ni `ui-ux-pro-max` como prueba.
+4. Registrar aquí el resultado con fecha, versión de Claude Code y lo observado, y retirar la etiqueta «pendiente» solo entonces.
+
+### Estado de lectura y uso (21 octubre 2026)
+
+| Skill | Archivos | Lectura | Descubrimiento | Ejecutada |
 |---|---|---|---|---|
-| ping-efficient-work | Sí; SHA-256 de SKILL.md coincide | Sí | No en la sesión inicial; puntero añadido después | No aplica |
-| redesign-existing-projects | Sí; coincide | Sí | Ídem | No aplica |
-| mobile-native | Sí; coincide | Sí | Ídem | No aplica |
-| emil-design-eng | Sí; coincide | Solo frontmatter | Ídem | No aplica |
-| ui-ux-pro-max | Sí; coincide | Solo frontmatter | Ídem | No ejecutada (script Python local, sin red) |
-| impeccable | Sí; coincide | Frontmatter y partes | Ídem | **No** ejecutada (descarga motor) |
-| systematic-debugging | Sí; coincide | Solo frontmatter | Ídem | No aplica |
-| verification-before-completion | Sí; coincide | Solo frontmatter | Ídem | No aplica |
+| ping-efficient-work | Sí; SHA-256 coincide | **Íntegra** (17 líneas) | Observada (parcial, ver arriba) | No aplica |
+| mobile-native | Sí; coincide | **Íntegra** (311 líneas) | Observada y cargada con `Skill` (parcial) | No aplica |
+| systematic-debugging | Sí; coincide | Solo frontmatter | Observada en el listado (parcial) | No aplica |
+| verification-before-completion | Sí; coincide | **Íntegra** (120 líneas) y PING_NOTES | Observada en el listado (parcial) | No aplica |
+| redesign-existing-projects | Sí; coincide | **Íntegra** (181 líneas) | Manual; falta `/nombre` del usuario | No aplica |
+| emil-design-eng | Sí; coincide | **Íntegra** (674 líneas, leída a petición expresa) | Manual; rechazada por `Skill` por diseño; falta `/nombre` del usuario | No aplica; la herramienta `Skill` la reserva al usuario |
+| ui-ux-pro-max | Sí; coincide | Solo frontmatter | Manual; sin comprobar | No ejecutada (script Python local, sin red) |
+| impeccable | Sí; coincide | Frontmatter y fragmentos, no íntegra | Manual; sin comprobar | **No** ejecutada (descarga motor) |
 
-El catálogo de skills de la sesión (`ListSkills`) solo mostraba skills de cuenta, no las de PING. Tras crear los punteros, invocar `mobile-native` con la herramienta `Skill` devolvió `Unknown skill` en esa misma sesión: el directorio `.claude/skills/` no existía al iniciarla y la documentación oficial indica que entonces requiere `/reload-skills` o una sesión nueva. **Pendiente de verificar en una sesión nueva** que los punteros se descubren; mientras tanto, lectura manual de `.agents/skills/<nombre>/SKILL.md`. Una skill de instrucciones no necesita un CLI para usarse.
+«Leída» no equivale a «aplicada»: lo aplicado en cada trabajo se declara en su propia nota (para la propuesta visual, `docs/design-proposals/identidad-intereses-movil/README.md`).
 
 ### Cuándo usar cada una
 

@@ -6,7 +6,7 @@ AGENTS.md es la fuente de reglas; este archivo solo añade lo propio de Claude C
 
 ## Skills
 
-Fuente única y versiones fijadas: `.agents/skills/` (registro `.agents/skill-installation.json`). `.claude/skills/` solo contiene punteros de texto para que Claude Code las descubra; no los edites ni copies contenido. Detalle, límites y comprobaciones: `docs/SKILLS_PING.md`.
+Fuente única y versiones fijadas: `.agents/skills/` (registro `.agents/skill-installation.json`). `.claude/skills/` solo contiene punteros de texto para que Claude Code pueda descubrirlas (descubrimiento aún por verificar en una sesión nueva); no los edites ni copies contenido. Detalle, límites y comprobaciones: `docs/SKILLS_PING.md`.
 
 Carga **solo la pertinente**, una vez:
 

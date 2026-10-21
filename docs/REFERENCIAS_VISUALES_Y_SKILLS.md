@@ -45,7 +45,7 @@ Decisión: **Ahora** (aprovechar en esta iteración), **Reservar** (otro proyect
 ## Qué sirve para PING, en pocas líneas
 
 1. **Método**: capturas reales del recorrido → elegir dos pantallas con evidencia → prototipo aislado → una sola revisión final.
-2. **Skills**: bastan las ocho actuales; no se añade ninguna nueva. La carencia real era de **descubrimiento en Claude Code**, resuelta con punteros.
+2. **Skills**: bastan las ocho actuales; no se añade ninguna nueva. La carencia real era de **descubrimiento en Claude Code**; se mitiga con punteros, pero el descubrimiento **sigue pendiente de verificación definitiva** (sesión nueva y `/nombre` del usuario; ver `docs/SKILLS_PING.md`).
 3. **Copy situado y feedback de selección**: aplicados en el prototipo de identidad e intereses.
 4. **Lo que no se adopta**: créditos «gratis», MCP sin nombre, plugins de colecciones completas, glassmorfismo global, subagentes por rutina.
 

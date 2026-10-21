@@ -66,7 +66,7 @@
                 <p id="alias-error" class="field-error" hidden>Escribe un alias para continuar.<small class="pp-note">Copy ilustrativo: la app muestra el mensaje de validación del servidor.</small></p>
               </div>
             </div>
-            <p id="alias-help" class="badge-help">Así te verán en SOFA 2026. Tu alias es público en este evento; tu correo sigue siendo privado.</p>
+            <p id="alias-help" class="badge-help">Tu alias es público en este evento; tu correo sigue siendo privado.</p>
           </div>
 
           <div class="primary-zone">
@@ -85,8 +85,8 @@
 
     <!-- ══════ PANTALLA 3 · INTERESES ══════ -->
     <section id="screen-interests" class="screen" aria-labelledby="in-title" hidden>
-      <div class="step-row">
-        <span class="me"><span class="avatar" data-avatar-preview role="img" aria-label="Tu avatar"></span><strong data-me-alias>Tu alias</strong><span>· SOFA 2026</span></span>
+      <div class="step-row compact">
+        <span class="me"><span class="avatar" data-avatar-preview role="img" aria-label="Tu avatar"></span><span class="me-text"><strong data-me-alias>Tu alias</strong> <span>· SOFA 2026</span></span></span>
         <p class="step-label">3 de 3 · Afinidad</p>
       </div>
       <ol class="steps" aria-label="Progreso de la entrada">
@@ -102,10 +102,11 @@
         <!-- CONTRATO: POST /join/interests, checkboxes name=interestIds value=ID, _csrf, draftKey, revision, action=complete|back.
              No hay máximo de intereses en el código base (pendiente humano); no se muestra ninguno. -->
         <div class="tray is-empty" data-tray>
-          <p class="tray-empty" data-tray-empty data-selection-summary>Aún ninguno. Puedes continuar sin elegir.</p>
           <div data-tray-body hidden>
-            <div class="tray-head"><strong>Elegidos</strong><output data-tray-count aria-hidden="true">0</output></div>
-            <div class="tray-chips tray-row" data-tray-chips></div>
+            <div class="tray-line">
+              <div class="tray-head"><strong>Elegidos</strong><output data-tray-count aria-hidden="true">0</output></div>
+              <div class="tray-chips tray-row" data-tray-chips></div>
+            </div>
             <div class="tray-chips" data-tray-all id="tray-all" hidden></div>
           </div>
         </div>
@@ -145,7 +146,7 @@
         </div>
 
         <div class="ic-actions">
-          <p data-selected-count role="status" aria-live="polite">0 intereses seleccionados</p>
+          <p><span data-selected-count role="status" aria-live="polite">0 intereses seleccionados</span><span class="skip-hint" data-skip-hint data-selection-summary> · Puedes continuar sin elegir.</span></p>
           <button class="btn-primary" type="button" data-act="complete">Ir a Mi Ping <svg class="ping-icon" aria-hidden="true"><use href="#arrow"/></svg></button>
         </div>
         <button class="btn-link back-link" type="button" data-act="back">Corregir alias o evento</button>
