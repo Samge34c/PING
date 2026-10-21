@@ -28,7 +28,7 @@ Todos los cambios implementados son de **presentación**: CSS, una línea de `ui
 ## Verificación (resumen)
 
 - Capturas reales de viewport a 390×844 y 360×740 (oscuro y claro según el bloque) y 1440 en escritorio; texto ampliado **simulado** ×1,5 y ×2 (no es el ajuste real de un teléfono).
-- Mediciones propias: sin desbordes horizontales, sin fallos de contraste sobre fondos sólidos, 0 controles bajo 44 px en las pantallas medidas.
+- Mediciones propias: sin desbordes horizontales, sin fallos de contraste sobre fondos sólidos, sin controles bajo 44 px de alto en las pantallas de participante medidas; quedan excepciones puntuales (enlace «Plano» de 41 px de ancho en `/organizer`, «Mi cuenta» de 24 px en escritorio, pestañas de configuración de 43 px).
 - Pruebas Java **solo las pertinentes** a cada bloque (`FinalMvpTests`, `DemoImprovementTests`, `PagePresentationTests`, `VerificationTests`, `RewardTests`, `ParticipantTests`, `EventEntryFlowTests`, `EventTests`, `InterestCategoryAdminTests`, `FloorplanTests`), todas verdes. **No se ejecutó la suite completa** ni se repitió sin cambios; no se añadieron pruebas de clases CSS.
 - MySQL local 8.0.46 (el proyecto apunta a 8.4.11).
 
