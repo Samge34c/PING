@@ -3,7 +3,7 @@
 param()
 $ErrorActionPreference = 'Stop'
 $failed = $false
-foreach ($file in Get-ChildItem -LiteralPath $PSScriptRoot -Filter '*.ps1') {
+foreach ($file in Get-ChildItem -LiteralPath $PSScriptRoot -Filter '*.ps1' -Recurse) {
     $tokens = $null; $parseErrors = $null
     $null = [Management.Automation.Language.Parser]::ParseFile($file.FullName, [ref]$tokens, [ref]$parseErrors)
     if ($parseErrors -and $parseErrors.Count) {

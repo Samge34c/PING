@@ -100,7 +100,8 @@ class BackupRestoreTests(unittest.TestCase):
             self.assertEqual(path.read_bytes(),before)
     def test_repository_destinations_are_rejected_including_resolved_links(self):
         with tempfile.TemporaryDirectory() as directory:
-            repo=Path(directory)/'repo';repo.mkdir()
+            # Match production ROOT: resolve Windows short TEMP names / directory aliases first.
+            repo=(Path(directory)/'repo').resolve();repo.mkdir()
             with mock.patch.object(ops,'ROOT',repo):
                 with self.assertRaises(ops.OpsError):ops.private_directory(repo/'backups')
                 self.assertFalse((repo/'backups').exists())

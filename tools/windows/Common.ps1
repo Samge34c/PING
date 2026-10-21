@@ -11,7 +11,11 @@ function Get-PingEnvironmentSnapshot {
     return $values
 }
 function Restore-PingEnvironment($Values) {
-    foreach ($name in $Values.Keys) { [Environment]::SetEnvironmentVariable($name, $Values[$name], 'Process') }
+    foreach ($name in $Values.Keys) {
+        # PowerShell7.5+ converts null to an empty value in the .NET call; remove absent entries explicitly.
+        if ($null -eq $Values[$name]) { Remove-Item -LiteralPath ('Env:' + $name) -ErrorAction SilentlyContinue }
+        else { [Environment]::SetEnvironmentVariable($name, $Values[$name], 'Process') }
+    }
 }
 function Request-PingDatabase {
     if (-not $env:DB_URL) { $env:DB_URL = Read-Host 'URL JDBC MySQL existente (sin usuario ni contraseña en la URL)' }
