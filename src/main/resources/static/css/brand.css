@@ -2851,7 +2851,7 @@ body.participant-entry-page {padding-left:0}
 /* DEC-055 · Intereses: bandeja de elegidos, mundos con icono local y gustos como chips.
    Todo bajo .interest-category-selector para que sirva igual en el alta, la edición y el editor en línea. */
 .ic-top {display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:4px 12px;min-height:32px;padding-top:4px}
-.ic-me {min-width:0;font-size:13px;line-height:1.3;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ic-me {min-width:0;font-size:13px;line-height:1.3;overflow-wrap:anywhere}
 .ic-me span {color:var(--ping-muted)}
 .ic-top .pe-step {margin:0;white-space:nowrap}
 .pe-page.ic-page>h1 {margin:0 0 12px;font-size:26px;line-height:1.15;text-wrap:balance}
@@ -2882,11 +2882,11 @@ body.participant-entry-page {padding-left:0}
 .ic-back {display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 10px;border:1px solid var(--ping-control-border);border-radius:22px;background:var(--ping-surface);color:var(--ping-primary);font-size:14px;font-weight:700;touch-action:manipulation}
 .ic-back .ping-icon {width:18px;height:18px;transform:scaleX(-1)}
 .ic-world-title {flex:1 1 8rem;min-width:0;margin:0;font-size:20px;line-height:1.25;overflow-wrap:break-word}
-.ic-worlds {display:grid;grid-template-columns:repeat(auto-fill,minmax(min(9rem,100%),1fr));gap:0 14px}
+.ic-worlds {display:grid;grid-template-columns:repeat(auto-fill,minmax(min(9em,100%),1fr));gap:0 14px}
 /* DEC-056: an open directory, rather than identical cards. Every family keeps equal access;
    its existing drawn icon and real name supply identity, without color implying priority. */
 .ic-world {display:grid;grid-template-columns:28px minmax(0,1fr);grid-template-rows:auto auto;align-content:center;gap:3px 8px;min-height:68px;padding:10px 2px;border:0;border-bottom:1px solid var(--ping-border);border-radius:0;background:transparent;color:var(--ping-text);text-align:left;touch-action:manipulation}
-.ic-world-name {grid-column:2;grid-row:1;font-size:14px;font-weight:750;line-height:1.25;overflow-wrap:break-word}
+.ic-world-name {grid-column:2;grid-row:1;font-size:15px;font-weight:750;line-height:1.25;overflow-wrap:break-word}
 .ic-world-meta {grid-column:2;grid-row:2;display:flex;flex-wrap:wrap;align-items:center;gap:4px;align-self:end;font-size:12px;line-height:1.2;color:var(--ping-muted)}
 .ic-world-meta b {display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--ping-accent);color:var(--ping-accent-text);font-size:12px;font-variant-numeric:tabular-nums}
 .ic-world-meta b[hidden] {display:none}
