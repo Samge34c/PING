@@ -1,0 +1,71 @@
+/* Propuesta de tokens · Festival editorial (documentación; NO se carga en la aplicación).
+   Fuente: variables de Figma «PING · Color» (modos Oscuro/Claro) y «PING · Espacio».
+   Los nombres reutilizan las variables --ping-* existentes de brand.css; solo son nuevas
+   las marcadas con «nuevo». Implementar en el bloque 1 del plan, previa decisión registrada. */
+
+:root,
+[data-theme="dark"] {
+  --ping-bg: #101015;
+  --ping-surface: #1B1822;
+  --ping-surface-alt: #2A2533;        /* antes #211D29: más separación de la superficie */
+  --ping-nav-bg: #0B0A0E;
+  --ping-border: #36333E;
+  --ping-control-border: #71657F;
+  --ping-text: #F6F3EE;
+  --ping-muted: #B5B0BE;
+  --ping-primary: #BB9CFF;
+  --ping-focus: #F8EE4F;
+  --ping-yellow-light: #F8EE4F;       /* acción principal: una por pantalla */
+  --ping-accent-text: #0B0A0E;
+  --ping-poster: #F8E836;             /* nuevo · cartel y boleto, igual en ambos temas */
+  --ping-poster-ink: #0B0A0E;         /* nuevo · tinta sobre cartel y pase */
+  --ping-purple: #6A298F;
+  --ping-art-bg: #21132F;
+  --ping-art-text: #F6F3EE;
+  --ping-art-soft: #DCC6F3;           /* nuevo · texto secundario sobre morado/plum/pase */
+  --ping-success: #82D6AB;
+  --ping-wait: #F8EE4F;               /* nuevo · estado de espera */
+  --ping-danger: #FF9AA8;
+  --ping-figure: #F8EE4F;             /* nuevo · separadores del line-up y acentos */
+}
+
+[data-theme="light"] {
+  --ping-bg: #F6F3EE;
+  --ping-surface: #FFFFFF;
+  --ping-surface-alt: #EFE9F4;
+  --ping-nav-bg: #FFFFFF;
+  --ping-border: #D6CFDC;
+  --ping-control-border: #666070;
+  --ping-text: #191620;
+  --ping-muted: #666070;
+  --ping-primary: #7444BA;
+  --ping-focus: #7444BA;
+  --ping-success: #246A49;
+  --ping-wait: #7A6200;
+  --ping-danger: #A52C46;
+  --ping-figure: #6A298F;
+}
+
+/* Superficies de marca fijas: conservan los valores oscuros en ambos temas
+   (equivale al modo Oscuro explícito de Figma en «Pase», «Boleto · talón» y «Puente de afinidad»). */
+.ping-pass,
+.ping-ticket__stub,
+.ping-affinity {
+  --ping-success: #82D6AB;
+  --ping-wait: #F8EE4F;
+  --ping-danger: #FF9AA8;
+  --ping-text: #F6F3EE;
+  --ping-muted: #DCC6F3;
+}
+
+:root {
+  --ping-space-4: 4px;  --ping-space-8: 8px;  --ping-space-12: 12px; --ping-space-16: 16px;
+  --ping-space-20: 20px; --ping-space-24: 24px; --ping-space-32: 32px; --ping-space-40: 40px;
+  --ping-radius-sm: 8px; --ping-radius-md: 12px; --ping-radius-lg: 16px; --ping-radius-pill: 999px;
+  --ping-touch-min: 44px;
+  --ping-ease-out: cubic-bezier(.23, 1, .32, 1);   /* ya usado en DEC-048 */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Movimiento reducido: solo fundidos de 0–100 ms, sin desplazamientos ni escalas. */
+}
