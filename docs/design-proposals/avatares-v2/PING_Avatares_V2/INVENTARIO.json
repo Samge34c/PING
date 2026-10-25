@@ -1,0 +1,11 @@
+{
+  "version": "2.0",
+  "bases_svg": 24,
+  "accesorios_svg": 64,
+  "ejemplos_svg": 16,
+  "laminas_svg": 9,
+  "laminas_png": 9,
+  "paletas_por_animal": 6,
+  "disenos_de_accesorio": 16,
+  "colores_accesorio_en_catalogo": 4
+}
