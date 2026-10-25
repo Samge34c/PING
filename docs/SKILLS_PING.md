@@ -198,3 +198,7 @@ Una tarea no carga las ocho. Un cambio estructural puede usar redesign y, despu�
 ### Qué no se hizo
 
 No se instalaron plugins, colecciones ni servicios; no se actualizó ninguna revisión (Taste ahora publica `design-taste-frontend`; PING conserva su revisión fijada); no se añadieron skills nuevas, porque las ocho cubren el encargo; no se activaron hooks; no se ejecutaron binarios. Evaluación de las quince referencias: `docs/REFERENCIAS_VISUALES_Y_SKILLS.md`.
+
+## logo-design — 24 octubre 2026
+
+Instalada a petición explícita de Samuel para el trabajo de marca V2. Fuente: https://github.com/kaankiziltug/logo-design-skill, commit `734090317a2155c5bf1ae8bd4cc85c6848a0128f` (release 1.4.5), licencia MIT (atribución en `.agents/skills/logo-design/LICENSE`). Copia selectiva con alcance de proyecto: `SKILL.md`, `references/`, `scripts/`, `templates/`, `LICENSE` y `TRADEMARKS.md`. **No** se instaló la biblioteca `assets/library/` (1 432 logotipos de terceros, marcas registradas, solo de referencia), por lo que `search_library.py` no funciona. Scripts revisados: Python estándar; `render_png.py` usa renderizadores locales (aquí Chrome) mediante subprocess, sin red. Sin instalador, plugin ni hooks. Puntero manual en `.claude/skills/logo-design` (`disable-model-invocation: true`). Registro y SHA-256 en `.agents/skill-installation.json`. Uso: conceptos, construcción SVG y pruebas de la propuesta `docs/design-proposals/v2`; la pausa de la skill tras los conceptos se omitió porque el encargo autorizaba elegir sin consulta intermedia.

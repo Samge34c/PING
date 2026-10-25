@@ -1,0 +1,26 @@
+/* Tokens V2 (documentación; NO se carga en la aplicación).
+   Fuente: colección de Figma «PING V2 · Color» (modos Oscuro/Claro). Contrastes medidos en README. */
+:root, [data-theme="dark"] {
+  --ping-bg: #15121C;  --ping-surface: #1D1926;  --ping-surface-alt: #262131;  --ping-nav-bg: #0D0B12;  --ping-night: #0D0B12;
+  --ping-text: #F7F4EF;  --ping-muted: #BDB5CA;  --ping-on-sun: #0D0B12;  --ping-on-grape: #F7F4EF;  --ping-on-grape-soft: #E6D8F5;
+  --ping-border: #3A3347;  --ping-control-border: #7A7088;
+  --ping-primary: #C2A6FF;  --ping-focus: #F8E836;  --ping-indicator: #F8E836;
+  --ping-action: #F8E836;  --ping-action-text: #0D0B12;  --ping-action-pressed: #E2D21C;
+  --ping-purple: #6A298F;  --ping-yellow: #F8E836;  --ping-art-bg: #2A1638;  --ping-brand-ring: #B58CF0;
+  --ping-success: #7FD9A8;  --ping-success-bg: #17302A;
+  --ping-warning: #FFB547;  --ping-warning-bg: #3A2A12;
+  --ping-danger: #FF8FA0;   --ping-danger-bg: #3D1B26;
+  --ping-info: #C2A6FF;     --ping-info-bg: #2A2140;
+}
+[data-theme="light"] {
+  --ping-bg: #F7F4EF;  --ping-surface: #FFFFFF;  --ping-surface-alt: #EEE8F3;  --ping-nav-bg: #FFFFFF;
+  --ping-text: #17141D;  --ping-muted: #5E566B;  --ping-border: #DAD2E2;
+  --ping-primary: #6E3FB8;  --ping-focus: #6E3FB8;  --ping-indicator: #6A298F;  --ping-brand-ring: #6A298F;
+  --ping-success: #1F6B47;  --ping-success-bg: #E3F4EA;
+  --ping-warning: #8A4B00;  --ping-warning-bg: #FFF0D6;
+  --ping-danger: #A3243F;   --ping-danger-bg: #FCE6EA;
+  --ping-info: #6E3FB8;     --ping-info-bg: #EEE6FB;
+}
+/* Tipografía V2 (Manrope): display 40/44, título 28/34, sección 20/26, cuerpo 16/24, control 16/20,
+   ayuda 14/20, etiqueta 13/16, código 28/32 (tracking .10em). Mínimo 13 px. */
+@media (prefers-reduced-motion: reduce) { /* cambios instantáneos o fundido ≤100 ms */ }

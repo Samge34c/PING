@@ -1,227 +1,286 @@
 [
-  {
-    "name": "impeccable",
-    "source": "https://github.com/pbakaus/impeccable",
-    "commit": "5bf0a069dc857e1b5f4b090e004d9d5b231416ca",
-    "source_directory": ".agents/skills/impeccable",
-    "project_directory": ".agents/skills/impeccable",
-    "skill_sha256": "5fb0d412928c03e62d2536adfd878ad6aad6f9ce343956aa4f7164da06da3459",
-    "installation": "manual copy from upstream, project only",
-    "automatic_hooks": false,
-    "license": "Apache-2.0",
-    "dependencies": [
-      "shell launcher",
-      "official native engine (probe: 0.1.15)",
-      "network + curl/wget only if engine absent"
-    ],
-    "version": "4.6.0",
-    "adaptation": "Upstream SKILL.md unchanged; project usage policy in docs/SKILLS_PING.md",
-    "verification": {
-      "manual_read": true,
-      "executor_discovery": false,
-      "engine_probe": {
-        "exit_code": 0,
-        "output": "impeccable-engine 0.1.15"
-      },
-      "hooks_status": {
-        "exit_code": 0,
-        "state": "disabled"
-      }
-    },
-    "notices": "NOTICE.md: ehmo platform-design-skills, MIT"
+ {
+  "name": "impeccable",
+  "source": "https://github.com/pbakaus/impeccable",
+  "commit": "5bf0a069dc857e1b5f4b090e004d9d5b231416ca",
+  "source_directory": ".agents/skills/impeccable",
+  "project_directory": ".agents/skills/impeccable",
+  "skill_sha256": "5fb0d412928c03e62d2536adfd878ad6aad6f9ce343956aa4f7164da06da3459",
+  "installation": "manual copy from upstream, project only",
+  "automatic_hooks": false,
+  "license": "Apache-2.0",
+  "dependencies": [
+   "shell launcher",
+   "official native engine (probe: 0.1.15)",
+   "network + curl/wget only if engine absent"
+  ],
+  "version": "4.6.0",
+  "adaptation": "Upstream SKILL.md unchanged; project usage policy in docs/SKILLS_PING.md",
+  "verification": {
+   "manual_read": true,
+   "executor_discovery": false,
+   "engine_probe": {
+    "exit_code": 0,
+    "output": "impeccable-engine 0.1.15"
+   },
+   "hooks_status": {
+    "exit_code": 0,
+    "state": "disabled"
+   }
   },
-  {
-    "name": "ui-ux-pro-max",
-    "source": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
-    "commit": "56ea9cf174ed86786187daa9de0e6247cb0747e4",
-    "source_directory": ".claude/skills/ui-ux-pro-max",
-    "project_directory": ".agents/skills/ui-ux-pro-max",
-    "skill_sha256": "ea087c341bfb5b23195c7302027268ede86da802554c18a5c4896a6017b439f9",
-    "installation": "manual copy from upstream, project only",
-    "automatic_hooks": false,
-    "license": "MIT",
-    "dependencies": [
-      "Python 3 standard library",
-      "bundled data"
-    ],
-    "version": null,
-    "adaptation": "Upstream SKILL.md unchanged; project usage policy in docs/SKILLS_PING.md",
-    "verification": {
-      "manual_read": true,
-      "executor_discovery": false,
-      "local_search": {
-        "exit_code": 0,
-        "query": "error summary validation",
-        "domain": "ux",
-        "results": 1
-      }
-    }
-  },
-  {
-    "name": "redesign-existing-projects",
-    "source": "https://github.com/Leonxlnx/taste-skill",
-    "commit": "f624f37a8c650b9cc550253104925efe4c8de246",
-    "source_directory": "skills/redesign-skill",
-    "project_directory": ".agents/skills/redesign-existing-projects",
-    "skill_sha256": "a75d547d04595fe97a5d377dddf145d029d51487a4f2a0a5a9d3b532ca3b84cd",
-    "installation": "manual copy from upstream, project only",
-    "automatic_hooks": false,
-    "license": "MIT",
-    "dependencies": [],
-    "version": null,
-    "adaptation": "Upstream SKILL.md unchanged; project usage policy in docs/SKILLS_PING.md",
-    "verification": {
-      "manual_read": true,
-      "executor_discovery": false
-    }
-  },
-  {
-    "name": "systematic-debugging",
-    "source": "https://github.com/obra/superpowers",
-    "commit": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
-    "source_directory": "skills/systematic-debugging",
-    "project_directory": ".agents/skills/systematic-debugging",
-    "skill_sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
-    "license": "MIT",
-    "attribution": "Copyright (c) 2025 Jesse Vincent",
-    "dependencies": [],
-    "referenced_skills": {
-      "superpowers:test-driven-development": "not installed; no automatic chaining",
-      "superpowers:verification-before-completion": "manual local path ../verification-before-completion/SKILL.md"
-    },
-    "optional_helpers": [
-      "find-polluter.sh: Bash + npm test, not run or validated for PING",
-      "condition-based-waiting-example.ts: illustrative TypeScript, not executed"
-    ],
-    "installed_files": [
-      "LICENSE",
-      "PING_NOTES.md",
-      "SKILL.md",
-      "condition-based-waiting-example.ts",
-      "condition-based-waiting.md",
-      "defense-in-depth.md",
-      "find-polluter.sh",
-      "root-cause-tracing.md"
-    ],
-    "installation": "selected upstream files only, project scope",
-    "adaptation": "Upstream files unchanged; PING_NOTES.md identifies integration policy",
-    "automatic_hooks": false,
-    "verification": {
-      "manual_read": true,
-      "executor_discovery": false,
-      "runtime_cli": "none; instructions only"
-    },
-    "upstream_files": [
-      "SKILL.md",
-      "condition-based-waiting-example.ts",
-      "condition-based-waiting.md",
-      "defense-in-depth.md",
-      "find-polluter.sh",
-      "root-cause-tracing.md"
-    ],
-    "local_files": [
-      "PING_NOTES.md"
-    ],
-    "source_license_path": "LICENSE"
-  },
-  {
-    "name": "verification-before-completion",
-    "source": "https://github.com/obra/superpowers",
-    "commit": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
-    "source_directory": "skills/verification-before-completion",
-    "project_directory": ".agents/skills/verification-before-completion",
-    "skill_sha256": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
-    "license": "MIT",
-    "attribution": "Copyright (c) 2025 Jesse Vincent",
-    "dependencies": [],
-    "referenced_skills": {},
-    "optional_helpers": [],
-    "installed_files": [
-      "LICENSE",
-      "PING_NOTES.md",
-      "SKILL.md"
-    ],
-    "installation": "selected upstream files only, project scope",
-    "adaptation": "Upstream files unchanged; PING_NOTES.md identifies integration policy",
-    "automatic_hooks": false,
-    "verification": {
-      "manual_read": true,
-      "executor_discovery": false,
-      "runtime_cli": "none; instructions only"
-    },
-    "upstream_files": [
-      "SKILL.md"
-    ],
-    "local_files": [
-      "PING_NOTES.md"
-    ],
-    "source_license_path": "LICENSE"
-  },
-  {
-    "name": "ping-efficient-work",
-    "source": "local: PING, user-requested project skill",
-    "version": "1.0.0",
-    "commit": null,
-    "project_directory": ".agents/skills/ping-efficient-work",
-    "skill_sha256": "766706ab61615a4f75a5180706102d1e446735d4c8be25a13dd777f053b9e662",
-    "license": "MIT",
-    "attribution": "Copyright (c) 2026 Proyecto PING",
-    "dependencies": [
-      "rg",
-      "Git and tools already required by the task"
-    ],
-    "installation": "created for project; revision preserved by PING Git history",
-    "automatic_hooks": false,
-    "verification": {
-      "manual_read": true,
-      "executor_discovery": false,
-      "runtime_cli": "none; instructions only"
-    }
-  },
-  {
-    "name": "mobile-native",
-    "source": "https://github.com/emilkowalski/skills",
-    "commit": "2d228630ba1446365f614a108cb8252f1feda202",
-    "source_directory": "skills/mobile-native",
-    "project_directory": ".agents/skills/mobile-native",
-    "skill_sha256": "888b7651d66d66dbac4e72b7c554638eb19bd971d686d6cbdf030a5ef3788f55",
-    "license": "MIT",
-    "attribution": "Copyright (c) 2026 Emil Kowalski",
-    "dependencies": [],
-    "installed_files": [
-      "SKILL.md",
-      "LICENSE"
-    ],
-    "automatic_hooks": false,
-    "installation": "selected instructions and root license, project scope; no global installer",
-    "adaptation": "Upstream SKILL.md unchanged; scope and manual usage in docs/SKILLS_PING.md",
-    "verification": {
-      "manual_read": true,
-      "executor_discovery": false,
-      "runtime_cli": "none; instructions only"
-    }
-  },
-  {
-    "name": "emil-design-eng",
-    "source": "https://github.com/emilkowalski/skills",
-    "commit": "2d228630ba1446365f614a108cb8252f1feda202",
-    "source_directory": "skills/emil-design-eng",
-    "project_directory": ".agents/skills/emil-design-eng",
-    "skill_sha256": "ffbe68e6007fb42cb8149f089b400a1ca007d59ba23e8948e2be4476f3175939",
-    "license": "MIT",
-    "attribution": "Copyright (c) 2026 Emil Kowalski",
-    "dependencies": [],
-    "installed_files": [
-      "SKILL.md",
-      "LICENSE"
-    ],
-    "automatic_hooks": false,
-    "installation": "selected instructions and root license, project scope; no global installer",
-    "adaptation": "Upstream SKILL.md unchanged; scope and manual usage in docs/SKILLS_PING.md",
-    "verification": {
-      "manual_read": true,
-      "executor_discovery": false,
-      "runtime_cli": "none; instructions only"
-    }
+  "notices": "NOTICE.md: ehmo platform-design-skills, MIT"
+ },
+ {
+  "name": "ui-ux-pro-max",
+  "source": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+  "commit": "56ea9cf174ed86786187daa9de0e6247cb0747e4",
+  "source_directory": ".claude/skills/ui-ux-pro-max",
+  "project_directory": ".agents/skills/ui-ux-pro-max",
+  "skill_sha256": "ea087c341bfb5b23195c7302027268ede86da802554c18a5c4896a6017b439f9",
+  "installation": "manual copy from upstream, project only",
+  "automatic_hooks": false,
+  "license": "MIT",
+  "dependencies": [
+   "Python 3 standard library",
+   "bundled data"
+  ],
+  "version": null,
+  "adaptation": "Upstream SKILL.md unchanged; project usage policy in docs/SKILLS_PING.md",
+  "verification": {
+   "manual_read": true,
+   "executor_discovery": false,
+   "local_search": {
+    "exit_code": 0,
+    "query": "error summary validation",
+    "domain": "ux",
+    "results": 1
+   }
   }
+ },
+ {
+  "name": "redesign-existing-projects",
+  "source": "https://github.com/Leonxlnx/taste-skill",
+  "commit": "f624f37a8c650b9cc550253104925efe4c8de246",
+  "source_directory": "skills/redesign-skill",
+  "project_directory": ".agents/skills/redesign-existing-projects",
+  "skill_sha256": "a75d547d04595fe97a5d377dddf145d029d51487a4f2a0a5a9d3b532ca3b84cd",
+  "installation": "manual copy from upstream, project only",
+  "automatic_hooks": false,
+  "license": "MIT",
+  "dependencies": [],
+  "version": null,
+  "adaptation": "Upstream SKILL.md unchanged; project usage policy in docs/SKILLS_PING.md",
+  "verification": {
+   "manual_read": true,
+   "executor_discovery": false
+  }
+ },
+ {
+  "name": "systematic-debugging",
+  "source": "https://github.com/obra/superpowers",
+  "commit": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
+  "source_directory": "skills/systematic-debugging",
+  "project_directory": ".agents/skills/systematic-debugging",
+  "skill_sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202",
+  "license": "MIT",
+  "attribution": "Copyright (c) 2025 Jesse Vincent",
+  "dependencies": [],
+  "referenced_skills": {
+   "superpowers:test-driven-development": "not installed; no automatic chaining",
+   "superpowers:verification-before-completion": "manual local path ../verification-before-completion/SKILL.md"
+  },
+  "optional_helpers": [
+   "find-polluter.sh: Bash + npm test, not run or validated for PING",
+   "condition-based-waiting-example.ts: illustrative TypeScript, not executed"
+  ],
+  "installed_files": [
+   "LICENSE",
+   "PING_NOTES.md",
+   "SKILL.md",
+   "condition-based-waiting-example.ts",
+   "condition-based-waiting.md",
+   "defense-in-depth.md",
+   "find-polluter.sh",
+   "root-cause-tracing.md"
+  ],
+  "installation": "selected upstream files only, project scope",
+  "adaptation": "Upstream files unchanged; PING_NOTES.md identifies integration policy",
+  "automatic_hooks": false,
+  "verification": {
+   "manual_read": true,
+   "executor_discovery": false,
+   "runtime_cli": "none; instructions only"
+  },
+  "upstream_files": [
+   "SKILL.md",
+   "condition-based-waiting-example.ts",
+   "condition-based-waiting.md",
+   "defense-in-depth.md",
+   "find-polluter.sh",
+   "root-cause-tracing.md"
+  ],
+  "local_files": [
+   "PING_NOTES.md"
+  ],
+  "source_license_path": "LICENSE"
+ },
+ {
+  "name": "verification-before-completion",
+  "source": "https://github.com/obra/superpowers",
+  "commit": "bb92a77741419a4ab5f06e711a283343f1ada0c3",
+  "source_directory": "skills/verification-before-completion",
+  "project_directory": ".agents/skills/verification-before-completion",
+  "skill_sha256": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3",
+  "license": "MIT",
+  "attribution": "Copyright (c) 2025 Jesse Vincent",
+  "dependencies": [],
+  "referenced_skills": {},
+  "optional_helpers": [],
+  "installed_files": [
+   "LICENSE",
+   "PING_NOTES.md",
+   "SKILL.md"
+  ],
+  "installation": "selected upstream files only, project scope",
+  "adaptation": "Upstream files unchanged; PING_NOTES.md identifies integration policy",
+  "automatic_hooks": false,
+  "verification": {
+   "manual_read": true,
+   "executor_discovery": false,
+   "runtime_cli": "none; instructions only"
+  },
+  "upstream_files": [
+   "SKILL.md"
+  ],
+  "local_files": [
+   "PING_NOTES.md"
+  ],
+  "source_license_path": "LICENSE"
+ },
+ {
+  "name": "ping-efficient-work",
+  "source": "local: PING, user-requested project skill",
+  "version": "1.0.0",
+  "commit": null,
+  "project_directory": ".agents/skills/ping-efficient-work",
+  "skill_sha256": "766706ab61615a4f75a5180706102d1e446735d4c8be25a13dd777f053b9e662",
+  "license": "MIT",
+  "attribution": "Copyright (c) 2026 Proyecto PING",
+  "dependencies": [
+   "rg",
+   "Git and tools already required by the task"
+  ],
+  "installation": "created for project; revision preserved by PING Git history",
+  "automatic_hooks": false,
+  "verification": {
+   "manual_read": true,
+   "executor_discovery": false,
+   "runtime_cli": "none; instructions only"
+  }
+ },
+ {
+  "name": "mobile-native",
+  "source": "https://github.com/emilkowalski/skills",
+  "commit": "2d228630ba1446365f614a108cb8252f1feda202",
+  "source_directory": "skills/mobile-native",
+  "project_directory": ".agents/skills/mobile-native",
+  "skill_sha256": "888b7651d66d66dbac4e72b7c554638eb19bd971d686d6cbdf030a5ef3788f55",
+  "license": "MIT",
+  "attribution": "Copyright (c) 2026 Emil Kowalski",
+  "dependencies": [],
+  "installed_files": [
+   "SKILL.md",
+   "LICENSE"
+  ],
+  "automatic_hooks": false,
+  "installation": "selected instructions and root license, project scope; no global installer",
+  "adaptation": "Upstream SKILL.md unchanged; scope and manual usage in docs/SKILLS_PING.md",
+  "verification": {
+   "manual_read": true,
+   "executor_discovery": false,
+   "runtime_cli": "none; instructions only"
+  }
+ },
+ {
+  "name": "emil-design-eng",
+  "source": "https://github.com/emilkowalski/skills",
+  "commit": "2d228630ba1446365f614a108cb8252f1feda202",
+  "source_directory": "skills/emil-design-eng",
+  "project_directory": ".agents/skills/emil-design-eng",
+  "skill_sha256": "ffbe68e6007fb42cb8149f089b400a1ca007d59ba23e8948e2be4476f3175939",
+  "license": "MIT",
+  "attribution": "Copyright (c) 2026 Emil Kowalski",
+  "dependencies": [],
+  "installed_files": [
+   "SKILL.md",
+   "LICENSE"
+  ],
+  "automatic_hooks": false,
+  "installation": "selected instructions and root license, project scope; no global installer",
+  "adaptation": "Upstream SKILL.md unchanged; scope and manual usage in docs/SKILLS_PING.md",
+  "verification": {
+   "manual_read": true,
+   "executor_discovery": false,
+   "runtime_cli": "none; instructions only"
+  }
+ },
+ {
+  "name": "logo-design",
+  "source": "https://github.com/kaankiziltug/logo-design-skill",
+  "commit": "734090317a2155c5bf1ae8bd4cc85c6848a0128f",
+  "version": "1.4.5",
+  "source_directory": "skills/logo-design",
+  "project_directory": ".agents/skills/logo-design",
+  "skill_sha256": "65ec4bd58732e8cc11e244724e8666de78764b973f6d3b03b233904639cf47c6",
+  "license": "MIT",
+  "attribution": "Copyright (c) 2026 kaankiziltug",
+  "dependencies": [
+   "Python 3 standard library",
+   "local SVG renderer (cairosvg, rsvg-convert, Inkscape or Chrome) only for render_png.py"
+  ],
+  "installed_files": [
+   "LICENSE",
+   "SKILL.md",
+   "TRADEMARKS.md",
+   "references/color.md",
+   "references/critique.md",
+   "references/discovery-brief.md",
+   "references/identity-system.md",
+   "references/library-guide.md",
+   "references/mark-types.md",
+   "references/presentation-delivery.md",
+   "references/principles.md",
+   "references/process.md",
+   "references/redesign.md",
+   "references/svg-construction.md",
+   "references/testing-checklist.md",
+   "references/typography.md",
+   "references/visual-techniques.md",
+   "scripts/build_catalog.py",
+   "scripts/concept_sheet.py",
+   "scripts/export_variants.py",
+   "scripts/presentation_board.py",
+   "scripts/preview_sheet.py",
+   "scripts/render_png.py",
+   "scripts/search_library.py",
+   "scripts/svg_audit.py",
+   "scripts/svglib.py",
+   "templates/brand-guidelines-template.md",
+   "templates/presentation-spec.example.json"
+  ],
+  "excluded": [
+   "skills/logo-design/assets/library/ (1,432 third-party trademark SVGs, reference only; see TRADEMARKS.md)",
+   "docs/",
+   "README.md",
+   ".claude-plugin/",
+   ".github/"
+  ],
+  "automatic_hooks": false,
+  "installation": "selected files from pinned commit, project scope; no installer, no plugin",
+  "adaptation": "Upstream SKILL.md unchanged; manual invocation pointer in .claude/skills/logo-design",
+  "verification": {
+   "manual_read": true,
+   "scripts_reviewed": "stdlib only; render_png.py calls local renderers via subprocess; no network"
+  }
+ }
 ]
