@@ -2911,3 +2911,28 @@ body.participant-entry-page {padding-left:0}
 @media (hover:hover) and (pointer:fine) {.ic-world:hover,.ic-sub:hover,.ic-back:hover,.interest-category-selector .interest-row-content:hover {border-color:var(--ping-primary)}}
 @media (prefers-reduced-motion:no-preference) {.ic-world,.ic-sub,.ic-back,.ic-chip {transition:transform 120ms cubic-bezier(.23,1,.32,1),background-color 120ms ease-out,border-color 120ms ease-out}.ic-world:active,.ic-sub:active,.ic-back:active,.ic-chip:active {transform:scale(.97)}}
 @media (prefers-reduced-motion:reduce) {.ic-chip[data-new] {animation:none}}
+
+/* DEC-057 · Pareja de avatares en la propuesta: un solo tamaño, aro fino, vínculo y estados reales (data-pair-state). */
+.match-pair{--pair-size:clamp(88px,27vw,112px);--pair-ring-gap:6px;position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);align-items:start;gap:8px;max-width:420px;margin:32px auto}
+.match-pair::before{content:"";position:absolute;z-index:-1;left:50%;top:calc(var(--pair-size) / 2);width:calc(var(--pair-size) * 3.2);height:calc(var(--pair-size) * 1.7);transform:translate(-50%,-50%);background:radial-gradient(closest-side,var(--ping-glow),transparent);pointer-events:none}
+.match-pair .match-person{display:flex;flex-direction:column;align-items:center;min-width:0;text-align:center}
+.match-pair .match-person h2{margin:16px 0 0;font-size:22px;line-height:1.2}
+.pair-avatar{--pair-size-own:var(--pair-size,52px);position:relative;display:inline-grid;place-items:center;width:var(--pair-size-own);height:var(--pair-size-own);flex:0 0 auto}
+.pair-avatar .preset-avatar.avatar-public{width:100%;height:100%;flex-basis:auto;border-radius:50%;overflow:hidden}
+.pair-avatar .preset-avatar img{inset:8%;width:84%;height:84%}
+.pair-ring{position:absolute;inset:calc(var(--pair-ring-gap,4px) * -1);border:1.5px dashed var(--ping-primary);border-radius:50%;pointer-events:none}
+.pair-avatar.is-connected .pair-ring{border-style:solid}
+.pair-initial{position:absolute;inset:0;display:none;place-items:center;border-radius:50%;background:var(--ping-badge-bg);color:var(--ping-primary);font-weight:800;font-size:calc(var(--pair-size-own) * .4)}
+.pair-avatar.is-fallback .pair-initial{display:grid}.pair-avatar.is-fallback .preset-avatar img{visibility:hidden}
+.pair-link{position:relative;align-self:start;margin-top:calc(var(--pair-size) / 2 - 1px);width:100%;height:2px;border-radius:1px;background:linear-gradient(90deg,transparent,var(--ping-primary) 35%,var(--ping-primary) 65%,transparent);pointer-events:none}
+.pair-link::after{content:"";position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--ping-accent);box-shadow:0 0 0 3px var(--ping-bg)}
+.am-person .pair-avatar{--pair-size:52px;--pair-ring-gap:4px}
+@media(max-width:767px){.am-person .pair-avatar{--pair-size:44px;--pair-ring-gap:3px}}
+@media (prefers-reduced-motion:no-preference){
+  /* Stepped rotation, 15 updates/s (1° ≈ 1 px per step): looks continuous at this speed for ~1/5 of the compositor work of a 60 fps linear spin (measured). */
+  .match-pair[data-pair-state="waiting"] .pair-ring{animation:pair-spin 24s steps(360) infinite}
+  .match-pair[data-pair-state="waiting"] .match-person:last-child .pair-ring{animation-direction:reverse}
+  .pair-avatar.is-celebrating::after{content:"";position:absolute;inset:calc(var(--pair-ring-gap,4px) * -1);border:2px solid var(--ping-accent);border-radius:50%;pointer-events:none;animation:pair-wave .9s cubic-bezier(.23,1,.32,1) forwards}
+}
+@keyframes pair-spin{to{transform:rotate(1turn)}}
+@keyframes pair-wave{from{transform:scale(1);opacity:.85}to{transform:scale(1.7);opacity:0}}

@@ -1,0 +1,5 @@
+{
+  "smtp_local_message": true,
+  "stored_in_announced_folder": true,
+  "html_escaped": true
+}

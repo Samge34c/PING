@@ -1,0 +1,312 @@
+{
+ "url": "/matches/1",
+ "espera-390": {
+  "state": "waiting",
+  "avatars": [
+   [
+    105.3,
+    105.3,
+    345
+   ],
+   [
+    105.3,
+    105.3,
+    345
+   ]
+  ],
+  "rings": [
+   [
+    117,
+    "dashed",
+    "pair-spin",
+    "running"
+   ],
+   [
+    123,
+    "dashed",
+    "pair-spin",
+    "running"
+   ]
+  ],
+  "imgsInsideAndStill": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "sw": 390,
+  "cw": 390,
+  "animations": [
+   null,
+   "rise",
+   "pair-spin",
+   "pair-spin"
+  ]
+ },
+ "espera-360": {
+  "state": "waiting",
+  "avatars": [
+   [
+    97.2,
+    97.2,
+    345
+   ],
+   [
+    97.2,
+    97.2,
+    345
+   ]
+  ],
+  "rings": [
+   [
+    109,
+    "dashed",
+    "pair-spin",
+    "running"
+   ],
+   [
+    115,
+    "dashed",
+    "pair-spin",
+    "running"
+   ]
+  ],
+  "imgsInsideAndStill": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "sw": 360,
+  "cw": 360,
+  "animations": [
+   null,
+   "rise",
+   "pair-spin",
+   "pair-spin"
+  ]
+ },
+ "espera-1280": {
+  "state": "waiting",
+  "avatars": [
+   [
+    112,
+    112,
+    331
+   ],
+   [
+    112,
+    112,
+    331
+   ]
+  ],
+  "rings": [
+   [
+    124,
+    "dashed",
+    "pair-spin",
+    "running"
+   ],
+   [
+    130,
+    "dashed",
+    "pair-spin",
+    "running"
+   ]
+  ],
+  "imgsInsideAndStill": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "sw": 1280,
+  "cw": 1280,
+  "animations": [
+   null,
+   "rise",
+   "pair-spin",
+   "pair-spin"
+  ]
+ },
+ "espera-390-x13": {
+  "state": "waiting",
+  "avatars": [
+   [
+    105.3,
+    105.3,
+    384
+   ],
+   [
+    105.3,
+    105.3,
+    384
+   ]
+  ],
+  "rings": [
+   [
+    123,
+    "dashed",
+    "pair-spin",
+    "running"
+   ],
+   [
+    129,
+    "dashed",
+    "pair-spin",
+    "running"
+   ]
+  ],
+  "imgsInsideAndStill": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "sw": 390,
+  "cw": 390,
+  "animations": [
+   "pair-spin",
+   "pair-spin"
+  ]
+ },
+ "ahora-no-alcanzable-390": {
+  "visible": false,
+  "h": 48,
+  "w": 97
+ },
+ "ahora-no-alcanzable-360": {
+  "visible": false,
+  "h": 48,
+  "w": 97
+ },
+ "movimiento-reducido": {
+  "state": "waiting",
+  "avatars": [
+   [
+    105.3,
+    105.3,
+    344
+   ],
+   [
+    105.3,
+    105.3,
+    344
+   ]
+  ],
+  "rings": [
+   [
+    117,
+    "dashed",
+    "none",
+    "running"
+   ],
+   [
+    117,
+    "dashed",
+    "none",
+    "running"
+   ]
+  ],
+  "imgsInsideAndStill": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "sw": 390,
+  "cw": 390,
+  "animations": []
+ },
+ "recurso-fallido": {
+  "fallback": 1,
+  "inicial": "grid",
+  "size": [
+   105,
+   105
+  ]
+ },
+ "recarga-espera": {
+  "state": "waiting",
+  "celebra": false
+ },
+ "B-propuesta": {
+  "state": "offer",
+  "avatars": [
+   [
+    105.3,
+    105.3,
+    345
+   ],
+   [
+    105.3,
+    105.3,
+    345
+   ]
+  ],
+  "rings": [
+   [
+    117,
+    "dashed",
+    "none",
+    "running"
+   ],
+   [
+    117,
+    "dashed",
+    "none",
+    "running"
+   ]
+  ],
+  "imgsInsideAndStill": [
+   true,
+   true,
+   true,
+   true,
+   true,
+   true
+  ],
+  "sw": 390,
+  "cw": 390,
+  "animations": [
+   null,
+   "rise"
+  ]
+ },
+ "B-posts-al-aceptar-tres-veces": [
+  "/matches/1/accept"
+ ],
+ "B-tras-aceptar": {
+  "fase": "ACTIVE",
+  "celebra": true,
+  "aro": "solid",
+  "texto": "os · Aceptaron ambos"
+ },
+ "A-recarga-por-live-js-ms": 2193,
+ "A-tras-recarga": {
+  "fase": "ACTIVE",
+  "celebra": true
+ },
+ "A-tras-onda": {
+  "celebra": false,
+  "animaciones": 0
+ },
+ "frames": 119,
+ "A-recarga-activa": {
+  "celebra": false,
+  "aro": "solid"
+ },
+ "A-reentrada-activa": {
+  "celebra": false
+ }
+}

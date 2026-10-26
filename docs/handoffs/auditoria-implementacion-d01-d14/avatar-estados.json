@@ -1,0 +1,141 @@
+{
+  "rejected": {
+    "chip": "Probando · sin guardar",
+    "undoDisabled": false,
+    "selected": [
+      [
+        "animal",
+        "nutria"
+      ],
+      [
+        "palette",
+        "coral"
+      ],
+      [
+        "head",
+        "gorro"
+      ],
+      [
+        "headColor",
+        "violeta"
+      ],
+      [
+        "audio",
+        "none"
+      ],
+      [
+        "audioColor",
+        "violeta"
+      ],
+      [
+        "face",
+        "none"
+      ],
+      [
+        "faceColor",
+        "violeta"
+      ],
+      [
+        "neck",
+        "none"
+      ],
+      [
+        "neckColor",
+        "violeta"
+      ]
+    ],
+    "error": "Los auriculares no combinan con gorro tejido, gorra, sombrero bucket ni vincha: se cruzan. Elige solo una de las dos piezas."
+  },
+  "undone": {
+    "chip": "Tu avatar guardado",
+    "selected": [
+      [
+        "animal",
+        "conejo"
+      ],
+      [
+        "palette",
+        "dorado"
+      ],
+      [
+        "head",
+        "bucket"
+      ],
+      [
+        "headColor",
+        "violeta"
+      ],
+      [
+        "audio",
+        "none"
+      ],
+      [
+        "audioColor",
+        "violeta"
+      ],
+      [
+        "face",
+        "none"
+      ],
+      [
+        "faceColor",
+        "violeta"
+      ],
+      [
+        "neck",
+        "none"
+      ],
+      [
+        "neckColor",
+        "violeta"
+      ]
+    ]
+  },
+  "persisted": [
+    [
+      "animal",
+      "nutria"
+    ],
+    [
+      "palette",
+      "coral"
+    ],
+    [
+      "head",
+      "lazo"
+    ],
+    [
+      "headColor",
+      "menta"
+    ],
+    [
+      "audio",
+      "none"
+    ],
+    [
+      "audioColor",
+      "violeta"
+    ],
+    [
+      "face",
+      "none"
+    ],
+    [
+      "faceColor",
+      "violeta"
+    ],
+    [
+      "neck",
+      "none"
+    ],
+    [
+      "neckColor",
+      "violeta"
+    ]
+  ],
+  "incompatible": {
+    "head": "none",
+    "audio": "auriculares",
+    "notice": "Quitamos «Gorro tejido»: no combina con «Auriculares» porque se cruzan. Puedes elegir otra pieza."
+  }
+}

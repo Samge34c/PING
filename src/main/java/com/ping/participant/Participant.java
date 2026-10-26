@@ -36,8 +36,23 @@ public class Participant {
     @Column(nullable=false,length=16) private String avatarHat="none";
     @Column(nullable=false,length=16) private String avatarAccessory="none";
     @Column(nullable=false,length=16) private String avatarBackground="violeta";
-    public Avatar getAvatar(){return new Avatar(avatarAnimal,avatarHat,avatarAccessory,avatarBackground);}
-    public void avatar(Avatar a){avatarAnimal=a.animal();avatarHat=a.hat();avatarAccessory=a.accessory();avatarBackground=a.background();}
+    // DEC-058: estilo del avatar. "preset" muestra el catálogo anterior (valores conservados); "v3" muestra las columnas avatar_v3_*.
+    @Column(name="avatar_style",nullable=false,length=8) private String avatarStyle="preset";
+    @Column(name="avatar_v3_animal",length=16) private String v3Animal;
+    @Column(name="avatar_v3_palette",length=16) private String v3Palette;
+    @Column(name="avatar_v3_head",length=16) private String v3Head;
+    @Column(name="avatar_v3_head_color",length=16) private String v3HeadColor;
+    @Column(name="avatar_v3_audio",length=16) private String v3Audio;
+    @Column(name="avatar_v3_audio_color",length=16) private String v3AudioColor;
+    @Column(name="avatar_v3_face",length=16) private String v3Face;
+    @Column(name="avatar_v3_face_color",length=16) private String v3FaceColor;
+    @Column(name="avatar_v3_neck",length=16) private String v3Neck;
+    @Column(name="avatar_v3_neck_color",length=16) private String v3NeckColor;
+    public Avatar getAvatar(){var preset=new Avatar(avatarAnimal,avatarHat,avatarAccessory,avatarBackground);return "v3".equals(avatarStyle)&&v3Animal!=null?preset.withV3(new AvatarV3(v3Animal,v3Palette,v3Head,v3HeadColor,v3Audio,v3AudioColor,v3Face,v3FaceColor,v3Neck,v3NeckColor)):preset;}
+    /** Guarda los campos preset y, si llega un avatar V3, pasa a mostrarlo; un avatar sin V3 vuelve al estilo preset sin borrar el último V3 guardado. */
+    public void avatar(Avatar a){avatarAnimal=a.animal();avatarHat=a.hat();avatarAccessory=a.accessory();avatarBackground=a.background();
+        var v=a.v3();if(v==null){avatarStyle="preset";return;}
+        avatarStyle="v3";v3Animal=v.animal();v3Palette=v.palette();v3Head=v.head();v3HeadColor=v.headColor();v3Audio=v.audio();v3AudioColor=v.audioColor();v3Face=v.face();v3FaceColor=v.faceColor();v3Neck=v.neck();v3NeckColor=v.neckColor();}
     @Version private long version;
     @ManyToMany
     @JoinTable(name = "participant_interests", joinColumns = @JoinColumn(name = "participant_id"), inverseJoinColumns = @JoinColumn(name = "interest_id"))

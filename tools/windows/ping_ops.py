@@ -427,6 +427,11 @@ def parser():
 
 
 def main(argv=None):
+    # One operational entry point: Start-Ping.ps1 and the root double-click files use this.
+    arguments = sys.argv[1:] if argv is None else argv
+    if arguments and arguments[0] in ('start', 'stop', 'configure', 'forget', 'serve', 'firewall', 'trust-pc'):
+        from ping_launcher import main as launch
+        return launch(arguments)
     args = parser().parse_args(argv)
     try:
         actions = {'versions':client_versions,'config':lambda options:safe_config(options.for_startup),'check-db':check_database,'backup':backup_database,'restore':restore_database}

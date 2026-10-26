@@ -1,0 +1,11 @@
+{
+  "jarSha256": "c04fce5d2428ecf0fb44a543406f793b3a0a5c5a1d2f24c3c42ac11583283867",
+  "jarModified": "2026-10-25T20:41:53.541Z",
+  "resourceCount": 489,
+  "resourceMismatches": [],
+  "classes": 177,
+  "compiledMismatches": [],
+  "javaSourceNewest": "2026-10-25T20:40:17.871Z",
+  "propertiesLauncherPresent": true,
+  "licensePackaging": "META-INF at jar root checked"
+}

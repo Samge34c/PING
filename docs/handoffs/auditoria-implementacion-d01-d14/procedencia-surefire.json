@@ -1,0 +1,307 @@
+{
+  "suites": 37,
+  "tests": 309,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "earliest": "2026-10-25T20:41:06.791Z",
+  "latest": "2026-10-25T20:41:51.443Z",
+  "reports": [
+    {
+      "file": "TEST-com.ping.auth.AccountSecurityTests.xml",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:06.791Z"
+    },
+    {
+      "file": "TEST-com.ping.auth.OAuthCancellationTests.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:08.038Z"
+    },
+    {
+      "file": "TEST-com.ping.demo.DemoImprovementTests.xml",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:11.126Z"
+    },
+    {
+      "file": "TEST-com.ping.demo.EventExperienceTests.xml",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:14.931Z"
+    },
+    {
+      "file": "TEST-com.ping.demo.RecognitionHintTests.xml",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:16.177Z"
+    },
+    {
+      "file": "TEST-com.ping.entry.EventEntryFlowTests.xml",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:17.749Z"
+    },
+    {
+      "file": "TEST-com.ping.entry.ParticipantEntryTests.xml",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:19.019Z"
+    },
+    {
+      "file": "TEST-com.ping.event.EncounterMigrationTests.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:19.107Z"
+    },
+    {
+      "file": "TEST-com.ping.event.EventEntryMigrationTests.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:19.258Z"
+    },
+    {
+      "file": "TEST-com.ping.event.EventTests.xml",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:20.193Z"
+    },
+    {
+      "file": "TEST-com.ping.event.WorkEditorTests.xml",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:21.004Z"
+    },
+    {
+      "file": "TEST-com.ping.floorplan.FloorplanMigrationTests.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:21.110Z"
+    },
+    {
+      "file": "TEST-com.ping.floorplan.FloorplanTests.xml",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:22.378Z"
+    },
+    {
+      "file": "TEST-com.ping.floorplan.FloorplanViewTests.xml",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:23.267Z"
+    },
+    {
+      "file": "TEST-com.ping.floorplan.FloorplanWebTests.xml",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:24.214Z"
+    },
+    {
+      "file": "TEST-com.ping.interest.InterestCategoryAdminTests.xml",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:25.299Z"
+    },
+    {
+      "file": "TEST-com.ping.interest.InterestCategoryMigrationTests.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:25.369Z"
+    },
+    {
+      "file": "TEST-com.ping.interest.InterestCategoryTests.xml",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:26.040Z"
+    },
+    {
+      "file": "TEST-com.ping.interest.InterestTests.xml",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:26.929Z"
+    },
+    {
+      "file": "TEST-com.ping.match.EncounterConfigurationTests.xml",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:27.873Z"
+    },
+    {
+      "file": "TEST-com.ping.match.MatchCompletionSagaTests.xml",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:29.804Z"
+    },
+    {
+      "file": "TEST-com.ping.match.MatchLiveStateTests.xml",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:31.736Z"
+    },
+    {
+      "file": "TEST-com.ping.match.MatchTests.xml",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:33.882Z"
+    },
+    {
+      "file": "TEST-com.ping.match.SofaDemoTests.xml",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:35.490Z"
+    },
+    {
+      "file": "TEST-com.ping.match.StructuredEncounterTests.xml",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:36.423Z"
+    },
+    {
+      "file": "TEST-com.ping.match.VariableRewardTests.xml",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:37.615Z"
+    },
+    {
+      "file": "TEST-com.ping.moderation.FinalMvpTests.xml",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:39.597Z"
+    },
+    {
+      "file": "TEST-com.ping.participant.AvatarV3Tests.xml",
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:41.416Z"
+    },
+    {
+      "file": "TEST-com.ping.participant.ParticipantTests.xml",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:42.405Z"
+    },
+    {
+      "file": "TEST-com.ping.PingApplicationTests.xml",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:42.639Z"
+    },
+    {
+      "file": "TEST-com.ping.reward.EventBenefitTests.xml",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:43.357Z"
+    },
+    {
+      "file": "TEST-com.ping.reward.RewardTests.xml",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:45.072Z"
+    },
+    {
+      "file": "TEST-com.ping.verification.VerificationTests.xml",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:49.225Z"
+    },
+    {
+      "file": "TEST-com.ping.verification.WorkIntegrationTests.xml",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:50.652Z"
+    },
+    {
+      "file": "TEST-com.ping.web.PagePresentationTests.xml",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:50.657Z"
+    },
+    {
+      "file": "TEST-com.ping.web.PublicResourceTests.xml",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:50.714Z"
+    },
+    {
+      "file": "TEST-com.ping.web.RecoveryWebTests.xml",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "mtime": "2026-10-25T20:41:51.443Z"
+    }
+  ]
+}

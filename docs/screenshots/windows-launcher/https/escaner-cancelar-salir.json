@@ -1,0 +1,48 @@
+{
+ "activa": {
+  "state": "active",
+  "running": "true",
+  "status": "Apunta al QR. No enviamos imágenes ni abrimos enlaces externos.",
+  "video": true,
+  "start": false,
+  "cancelVisible": true
+ },
+ "cancelar": {
+  "state": "idle",
+  "running": "false",
+  "status": "Cámara detenida. Puedes introducir el código.",
+  "video": false,
+  "start": true,
+  "cancelVisible": false,
+  "tracksTerminados": true
+ },
+ "reintento-tras-cancelar": {
+  "state": "active",
+  "running": "true",
+  "status": "Apunta al QR. No enviamos imágenes ni abrimos enlaces externos.",
+  "video": true,
+  "start": false,
+  "cancelVisible": true
+ },
+ "salir-pantalla": {
+  "state": "idle",
+  "running": "false",
+  "status": "Cámara detenida al salir de la pantalla. Puedes reabrirla.",
+  "video": false,
+  "start": true,
+  "cancelVisible": false,
+  "tracksTerminados": true
+ },
+ "reabrir-al-volver": {
+  "state": "active",
+  "running": "true",
+  "status": "Apunta al QR. No enviamos imágenes ni abrimos enlaces externos.",
+  "video": true,
+  "start": false,
+  "cancelVisible": true
+ },
+ "doble-pulsacion-no-abre-otra": {
+  "pistasVideo": 1,
+  "estado": "active"
+ }
+}

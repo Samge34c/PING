@@ -1,0 +1,6 @@
+interface:
+  display_name: "Emil Design Engineering"
+  short_description: "Interacción y movimiento breve para pantallas de PING"
+
+policy:
+  allow_implicit_invocation: false

@@ -1,8 +1,10 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Entra a tu evento')}"></head><body class="participant-entry-page"><header th:replace="~{entry/interests :: topbar}"></header>
-<main id="main-content" class="container pe-page"><a class="pi-back" th:href="@{/}">← Inicio</a><p class="pe-step">1 de 3 · Tu evento</p><h1>El encuentro empieza<br>en tu evento.</h1><p class="pe-intro">Escanea su QR con la cámara o escribe el código que te compartieron.</p>
+<!-- DEC-058 · D06-1: «Únete a tu evento» (Figma 19:337) con tokens V2; mismo formulario, escáner y validación. -->
+<main id="main-content" class="container pe-page fe-join"><a class="pi-back" th:href="@{/}">← Inicio</a><p class="pe-step">1 de 3 · Tu evento</p><h1>Únete a tu evento</h1><p class="pe-intro">Escribe el código que te dieron o escanea el QR del evento.</p>
 <p th:if="${entryError}" class="ping-notice" role="alert" tabindex="-1" data-error-summary th:text="${entryError}"></p>
 <form method="post" th:action="@{/join/event}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="draftKey" th:value="${draftKey}"><input type="hidden" name="revision" th:value="${revision}">
 <label class="form-label" for="code">Código del evento</label><input class="form-control pe-code" id="code" name="code" th:value="${code}" required maxlength="40" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="code-help"><p id="code-help" class="pe-help">El código identifica el evento, no a una persona.</p>
-<div th:replace="~{verification/scanner :: scanner('EVENT_JOIN','code')}"></div><button class="btn btn-primary pe-primary">Continuar <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></button></form>
+<button class="btn btn-primary pe-primary">Continuar <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></button>
+<div class="fe-scan"><svg th:replace="~{fragments/layout :: icon('camera')}"></svg><div><p class="fe-scan-title">Escanear el QR del evento</p><div th:replace="~{verification/scanner :: scanner('EVENT_JOIN','code')}"></div></div></div></form>
 <a th:if="${hasEntryEvent}" class="pi-back pe-return" th:href="@{/join}">Volver a mi entrada sin cambiar evento</a>
 <p class="pe-academic">Simulación académica. Sin vínculo oficial con SOFA.</p><a class="pi-back" th:if="${demoEnabled == true}" th:href="@{/demo}">¿Quieres probar? Entrar a la demo</a></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

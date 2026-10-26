@@ -1,0 +1,68 @@
+{
+ "x13-inicio": {
+  "sw": 390,
+  "recortes": []
+ },
+ "x13-unirme": {
+  "sw": 390,
+  "recortes": []
+ },
+ "x13-cuenta": {
+  "sw": 390,
+  "recortes": []
+ },
+ "x13-entrar": {
+  "sw": 390,
+  "recortes": []
+ },
+ "x13-mi-ping": {
+  "sw": 390,
+  "recortes": [
+   "visually-hidden"
+  ]
+ },
+ "x13-avatar": {
+  "sw": 390,
+  "recortes": [
+   "visually-hidden",
+   "visually-hidden",
+   "av3-title"
+  ]
+ },
+ "x13-conexiones": {
+  "sw": 390,
+  "recortes": []
+ },
+ "x13-beneficios": {
+  "sw": 390,
+  "recortes": []
+ },
+ "x13-recibo": {
+  "sw": 390,
+  "recortes": [
+   "visually-hidden"
+  ]
+ },
+ "x13-intereses": {
+  "sw": 390,
+  "recortes": []
+ },
+ "reduce/me": [],
+ "reduce/me/avatar": [],
+ "reduce/": [],
+ "teclado-editor": {
+  "before": "Animal",
+  "after": {
+   "tab": "Pelaje",
+   "selected": "true",
+   "panelVisible": true,
+   "outline": "solid"
+  },
+  "next": {
+   "tag": "INPUT",
+   "type": "radio",
+   "name": "palette",
+   "outline": "solid"
+  }
+ }
+}

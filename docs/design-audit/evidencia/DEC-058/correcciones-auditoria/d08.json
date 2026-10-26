@@ -1,0 +1,123 @@
+{
+ "tras-codigo": "/join",
+ "tras-identidad": "/join/interests",
+ "inicial": {
+  "enviados": 0,
+  "marcados": 0,
+  "filas": 264,
+  "mundo": "Anime y manga",
+  "familias": [
+   "Formatos y comunidad  (7)",
+   "Series y universos  (12)"
+  ],
+  "pie": "Aún ninguno. Puedes continuar sin elegir.",
+  "revisar": null,
+  "bandeja": false,
+  "sw": 390
+ },
+ "tras-elegir-en-Videojuegos": {
+  "enviados": 3,
+  "marcados": 3,
+  "filas": 264,
+  "mundo": "Videojuegos",
+  "familias": [
+   "Acción y supervivencia 1 de 8 (8)",
+   "Aventura y mundo abierto  (6)",
+   "Competitivo  (8)",
+   "Creativos y tranquilos  (6)",
+   "Indie y plataformas  (7)",
+   "Móvil y casual  (7)"
+  ],
+  "pie": "3 elegidos en 2 familias",
+  "revisar": "Revisar",
+  "bandeja": false,
+  "sw": 390
+ },
+ "vuelta-primer-mundo": {
+  "enviados": 3,
+  "marcados": 3,
+  "filas": 264,
+  "mundo": "Anime y manga",
+  "familias": [
+   "Formatos y comunidad 2 de 7 (7)",
+   "Series y universos  (12)"
+  ],
+  "pie": "3 elegidos en 2 familias",
+  "revisar": "Revisar",
+  "bandeja": false,
+  "sw": 390
+ },
+ "revisar": {
+  "enviados": 3,
+  "marcados": 3,
+  "filas": 264,
+  "mundo": "Anime y manga",
+  "familias": [
+   "Formatos y comunidad 2 de 7 (7)",
+   "Series y universos  (12)"
+  ],
+  "pie": "3 elegidos en 2 familias",
+  "revisar": "Ocultar",
+  "bandeja": true,
+  "sw": 390,
+  "foco": "Quitar Apex Legends"
+ },
+ "tras-quitar": {
+  "enviados": 2,
+  "marcados": 2,
+  "filas": 264,
+  "mundo": "Anime y manga",
+  "familias": [
+   "Formatos y comunidad 2 de 7 (7)",
+   "Series y universos  (12)"
+  ],
+  "pie": "2 elegidos en 1 familia",
+  "revisar": "Ocultar",
+  "bandeja": true,
+  "sw": 390
+ },
+ "busqueda": {
+  "enviados": 2,
+  "marcados": 2,
+  "filas": 264,
+  "mundo": null,
+  "familias": [],
+  "pie": "2 elegidos en 1 familia",
+  "revisar": "Revisar",
+  "bandeja": false,
+  "sw": 390,
+  "estado": "1 opción visible. Tus elecciones se conservan.",
+  "visibles": [
+   "The Legend of Zelda"
+  ]
+ },
+ "sin-busqueda": {
+  "enviados": 2,
+  "marcados": 2,
+  "filas": 264,
+  "mundo": "Anime y manga",
+  "familias": [
+   "Formatos y comunidad 2 de 7 (7)",
+   "Series y universos  (12)"
+  ],
+  "pie": "2 elegidos en 1 familia",
+  "revisar": "Revisar",
+  "bandeja": false,
+  "sw": 390
+ },
+ "teclado": {
+  "mundo": "Cine y series",
+  "foco": "ic-world",
+  "contorno": "solid"
+ },
+ "pie": {
+  "top": 740,
+  "bottom": 844,
+  "alto": 844,
+  "pos": "sticky"
+ },
+ "tras-enviar": "/me",
+ "mi-ping-gustos": "Tus gustos Editar",
+ "fallo": "Error: SyntaxError: Unexpected end of input\n    at Object.eval (file:///C:/Users/river/AppData/Local/Temp/claude/C--Users-river-PING-movil/e6335c12-3af3-41e9-831a-f5e6dca1807c/scratchpad/cdp/cdp.mjs:43:156)\n    at async file:///C:/Users/river/AppData/Local/Temp/claude/C--Users-river-PING-movil/e6335c12-3af3-41e9-831a-f5e6dca1807c/scratchpad/cdp/d08.mjs:67:16",
+ "errores": []
+}

@@ -1,0 +1,3362 @@
+{
+  "time": "2026-10-25T20:58:40.266Z",
+  "branch": "feature/seleccion-implementacion",
+  "head": "49e9482da1c39217e63b318b4a7ab6fc0e5e639b",
+  "files": [
+    {
+      "path": "DESIGN.md",
+      "bytes": 15358,
+      "sha256": "12be7426a6551d81b3822db5dac6cf3cec68746a02e456b43fc6a922f8a9816a"
+    },
+    {
+      "path": "docs/DECISION_LOG.md",
+      "bytes": 71746,
+      "sha256": "ae800435cba0c03ec4bab35cbf9e35f04e8796050843ca039a5b7aafee13d967"
+    },
+    {
+      "path": "docs/handoffs/FIGMA_CONSOLIDADO.md",
+      "bytes": 25334,
+      "sha256": "35a193df2f2aa201cf2fc83738bae842049ba860b3f02112bf9d694c57da40f4"
+    },
+    {
+      "path": "pom.xml",
+      "bytes": 3670,
+      "sha256": "5478a575ee9ffc7868c0310d7d597093202177e6311ea1dbcda2b6bfc99fa2cd"
+    },
+    {
+      "path": "src/main/java/com/ping/PingApplication.java",
+      "bytes": 320,
+      "sha256": "4a585a884fe9fe474e2ff9ad15d0dc4baad454ad85305e56b08935a66c8bba7c"
+    },
+    {
+      "path": "src/main/java/com/ping/admin/AdminController.java",
+      "bytes": 2004,
+      "sha256": "a77b46a0ebe9797a72979471a71d5768c50d17d24d43466a67bb425965913a1e"
+    },
+    {
+      "path": "src/main/java/com/ping/admin/AdminService.java",
+      "bytes": 4272,
+      "sha256": "dbf32d62862d6209a36c3b1857b886aaff170fa7cb03f99ab6971457046ef5be"
+    },
+    {
+      "path": "src/main/java/com/ping/admin/EventDetails.java",
+      "bytes": 589,
+      "sha256": "28e9fb8797c15e1e0f42035dbb277184c259b89c5e9986c89ff3b13e9afc2abc"
+    },
+    {
+      "path": "src/main/java/com/ping/admin/EventMetrics.java",
+      "bytes": 654,
+      "sha256": "6c5da4f7727542e101361b5adf97581b1bbb44ee61102af5d66d391c7850fb22"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/AccessPolicy.java",
+      "bytes": 4883,
+      "sha256": "fe43e9a46dbbb9c85c4891cc9fd40c30813cb78b77fad4de5775922c9157b281"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/AccountController.java",
+      "bytes": 5615,
+      "sha256": "f84076a9a75e397c8c4f3eca40d03499a754a6f39c4bcb2333ce55c8b431383c"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/AccountService.java",
+      "bytes": 10521,
+      "sha256": "7733fe59e4ad98b51136d59406227e4b1b8e8a4613af275d6a36f5d13143ea40"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/AuthConfiguration.java",
+      "bytes": 6004,
+      "sha256": "16f4f8482a156748305eda9154c6079e9349ccf73541919a5e937ba2540a022a"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/AuthSupport.java",
+      "bytes": 1957,
+      "sha256": "819fc705b7a85856c5fd90118fd080f7f850d86112a6e1b72e939bc038318304"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/AuthThrottle.java",
+      "bytes": 1531,
+      "sha256": "74785e3565637118d6754e76c5deacc5b8e06a428f3c288f1392faf537a14fb5"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/AuthViewModel.java",
+      "bytes": 887,
+      "sha256": "8d8992db18b97a999b6d335d9ee004b16a6ade7d158deb4a862abf1e17896b76"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/ExistingCsrfRepository.java",
+      "bytes": 852,
+      "sha256": "7b267b255e4b782ffda46a237122dfda747ad5355d69550c052f5cfaad04769d"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/LoginSuccess.java",
+      "bytes": 3872,
+      "sha256": "6933cedba2bf633118cdcedefcf621aac8b6de3bbdf51316f774547cb8899110"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/OrganizerController.java",
+      "bytes": 1628,
+      "sha256": "3a0f591e8d66b2fb5e0cbc6463bfef21998e653e754ad649e4264cea394a1f19"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/PingUser.java",
+      "bytes": 886,
+      "sha256": "a75abc0a10a36968cbe4e2d0623fb385a28e38655d26270b16734825ed9a91f6"
+    },
+    {
+      "path": "src/main/java/com/ping/auth/PrivateMail.java",
+      "bytes": 2024,
+      "sha256": "6ebe7e8074b6b5ffdc5d39e7f4505b012781dc856cad172e2682db503f896a9a"
+    },
+    {
+      "path": "src/main/java/com/ping/demo/DemoPreparationController.java",
+      "bytes": 941,
+      "sha256": "efa60a79cfb2cec5f535213b7c62d2c62f107961a3f64dc3765b759ee6bccdfb"
+    },
+    {
+      "path": "src/main/java/com/ping/demo/DemoPreparationService.java",
+      "bytes": 3719,
+      "sha256": "9bae82578469a70b82ebcb41bbad56677d7fba0d4e11cbbe342f0092dcacb6b2"
+    },
+    {
+      "path": "src/main/java/com/ping/demo/DemoScenario.java",
+      "bytes": 413,
+      "sha256": "49b8f9b5b7f50f9883fef130b0af1d510dd5e2802fccffb1edc747db1197d33c"
+    },
+    {
+      "path": "src/main/java/com/ping/demo/DemoScenarioRepository.java",
+      "bytes": 454,
+      "sha256": "3a1c4d49242dba63faf5e81f36266c27e6f78adea19ca292e65ceb6d21d3b94d"
+    },
+    {
+      "path": "src/main/java/com/ping/demo/ThemeController.java",
+      "bytes": 859,
+      "sha256": "8baeecd40a772c836705599949d1ab9a686e888ee5afe9efa24f08e816083e0e"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/ActivityForm.java",
+      "bytes": 1631,
+      "sha256": "53d8d0e97932cb109e92dff1ab3e016d9870569b3139869bf23f2b9ac898395f"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/EncounterController.java",
+      "bytes": 6013,
+      "sha256": "3aae80264771b74d386a40ad451a01410856c2464b70ce2e3e131ecfcdf9ac8d"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/EncounterService.java",
+      "bytes": 10660,
+      "sha256": "91864b92e4c33c3d1d4ce29d6a5f5ed0c696ce0a43f387abe5e4eb6446417896"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/EncounterUnavailableException.java",
+      "bytes": 196,
+      "sha256": "fe5df7ad4f14be295708adc37fdf74c74446cc7c7e187a53b46016e95eedaba3"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/EventActivity.java",
+      "bytes": 1969,
+      "sha256": "110af8b3f6129829e76c15b77604abf6d94132547710eefd54359d659c363e53"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/EventActivityRepository.java",
+      "bytes": 342,
+      "sha256": "1b090708b710ad7c5d6ec63cac652a9a76699cab336252a0aca3f8e8d417b079"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/MeetingPoint.java",
+      "bytes": 1054,
+      "sha256": "7e38574a724dc26b7d0a84503c6ba42c8faae489e36275dc9443e5b08f7b1b3f"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/MeetingPointRepository.java",
+      "bytes": 339,
+      "sha256": "c54804bc43345546b084bb165d0367d1906b479d836ecd30097ccc16182b1a82"
+    },
+    {
+      "path": "src/main/java/com/ping/encounter/PointForm.java",
+      "bytes": 935,
+      "sha256": "79e0e6d97ec69855ec307a5a1b6098667acbccfb0b195b17abd1af6402db54f0"
+    },
+    {
+      "path": "src/main/java/com/ping/entry/ParticipantEntryController.java",
+      "bytes": 13881,
+      "sha256": "a4b905772361e71c828b7ffd4966f1f9e9203e2eb3d462c9d05762ca03ade7e0"
+    },
+    {
+      "path": "src/main/java/com/ping/entry/ParticipantEntryService.java",
+      "bytes": 1793,
+      "sha256": "7b49124e4fb056c3e2451b591cc29ecb3d54a33ef515af60f1405f67dcee0c8d"
+    },
+    {
+      "path": "src/main/java/com/ping/event/EncounterOptions.java",
+      "bytes": 1702,
+      "sha256": "979539cdb3bd2031964f10ff67bc197318c2a68d355b2ce95a6ae372720cd784"
+    },
+    {
+      "path": "src/main/java/com/ping/event/Event.java",
+      "bytes": 4165,
+      "sha256": "b43a74d5decf960d94b2a6f8b1f3ab43233c4b6217ec8f4cb6eca33df271849f"
+    },
+    {
+      "path": "src/main/java/com/ping/event/EventController.java",
+      "bytes": 4013,
+      "sha256": "1d1b0e8a5aeaf9df377f6245affa806a81a8ffcecf4035e49aa596eed677bbc6"
+    },
+    {
+      "path": "src/main/java/com/ping/event/EventEntryLinks.java",
+      "bytes": 2559,
+      "sha256": "3a42a439fb8f6a777b2dccd7a9fb851e9d9cd097f1c57ce0a53304f61a684322"
+    },
+    {
+      "path": "src/main/java/com/ping/event/EventForm.java",
+      "bytes": 3170,
+      "sha256": "12929fc9726d0144a5c362352e52d9029ddaf886ae2ec2ed10396e23863d9c37"
+    },
+    {
+      "path": "src/main/java/com/ping/event/EventRepository.java",
+      "bytes": 614,
+      "sha256": "7db298bed151faf6e9166d327acaffa331b4ebea88cb8f2fd90396db52485896"
+    },
+    {
+      "path": "src/main/java/com/ping/event/EventSectionForm.java",
+      "bytes": 1101,
+      "sha256": "4c1596e6fc7d1ec434cf31444a02c13781e6a157f20e7bda6132196038ff246a"
+    },
+    {
+      "path": "src/main/java/com/ping/event/EventService.java",
+      "bytes": 5499,
+      "sha256": "44e873d59cbe03c5dc959ce41b89feea24b9df44e4294c9360a3ec6b35ed2964"
+    },
+    {
+      "path": "src/main/java/com/ping/event/EventStatus.java",
+      "bytes": 274,
+      "sha256": "1407e8caae4538fe8566029def3134cf9c1d173e4c5052caa181d1ac9c054238"
+    },
+    {
+      "path": "src/main/java/com/ping/experience/DemoRecognitionHints.java",
+      "bytes": 671,
+      "sha256": "53b0860d7c6176414db32a8a7a49043b367dbf6d888c75eb5bbae21f3932a145"
+    },
+    {
+      "path": "src/main/java/com/ping/experience/EventExperienceCatalog.java",
+      "bytes": 3542,
+      "sha256": "a3e9e86c49a38e831c366f21b53a2f56cfe2d57dcfdc5e105628bba736f56f1b"
+    },
+    {
+      "path": "src/main/java/com/ping/experience/EventExperienceController.java",
+      "bytes": 3978,
+      "sha256": "eb6229819272f21198165ddd874507c5e79fc1d5cfc7470a52427bbd236e8ec5"
+    },
+    {
+      "path": "src/main/java/com/ping/floorplan/FloorplanAdminController.java",
+      "bytes": 5275,
+      "sha256": "2cb56c2def364502bfeb96b2f3266622d9e60733ea0caccae0e84a9de0ac9418"
+    },
+    {
+      "path": "src/main/java/com/ping/floorplan/FloorplanImageCodec.java",
+      "bytes": 5816,
+      "sha256": "196d08a1629fb6bb1c786833ed2dacb93b9274439f030c86aba78c53877bb4a9"
+    },
+    {
+      "path": "src/main/java/com/ping/floorplan/FloorplanPositionForm.java",
+      "bytes": 1229,
+      "sha256": "0b58a241c52aff4fc6510f77371a4ef8ef285ede1dfaa4d75a4769e6278f4fe7"
+    },
+    {
+      "path": "src/main/java/com/ping/floorplan/FloorplanService.java",
+      "bytes": 7002,
+      "sha256": "15c84f5606bf02ba3d678962219e3c32d3c506a2397f057d64f4734eba083561"
+    },
+    {
+      "path": "src/main/java/com/ping/floorplan/FloorplanViewController.java",
+      "bytes": 4641,
+      "sha256": "d58bafc524953854a003de1069b55771732ed2dd0ec1ec5ffb915d982224dbf5"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/Interest.java",
+      "bytes": 815,
+      "sha256": "46619f1a5c1d721550524426e2d30c90ee5697fe34b65da499ebebc74bc4e71e"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestCatalogService.java",
+      "bytes": 2510,
+      "sha256": "a5c6f7dd2e7c70a2176ac4023f1b4d7056f1a4758ea75b1ad2a563b153e50040"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestCatalogState.java",
+      "bytes": 201,
+      "sha256": "4f08aededc577ab80fcd45f985915c7174e7ce04b9f43eacca1766c6cf660731"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestCatalogStateRepository.java",
+      "bytes": 438,
+      "sha256": "7393dba2e6e7b79694be52d2df8bcceb44add689677d789b7520b2d9d6e91c30"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestCategory.java",
+      "bytes": 790,
+      "sha256": "ac7eb0886ad72e14032b5102ce74d332995e0bbd6f5b922944e2dc512acda7f8"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestCategoryAdminService.java",
+      "bytes": 3663,
+      "sha256": "f031919e54cf59b9e6ad361f3aac7a23809196ad70589fcf2d71db835bfbd07a"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestCategoryController.java",
+      "bytes": 1795,
+      "sha256": "113bd32a221816f45beb6212b7d7aa9ade152a3022e9c6386adb6b20f2fdbd20"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestCategoryForm.java",
+      "bytes": 960,
+      "sha256": "ccc8f3abf4d94a4284a3f336a53b814f176fdd5231159c705a8ecfe67b8776d3"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestCategoryRepository.java",
+      "bytes": 428,
+      "sha256": "7414f044d1b6cbeb01270e69314a55983418ab073093e6dfecda7e029432b123"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestController.java",
+      "bytes": 2994,
+      "sha256": "756996043ae112e8bb1c515bb6ad930d7c9ee68d70c34c47ff6d72e0d21e3d6a"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestRepository.java",
+      "bytes": 583,
+      "sha256": "324a8fcb63589c9494aea3d774e4495f6f2bacc220be6e9b27c7d1c9a3cf5a36"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestSelectionForm.java",
+      "bytes": 680,
+      "sha256": "69c2b49c1444f2b53e666f3c6b58523fbc0f6fd57f7b82bbe00e46d2b4743106"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestService.java",
+      "bytes": 2883,
+      "sha256": "56343e660b91e658e474a1ee117fc1ab50e0eaf19c4f3cc6a489172afdf77d69"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/InterestTaxonomy.java",
+      "bytes": 1250,
+      "sha256": "d2ad925d3c9ef4651420638b29cb3debca02e76763fb5a4cfdf0fd6b543ec69b"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/TaxonomyAdminService.java",
+      "bytes": 3764,
+      "sha256": "9d3a55ee6bce2e0afb5873b4c40fcf648253c9f7db6a18986b3a5a42655e98c3"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/TaxonomyController.java",
+      "bytes": 1507,
+      "sha256": "1c5b42b2b4ab98158477185da47dd8ebbd3b3b632a5606aee2c91f54a55488ac"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/TaxonomyForm.java",
+      "bytes": 982,
+      "sha256": "4ded3dd40a83a8c227693b36fb1a85974a4e66de3e5c9c2c2b5e1883d7b46b9b"
+    },
+    {
+      "path": "src/main/java/com/ping/interest/TaxonomyModel.java",
+      "bytes": 678,
+      "sha256": "4e2395dd592a426d4860f78827b655f0c4df08c513a33a8813a49155abb509e2"
+    },
+    {
+      "path": "src/main/java/com/ping/match/ActivityCatalog.java",
+      "bytes": 4801,
+      "sha256": "a82a3d8e201da541869ea844cc366d401e85b75390938241c3b512bd3bc97287"
+    },
+    {
+      "path": "src/main/java/com/ping/match/CompletionStep.java",
+      "bytes": 791,
+      "sha256": "305bc5062618f8b2940a591867e9a5dbaee6518e8ed156c8c107fa58018c7df2"
+    },
+    {
+      "path": "src/main/java/com/ping/match/CompletionStepRepository.java",
+      "bytes": 351,
+      "sha256": "985dc30d8848c4198e63287fe5a72d95ceb287ba86c941f86f8195c15a22e379"
+    },
+    {
+      "path": "src/main/java/com/ping/match/DemoController.java",
+      "bytes": 11980,
+      "sha256": "b4bed7744ceac9de410c0ee647035868c996a6e8c4023f46e619a95b4f47191e"
+    },
+    {
+      "path": "src/main/java/com/ping/match/DemoSession.java",
+      "bytes": 353,
+      "sha256": "d826e10903cdabf2390aafeab9c39be44798773d3898d203953a178df1d153ca"
+    },
+    {
+      "path": "src/main/java/com/ping/match/Feedback.java",
+      "bytes": 1243,
+      "sha256": "fca19f4a7382723de2b943206d3e05adb88bbbfd6ca40b80630c9592818107c8"
+    },
+    {
+      "path": "src/main/java/com/ping/match/FeedbackRepository.java",
+      "bytes": 1080,
+      "sha256": "8e46666ba548f30914707b04a903fe35302ea8d56a7dfbc1ae5a4a9b2bdb851b"
+    },
+    {
+      "path": "src/main/java/com/ping/match/JourneyPolicy.java",
+      "bytes": 331,
+      "sha256": "ebaef0c9a2b77176bd2c24f31f23cd28cea827928af4d7c0b00641f3b942ff7c"
+    },
+    {
+      "path": "src/main/java/com/ping/match/Match.java",
+      "bytes": 7390,
+      "sha256": "c3a2501842291fbabcebc5e772d4fa680241e809eac6349d7382162129e4be9d"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchCompletion.java",
+      "bytes": 2120,
+      "sha256": "88d1ba3335de5e5ec1e6a363758826729e1f61903bcc165f28c7fd2c6bbb4d6a"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchCompletionRepository.java",
+      "bytes": 359,
+      "sha256": "421ce73996385c9bb3532b79dbbcd1578250076d181edbfc1cc6bf43d31c678b"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchCompletionSaga.java",
+      "bytes": 2817,
+      "sha256": "e502d969566625710cc45b5973dd3f95b32328e6aa833e07f51ddde93b5c495a"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchCompletionSagaSteps.java",
+      "bytes": 5959,
+      "sha256": "7705b401347366ceaf8a21f0d4ec16169b26530392706edf03b79d720c471c01"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchLiveState.java",
+      "bytes": 3812,
+      "sha256": "d715a63f60e81b7476f1540e0cbfade5d335ffe614d196d35509c1e1c08551b5"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchRepository.java",
+      "bytes": 1428,
+      "sha256": "1ca165bf2e38f29d5705009d0ba14c291ea1f050c5956ad681f8452aaab17718"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchReservation.java",
+      "bytes": 532,
+      "sha256": "46ac4994ec112797b9fbe752638e810eb89b54e385cc0cd9761a75e4541f5e63"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchReservationRepository.java",
+      "bytes": 329,
+      "sha256": "95a138d53e23b7ca6c709fa088b657c5c81e631b2cfc685cf63b22912ac273fb"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchService.java",
+      "bytes": 7256,
+      "sha256": "109bb8bc4e36af63af9ba2c781f71687d10d762bfa8019dfa20b96689a41477d"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchStatus.java",
+      "bytes": 304,
+      "sha256": "d32eae81b11233014f224b6f488e7bcb8547ac1ddc1031e7f8efd2882b1198c1"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchView.java",
+      "bytes": 1097,
+      "sha256": "39200ff946278dfa80385e5c975271e3212e5328423ff56be92b850ab470794f"
+    },
+    {
+      "path": "src/main/java/com/ping/match/MatchingService.java",
+      "bytes": 3826,
+      "sha256": "73d4f24881435e1719531d7a3f52e8d79f7fa04a0c024be9037fbcad623cb88a"
+    },
+    {
+      "path": "src/main/java/com/ping/match/SagaStatus.java",
+      "bytes": 170,
+      "sha256": "35649c6c58ef7e63f0ca1fbf227fae3e70e18a444b71385c123cd81c8f08a680"
+    },
+    {
+      "path": "src/main/java/com/ping/moderation/BlockRepository.java",
+      "bytes": 611,
+      "sha256": "4cfa3fa96565ca5072635e0fe294f04b2aca55485f0792cf65738aca8f413fca"
+    },
+    {
+      "path": "src/main/java/com/ping/moderation/InteractionReport.java",
+      "bytes": 1400,
+      "sha256": "26bbf86098bb9766661fc1734238a7609eda5f304100013f4e34e1c2015084a1"
+    },
+    {
+      "path": "src/main/java/com/ping/moderation/ModerationService.java",
+      "bytes": 3480,
+      "sha256": "ad5f352e333904bb35d3c912be228ff418994715244970f8c22494ab74f2fa19"
+    },
+    {
+      "path": "src/main/java/com/ping/moderation/ParticipantBlock.java",
+      "bytes": 720,
+      "sha256": "68644d4aa24e7d320d25f1c03e42f94ebd2ddd6fdfe28f78ba897d31e0f5a5c1"
+    },
+    {
+      "path": "src/main/java/com/ping/moderation/ReportReason.java",
+      "bytes": 323,
+      "sha256": "d6d6efdfca67ee13266477f8152cff7e9b9b4c22c0602ae1bbab82ada99a3ce4"
+    },
+    {
+      "path": "src/main/java/com/ping/moderation/ReportRepository.java",
+      "bytes": 660,
+      "sha256": "8d54d1cc34d18d1cb85b6ba7ebd37e08c4f6d779b41bb9bcbbf54b9d74f36d60"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/AvailabilityForm.java",
+      "bytes": 575,
+      "sha256": "21a8ab5d016df4501c1a1d8586f99b519cc993afeb6353640d10d73ad773def3"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/Avatar.java",
+      "bytes": 1665,
+      "sha256": "c717c99b6dcccbb024f43d639d1b7e19ab5ecaa89b657dda2cacca3d7827bbd4"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/AvatarCatalog.java",
+      "bytes": 769,
+      "sha256": "dd72d90b207a00e83dc33cd41cd73043ffd931be1b1bcbd605d7f449a59a244a"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/AvatarController.java",
+      "bytes": 3031,
+      "sha256": "a16e89c6084e198e535d16c50733f62952d21fd0a0f5d471e6ba8464556c349c"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/AvatarV3.java",
+      "bytes": 7506,
+      "sha256": "0f17c742adc7119a7f79c61d0f67479567618f9668e55924907c04a4920f841a"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/CompletionRewardService.java",
+      "bytes": 765,
+      "sha256": "756167e44bfaaf95f7d713449991675250b8b6285c295b280334064e40074d80"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/Participant.java",
+      "bytes": 5393,
+      "sha256": "74ea8722da72847e7bdb353c90df163c45ad156ee1965206268815b39d2fc52a"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/ParticipantController.java",
+      "bytes": 2473,
+      "sha256": "6509a190a697c9a449bb02bb8d640cde3156914198ff4d5160470b7f7f30495e"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/ParticipantForm.java",
+      "bytes": 786,
+      "sha256": "8d5e5f31789f69659265440d9f5911752c90af93a617e82fe9a9d6c7b04d3ed7"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/ParticipantRepository.java",
+      "bytes": 1562,
+      "sha256": "76a6ac854f5808f9413562d4eb6d3ba69f9efd67a23411dec30f5a9f950f8695"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/ParticipantService.java",
+      "bytes": 3452,
+      "sha256": "4f28015128ea993dc7500073862baec49c00b02828ccef73601bf52ca311ef81"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/ParticipantView.java",
+      "bytes": 218,
+      "sha256": "f870e6123e51b429835fe0fdb6fc3790f6ffd5e5b1bca8516b6623f665b46eca"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/RecognitionHintController.java",
+      "bytes": 2326,
+      "sha256": "d89670378d5740993b49ea054004904547107bd55095dbf6b2a04e0fb0e0a6f4"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/RecognitionHintForm.java",
+      "bytes": 883,
+      "sha256": "46a905a8a0e529bb7c2e98276024bf9c60fecf9feb1578f69bfd6228ba4af5e1"
+    },
+    {
+      "path": "src/main/java/com/ping/participant/RecognitionHintService.java",
+      "bytes": 2733,
+      "sha256": "4cf010abcfd01d20b35b3111c08922a7354cecab089ef03d16264afc9dfc5965"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/Benefit.java",
+      "bytes": 1601,
+      "sha256": "8c3881e7534a767df5d3e20ad49f02ef9c09c1b0f6988c89efdded4b540916e8"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/BenefitAdminController.java",
+      "bytes": 1683,
+      "sha256": "9c14d7d9374f5ddc9912600ea802953963fd0af6f5d984d9591896a8545c14a2"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/BenefitAdminService.java",
+      "bytes": 2018,
+      "sha256": "f86ade2c93a6557c132a8577a51405b7cc89a939747728fdeab7807ff8be90d0"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/BenefitForm.java",
+      "bytes": 1825,
+      "sha256": "bf321c9f455c5ba9db4c0171f6edc74ea31d2e304fb0e1d0b6113bd95b5065c3"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/BenefitRepository.java",
+      "bytes": 380,
+      "sha256": "93598990fedee1d95691cfed4f133ccd03474c005c45bef9b4342cbafc657c48"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/ClaimStatus.java",
+      "bytes": 270,
+      "sha256": "b597ea6148959afb5777e196fe09a43f745c96267596a39169a51bde803b8ffa"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/RewardClaim.java",
+      "bytes": 2891,
+      "sha256": "c0b5e734a0c861b2c5415f63953dd484bbd3ee50ff6604e7df14a8bd7ca1a6e0"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/RewardClaimRepository.java",
+      "bytes": 923,
+      "sha256": "a6f243e955a297756838c3d71ccf49b76682a7ce1a50538b79f168e45a0c1284"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/RewardController.java",
+      "bytes": 3294,
+      "sha256": "e763a23660d197500b0d4075673d7dd07e5cc9bb25f415201f47b81bcc35bdeb"
+    },
+    {
+      "path": "src/main/java/com/ping/reward/RewardService.java",
+      "bytes": 5776,
+      "sha256": "fb499d04195a2c7906df1acf50aba2ffc94df35ea0f317b562577494c38253f6"
+    },
+    {
+      "path": "src/main/java/com/ping/verification/CredentialController.java",
+      "bytes": 5383,
+      "sha256": "e1183a38e163c49fbc3948d468049aa6828808e2976ca1af369ab6b13fefc139"
+    },
+    {
+      "path": "src/main/java/com/ping/verification/CredentialService.java",
+      "bytes": 9035,
+      "sha256": "fd617797214f4fc42935f535eb817c24949560e12dbdda9616b3de68228fb3f9"
+    },
+    {
+      "path": "src/main/java/com/ping/verification/CredentialSession.java",
+      "bytes": 536,
+      "sha256": "abcaebd4b6caccc9d942409fd9c7284a4f7ec77dfaa252a334eacccdb67af771"
+    },
+    {
+      "path": "src/main/java/com/ping/web/BusinessRuleException.java",
+      "bytes": 161,
+      "sha256": "a66a4030bb423faa2d1f10bbd6635dfdd55c51f0481aa32f19c77bd637e86df6"
+    },
+    {
+      "path": "src/main/java/com/ping/web/ErrorPageController.java",
+      "bytes": 1786,
+      "sha256": "eb295437f2f6a9a6e03d7c609c6bde473706faaa83daf6451864af9180ed805c"
+    },
+    {
+      "path": "src/main/java/com/ping/web/ErrorRecovery.java",
+      "bytes": 1436,
+      "sha256": "2557cc91504875fe4b3416f462df1a8b104794ed91ab08038c3bdcbc00cc52c4"
+    },
+    {
+      "path": "src/main/java/com/ping/web/FormTokenFilter.java",
+      "bytes": 2483,
+      "sha256": "cb9877636eb0a0751dbcd13acb23c2658562ae5136d37296b3104d6f173df90e"
+    },
+    {
+      "path": "src/main/java/com/ping/web/HomeController.java",
+      "bytes": 326,
+      "sha256": "23b3170271560665b04099ff760174380c705a0eee43c42c8b52882565c018f9"
+    },
+    {
+      "path": "src/main/java/com/ping/web/NotFoundException.java",
+      "bytes": 153,
+      "sha256": "d1fff7b87585ed080b68bffe312cc9cbf11fb5d3de47295c893703eb6f44f48e"
+    },
+    {
+      "path": "src/main/java/com/ping/web/PagePresentation.java",
+      "bytes": 1520,
+      "sha256": "ae148512994379ef5ac7fc389f4abc685ca88c0e9c3d1c0bee56d30a343393f7"
+    },
+    {
+      "path": "src/main/java/com/ping/web/PublicResourceConfiguration.java",
+      "bytes": 2530,
+      "sha256": "502ecb207d886514fd134d962bce0f50cd63831856e57322a14362bd55defeb6"
+    },
+    {
+      "path": "src/main/java/com/ping/web/SessionRequiredException.java",
+      "bytes": 422,
+      "sha256": "01655ea57056132ef6ab4b70f5d2222d153b61ebdc366b0532ed77122fb44f73"
+    },
+    {
+      "path": "src/main/java/com/ping/web/WebAdvice.java",
+      "bytes": 6802,
+      "sha256": "a57a2b44c1e55c417c5aea8ffe1c53f4c64d3153d495ad964441fdaf090abac3"
+    },
+    {
+      "path": "src/main/resources/META-INF/licenses/TwelveMonkeys-3.12.0.txt",
+      "bytes": 1545,
+      "sha256": "7982c36e28941179029ea7ce6a51a35342377fc8d4940225e16192e877d7d50b"
+    },
+    {
+      "path": "src/main/resources/application-bootstrap.properties",
+      "bytes": 282,
+      "sha256": "c79a1c8863099d5f95d30fd70437dd78d684a2e29ef71439806515103477491c"
+    },
+    {
+      "path": "src/main/resources/application-mysql.properties",
+      "bytes": 215,
+      "sha256": "2e3115e36f0aa2c442585a627534286b4a84613301a3012547d31aae038a63db"
+    },
+    {
+      "path": "src/main/resources/application.properties",
+      "bytes": 1717,
+      "sha256": "1725db0ac3d456c4c601ad0a80fb0c9fb73382630c46262e9db3f82f37f06258"
+    },
+    {
+      "path": "src/main/resources/db/migration/V10__blocks_and_reports.sql",
+      "bytes": 1182,
+      "sha256": "dbd156b0113c54a630806804312e9fcd901cb5c14227f81a30a8155a62878e1c"
+    },
+    {
+      "path": "src/main/resources/db/migration/V11__benefits_and_claims.sql",
+      "bytes": 973,
+      "sha256": "0b2801d8f29342e24d958862b54dc244ccf36660ee849388d8ee560627af9552"
+    },
+    {
+      "path": "src/main/resources/db/migration/V12__participant_recognition_hint.sql",
+      "bytes": 160,
+      "sha256": "d7277adc757cb7ce2d8c6c920533e3a32f9ae30b74e8d2687be8bc5985eda5df"
+    },
+    {
+      "path": "src/main/resources/db/migration/V13__event_entry_codes.sql",
+      "bytes": 344,
+      "sha256": "71d8d0a7959c78e42586898a95ed3e68184fd933fa070da504e58f8d9869b0f6"
+    },
+    {
+      "path": "src/main/resources/db/migration/V14__event_encounter_catalogs_and_arrival.sql",
+      "bytes": 496,
+      "sha256": "ad71c7c1f24b599166c3aacd1d517a431605e83bb975cc1980a241fdeb7792b5"
+    },
+    {
+      "path": "src/main/resources/db/migration/V15__structured_event_encounters.sql",
+      "bytes": 1430,
+      "sha256": "b0b2386da3f3aad117f303189146220ee4e1a1a27943888efa2820989f1695ff"
+    },
+    {
+      "path": "src/main/resources/db/migration/V16__variable_rewards_and_event_benefits.sql",
+      "bytes": 1519,
+      "sha256": "b3a37fd9e1e43e4e6061ddff5d8bd974ecd0d52d8c09e033f23fda1b9d1cb370"
+    },
+    {
+      "path": "src/main/resources/db/migration/V17__interest_categories.sql",
+      "bytes": 1078,
+      "sha256": "9495c258e43051efbd80795fbafd04f417ee24a5eaa90205188248c99ae7fca2"
+    },
+    {
+      "path": "src/main/resources/db/migration/V18__event_floorplans.sql",
+      "bytes": 1680,
+      "sha256": "37c118aefd39b52167e6e37681c7c753a0586026908384676387a64f29033216"
+    },
+    {
+      "path": "src/main/resources/db/migration/V19__work_editor_catalog_avatars.sql",
+      "bytes": 114807,
+      "sha256": "2b5df6737b7f11825c82a47b0ccc0c13fffa3524e2c9428cf37ffd2f7a2d8180"
+    },
+    {
+      "path": "src/main/resources/db/migration/V1__create_events.sql",
+      "bytes": 394,
+      "sha256": "d7174074cf959a05e6e5002404b206a7e277b9cd5eb89ed04c3ea8271770a225"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20__accounts_and_event_permissions.sql",
+      "bytes": 1932,
+      "sha256": "4cd54e914523e0965266f85b6b5b88ab4493219889e0d90d66b202a2b5d5ecbb"
+    },
+    {
+      "path": "src/main/resources/db/migration/V21__personal_verification_and_receipts.sql",
+      "bytes": 1579,
+      "sha256": "4ead239a3de098f156f37e52d4c5c042edcb71450809920f3413bf02279fe872"
+    },
+    {
+      "path": "src/main/resources/db/migration/V22__taxonomy_revision.sql",
+      "bytes": 75,
+      "sha256": "f785c4d2b09abc723b347977ba84f42e852cc9a9592d97f93df8d647e9aa4442"
+    },
+    {
+      "path": "src/main/resources/db/migration/V23__avatar_v3.sql",
+      "bytes": 1106,
+      "sha256": "cc43280958ec09413b0ed5eecacd624ec205952ac9491c14fdcdc0d0720c3bac"
+    },
+    {
+      "path": "src/main/resources/db/migration/V2__create_participants.sql",
+      "bytes": 406,
+      "sha256": "de82b3d736776aaaa43daca1044cacf69db93c3729af63f33fee8c6060d122d9"
+    },
+    {
+      "path": "src/main/resources/db/migration/V3__create_interests.sql",
+      "bytes": 552,
+      "sha256": "872cebc8bf5e7c9a26e7eda86a2c59cedbc8fff238c54f457bc56071d8bd4118"
+    },
+    {
+      "path": "src/main/resources/db/migration/V4__seed_demo_interests.sql",
+      "bytes": 335,
+      "sha256": "1c828329ed31fe385a8334bea0a3b86af70a4267fb5234e11244cae73d54172d"
+    },
+    {
+      "path": "src/main/resources/db/migration/V5__meeting_point_waiting_and_points.sql",
+      "bytes": 497,
+      "sha256": "236814ec089707d5e45707c71314e0f164290c47ef0080cac0eabc3250747b4f"
+    },
+    {
+      "path": "src/main/resources/db/migration/V6__matches_reservations_feedback.sql",
+      "bytes": 1981,
+      "sha256": "ca6f16d0db3276958328a1991dc797a3cc197c0c645d3ebacf39bf9a8afc2389"
+    },
+    {
+      "path": "src/main/resources/db/migration/V7__manual_demo_scenario.sql",
+      "bytes": 307,
+      "sha256": "ed9b68c5179bdd461060eb6296059188abb61a346516866f5dc2fb0589a25d0e"
+    },
+    {
+      "path": "src/main/resources/db/migration/V8__match_completion_saga.sql",
+      "bytes": 954,
+      "sha256": "3ff39c9632b5be55d4a75dce40c3e77f68f15659d36c541c8c9b8bbd599bc752"
+    },
+    {
+      "path": "src/main/resources/db/migration/V9__feedback_timestamp.sql",
+      "bytes": 63,
+      "sha256": "c8a6d5f1b57326ab46ad1a464f2c5ff70b28587df26e17c9816b31b20f5969a3"
+    },
+    {
+      "path": "src/main/resources/static/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/main/resources/static/css/brand.css",
+      "bytes": 141821,
+      "sha256": "0b0c2ac5f9417f54d20915d26e5491b754b4b07479d19e45a2a94c7fb3892587"
+    },
+    {
+      "path": "src/main/resources/static/css/floorplan.css",
+      "bytes": 3521,
+      "sha256": "c0df5159abadce33ff13112aa28a56c49927d1e1b193ef2948f0473137f89e08"
+    },
+    {
+      "path": "src/main/resources/static/css/v2.css",
+      "bytes": 32523,
+      "sha256": "7844479a5faabcc8db1b462c014392ba1934f2e45cfee3c77c15fe3fa9c5f894"
+    },
+    {
+      "path": "src/main/resources/static/fonts/Manrope-Variable.ttf",
+      "bytes": 164700,
+      "sha256": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6"
+    },
+    {
+      "path": "src/main/resources/static/fonts/OFL.txt",
+      "bytes": 4480,
+      "sha256": "4b8929f05a122b7abb9059501dc7dc4df86f8c97d5a1769d60d82cf2d2795dde"
+    },
+    {
+      "path": "src/main/resources/static/images/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/main/resources/static/img/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/accesorios/bufanda.svg",
+      "bytes": 306,
+      "sha256": "a855f921890349747e94e0b8b3881945619cf24bd42f7b6289e1c94c6eefc8db"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/accesorios/gafas.svg",
+      "bytes": 336,
+      "sha256": "5794f65408b770246d2a2631a428e4891e0630684815003786d3208a3f739302"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/accesorios/pajarita.svg",
+      "bytes": 342,
+      "sha256": "ad58031ef04997afc66a11e0d0fef3e02ed5c0e6e8c4325fea5eb6147afc21a8"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/animales/buho.svg",
+      "bytes": 689,
+      "sha256": "ea57d449747313506c2cf2e7340c3a9f5576dff3833b6b7e10778afd633e1841"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/animales/conejo.svg",
+      "bytes": 665,
+      "sha256": "e27bfdf169df85997d3b45c804c37decea17037234ef68ca31813cee0810858e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/animales/gato.svg",
+      "bytes": 662,
+      "sha256": "3bef10b7bb17f720f59a1bcfe276c262bce1773249805a2cbc363cf024dd1669"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/animales/oso.svg",
+      "bytes": 648,
+      "sha256": "689a9b31fe5d303dd786b05e8ce30e5504171684e655eaff68d8d2e7dcc2ab92"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/animales/panda.svg",
+      "bytes": 723,
+      "sha256": "a0c1a3d798afe61b635cfc4eafdc1b5fe6fb493f7a7f26aac161bcaa1acdfbc5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/animales/perro.svg",
+      "bytes": 644,
+      "sha256": "0289f05207ba61c1b5dca3bf7f7f8284f605be717d142ec8908d840c6de87968"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/animales/rana.svg",
+      "bytes": 701,
+      "sha256": "923553da28aaed25d98137c346289e4cf3354056e14190b12838e3e36adb0ba7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/animales/zorro.svg",
+      "bytes": 689,
+      "sha256": "5b53571437a0158875fa33a2a53345839bc335b175face47383b7f71ddd0f539"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/manifest.json",
+      "bytes": 2810,
+      "sha256": "11e37136636f0f202fbdf0a4a74a4163f0885992f1cbc6c29d75b14747536591"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/sombreros/corona.svg",
+      "bytes": 314,
+      "sha256": "ec8b01821e9dbb8e092a12008516700b56b36e8cffe6cca6b6fb1fa7864e9e17"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/sombreros/fiesta.svg",
+      "bytes": 395,
+      "sha256": "90b223f43c3638d3330a16f4bcc7417ae90eefa9b186e244638f428aefc7d20c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/sombreros/gorra.svg",
+      "bytes": 346,
+      "sha256": "c0299a25b52f17202767ea4fee0b79a57cc497c98bc55f062a2453dc03d682c0"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/sombreros/gorro.svg",
+      "bytes": 378,
+      "sha256": "d943e94e50dc4f1a5e8b740a0aad4ead3773b0c48652e15b447be8f575dead93"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-cacao-orejas.svg",
+      "bytes": 617,
+      "sha256": "fabae3567efeb3189275bee7c168ecaf4fb21c384fcc3b9c0047008ee979dae8"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-cacao.svg",
+      "bytes": 2497,
+      "sha256": "0c40db34e256c045dd0dff8c2a29922209e0d9b98e7dcc747c03275cebbcdf0c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-coral-orejas.svg",
+      "bytes": 617,
+      "sha256": "22dd9d42950979cd999819a18f0916f64907e43cc12e67912831e61c5742dada"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-coral.svg",
+      "bytes": 2497,
+      "sha256": "7d551bd81fb3577a55a09286d6c841c0a78d578da0141eefb24925ce32085a92"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-dorado-orejas.svg",
+      "bytes": 617,
+      "sha256": "60d1689d926ef528df852d607d3b4f56ba38471664bd7b3681b082c09d192bc1"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-dorado.svg",
+      "bytes": 2497,
+      "sha256": "7cf50c17d6c6bb7386dd005340b4d6fa5a7a5085c36b755325e1771a654a926b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-lila-orejas.svg",
+      "bytes": 617,
+      "sha256": "5b2b762a92ce4978c4cb3c09362d5319622c0498c7d8a81b078412a5435f89c3"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-lila.svg",
+      "bytes": 2497,
+      "sha256": "f06d413da6d448c82be20c2bd1f4a30d707ff5e1b8207c2ef57ddf37585a5ded"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-natural-orejas.svg",
+      "bytes": 617,
+      "sha256": "a76057d5a6eae8e492a52e690643cecc2d9c6648b8fd5d1269e30699f33a614b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-natural.svg",
+      "bytes": 2497,
+      "sha256": "814ba3fb19a058aaef17b59150018b8a588c6fa62b709d78324aebc5535ea327"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-perla-orejas.svg",
+      "bytes": 617,
+      "sha256": "fed627f81b182823a754d19ca7b4b3b44f62cc1a93820efed1eaa1e9ff8f91a4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/conejo-perla.svg",
+      "bytes": 2497,
+      "sha256": "d9c1030823137af906d8489da5c978b2c9e5a1176d33041a4158af47f7846bef"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/gato-cacao.svg",
+      "bytes": 2554,
+      "sha256": "ac982bf8679f6d69559cadfc174c236a354feb26728c5de326d519fbcf8acd62"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/gato-coral.svg",
+      "bytes": 2554,
+      "sha256": "b8d6952317f09771996baa49695f8c9798c6ebf9b7a903da66485b403c3996c7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/gato-dorado.svg",
+      "bytes": 2554,
+      "sha256": "30b278d2c3f78cad8bbefed38b7739df9f8bf89f5f9aed14488d386c05cc87bf"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/gato-lila.svg",
+      "bytes": 2554,
+      "sha256": "6d2f924897ac67c4667ec44c68401f1b51c1f6c7ec345073c2045c4c6840337b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/gato-natural.svg",
+      "bytes": 2554,
+      "sha256": "e5e3b4dad71a1264c26ba6aa9a5963db90a96f280f461854ce75cd048a4260ff"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/gato-perla.svg",
+      "bytes": 2554,
+      "sha256": "2b57976e073b648309157a58c32e458a4cf05bfbca9f7573f09670a71af0e936"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/nutria-cacao.svg",
+      "bytes": 2260,
+      "sha256": "3a85634b3bd6b6ced156cb31c302aa5c3a109a72c5fc9b23be2102f829f7b030"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/nutria-coral.svg",
+      "bytes": 2260,
+      "sha256": "20df13f11a10e0f9fdb95b55c6304d4b4298c33775bbd7e03d41f59f78990b5b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/nutria-dorado.svg",
+      "bytes": 2260,
+      "sha256": "6a07ac0cd56ff41c9eeda61ef48ebe994b197da17dec7ba59e0c2e1c57936c63"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/nutria-lila.svg",
+      "bytes": 2260,
+      "sha256": "1b043e8f412329f0fb0cdce28e4f1639cd729c4e75182c1f5589d4ae74d3c890"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/nutria-natural.svg",
+      "bytes": 2260,
+      "sha256": "c56501af52fa6b39a803a3223bc0d9a9f8a64dc8ea2b724ff162417e079e18d0"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/nutria-perla.svg",
+      "bytes": 2260,
+      "sha256": "bf449079739180ba3770ac1e649e3baab0c64f0e041816f2338461221f642b5c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/panda-rojo-cacao.svg",
+      "bytes": 2714,
+      "sha256": "35b0d082ec63df944437755f93809df375258a41c8201af4907fc331672f4309"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/panda-rojo-coral.svg",
+      "bytes": 2714,
+      "sha256": "7c1e511565dcb44d7ad30e3c8b8a5b7590619a6eb69c21127473162d0cdc3783"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/panda-rojo-dorado.svg",
+      "bytes": 2714,
+      "sha256": "88fdfff69eab22fbf7a77a50eec9161a2a0e7ed8d0b66be849149b35f975a435"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/panda-rojo-lila.svg",
+      "bytes": 2714,
+      "sha256": "81e76ce51cb39f9bccd0a7c239aac9d0e783008c8ae53db94d0d9a96963d361f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/panda-rojo-natural.svg",
+      "bytes": 2714,
+      "sha256": "4b86c50918dd62fbe94925e8109679178463fc29423dd9afae412de6d29c2038"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/base/panda-rojo-perla.svg",
+      "bytes": 2714,
+      "sha256": "0fe2fc3dbfd38749c233a14c89d31ccac006072c4d3d2d7b5d35ade79968af91"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-auriculares-amarillo.svg",
+      "bytes": 548,
+      "sha256": "368e227c6d0edf75cd98668dae76e356ae16073b32c91d401b8c50007735ec7b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-auriculares-coral.svg",
+      "bytes": 548,
+      "sha256": "6537b16363c7b720d7604cb6282cca884b35dd0b082f1ecf139f1f33fbb1520a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-auriculares-menta.svg",
+      "bytes": 548,
+      "sha256": "470b701c630b55cf1e0d744d35c1e23d20da8f5c0ac5663f77a79e0e221b95e1"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-auriculares-violeta.svg",
+      "bytes": 548,
+      "sha256": "35d73f2a14d3255706e5d31fd4ffaa1177a40e16c5cd7f6882105b483aa4dbf5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-banda-amarillo.svg",
+      "bytes": 540,
+      "sha256": "d5bf1900b000fcd54258d6fc7a3261ba312d8022c05b1ad56e1fc2def7dad863"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-banda-coral.svg",
+      "bytes": 540,
+      "sha256": "2e524cfee0b95797d47ee40d5efaf590047209eb0b6cb64b7435deae376de663"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-banda-menta.svg",
+      "bytes": 540,
+      "sha256": "bbc276c1668d00419fefbfe0926ea20be8380f051089839e9d20761c9fbe295e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-banda-violeta.svg",
+      "bytes": 540,
+      "sha256": "15cbd235cbad1072fb4de2307753a6aca0c6d89f1c19a7e0fff1130fa848cec4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-bucket-amarillo.svg",
+      "bytes": 715,
+      "sha256": "eef1736e2ead8f8942f56d4b55cae6cac3611f8dbd9e1a1fefbc1ef55eca54d6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-bucket-coral.svg",
+      "bytes": 715,
+      "sha256": "46e3664c18e1736e287f0bc817819537ace121444ceaca4b85e1218350561d50"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-bucket-menta.svg",
+      "bytes": 715,
+      "sha256": "a942dbf742337eec8964daa5c17e0e254ceafee7e456f8a7ce0cf5bdc9e95b13"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-bucket-violeta.svg",
+      "bytes": 715,
+      "sha256": "ac8d837f44ac6470923ea07d94264feaf522a6066e784398023525747a2c52d5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-bufanda-amarillo.svg",
+      "bytes": 559,
+      "sha256": "394fede09decf7ebca471b4ce12089185221330e6ae4102b6e19b16be80fd11d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-bufanda-coral.svg",
+      "bytes": 559,
+      "sha256": "0a7264b8ca8ff04ba2f1879b996c1218fe9222753d787531f0f52b3ba91fcfde"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-bufanda-menta.svg",
+      "bytes": 559,
+      "sha256": "30858a7e5fbc0e3c847a9d5236eaa1b012ba074ca986d210f066b6814c8b08eb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-bufanda-violeta.svg",
+      "bytes": 559,
+      "sha256": "796ac49d2e2fb46392b381b43584d28392d46c09c1637501b53ffb6ed08d9137"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-corbatin-amarillo.svg",
+      "bytes": 733,
+      "sha256": "86e787d6ed450e3545f02e8244eb381c196f67b676fc6ff42986d641c57d9d4b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-corbatin-coral.svg",
+      "bytes": 733,
+      "sha256": "64be3bb8d154791755ab88eafc4520c9e9c57c435d111975533c45ca9373191b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-corbatin-menta.svg",
+      "bytes": 733,
+      "sha256": "e6e0071296c8bb36e682163751dea12d6dff70ad25acd10fa85ca1f9649df335"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-corbatin-violeta.svg",
+      "bytes": 733,
+      "sha256": "10bcc99e1fd69ea93a3fc1d535bed42b92a1349a2b0df403d334bd0b482aa2d4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-cuadradas-amarillo.svg",
+      "bytes": 1300,
+      "sha256": "0b55b87f1b7d07ed1c14c40ebc2d60e2af79bb5e70108542e8c2d2e4abf501b6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-cuadradas-coral.svg",
+      "bytes": 1300,
+      "sha256": "9cd1a3af009925b9266615a5fc912e024eb75ff78ff1ab5d3bcd7ee880bb45ab"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-cuadradas-menta.svg",
+      "bytes": 1300,
+      "sha256": "a7f5b42e2f8fe25beff939e450821565c2d41737160900fb9fa7ac6a8ec1dfa6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-cuadradas-violeta.svg",
+      "bytes": 1300,
+      "sha256": "63a4a7869f04454829a259b5508b8fd5f9bbb70342bc40d1f3e1343ab1edace7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-redondas-amarillo.svg",
+      "bytes": 626,
+      "sha256": "31f2d1552cb54e5e5bd26961003032d5df195ae97a048184fccfbd70639420f3"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-redondas-coral.svg",
+      "bytes": 626,
+      "sha256": "4c2e81576d89d00f3e5269007e7db3de054f68780e4727a80dd5711854dc0c67"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-redondas-menta.svg",
+      "bytes": 626,
+      "sha256": "4ce42a4c753e5a0931a33bc2137aecb36a793f3df8d0b17ed3c61ea6f6041a16"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-redondas-violeta.svg",
+      "bytes": 626,
+      "sha256": "1f0855f3f7a2d4401f8c9cc0defce7990ebf2fb8b7c664543fabc083460a7de0"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-sol-amarillo.svg",
+      "bytes": 833,
+      "sha256": "209b83166b5b951a37b6d36f1dc9d3cd458b935830fd9e4950ef31766068bdd8"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-sol-coral.svg",
+      "bytes": 833,
+      "sha256": "6ea447b03f3032a2c95c3fced4076a87abd9522660d0eeec7bda4ce83b9196cd"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-sol-menta.svg",
+      "bytes": 833,
+      "sha256": "fad44bd3449b2fcbf21e7cecdd6aa144984fed789950c7f8f8ff0d129b7f5bad"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gafas-sol-violeta.svg",
+      "bytes": 833,
+      "sha256": "5a56e61e22d99e1aa19766eee5dd9826d341980e24880bc3750963707a2c9659"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gorra-amarillo.svg",
+      "bytes": 743,
+      "sha256": "35279ffa7a5ee6c280c3ca30d7af2235bccb91ab1e55a2c88d6a3a2f2caa67fe"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gorra-coral.svg",
+      "bytes": 743,
+      "sha256": "05d22e054cba5d0e6a3df68d64694da84101b36684a5a4d39e01c3db5f7f9a16"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gorra-menta.svg",
+      "bytes": 743,
+      "sha256": "f9ed6b692568cbd5ca7113470493b0bc01d85b2527cacbb57f3e8e6a0e413f28"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gorra-violeta.svg",
+      "bytes": 743,
+      "sha256": "93ddc25e0b334a2a1ae010f51a85acce1bb04eb32eabbd30d4cc223e770642bc"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gorro-amarillo.svg",
+      "bytes": 937,
+      "sha256": "43b58293e7e15b11e6cf9c78a76c9621217b4f4976d64f4a3a6bdfa4fdf9fba7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gorro-coral.svg",
+      "bytes": 937,
+      "sha256": "56849f1a18d5e3e4ecfb35d74f25427036673a8e60fa9c63ad19ea808b977963"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gorro-menta.svg",
+      "bytes": 937,
+      "sha256": "344edd23217fc5d57301a0fb97ef2adb3eceb8740b37446c382f9a9e2d705127"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-gorro-violeta.svg",
+      "bytes": 937,
+      "sha256": "e224da1ff0c5b05f8a2088cb1b9160e35a2b42aeaeff8698bd565fd4f12a160d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-lazo-amarillo.svg",
+      "bytes": 560,
+      "sha256": "f30bac29362153765e9484f090543e9acf7fb08fa642f1b9ead4c7a647fc9cbf"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-lazo-coral.svg",
+      "bytes": 560,
+      "sha256": "12536c5628fe05178f2fae2b41cd57695adb7b6e61ea0fbd7ceed675d63642b6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-lazo-menta.svg",
+      "bytes": 560,
+      "sha256": "72d7520b46d77a340ce15424558713898f8dbdc372658849c685c02d04c26f4b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-lazo-violeta.svg",
+      "bytes": 560,
+      "sha256": "42d6bb64caafc3ffbdc748171d919464b7d4e3a034a350ccc2c3031e2c409683"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-microfono-amarillo.svg",
+      "bytes": 977,
+      "sha256": "982a99e22a8ebb85a341d3af826abfa416dd25fc57c580e00bafd36179b12000"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-microfono-coral.svg",
+      "bytes": 977,
+      "sha256": "c0a51f5f581d8dff23fd84799c48c5ce31aede374dfb9300f65c4aca9c3745bb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-microfono-menta.svg",
+      "bytes": 977,
+      "sha256": "d8489ec42d3f8310be788575db9c368b24bbc03c122b4183e84ae52ef71e7dc4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-microfono-violeta.svg",
+      "bytes": 977,
+      "sha256": "ff2accd1f1a47f041f222919598070ee3d2863ad93abdd137e0e015b98f3a67f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-panuelo-amarillo.svg",
+      "bytes": 695,
+      "sha256": "b60f59cab85148d6a9ee6b8b46872e3ef378e799fcd9c1f5c350bb3d0c178f48"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-panuelo-coral.svg",
+      "bytes": 695,
+      "sha256": "312605baf8f4b0ee444c39163f9e7a70068dc9c9c215f98e49ac013c6f0fc3dd"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-panuelo-menta.svg",
+      "bytes": 695,
+      "sha256": "5f834ab4d7a5e9159eaffa328862408c28dc446c85b5965a8e9e73a0007b7429"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-panuelo-violeta.svg",
+      "bytes": 695,
+      "sha256": "0702552346e0b9a012783f480a883d5c9dbe9f4e87c8dde66293d4c973623c0c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-pase-amarillo.svg",
+      "bytes": 461,
+      "sha256": "639d93a52762c85a76214ebf533532f1957c7aab6a39bd10ef5c6b13eb35c2f6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-pase-coral.svg",
+      "bytes": 461,
+      "sha256": "aa5f7b9f74209e127b24b4ccb0682391d6ff6752e37ed38439b36e5cddf9fbc9"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-pase-menta.svg",
+      "bytes": 461,
+      "sha256": "4125e324dce2de02745ab52b5aabbb1b213aa05fad4cbb2d1178766ee6922122"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-pase-violeta.svg",
+      "bytes": 461,
+      "sha256": "d0821c21e7f9013a0166bb94d73bc7c963d718328bb43ed21fe6ce7dbfdccbe7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-pin-estrella-amarillo.svg",
+      "bytes": 457,
+      "sha256": "6acc0a9ed8f233510368127c877f7476f15e06f69386e310b49d80fbeec90867"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-pin-estrella-coral.svg",
+      "bytes": 457,
+      "sha256": "2b31adc5ab0df2c2d23227bb497942eda0499dbe596db40b1636e454e9a6b666"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-pin-estrella-menta.svg",
+      "bytes": 457,
+      "sha256": "76a60c268274bd12c6a68cff331ca98cc7f948df1769facdc489fa9d551eebfe"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-pin-estrella-violeta.svg",
+      "bytes": 457,
+      "sha256": "669702ef030e3a04a4a6f104b6b45076b65b4d34e793f67456f596eae859683d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-vincha-amarillo.svg",
+      "bytes": 659,
+      "sha256": "26e3b0818e367d0816af7bba61c0364a4140c8ddc0d8280a8c0b779efec151a9"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-vincha-coral.svg",
+      "bytes": 659,
+      "sha256": "dd0e8886206b98aca340700dc966c5c95d3b70343af7606ffbbbb07a548bc776"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-vincha-menta.svg",
+      "bytes": 659,
+      "sha256": "0d932a169dadb23d129527c4bedf8b6cc96bfbe6368d3b9e3bc20ed1febab84e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/conejo-vincha-violeta.svg",
+      "bytes": 659,
+      "sha256": "1b41108ab030017654458fa0add904bedc1b3df5edb127777ea62d9e3e47470d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-auriculares-amarillo.svg",
+      "bytes": 548,
+      "sha256": "368e227c6d0edf75cd98668dae76e356ae16073b32c91d401b8c50007735ec7b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-auriculares-coral.svg",
+      "bytes": 548,
+      "sha256": "6537b16363c7b720d7604cb6282cca884b35dd0b082f1ecf139f1f33fbb1520a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-auriculares-menta.svg",
+      "bytes": 548,
+      "sha256": "470b701c630b55cf1e0d744d35c1e23d20da8f5c0ac5663f77a79e0e221b95e1"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-auriculares-violeta.svg",
+      "bytes": 548,
+      "sha256": "35d73f2a14d3255706e5d31fd4ffaa1177a40e16c5cd7f6882105b483aa4dbf5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-banda-amarillo.svg",
+      "bytes": 506,
+      "sha256": "e0736262db0103f8a56a1acda2144a733c49b90762d967948f588beaaaef8a24"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-banda-coral.svg",
+      "bytes": 506,
+      "sha256": "d4fe8ec219dc670b7159c5f0c679bf6acabd318c577e3856ac85c0ce31bc1f0c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-banda-menta.svg",
+      "bytes": 506,
+      "sha256": "d21e7f0c21670b3cdedcaab07a8c525a834e2c8971a8a51b2dae6812399a9204"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-banda-violeta.svg",
+      "bytes": 506,
+      "sha256": "a22f8b8798f69189e08228cf17a1bba33d32cbd14bced815cb28dd6439f09aea"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-bucket-amarillo.svg",
+      "bytes": 680,
+      "sha256": "23c66d6f28a9ec6f1ea1a77a643e946c5292b6dbdbb0261ef0cf6923e286e179"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-bucket-coral.svg",
+      "bytes": 680,
+      "sha256": "9d23ebc702361817718ec669ec9050a97179fc64fa72104cc8ecb27fe3dfd02c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-bucket-menta.svg",
+      "bytes": 680,
+      "sha256": "463309defce4492ea89e41b154329b7ed9537562dfc4b0a6f3f9e3f2bd206e86"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-bucket-violeta.svg",
+      "bytes": 680,
+      "sha256": "a5f9975eb36cca8a0be532aae21ae26148aca3423969cadf146bb4e8046c7508"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-bufanda-amarillo.svg",
+      "bytes": 559,
+      "sha256": "394fede09decf7ebca471b4ce12089185221330e6ae4102b6e19b16be80fd11d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-bufanda-coral.svg",
+      "bytes": 559,
+      "sha256": "0a7264b8ca8ff04ba2f1879b996c1218fe9222753d787531f0f52b3ba91fcfde"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-bufanda-menta.svg",
+      "bytes": 559,
+      "sha256": "30858a7e5fbc0e3c847a9d5236eaa1b012ba074ca986d210f066b6814c8b08eb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-bufanda-violeta.svg",
+      "bytes": 559,
+      "sha256": "796ac49d2e2fb46392b381b43584d28392d46c09c1637501b53ffb6ed08d9137"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-corbatin-amarillo.svg",
+      "bytes": 733,
+      "sha256": "86e787d6ed450e3545f02e8244eb381c196f67b676fc6ff42986d641c57d9d4b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-corbatin-coral.svg",
+      "bytes": 733,
+      "sha256": "64be3bb8d154791755ab88eafc4520c9e9c57c435d111975533c45ca9373191b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-corbatin-menta.svg",
+      "bytes": 733,
+      "sha256": "e6e0071296c8bb36e682163751dea12d6dff70ad25acd10fa85ca1f9649df335"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-corbatin-violeta.svg",
+      "bytes": 733,
+      "sha256": "10bcc99e1fd69ea93a3fc1d535bed42b92a1349a2b0df403d334bd0b482aa2d4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-cuadradas-amarillo.svg",
+      "bytes": 1300,
+      "sha256": "7711a38288bb39b609db1389f27485a09d9b27f5cafb85c3c42a4f57442d3e78"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-cuadradas-coral.svg",
+      "bytes": 1300,
+      "sha256": "137504f9fc7a379223ff7a18223c2b3c0b3e0dcef21b9a959fb8a89348a2d9bb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-cuadradas-menta.svg",
+      "bytes": 1300,
+      "sha256": "e12f7a4bca52ac9cf448ffd26f1f9dca4ae339b82b7aba4b6a24e5d317ab9fc3"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-cuadradas-violeta.svg",
+      "bytes": 1300,
+      "sha256": "18bea9ade90f2e10d7ac0baa192a1b70b9efd17f40ecdf662ce75115dba84d54"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-redondas-amarillo.svg",
+      "bytes": 626,
+      "sha256": "1a27ea15fe4fffb3fc3027ea19904ef2aa030d9c97cbb88755d3049a472a1252"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-redondas-coral.svg",
+      "bytes": 626,
+      "sha256": "8c612ce0b6a662443cb4ca261ca84b2481b1f13037f8254b7244980d8b9d6c8a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-redondas-menta.svg",
+      "bytes": 626,
+      "sha256": "d3f3dfc1842af477c1b3381a05ca9d0f2331771467a4a9798f159d90214c7b58"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-redondas-violeta.svg",
+      "bytes": 626,
+      "sha256": "f92970236ea536a773d5bead7f69536868ed985a3e5374def197662449e8b44d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-sol-amarillo.svg",
+      "bytes": 832,
+      "sha256": "fce86020975413f109bd1a450871876339cd536bf560e88ab2668f721402012d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-sol-coral.svg",
+      "bytes": 832,
+      "sha256": "fe702c19f7bcf508813cd4e64cb91c9c695476fe21c09a44ed43b858fadfc561"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-sol-menta.svg",
+      "bytes": 832,
+      "sha256": "7c55084bb1d2014e7af05bf2f2c28d1a51b9685bef712c6dfeddf5dd8a80ba40"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gafas-sol-violeta.svg",
+      "bytes": 832,
+      "sha256": "f275d2afb18e304e20d462a02aee38cbd73aa64e0b9a169739422ca309f4b318"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gorra-amarillo.svg",
+      "bytes": 709,
+      "sha256": "ce1243a90dc4a216f7af544d0ad57ff8dc18043b2824657282f4ef3775f5db9f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gorra-coral.svg",
+      "bytes": 709,
+      "sha256": "792cd0b6f64203f9d0de8fbad5fb3a70780107ed9afbf3ba83aa49483a15d741"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gorra-menta.svg",
+      "bytes": 709,
+      "sha256": "182713ea5aa7a70090bb33e03a389ee9eff5fdc89bfd7d2af2b5dcf0b46e1ea2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gorra-violeta.svg",
+      "bytes": 709,
+      "sha256": "c84c6d891d85266df8d5ce08582fc2e476e2bd9641ad0c14a195da96677d9e3e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gorro-amarillo.svg",
+      "bytes": 903,
+      "sha256": "2682131c03dc01509466734f48979eb509f03ad60e0f9bfda2de81d079d961e8"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gorro-coral.svg",
+      "bytes": 903,
+      "sha256": "bb798654f6b7c1e665f8fcdff89580fc0fbd4b8959456f747b0f0efa9c176ac7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gorro-menta.svg",
+      "bytes": 903,
+      "sha256": "8ee7f6fbb6fad3368c53c331ac1d5771b3e9b45121f7920a8e84ed3ecf2522a7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-gorro-violeta.svg",
+      "bytes": 903,
+      "sha256": "534bb03a71f604c6d25936c4a3d66c18850e705cc5e62137b0e94d26f614141a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-lazo-amarillo.svg",
+      "bytes": 525,
+      "sha256": "9b57ec5428508b9985c7990608605e543191718ae6814db4a0e87e974e2966d4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-lazo-coral.svg",
+      "bytes": 525,
+      "sha256": "b091c4dfce822b6df70a90436babfe294e6ec2578e6ca485db1c60edf7144c66"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-lazo-menta.svg",
+      "bytes": 525,
+      "sha256": "6645daa8266511b3dec9ddfaaecc9031369f4829bfd0e3ae06155312c517a09e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-lazo-violeta.svg",
+      "bytes": 525,
+      "sha256": "450e0f19dc5c329c5e4cdbb1054463c6bed3567d6b1df9e37d170ede92495c66"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-microfono-amarillo.svg",
+      "bytes": 977,
+      "sha256": "982a99e22a8ebb85a341d3af826abfa416dd25fc57c580e00bafd36179b12000"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-microfono-coral.svg",
+      "bytes": 977,
+      "sha256": "c0a51f5f581d8dff23fd84799c48c5ce31aede374dfb9300f65c4aca9c3745bb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-microfono-menta.svg",
+      "bytes": 977,
+      "sha256": "d8489ec42d3f8310be788575db9c368b24bbc03c122b4183e84ae52ef71e7dc4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-microfono-violeta.svg",
+      "bytes": 977,
+      "sha256": "ff2accd1f1a47f041f222919598070ee3d2863ad93abdd137e0e015b98f3a67f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-panuelo-amarillo.svg",
+      "bytes": 695,
+      "sha256": "b60f59cab85148d6a9ee6b8b46872e3ef378e799fcd9c1f5c350bb3d0c178f48"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-panuelo-coral.svg",
+      "bytes": 695,
+      "sha256": "312605baf8f4b0ee444c39163f9e7a70068dc9c9c215f98e49ac013c6f0fc3dd"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-panuelo-menta.svg",
+      "bytes": 695,
+      "sha256": "5f834ab4d7a5e9159eaffa328862408c28dc446c85b5965a8e9e73a0007b7429"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-panuelo-violeta.svg",
+      "bytes": 695,
+      "sha256": "0702552346e0b9a012783f480a883d5c9dbe9f4e87c8dde66293d4c973623c0c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-pase-amarillo.svg",
+      "bytes": 461,
+      "sha256": "639d93a52762c85a76214ebf533532f1957c7aab6a39bd10ef5c6b13eb35c2f6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-pase-coral.svg",
+      "bytes": 461,
+      "sha256": "aa5f7b9f74209e127b24b4ccb0682391d6ff6752e37ed38439b36e5cddf9fbc9"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-pase-menta.svg",
+      "bytes": 461,
+      "sha256": "4125e324dce2de02745ab52b5aabbb1b213aa05fad4cbb2d1178766ee6922122"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-pase-violeta.svg",
+      "bytes": 461,
+      "sha256": "d0821c21e7f9013a0166bb94d73bc7c963d718328bb43ed21fe6ce7dbfdccbe7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-pin-estrella-amarillo.svg",
+      "bytes": 422,
+      "sha256": "6954f51672ca41fbef4ff4d6698d14fc75de941153272dca8b7bcb54296d949f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-pin-estrella-coral.svg",
+      "bytes": 422,
+      "sha256": "9c14b0423db8f7131dbb0298f532c92c5b1b0f7bf78e5a2676de6e2e42cbd4ca"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-pin-estrella-menta.svg",
+      "bytes": 422,
+      "sha256": "5188b9168f5e44955d462597461ef931fea8bdfd582177f937719c23560f34a1"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-pin-estrella-violeta.svg",
+      "bytes": 422,
+      "sha256": "506cfcd2d96cd0952296c9e10f98442c393aa508cfd98f0dbbee57aca5d5dc16"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-vincha-amarillo.svg",
+      "bytes": 624,
+      "sha256": "939d7c1ed40a2dcf3c0eb970889c5a4e597aa0b8cd06df98b11a979d51e824e6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-vincha-coral.svg",
+      "bytes": 624,
+      "sha256": "593d8cf38fb634145f564fcb0575c7517fda54312dedb1526a5d6cceda48d158"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-vincha-menta.svg",
+      "bytes": 624,
+      "sha256": "b742c273e0defb10a43c0030ebac34aa6c5a1c3ab8abaee63bceb874983348a5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/gato-vincha-violeta.svg",
+      "bytes": 624,
+      "sha256": "bc84711c21fe0eee23e0ef4119a43ee340caf081e5abc113a94fed2f193db820"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-auriculares-amarillo.svg",
+      "bytes": 548,
+      "sha256": "368e227c6d0edf75cd98668dae76e356ae16073b32c91d401b8c50007735ec7b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-auriculares-coral.svg",
+      "bytes": 548,
+      "sha256": "6537b16363c7b720d7604cb6282cca884b35dd0b082f1ecf139f1f33fbb1520a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-auriculares-menta.svg",
+      "bytes": 548,
+      "sha256": "470b701c630b55cf1e0d744d35c1e23d20da8f5c0ac5663f77a79e0e221b95e1"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-auriculares-violeta.svg",
+      "bytes": 548,
+      "sha256": "35d73f2a14d3255706e5d31fd4ffaa1177a40e16c5cd7f6882105b483aa4dbf5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-banda-amarillo.svg",
+      "bytes": 506,
+      "sha256": "e0736262db0103f8a56a1acda2144a733c49b90762d967948f588beaaaef8a24"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-banda-coral.svg",
+      "bytes": 506,
+      "sha256": "d4fe8ec219dc670b7159c5f0c679bf6acabd318c577e3856ac85c0ce31bc1f0c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-banda-menta.svg",
+      "bytes": 506,
+      "sha256": "d21e7f0c21670b3cdedcaab07a8c525a834e2c8971a8a51b2dae6812399a9204"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-banda-violeta.svg",
+      "bytes": 506,
+      "sha256": "a22f8b8798f69189e08228cf17a1bba33d32cbd14bced815cb28dd6439f09aea"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-bucket-amarillo.svg",
+      "bytes": 680,
+      "sha256": "23c66d6f28a9ec6f1ea1a77a643e946c5292b6dbdbb0261ef0cf6923e286e179"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-bucket-coral.svg",
+      "bytes": 680,
+      "sha256": "9d23ebc702361817718ec669ec9050a97179fc64fa72104cc8ecb27fe3dfd02c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-bucket-menta.svg",
+      "bytes": 680,
+      "sha256": "463309defce4492ea89e41b154329b7ed9537562dfc4b0a6f3f9e3f2bd206e86"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-bucket-violeta.svg",
+      "bytes": 680,
+      "sha256": "a5f9975eb36cca8a0be532aae21ae26148aca3423969cadf146bb4e8046c7508"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-bufanda-amarillo.svg",
+      "bytes": 559,
+      "sha256": "394fede09decf7ebca471b4ce12089185221330e6ae4102b6e19b16be80fd11d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-bufanda-coral.svg",
+      "bytes": 559,
+      "sha256": "0a7264b8ca8ff04ba2f1879b996c1218fe9222753d787531f0f52b3ba91fcfde"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-bufanda-menta.svg",
+      "bytes": 559,
+      "sha256": "30858a7e5fbc0e3c847a9d5236eaa1b012ba074ca986d210f066b6814c8b08eb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-bufanda-violeta.svg",
+      "bytes": 559,
+      "sha256": "796ac49d2e2fb46392b381b43584d28392d46c09c1637501b53ffb6ed08d9137"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-corbatin-amarillo.svg",
+      "bytes": 733,
+      "sha256": "86e787d6ed450e3545f02e8244eb381c196f67b676fc6ff42986d641c57d9d4b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-corbatin-coral.svg",
+      "bytes": 733,
+      "sha256": "64be3bb8d154791755ab88eafc4520c9e9c57c435d111975533c45ca9373191b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-corbatin-menta.svg",
+      "bytes": 733,
+      "sha256": "e6e0071296c8bb36e682163751dea12d6dff70ad25acd10fa85ca1f9649df335"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-corbatin-violeta.svg",
+      "bytes": 733,
+      "sha256": "10bcc99e1fd69ea93a3fc1d535bed42b92a1349a2b0df403d334bd0b482aa2d4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-cuadradas-amarillo.svg",
+      "bytes": 1300,
+      "sha256": "7711a38288bb39b609db1389f27485a09d9b27f5cafb85c3c42a4f57442d3e78"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-cuadradas-coral.svg",
+      "bytes": 1300,
+      "sha256": "137504f9fc7a379223ff7a18223c2b3c0b3e0dcef21b9a959fb8a89348a2d9bb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-cuadradas-menta.svg",
+      "bytes": 1300,
+      "sha256": "e12f7a4bca52ac9cf448ffd26f1f9dca4ae339b82b7aba4b6a24e5d317ab9fc3"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-cuadradas-violeta.svg",
+      "bytes": 1300,
+      "sha256": "18bea9ade90f2e10d7ac0baa192a1b70b9efd17f40ecdf662ce75115dba84d54"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-redondas-amarillo.svg",
+      "bytes": 626,
+      "sha256": "1a27ea15fe4fffb3fc3027ea19904ef2aa030d9c97cbb88755d3049a472a1252"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-redondas-coral.svg",
+      "bytes": 626,
+      "sha256": "8c612ce0b6a662443cb4ca261ca84b2481b1f13037f8254b7244980d8b9d6c8a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-redondas-menta.svg",
+      "bytes": 626,
+      "sha256": "d3f3dfc1842af477c1b3381a05ca9d0f2331771467a4a9798f159d90214c7b58"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-redondas-violeta.svg",
+      "bytes": 626,
+      "sha256": "f92970236ea536a773d5bead7f69536868ed985a3e5374def197662449e8b44d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-sol-amarillo.svg",
+      "bytes": 832,
+      "sha256": "fce86020975413f109bd1a450871876339cd536bf560e88ab2668f721402012d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-sol-coral.svg",
+      "bytes": 832,
+      "sha256": "fe702c19f7bcf508813cd4e64cb91c9c695476fe21c09a44ed43b858fadfc561"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-sol-menta.svg",
+      "bytes": 832,
+      "sha256": "7c55084bb1d2014e7af05bf2f2c28d1a51b9685bef712c6dfeddf5dd8a80ba40"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gafas-sol-violeta.svg",
+      "bytes": 832,
+      "sha256": "f275d2afb18e304e20d462a02aee38cbd73aa64e0b9a169739422ca309f4b318"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gorra-amarillo.svg",
+      "bytes": 709,
+      "sha256": "ce1243a90dc4a216f7af544d0ad57ff8dc18043b2824657282f4ef3775f5db9f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gorra-coral.svg",
+      "bytes": 709,
+      "sha256": "792cd0b6f64203f9d0de8fbad5fb3a70780107ed9afbf3ba83aa49483a15d741"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gorra-menta.svg",
+      "bytes": 709,
+      "sha256": "182713ea5aa7a70090bb33e03a389ee9eff5fdc89bfd7d2af2b5dcf0b46e1ea2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gorra-violeta.svg",
+      "bytes": 709,
+      "sha256": "c84c6d891d85266df8d5ce08582fc2e476e2bd9641ad0c14a195da96677d9e3e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gorro-amarillo.svg",
+      "bytes": 903,
+      "sha256": "2682131c03dc01509466734f48979eb509f03ad60e0f9bfda2de81d079d961e8"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gorro-coral.svg",
+      "bytes": 903,
+      "sha256": "bb798654f6b7c1e665f8fcdff89580fc0fbd4b8959456f747b0f0efa9c176ac7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gorro-menta.svg",
+      "bytes": 903,
+      "sha256": "8ee7f6fbb6fad3368c53c331ac1d5771b3e9b45121f7920a8e84ed3ecf2522a7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-gorro-violeta.svg",
+      "bytes": 903,
+      "sha256": "534bb03a71f604c6d25936c4a3d66c18850e705cc5e62137b0e94d26f614141a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-lazo-amarillo.svg",
+      "bytes": 525,
+      "sha256": "9b57ec5428508b9985c7990608605e543191718ae6814db4a0e87e974e2966d4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-lazo-coral.svg",
+      "bytes": 525,
+      "sha256": "b091c4dfce822b6df70a90436babfe294e6ec2578e6ca485db1c60edf7144c66"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-lazo-menta.svg",
+      "bytes": 525,
+      "sha256": "6645daa8266511b3dec9ddfaaecc9031369f4829bfd0e3ae06155312c517a09e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-lazo-violeta.svg",
+      "bytes": 525,
+      "sha256": "450e0f19dc5c329c5e4cdbb1054463c6bed3567d6b1df9e37d170ede92495c66"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-microfono-amarillo.svg",
+      "bytes": 977,
+      "sha256": "982a99e22a8ebb85a341d3af826abfa416dd25fc57c580e00bafd36179b12000"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-microfono-coral.svg",
+      "bytes": 977,
+      "sha256": "c0a51f5f581d8dff23fd84799c48c5ce31aede374dfb9300f65c4aca9c3745bb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-microfono-menta.svg",
+      "bytes": 977,
+      "sha256": "d8489ec42d3f8310be788575db9c368b24bbc03c122b4183e84ae52ef71e7dc4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-microfono-violeta.svg",
+      "bytes": 977,
+      "sha256": "ff2accd1f1a47f041f222919598070ee3d2863ad93abdd137e0e015b98f3a67f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-panuelo-amarillo.svg",
+      "bytes": 695,
+      "sha256": "b60f59cab85148d6a9ee6b8b46872e3ef378e799fcd9c1f5c350bb3d0c178f48"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-panuelo-coral.svg",
+      "bytes": 695,
+      "sha256": "312605baf8f4b0ee444c39163f9e7a70068dc9c9c215f98e49ac013c6f0fc3dd"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-panuelo-menta.svg",
+      "bytes": 695,
+      "sha256": "5f834ab4d7a5e9159eaffa328862408c28dc446c85b5965a8e9e73a0007b7429"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-panuelo-violeta.svg",
+      "bytes": 695,
+      "sha256": "0702552346e0b9a012783f480a883d5c9dbe9f4e87c8dde66293d4c973623c0c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-pase-amarillo.svg",
+      "bytes": 461,
+      "sha256": "639d93a52762c85a76214ebf533532f1957c7aab6a39bd10ef5c6b13eb35c2f6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-pase-coral.svg",
+      "bytes": 461,
+      "sha256": "aa5f7b9f74209e127b24b4ccb0682391d6ff6752e37ed38439b36e5cddf9fbc9"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-pase-menta.svg",
+      "bytes": 461,
+      "sha256": "4125e324dce2de02745ab52b5aabbb1b213aa05fad4cbb2d1178766ee6922122"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-pase-violeta.svg",
+      "bytes": 461,
+      "sha256": "d0821c21e7f9013a0166bb94d73bc7c963d718328bb43ed21fe6ce7dbfdccbe7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-pin-estrella-amarillo.svg",
+      "bytes": 422,
+      "sha256": "6954f51672ca41fbef4ff4d6698d14fc75de941153272dca8b7bcb54296d949f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-pin-estrella-coral.svg",
+      "bytes": 422,
+      "sha256": "9c14b0423db8f7131dbb0298f532c92c5b1b0f7bf78e5a2676de6e2e42cbd4ca"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-pin-estrella-menta.svg",
+      "bytes": 422,
+      "sha256": "5188b9168f5e44955d462597461ef931fea8bdfd582177f937719c23560f34a1"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-pin-estrella-violeta.svg",
+      "bytes": 422,
+      "sha256": "506cfcd2d96cd0952296c9e10f98442c393aa508cfd98f0dbbee57aca5d5dc16"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-vincha-amarillo.svg",
+      "bytes": 624,
+      "sha256": "939d7c1ed40a2dcf3c0eb970889c5a4e597aa0b8cd06df98b11a979d51e824e6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-vincha-coral.svg",
+      "bytes": 624,
+      "sha256": "593d8cf38fb634145f564fcb0575c7517fda54312dedb1526a5d6cceda48d158"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-vincha-menta.svg",
+      "bytes": 624,
+      "sha256": "b742c273e0defb10a43c0030ebac34aa6c5a1c3ab8abaee63bceb874983348a5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/nutria-vincha-violeta.svg",
+      "bytes": 624,
+      "sha256": "bc84711c21fe0eee23e0ef4119a43ee340caf081e5abc113a94fed2f193db820"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-auriculares-amarillo.svg",
+      "bytes": 548,
+      "sha256": "368e227c6d0edf75cd98668dae76e356ae16073b32c91d401b8c50007735ec7b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-auriculares-coral.svg",
+      "bytes": 548,
+      "sha256": "6537b16363c7b720d7604cb6282cca884b35dd0b082f1ecf139f1f33fbb1520a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-auriculares-menta.svg",
+      "bytes": 548,
+      "sha256": "470b701c630b55cf1e0d744d35c1e23d20da8f5c0ac5663f77a79e0e221b95e1"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-auriculares-violeta.svg",
+      "bytes": 548,
+      "sha256": "35d73f2a14d3255706e5d31fd4ffaa1177a40e16c5cd7f6882105b483aa4dbf5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-banda-amarillo.svg",
+      "bytes": 506,
+      "sha256": "e0736262db0103f8a56a1acda2144a733c49b90762d967948f588beaaaef8a24"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-banda-coral.svg",
+      "bytes": 506,
+      "sha256": "d4fe8ec219dc670b7159c5f0c679bf6acabd318c577e3856ac85c0ce31bc1f0c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-banda-menta.svg",
+      "bytes": 506,
+      "sha256": "d21e7f0c21670b3cdedcaab07a8c525a834e2c8971a8a51b2dae6812399a9204"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-banda-violeta.svg",
+      "bytes": 506,
+      "sha256": "a22f8b8798f69189e08228cf17a1bba33d32cbd14bced815cb28dd6439f09aea"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-bucket-amarillo.svg",
+      "bytes": 680,
+      "sha256": "23c66d6f28a9ec6f1ea1a77a643e946c5292b6dbdbb0261ef0cf6923e286e179"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-bucket-coral.svg",
+      "bytes": 680,
+      "sha256": "9d23ebc702361817718ec669ec9050a97179fc64fa72104cc8ecb27fe3dfd02c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-bucket-menta.svg",
+      "bytes": 680,
+      "sha256": "463309defce4492ea89e41b154329b7ed9537562dfc4b0a6f3f9e3f2bd206e86"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-bucket-violeta.svg",
+      "bytes": 680,
+      "sha256": "a5f9975eb36cca8a0be532aae21ae26148aca3423969cadf146bb4e8046c7508"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-bufanda-amarillo.svg",
+      "bytes": 559,
+      "sha256": "394fede09decf7ebca471b4ce12089185221330e6ae4102b6e19b16be80fd11d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-bufanda-coral.svg",
+      "bytes": 559,
+      "sha256": "0a7264b8ca8ff04ba2f1879b996c1218fe9222753d787531f0f52b3ba91fcfde"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-bufanda-menta.svg",
+      "bytes": 559,
+      "sha256": "30858a7e5fbc0e3c847a9d5236eaa1b012ba074ca986d210f066b6814c8b08eb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-bufanda-violeta.svg",
+      "bytes": 559,
+      "sha256": "796ac49d2e2fb46392b381b43584d28392d46c09c1637501b53ffb6ed08d9137"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-corbatin-amarillo.svg",
+      "bytes": 733,
+      "sha256": "86e787d6ed450e3545f02e8244eb381c196f67b676fc6ff42986d641c57d9d4b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-corbatin-coral.svg",
+      "bytes": 733,
+      "sha256": "64be3bb8d154791755ab88eafc4520c9e9c57c435d111975533c45ca9373191b"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-corbatin-menta.svg",
+      "bytes": 733,
+      "sha256": "e6e0071296c8bb36e682163751dea12d6dff70ad25acd10fa85ca1f9649df335"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-corbatin-violeta.svg",
+      "bytes": 733,
+      "sha256": "10bcc99e1fd69ea93a3fc1d535bed42b92a1349a2b0df403d334bd0b482aa2d4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-cuadradas-amarillo.svg",
+      "bytes": 1300,
+      "sha256": "7711a38288bb39b609db1389f27485a09d9b27f5cafb85c3c42a4f57442d3e78"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-cuadradas-coral.svg",
+      "bytes": 1300,
+      "sha256": "137504f9fc7a379223ff7a18223c2b3c0b3e0dcef21b9a959fb8a89348a2d9bb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-cuadradas-menta.svg",
+      "bytes": 1300,
+      "sha256": "e12f7a4bca52ac9cf448ffd26f1f9dca4ae339b82b7aba4b6a24e5d317ab9fc3"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-cuadradas-violeta.svg",
+      "bytes": 1300,
+      "sha256": "18bea9ade90f2e10d7ac0baa192a1b70b9efd17f40ecdf662ce75115dba84d54"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-redondas-amarillo.svg",
+      "bytes": 626,
+      "sha256": "1a27ea15fe4fffb3fc3027ea19904ef2aa030d9c97cbb88755d3049a472a1252"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-redondas-coral.svg",
+      "bytes": 626,
+      "sha256": "8c612ce0b6a662443cb4ca261ca84b2481b1f13037f8254b7244980d8b9d6c8a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-redondas-menta.svg",
+      "bytes": 626,
+      "sha256": "d3f3dfc1842af477c1b3381a05ca9d0f2331771467a4a9798f159d90214c7b58"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-redondas-violeta.svg",
+      "bytes": 626,
+      "sha256": "f92970236ea536a773d5bead7f69536868ed985a3e5374def197662449e8b44d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-sol-amarillo.svg",
+      "bytes": 832,
+      "sha256": "fce86020975413f109bd1a450871876339cd536bf560e88ab2668f721402012d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-sol-coral.svg",
+      "bytes": 832,
+      "sha256": "fe702c19f7bcf508813cd4e64cb91c9c695476fe21c09a44ed43b858fadfc561"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-sol-menta.svg",
+      "bytes": 832,
+      "sha256": "7c55084bb1d2014e7af05bf2f2c28d1a51b9685bef712c6dfeddf5dd8a80ba40"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gafas-sol-violeta.svg",
+      "bytes": 832,
+      "sha256": "f275d2afb18e304e20d462a02aee38cbd73aa64e0b9a169739422ca309f4b318"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gorra-amarillo.svg",
+      "bytes": 709,
+      "sha256": "ce1243a90dc4a216f7af544d0ad57ff8dc18043b2824657282f4ef3775f5db9f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gorra-coral.svg",
+      "bytes": 709,
+      "sha256": "792cd0b6f64203f9d0de8fbad5fb3a70780107ed9afbf3ba83aa49483a15d741"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gorra-menta.svg",
+      "bytes": 709,
+      "sha256": "182713ea5aa7a70090bb33e03a389ee9eff5fdc89bfd7d2af2b5dcf0b46e1ea2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gorra-violeta.svg",
+      "bytes": 709,
+      "sha256": "c84c6d891d85266df8d5ce08582fc2e476e2bd9641ad0c14a195da96677d9e3e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gorro-amarillo.svg",
+      "bytes": 903,
+      "sha256": "2682131c03dc01509466734f48979eb509f03ad60e0f9bfda2de81d079d961e8"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gorro-coral.svg",
+      "bytes": 903,
+      "sha256": "bb798654f6b7c1e665f8fcdff89580fc0fbd4b8959456f747b0f0efa9c176ac7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gorro-menta.svg",
+      "bytes": 903,
+      "sha256": "8ee7f6fbb6fad3368c53c331ac1d5771b3e9b45121f7920a8e84ed3ecf2522a7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-gorro-violeta.svg",
+      "bytes": 903,
+      "sha256": "534bb03a71f604c6d25936c4a3d66c18850e705cc5e62137b0e94d26f614141a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-lazo-amarillo.svg",
+      "bytes": 525,
+      "sha256": "9b57ec5428508b9985c7990608605e543191718ae6814db4a0e87e974e2966d4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-lazo-coral.svg",
+      "bytes": 525,
+      "sha256": "b091c4dfce822b6df70a90436babfe294e6ec2578e6ca485db1c60edf7144c66"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-lazo-menta.svg",
+      "bytes": 525,
+      "sha256": "6645daa8266511b3dec9ddfaaecc9031369f4829bfd0e3ae06155312c517a09e"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-lazo-violeta.svg",
+      "bytes": 525,
+      "sha256": "450e0f19dc5c329c5e4cdbb1054463c6bed3567d6b1df9e37d170ede92495c66"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-microfono-amarillo.svg",
+      "bytes": 977,
+      "sha256": "982a99e22a8ebb85a341d3af826abfa416dd25fc57c580e00bafd36179b12000"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-microfono-coral.svg",
+      "bytes": 977,
+      "sha256": "c0a51f5f581d8dff23fd84799c48c5ce31aede374dfb9300f65c4aca9c3745bb"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-microfono-menta.svg",
+      "bytes": 977,
+      "sha256": "d8489ec42d3f8310be788575db9c368b24bbc03c122b4183e84ae52ef71e7dc4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-microfono-violeta.svg",
+      "bytes": 977,
+      "sha256": "ff2accd1f1a47f041f222919598070ee3d2863ad93abdd137e0e015b98f3a67f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-panuelo-amarillo.svg",
+      "bytes": 695,
+      "sha256": "b60f59cab85148d6a9ee6b8b46872e3ef378e799fcd9c1f5c350bb3d0c178f48"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-panuelo-coral.svg",
+      "bytes": 695,
+      "sha256": "312605baf8f4b0ee444c39163f9e7a70068dc9c9c215f98e49ac013c6f0fc3dd"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-panuelo-menta.svg",
+      "bytes": 695,
+      "sha256": "5f834ab4d7a5e9159eaffa328862408c28dc446c85b5965a8e9e73a0007b7429"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-panuelo-violeta.svg",
+      "bytes": 695,
+      "sha256": "0702552346e0b9a012783f480a883d5c9dbe9f4e87c8dde66293d4c973623c0c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-pase-amarillo.svg",
+      "bytes": 461,
+      "sha256": "639d93a52762c85a76214ebf533532f1957c7aab6a39bd10ef5c6b13eb35c2f6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-pase-coral.svg",
+      "bytes": 461,
+      "sha256": "aa5f7b9f74209e127b24b4ccb0682391d6ff6752e37ed38439b36e5cddf9fbc9"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-pase-menta.svg",
+      "bytes": 461,
+      "sha256": "4125e324dce2de02745ab52b5aabbb1b213aa05fad4cbb2d1178766ee6922122"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-pase-violeta.svg",
+      "bytes": 461,
+      "sha256": "d0821c21e7f9013a0166bb94d73bc7c963d718328bb43ed21fe6ce7dbfdccbe7"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-pin-estrella-amarillo.svg",
+      "bytes": 422,
+      "sha256": "6954f51672ca41fbef4ff4d6698d14fc75de941153272dca8b7bcb54296d949f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-pin-estrella-coral.svg",
+      "bytes": 422,
+      "sha256": "9c14b0423db8f7131dbb0298f532c92c5b1b0f7bf78e5a2676de6e2e42cbd4ca"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-pin-estrella-menta.svg",
+      "bytes": 422,
+      "sha256": "5188b9168f5e44955d462597461ef931fea8bdfd582177f937719c23560f34a1"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-pin-estrella-violeta.svg",
+      "bytes": 422,
+      "sha256": "506cfcd2d96cd0952296c9e10f98442c393aa508cfd98f0dbbee57aca5d5dc16"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-vincha-amarillo.svg",
+      "bytes": 624,
+      "sha256": "939d7c1ed40a2dcf3c0eb970889c5a4e597aa0b8cd06df98b11a979d51e824e6"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-vincha-coral.svg",
+      "bytes": 624,
+      "sha256": "593d8cf38fb634145f564fcb0575c7517fda54312dedb1526a5d6cceda48d158"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-vincha-menta.svg",
+      "bytes": 624,
+      "sha256": "b742c273e0defb10a43c0030ebac34aa6c5a1c3ab8abaee63bceb874983348a5"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/front/panda-rojo-vincha-violeta.svg",
+      "bytes": 624,
+      "sha256": "bc84711c21fe0eee23e0ef4119a43ee340caf081e5abc113a94fed2f193db820"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-auriculares-amarillo.svg",
+      "bytes": 367,
+      "sha256": "9d120b53f8d3f95a0de314d38107d0491fb31acb183d6cd4bf2f62e8c4bb93c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-auriculares-coral.svg",
+      "bytes": 367,
+      "sha256": "8ae85b26b22620fd28f491b9dfa0bd02125a2e32f06c6734c64d3eb056b5ba7d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-auriculares-menta.svg",
+      "bytes": 367,
+      "sha256": "9bbd04b240880df407d430689ce2d7afb043962b8c50a53aa8d6d6634d3b3828"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-auriculares-violeta.svg",
+      "bytes": 367,
+      "sha256": "366ddf15fe07d880052fe2f51412f9a47ab2de6a661e193fc55ecb5eba37f24f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-microfono-amarillo.svg",
+      "bytes": 367,
+      "sha256": "9d120b53f8d3f95a0de314d38107d0491fb31acb183d6cd4bf2f62e8c4bb93c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-microfono-coral.svg",
+      "bytes": 367,
+      "sha256": "8ae85b26b22620fd28f491b9dfa0bd02125a2e32f06c6734c64d3eb056b5ba7d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-microfono-menta.svg",
+      "bytes": 367,
+      "sha256": "9bbd04b240880df407d430689ce2d7afb043962b8c50a53aa8d6d6634d3b3828"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-microfono-violeta.svg",
+      "bytes": 367,
+      "sha256": "366ddf15fe07d880052fe2f51412f9a47ab2de6a661e193fc55ecb5eba37f24f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-pase-amarillo.svg",
+      "bytes": 380,
+      "sha256": "f1826d919b366f2267be337c309f77c4a12c1b107756a6a70e9c951fd3e7cf7a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-pase-coral.svg",
+      "bytes": 380,
+      "sha256": "ec332a7714bcf5718a6733d1cf3e5966e9f6d96a19de04574483c08a5a0f7d8d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-pase-menta.svg",
+      "bytes": 380,
+      "sha256": "5b3f4056c171ade9ecff5785ea433ae68461b7332b40a29cb9e74abe79873cdc"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-pase-violeta.svg",
+      "bytes": 380,
+      "sha256": "19013eb3ca0c4f3301873c58b482bbb9a458e505a92c635d05956d8b08cc2a49"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-vincha-amarillo.svg",
+      "bytes": 419,
+      "sha256": "0677b8f08356685401465a63cced695ae190a961c32dff632f7a8c2fb3903cf4"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-vincha-coral.svg",
+      "bytes": 419,
+      "sha256": "26506cb3bbccba7e2cddadb260f8513e8c58f56c1f49a6f66f58ce3c8bad251c"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-vincha-menta.svg",
+      "bytes": 419,
+      "sha256": "411e25207eee4561765f70e401e38bfea3aacc2e807d52b86adfb9d3181830c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/conejo-vincha-violeta.svg",
+      "bytes": 419,
+      "sha256": "286341ddc432a2f79a3332098c88b7d8f948f6e6bc43ba90d42530b49d1fa349"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-auriculares-amarillo.svg",
+      "bytes": 367,
+      "sha256": "9d120b53f8d3f95a0de314d38107d0491fb31acb183d6cd4bf2f62e8c4bb93c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-auriculares-coral.svg",
+      "bytes": 367,
+      "sha256": "8ae85b26b22620fd28f491b9dfa0bd02125a2e32f06c6734c64d3eb056b5ba7d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-auriculares-menta.svg",
+      "bytes": 367,
+      "sha256": "9bbd04b240880df407d430689ce2d7afb043962b8c50a53aa8d6d6634d3b3828"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-auriculares-violeta.svg",
+      "bytes": 367,
+      "sha256": "366ddf15fe07d880052fe2f51412f9a47ab2de6a661e193fc55ecb5eba37f24f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-microfono-amarillo.svg",
+      "bytes": 367,
+      "sha256": "9d120b53f8d3f95a0de314d38107d0491fb31acb183d6cd4bf2f62e8c4bb93c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-microfono-coral.svg",
+      "bytes": 367,
+      "sha256": "8ae85b26b22620fd28f491b9dfa0bd02125a2e32f06c6734c64d3eb056b5ba7d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-microfono-menta.svg",
+      "bytes": 367,
+      "sha256": "9bbd04b240880df407d430689ce2d7afb043962b8c50a53aa8d6d6634d3b3828"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-microfono-violeta.svg",
+      "bytes": 367,
+      "sha256": "366ddf15fe07d880052fe2f51412f9a47ab2de6a661e193fc55ecb5eba37f24f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-pase-amarillo.svg",
+      "bytes": 380,
+      "sha256": "f1826d919b366f2267be337c309f77c4a12c1b107756a6a70e9c951fd3e7cf7a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-pase-coral.svg",
+      "bytes": 380,
+      "sha256": "ec332a7714bcf5718a6733d1cf3e5966e9f6d96a19de04574483c08a5a0f7d8d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-pase-menta.svg",
+      "bytes": 380,
+      "sha256": "5b3f4056c171ade9ecff5785ea433ae68461b7332b40a29cb9e74abe79873cdc"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-pase-violeta.svg",
+      "bytes": 380,
+      "sha256": "19013eb3ca0c4f3301873c58b482bbb9a458e505a92c635d05956d8b08cc2a49"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-vincha-amarillo.svg",
+      "bytes": 384,
+      "sha256": "86da43cd2e92dfabfa7effeff11137492f95a63e904aff1e3a695d28f485b6c9"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-vincha-coral.svg",
+      "bytes": 384,
+      "sha256": "db764fe599ca1316301057e0c4eccafc1d4b9b0d3d3a88d8faa8d20c98b718ab"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-vincha-menta.svg",
+      "bytes": 384,
+      "sha256": "21d795802229d89f3bd947b9c85038b44422456158358e6c21453190c9d21985"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/gato-vincha-violeta.svg",
+      "bytes": 384,
+      "sha256": "d7e57604c96a52520a74a76f09847e77c7bc3460768db952810a16543b2af92f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-auriculares-amarillo.svg",
+      "bytes": 367,
+      "sha256": "9d120b53f8d3f95a0de314d38107d0491fb31acb183d6cd4bf2f62e8c4bb93c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-auriculares-coral.svg",
+      "bytes": 367,
+      "sha256": "8ae85b26b22620fd28f491b9dfa0bd02125a2e32f06c6734c64d3eb056b5ba7d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-auriculares-menta.svg",
+      "bytes": 367,
+      "sha256": "9bbd04b240880df407d430689ce2d7afb043962b8c50a53aa8d6d6634d3b3828"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-auriculares-violeta.svg",
+      "bytes": 367,
+      "sha256": "366ddf15fe07d880052fe2f51412f9a47ab2de6a661e193fc55ecb5eba37f24f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-microfono-amarillo.svg",
+      "bytes": 367,
+      "sha256": "9d120b53f8d3f95a0de314d38107d0491fb31acb183d6cd4bf2f62e8c4bb93c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-microfono-coral.svg",
+      "bytes": 367,
+      "sha256": "8ae85b26b22620fd28f491b9dfa0bd02125a2e32f06c6734c64d3eb056b5ba7d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-microfono-menta.svg",
+      "bytes": 367,
+      "sha256": "9bbd04b240880df407d430689ce2d7afb043962b8c50a53aa8d6d6634d3b3828"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-microfono-violeta.svg",
+      "bytes": 367,
+      "sha256": "366ddf15fe07d880052fe2f51412f9a47ab2de6a661e193fc55ecb5eba37f24f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-pase-amarillo.svg",
+      "bytes": 380,
+      "sha256": "f1826d919b366f2267be337c309f77c4a12c1b107756a6a70e9c951fd3e7cf7a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-pase-coral.svg",
+      "bytes": 380,
+      "sha256": "ec332a7714bcf5718a6733d1cf3e5966e9f6d96a19de04574483c08a5a0f7d8d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-pase-menta.svg",
+      "bytes": 380,
+      "sha256": "5b3f4056c171ade9ecff5785ea433ae68461b7332b40a29cb9e74abe79873cdc"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-pase-violeta.svg",
+      "bytes": 380,
+      "sha256": "19013eb3ca0c4f3301873c58b482bbb9a458e505a92c635d05956d8b08cc2a49"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-vincha-amarillo.svg",
+      "bytes": 384,
+      "sha256": "86da43cd2e92dfabfa7effeff11137492f95a63e904aff1e3a695d28f485b6c9"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-vincha-coral.svg",
+      "bytes": 384,
+      "sha256": "db764fe599ca1316301057e0c4eccafc1d4b9b0d3d3a88d8faa8d20c98b718ab"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-vincha-menta.svg",
+      "bytes": 384,
+      "sha256": "21d795802229d89f3bd947b9c85038b44422456158358e6c21453190c9d21985"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/nutria-vincha-violeta.svg",
+      "bytes": 384,
+      "sha256": "d7e57604c96a52520a74a76f09847e77c7bc3460768db952810a16543b2af92f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-auriculares-amarillo.svg",
+      "bytes": 367,
+      "sha256": "9d120b53f8d3f95a0de314d38107d0491fb31acb183d6cd4bf2f62e8c4bb93c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-auriculares-coral.svg",
+      "bytes": 367,
+      "sha256": "8ae85b26b22620fd28f491b9dfa0bd02125a2e32f06c6734c64d3eb056b5ba7d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-auriculares-menta.svg",
+      "bytes": 367,
+      "sha256": "9bbd04b240880df407d430689ce2d7afb043962b8c50a53aa8d6d6634d3b3828"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-auriculares-violeta.svg",
+      "bytes": 367,
+      "sha256": "366ddf15fe07d880052fe2f51412f9a47ab2de6a661e193fc55ecb5eba37f24f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-microfono-amarillo.svg",
+      "bytes": 367,
+      "sha256": "9d120b53f8d3f95a0de314d38107d0491fb31acb183d6cd4bf2f62e8c4bb93c2"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-microfono-coral.svg",
+      "bytes": 367,
+      "sha256": "8ae85b26b22620fd28f491b9dfa0bd02125a2e32f06c6734c64d3eb056b5ba7d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-microfono-menta.svg",
+      "bytes": 367,
+      "sha256": "9bbd04b240880df407d430689ce2d7afb043962b8c50a53aa8d6d6634d3b3828"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-microfono-violeta.svg",
+      "bytes": 367,
+      "sha256": "366ddf15fe07d880052fe2f51412f9a47ab2de6a661e193fc55ecb5eba37f24f"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-pase-amarillo.svg",
+      "bytes": 380,
+      "sha256": "f1826d919b366f2267be337c309f77c4a12c1b107756a6a70e9c951fd3e7cf7a"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-pase-coral.svg",
+      "bytes": 380,
+      "sha256": "ec332a7714bcf5718a6733d1cf3e5966e9f6d96a19de04574483c08a5a0f7d8d"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-pase-menta.svg",
+      "bytes": 380,
+      "sha256": "5b3f4056c171ade9ecff5785ea433ae68461b7332b40a29cb9e74abe79873cdc"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-pase-violeta.svg",
+      "bytes": 380,
+      "sha256": "19013eb3ca0c4f3301873c58b482bbb9a458e505a92c635d05956d8b08cc2a49"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-vincha-amarillo.svg",
+      "bytes": 384,
+      "sha256": "86da43cd2e92dfabfa7effeff11137492f95a63e904aff1e3a695d28f485b6c9"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-vincha-coral.svg",
+      "bytes": 384,
+      "sha256": "db764fe599ca1316301057e0c4eccafc1d4b9b0d3d3a88d8faa8d20c98b718ab"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-vincha-menta.svg",
+      "bytes": 384,
+      "sha256": "21d795802229d89f3bd947b9c85038b44422456158358e6c21453190c9d21985"
+    },
+    {
+      "path": "src/main/resources/static/img/avatars/v3/rear/panda-rojo-vincha-violeta.svg",
+      "bytes": 384,
+      "sha256": "d7e57604c96a52520a74a76f09847e77c7bc3460768db952810a16543b2af92f"
+    },
+    {
+      "path": "src/main/resources/static/img/favicon-32.png",
+      "bytes": 901,
+      "sha256": "7bc566eed7b9b789d9b4df43dcc78a4b6e35c213d6f09cba853e2d6e121109e8"
+    },
+    {
+      "path": "src/main/resources/static/img/favicon.svg",
+      "bytes": 802,
+      "sha256": "0d07fcebffc4f1295e534c0430a29fb5408c752220e80effd3010eaff9b361d1"
+    },
+    {
+      "path": "src/main/resources/static/img/icons.svg",
+      "bytes": 8109,
+      "sha256": "af66a1afe6a61d9942bb031b5bfc219c1c829fa36ec2b11a2b3eeccaf5df25e3"
+    },
+    {
+      "path": "src/main/resources/static/img/ping-social.png",
+      "bytes": 33973,
+      "sha256": "1da9717cab068fa80ec65308cf17780bef6818b9ae1e81748b8843ed039f9e9d"
+    },
+    {
+      "path": "src/main/resources/static/img/sofa/convencion-social.webp",
+      "bytes": 319502,
+      "sha256": "1cca94859b1c16e6f421443dfddfc1ddbec6b7880757ccdc00929f7319f04146"
+    },
+    {
+      "path": "src/main/resources/static/js/account.js",
+      "bytes": 311,
+      "sha256": "3343409edc63e8736c62eb9c37421054850a4cfd197b071b2be64448fd6d924e"
+    },
+    {
+      "path": "src/main/resources/static/js/active-map.js",
+      "bytes": 1373,
+      "sha256": "e09742e03e0009488824b33563f5c3cfa2b9b943de59f3b60c329ad5ed9b1a83"
+    },
+    {
+      "path": "src/main/resources/static/js/avatar.js",
+      "bytes": 8710,
+      "sha256": "b702e66672bbddf99a661d989a117e05ccec0ff3c8c1c4dbae1f3f8fcdbd7d74"
+    },
+    {
+      "path": "src/main/resources/static/js/connect-pair.js",
+      "bytes": 1329,
+      "sha256": "184cd7f2a2924a3554d583974e4991f7bebcb4017de97369bf8575fbacd9525d"
+    },
+    {
+      "path": "src/main/resources/static/js/event-editor.js",
+      "bytes": 9727,
+      "sha256": "ded6c99b90e1f6f778bc70feabfc94074d1df0efc661174fe310a3b15357147b"
+    },
+    {
+      "path": "src/main/resources/static/js/event-entry.js",
+      "bytes": 850,
+      "sha256": "c2ac384e8b051325036741925334f83b6172e5d0bcbe9676a4aa3229f96008d0"
+    },
+    {
+      "path": "src/main/resources/static/js/event-map.js",
+      "bytes": 2653,
+      "sha256": "f73295f7cfc8126b20fb2c1e615b01b7fb153b0f5d8821330d3886b4c4121793"
+    },
+    {
+      "path": "src/main/resources/static/js/floorplan.js",
+      "bytes": 7077,
+      "sha256": "34d2888d92ecada41b7d248280ea26b7cfeea640d186d28d296607d4e4760803"
+    },
+    {
+      "path": "src/main/resources/static/js/interest-selector.js",
+      "bytes": 11951,
+      "sha256": "bb78f39dd2a5cee4a23027ff7faa0f5f0f770f92e39ea699413205a943b81f8f"
+    },
+    {
+      "path": "src/main/resources/static/js/live.js",
+      "bytes": 8299,
+      "sha256": "b240ea102fa39ea9ead4f43cd8f9f26bfb63b888cbc4cbe4f1a1453d3245fc3b"
+    },
+    {
+      "path": "src/main/resources/static/js/qr-scanner.js",
+      "bytes": 7305,
+      "sha256": "301251d255ca50cb6120ca711e2285fe84835a048b78b6f98d7e41524f49d6b9"
+    },
+    {
+      "path": "src/main/resources/static/js/recognition-hint.js",
+      "bytes": 2036,
+      "sha256": "c41b890382d52c39e01fd1b988a56e3a9d7126e4eb4bc39973ba42171c87ac15"
+    },
+    {
+      "path": "src/main/resources/static/js/theme-init.js",
+      "bytes": 361,
+      "sha256": "f9baf4f9d467a70aadc0afc53f9ee588a3982613bf2bc0ee61a8b953ff0b6415"
+    },
+    {
+      "path": "src/main/resources/static/js/theme-toggle.js",
+      "bytes": 1083,
+      "sha256": "e533779b5002a20939db07bb231241c27e0aa11c08cc1c77b405e84424931ec0"
+    },
+    {
+      "path": "src/main/resources/static/js/themes.js",
+      "bytes": 1681,
+      "sha256": "95af211e412c209c834ca13468413499e5d668333812fc5c94ef496bb5596e9a"
+    },
+    {
+      "path": "src/main/resources/static/js/ui.js",
+      "bytes": 10618,
+      "sha256": "7db815f9f054db0bd2d6d8c22caadd5bac14daf8e92277ad53e9d176004cd9d8"
+    },
+    {
+      "path": "src/main/resources/static/vendor/bootstrap/LICENSE",
+      "bytes": 1114,
+      "sha256": "c5f361fe9af814f57c925bfdadbb3d1857e511fa9feef485cdc5cae817ad44dd"
+    },
+    {
+      "path": "src/main/resources/static/vendor/bootstrap/bootstrap.min.css",
+      "bytes": 232116,
+      "sha256": "596a918e5d4c71cb731b23412d5b145e429c2203a23e9bf7ba90eff3e291bbb8"
+    },
+    {
+      "path": "src/main/resources/static/vendor/zxing/LICENSE-browser",
+      "bytes": 1090,
+      "sha256": "acc919c82f1a69708155af09097614207acdcacc82848126ac8a1a146072c6a3"
+    },
+    {
+      "path": "src/main/resources/static/vendor/zxing/LICENSE-library",
+      "bytes": 13566,
+      "sha256": "9e8ebffbc0900f6d4516d3731ad42945f3acde5bf48f5b8d7e86fc7e81473f95"
+    },
+    {
+      "path": "src/main/resources/static/vendor/zxing/PROVENANCE.json",
+      "bytes": 738,
+      "sha256": "3bf611259b519b30bf4f7c99c49026f0c4dec371524350599d7388b380996e9b"
+    },
+    {
+      "path": "src/main/resources/static/vendor/zxing/zxing-browser.min.js",
+      "bytes": 441121,
+      "sha256": "066bc34edfcdd4a33f0964aeec967752a0dea1ccaf36e58e319ac9fcb5070f6a"
+    },
+    {
+      "path": "src/main/resources/templates/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/main/resources/templates/account/access.html",
+      "bytes": 1307,
+      "sha256": "8236b3c8a85bf6b51de4e4aaef05c8acba75d9f02e935be84d19a1c01625d6d5"
+    },
+    {
+      "path": "src/main/resources/templates/account/context.html",
+      "bytes": 363,
+      "sha256": "ab5b5584efa671377452df6e7ae0c7cbf30ea93b8c5bb9ae6348d6aae2ce2183"
+    },
+    {
+      "path": "src/main/resources/templates/account/link-session.html",
+      "bytes": 1042,
+      "sha256": "e160a5fef3576d3da30c82361e0be7f0b9181007de2b08486c96ea73ec0d61cf"
+    },
+    {
+      "path": "src/main/resources/templates/account/login.html",
+      "bytes": 3020,
+      "sha256": "32801ae120f3846ad3ae416112bfe5af95daeaa9a622ef1e33b154e201e35ea2"
+    },
+    {
+      "path": "src/main/resources/templates/account/organizer.html",
+      "bytes": 1642,
+      "sha256": "38264d539d1df125d32f00bc450ac1e4fbc2c0d4dfa9048fc87ae4477e0c8b99"
+    },
+    {
+      "path": "src/main/resources/templates/account/profile.html",
+      "bytes": 1438,
+      "sha256": "9d7f72f5b1f510a88e4a1cf1fba2693ccd23a7a043edfe020562324d04496567"
+    },
+    {
+      "path": "src/main/resources/templates/account/recover.html",
+      "bytes": 1477,
+      "sha256": "5f5d768654719940094c79bbeb721fac62e28bece95777848a8a439c434b7091"
+    },
+    {
+      "path": "src/main/resources/templates/account/register.html",
+      "bytes": 3086,
+      "sha256": "8862f191beb6b85f786c8af2dc5230755ce7abf3c4e40c6af88db3dad9edbf51"
+    },
+    {
+      "path": "src/main/resources/templates/account/token.html",
+      "bytes": 1698,
+      "sha256": "055af723c61e22ad9e4140dc83280650266157b64d88b7dc3185d0a1d0a04bff"
+    },
+    {
+      "path": "src/main/resources/templates/admin/dashboard.html",
+      "bytes": 13571,
+      "sha256": "1b485e9ef9ff94f73b0cf3e6e3b81e3558705de3cfe4c0ad923ff1a30d67821b"
+    },
+    {
+      "path": "src/main/resources/templates/demo/active-mission.html",
+      "bytes": 14372,
+      "sha256": "c55a28694496e6f142f6874cdba37e40db10ffe3d9223854db0728eb69595562"
+    },
+    {
+      "path": "src/main/resources/templates/demo/connect.html",
+      "bytes": 3740,
+      "sha256": "ab22b36919b0123ed76bc187acfc529af721df6a5a15917a4468f7bd19357a56"
+    },
+    {
+      "path": "src/main/resources/templates/demo/connections.html",
+      "bytes": 2534,
+      "sha256": "531825d002cba06ea800c0a0e471bfaf9d63cb2d4c8272a4dd01a7db0f8b292b"
+    },
+    {
+      "path": "src/main/resources/templates/demo/dashboard.html",
+      "bytes": 5500,
+      "sha256": "87e75965c10db9c4fe2ea4d6ae6b172d6b72a58558337ea7c5e38bc0bfb16cd3"
+    },
+    {
+      "path": "src/main/resources/templates/demo/match.html",
+      "bytes": 10319,
+      "sha256": "afa0a5a3a505870f7196d6a500f1f8077e4d8b8c8ee8a74c90f100d56011b405"
+    },
+    {
+      "path": "src/main/resources/templates/demo/prepare.html",
+      "bytes": 3446,
+      "sha256": "f86e9b0e26a789eec9bbde300e443e45e1761f8fbaeeb71e0d5a7843ada7a182"
+    },
+    {
+      "path": "src/main/resources/templates/demo/select.html",
+      "bytes": 3093,
+      "sha256": "736d931700475a5aa9dd7cab420ad694aa7e086dfb8458b2d40baa792c89aaee"
+    },
+    {
+      "path": "src/main/resources/templates/demo/themes.html",
+      "bytes": 2816,
+      "sha256": "7c0f17a43efbccb9b89afd555325dc2d49bdaed26b28b4f651d0a4bf0fe013a1"
+    },
+    {
+      "path": "src/main/resources/templates/encounter/activity.html",
+      "bytes": 2604,
+      "sha256": "139cc45e264ea6e03e8b9a64bd7e84addd2b0e285d75ad270c46236697e00c79"
+    },
+    {
+      "path": "src/main/resources/templates/encounter/list.html",
+      "bytes": 12980,
+      "sha256": "86aea7687fc3b455ab9a1732036e02ebc5c6f5b2f2ef88506e39c08119a76a5b"
+    },
+    {
+      "path": "src/main/resources/templates/encounter/point.html",
+      "bytes": 1494,
+      "sha256": "951e07b59469d94748cdf7fc855efb6a16dfdbac4ebf1e2b62f4949b676bfecc"
+    },
+    {
+      "path": "src/main/resources/templates/entry/avatar-edit.html",
+      "bytes": 1333,
+      "sha256": "879fa90a958939d8c43a452a3e70747f2a7955b98b9791a5b79eea73aa646e34"
+    },
+    {
+      "path": "src/main/resources/templates/entry/avatar.html",
+      "bytes": 6389,
+      "sha256": "a3582bbb81b5be45f4c6c86975ac5a6d795487bfae2b0f4602511870fed0b0a0"
+    },
+    {
+      "path": "src/main/resources/templates/entry/details.html",
+      "bytes": 3194,
+      "sha256": "34d5266578149dcfe73f5fe19755b16df042f662753c88f01c3b5c5813297b66"
+    },
+    {
+      "path": "src/main/resources/templates/entry/event.html",
+      "bytes": 2077,
+      "sha256": "2ccba4c29d0b64ecc8996e93c3f83925c2fa16d5e81b4d9f89a393efdbd49e6c"
+    },
+    {
+      "path": "src/main/resources/templates/entry/interests.html",
+      "bytes": 2361,
+      "sha256": "bf9bec7bb61675f82204aac7ec3efa7b2ff7821246b14652019a0bbf1d41ddc4"
+    },
+    {
+      "path": "src/main/resources/templates/errors/message.html",
+      "bytes": 923,
+      "sha256": "7fb16977bac6bc8cf1304743d94e44c90c3e059b0e2cf9b06728930c3bd6701c"
+    },
+    {
+      "path": "src/main/resources/templates/events/detail.html",
+      "bytes": 5769,
+      "sha256": "d35e6fe084600f8c09ed611aa286d4d6b4a2103ce53a8b36c8a7defc561cefab"
+    },
+    {
+      "path": "src/main/resources/templates/events/form.html",
+      "bytes": 3646,
+      "sha256": "650f29ecb627fe69a75dd26f226f1ce516a1d6bc51778c2e8100de282cdb742a"
+    },
+    {
+      "path": "src/main/resources/templates/events/list.html",
+      "bytes": 2758,
+      "sha256": "dcd6e9e84e8a17e19f2ed6e121c05f1089093a1fec0d9b3f6fe2fd33d6697969"
+    },
+    {
+      "path": "src/main/resources/templates/experience/fragments.html",
+      "bytes": 2519,
+      "sha256": "6d2bd2b135b78954979fb1f1a3318c513a26e3f9b43a052a39a75500a91a871a"
+    },
+    {
+      "path": "src/main/resources/templates/experience/hub-fragments.html",
+      "bytes": 2839,
+      "sha256": "8cafc79874d2ca09523f5af67f44f8394a85b8f9621cb8de6a87acb4a5fe06eb"
+    },
+    {
+      "path": "src/main/resources/templates/experience/hub.html",
+      "bytes": 7647,
+      "sha256": "619c172ddcec64f3c0028999ffbac1e7bf32b9a45e91c0ac233398da9755a83b"
+    },
+    {
+      "path": "src/main/resources/templates/experience/map.html",
+      "bytes": 3415,
+      "sha256": "383feb0b173988d1517348fb3a0eec514565fbc953651a37dbdf362531a1c308"
+    },
+    {
+      "path": "src/main/resources/templates/experience/venue.html",
+      "bytes": 1296,
+      "sha256": "8e4a01fc3909106d6830154e620deaa738639602d7cc856c137d293e44987b05"
+    },
+    {
+      "path": "src/main/resources/templates/floorplan/admin.html",
+      "bytes": 5489,
+      "sha256": "f4b864261ba00a5ceb2f6a3ff3e1451dab6435cb27810a138da36b582985664c"
+    },
+    {
+      "path": "src/main/resources/templates/floorplan/participant.html",
+      "bytes": 2389,
+      "sha256": "8c924e3352478eee4b4398a57213def71062bb75039769245adb73fde5ac2329"
+    },
+    {
+      "path": "src/main/resources/templates/floorplan/upload-error.html",
+      "bytes": 618,
+      "sha256": "5f6d0d5d3084f46c51a8b10924e72606fbd736826f850d9c1f1ac634bf173533"
+    },
+    {
+      "path": "src/main/resources/templates/floorplan/viewer.html",
+      "bytes": 2027,
+      "sha256": "3509e55d7316821d27117317a8142a50cd1ff6ac3d54449374ffb9fe1eda4859"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/layout.html",
+      "bytes": 10007,
+      "sha256": "109da2aa5c7b4aac44887c8d186effddcde0ad4c89c943e281c239d4113e2b74"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/navigation.html",
+      "bytes": 3689,
+      "sha256": "ccfb5881de915d7bf1087108ba0fd271f5327809929c513c5fe55278e5adbb11"
+    },
+    {
+      "path": "src/main/resources/templates/home.html",
+      "bytes": 2934,
+      "sha256": "cb6c98ff3c8abf0a6f74e3646740861b80fab8b73a0277e99653b9d5cd63b923"
+    },
+    {
+      "path": "src/main/resources/templates/interests/catalog.html",
+      "bytes": 1339,
+      "sha256": "32b3d66bdbe4d9b15e1cb858fc0d91e39abc8d25e6d0a1cc5c510e5e6a6a13e3"
+    },
+    {
+      "path": "src/main/resources/templates/interests/categories.html",
+      "bytes": 1058,
+      "sha256": "ff91d946214acf3c14a77fa35732c3416d2b3e17c3e4e2bc9ad21f4afd8a6fbf"
+    },
+    {
+      "path": "src/main/resources/templates/interests/category-form.html",
+      "bytes": 1937,
+      "sha256": "913015c0b79fae43a890dfe7c8c7d0e5664c4470debea0f1d3088a02f9db5a3b"
+    },
+    {
+      "path": "src/main/resources/templates/interests/form.html",
+      "bytes": 1704,
+      "sha256": "a168c2e85c6f4856797055ef45ff7f05078266c7367ee1d035c7202a157d1852"
+    },
+    {
+      "path": "src/main/resources/templates/interests/selector.html",
+      "bytes": 5591,
+      "sha256": "74183364ea6e868ef067db7969df957cb36a1d294411184ea816aac2e232e8f3"
+    },
+    {
+      "path": "src/main/resources/templates/interests/taxonomy-form.html",
+      "bytes": 2137,
+      "sha256": "19c2bb8546f933b84365222404f571d30fb50a177645de0d6175a993b7f16c24"
+    },
+    {
+      "path": "src/main/resources/templates/interests/taxonomy.html",
+      "bytes": 1297,
+      "sha256": "aa6a0491e92b0f40f6de8f57fc6c9f3b95343c53f151a828da5488890384f683"
+    },
+    {
+      "path": "src/main/resources/templates/participants/detail.html",
+      "bytes": 2098,
+      "sha256": "18391b7f221e0c77b9507a4e1e33fc990d60d0384e3c13a981d9655dc336155c"
+    },
+    {
+      "path": "src/main/resources/templates/participants/form.html",
+      "bytes": 2139,
+      "sha256": "750b7d33800325a1ea46e078b733f1e199d2a71634e9d37349fb2e04319b9ed2"
+    },
+    {
+      "path": "src/main/resources/templates/participants/list.html",
+      "bytes": 1949,
+      "sha256": "85056b7b05f381ce69449c069ba2b7eff3c43f249a203a292d2c740bf450bb9f"
+    },
+    {
+      "path": "src/main/resources/templates/recognition/edit.html",
+      "bytes": 763,
+      "sha256": "e7638899b27fe08a710946cc9dc5d2f8b01d85fc072dd2ee8289ed93016dc8e5"
+    },
+    {
+      "path": "src/main/resources/templates/recognition/fragments.html",
+      "bytes": 2259,
+      "sha256": "ead94591d93bf01bf3d5d6efe9eec0c22162c4d8400f5eb53e1980c5a0479f96"
+    },
+    {
+      "path": "src/main/resources/templates/rewards/benefits.html",
+      "bytes": 7259,
+      "sha256": "e60765844cb0259712f75a96cadf88b9e7d2a3a9123769ad00cf288b0621ae5f"
+    },
+    {
+      "path": "src/main/resources/templates/rewards/delivery.html",
+      "bytes": 2100,
+      "sha256": "9634c88d6dc322143350d0f8dd3108196944a2db04caf966de1ad7d0c10fdc47"
+    },
+    {
+      "path": "src/main/resources/templates/rewards/form.html",
+      "bytes": 2350,
+      "sha256": "e331a141c1c6ef139b6b4b29b1696fb4a5d782d781470a1ce67e6200c9fd2409"
+    },
+    {
+      "path": "src/main/resources/templates/rewards/manage.html",
+      "bytes": 1043,
+      "sha256": "b96b2c9bdabbc144cefa812fbbb272931228bdcd2d86a765fa05e3b6cba4e358"
+    },
+    {
+      "path": "src/main/resources/templates/rewards/receipt.html",
+      "bytes": 5670,
+      "sha256": "7e89651ff374969a656f15d127bdc413f805e261ca93d8b8127effb33de0ec88"
+    },
+    {
+      "path": "src/main/resources/templates/verification/scanner.html",
+      "bytes": 973,
+      "sha256": "490280ef7fdfdd0bfee9991ddb4fa3064b94cdd95f7dbed3c3b9ee724901ad33"
+    },
+    {
+      "path": "src/test/java/com/ping/LegacySecurityFixture.java",
+      "bytes": 302,
+      "sha256": "feb6ab6cb98bdf552f65ea5dfb73a127c749e8d46a598ff93e91eb84c75d80b8"
+    },
+    {
+      "path": "src/test/java/com/ping/PingApplicationTests.java",
+      "bytes": 1867,
+      "sha256": "8ea334b02e81d0cf1712531149d9a40d0576f3b5eb123e53f791b01cef355422"
+    },
+    {
+      "path": "src/test/java/com/ping/auth/AccountSecurityTests.java",
+      "bytes": 12860,
+      "sha256": "f5282d0fc0606b2bdbf262689c410e3a76e2bd36c2cd5a95ad01d89c91a9d250"
+    },
+    {
+      "path": "src/test/java/com/ping/auth/OAuthCancellationTests.java",
+      "bytes": 1949,
+      "sha256": "04359e09f2c14a532e60f9f7244454d0d7ed93c470939c40cdf40962791bf366"
+    },
+    {
+      "path": "src/test/java/com/ping/demo/DemoImprovementTests.java",
+      "bytes": 18326,
+      "sha256": "ede7b35c63fe80bb988123d8aeb7d3e759525f796a19c827e2d4a9513e27b96d"
+    },
+    {
+      "path": "src/test/java/com/ping/demo/EventExperienceTests.java",
+      "bytes": 21415,
+      "sha256": "fff4ab9ffa7b4abb0af79d48834cadeb5f8d7d1bad27f033cd07ef74add8ce6e"
+    },
+    {
+      "path": "src/test/java/com/ping/demo/RecognitionHintTests.java",
+      "bytes": 8698,
+      "sha256": "a668be8dacc8696cac5aa160162e7a1f5885dc16f0abe447a8e94fe8a23b7fa2"
+    },
+    {
+      "path": "src/test/java/com/ping/entry/EventEntryFlowTests.java",
+      "bytes": 10613,
+      "sha256": "89c67711ec9d26db73d220fc2848d647c691c66834f19488c6d3b254cfb22309"
+    },
+    {
+      "path": "src/test/java/com/ping/entry/ParticipantEntryTests.java",
+      "bytes": 7984,
+      "sha256": "2170c44b93c67e04fd0dc1a2c16ddbac975b747d368c8343de1c41c88e156a02"
+    },
+    {
+      "path": "src/test/java/com/ping/event/EncounterMigrationTests.java",
+      "bytes": 3594,
+      "sha256": "4184ce9801cface24c18fa2884cc614cfd4f7cd985f84d19c98b437421c32c52"
+    },
+    {
+      "path": "src/test/java/com/ping/event/EventEntryMigrationTests.java",
+      "bytes": 2279,
+      "sha256": "10247e29a3a2d473ca6c70d8600ecb36097da0ed6b9498e8ddff186cfc07a120"
+    },
+    {
+      "path": "src/test/java/com/ping/event/EventTests.java",
+      "bytes": 6879,
+      "sha256": "42f11b85d96a1a308d623d2640e14bec59864b1ac42eb31bfb8b2209808277c8"
+    },
+    {
+      "path": "src/test/java/com/ping/event/MySqlUpgradeVerification.java",
+      "bytes": 4622,
+      "sha256": "985603a6e52c88cfaaaa94b22812db5fb91fd26fca73ac94b78d5d10bb623205"
+    },
+    {
+      "path": "src/test/java/com/ping/event/WorkEditorTests.java",
+      "bytes": 5272,
+      "sha256": "5ecc4cec50fb3bcde9682654e9bbeffe5c86d1350ba4d432e12ce004509c4924"
+    },
+    {
+      "path": "src/test/java/com/ping/floorplan/FloorplanMigrationTests.java",
+      "bytes": 3405,
+      "sha256": "0ed6ce02d1aa7dca8520b55f47e9a687c687c34500e5741df9d7939022dfe764"
+    },
+    {
+      "path": "src/test/java/com/ping/floorplan/FloorplanMySqlVerification.java",
+      "bytes": 955,
+      "sha256": "901c5ed1befc3aa93d14e37ab71437a36e6e7b8592f58785e692d1c5beefaad1"
+    },
+    {
+      "path": "src/test/java/com/ping/floorplan/FloorplanTests.java",
+      "bytes": 8520,
+      "sha256": "fff73d2208b2756d3da9fa864c740ff4c65d01a0e73dde9e284482a0caea6e89"
+    },
+    {
+      "path": "src/test/java/com/ping/floorplan/FloorplanViewTests.java",
+      "bytes": 4916,
+      "sha256": "a0114fa3662c6e717ffac1a997c2a81e1b0ddc6b5b49ff40fbb2d1594d87a025"
+    },
+    {
+      "path": "src/test/java/com/ping/floorplan/FloorplanWebTests.java",
+      "bytes": 4189,
+      "sha256": "31e8f471065c62a962a75322f6b7eb8f455e8377a6a98c0496f96e97fa28c107"
+    },
+    {
+      "path": "src/test/java/com/ping/interest/InterestCategoryAdminTests.java",
+      "bytes": 9306,
+      "sha256": "c089449bd860dfe9b0168d87fd1ed20b43c17604e6955fc652df40280a0277d3"
+    },
+    {
+      "path": "src/test/java/com/ping/interest/InterestCategoryMigrationTests.java",
+      "bytes": 3512,
+      "sha256": "086beab8f375f03be641458b2d291eadc162ff48bbbb8bcba615efacaf10ef2e"
+    },
+    {
+      "path": "src/test/java/com/ping/interest/InterestCategoryMySqlVerification.java",
+      "bytes": 857,
+      "sha256": "abeca62eef2a8a61d3bc1705d9b97191bc2dca28ecec89f825d190ba1221b1ce"
+    },
+    {
+      "path": "src/test/java/com/ping/interest/InterestCategoryTests.java",
+      "bytes": 4115,
+      "sha256": "c0db0fafa5db20690e3684ad2fb639cd3fb95b00a9f5a16cb8606d9502de2bc1"
+    },
+    {
+      "path": "src/test/java/com/ping/interest/InterestTests.java",
+      "bytes": 7008,
+      "sha256": "5d453aa78df37687c569d5c7c592bd2b466659c5d9955b6cb302a1e9139be260"
+    },
+    {
+      "path": "src/test/java/com/ping/match/EncounterConfigurationTests.java",
+      "bytes": 10227,
+      "sha256": "2cf9e0d003a73b6784dd185bb8393975ed3136d3ecda8df154da4047965006bb"
+    },
+    {
+      "path": "src/test/java/com/ping/match/MatchCompletionSagaTests.java",
+      "bytes": 11523,
+      "sha256": "46990fc08d405eea8f16f8de2c2113ba0e2638a102e8eaa3118a88946737205d"
+    },
+    {
+      "path": "src/test/java/com/ping/match/MatchLiveStateTests.java",
+      "bytes": 5828,
+      "sha256": "db978112b23af171ee4e1d13358f85a83580e4edbad5282052f2d7d3dce2087e"
+    },
+    {
+      "path": "src/test/java/com/ping/match/MatchTests.java",
+      "bytes": 17902,
+      "sha256": "a7c0840e9c98895d0855c980cb9fb6d9d8194dcecfac59fd9e4586add385621a"
+    },
+    {
+      "path": "src/test/java/com/ping/match/SofaDemoTests.java",
+      "bytes": 6972,
+      "sha256": "b47b990bba32b2ed9217652173ca0bd20dea87db2b3b3b1b7d25a22ea687e0b1"
+    },
+    {
+      "path": "src/test/java/com/ping/match/StructuredEncounterTests.java",
+      "bytes": 5216,
+      "sha256": "98b0ea17fdd686c12f5a5b0e6b0d919ecabbccbf321f3fce2480bf602f6c99a7"
+    },
+    {
+      "path": "src/test/java/com/ping/match/VariableRewardTests.java",
+      "bytes": 6035,
+      "sha256": "856769145fc2aee04bc53a657f543576d7e2bd7e63fbb7d4a37b38ae60d07cfb"
+    },
+    {
+      "path": "src/test/java/com/ping/moderation/FinalMvpTests.java",
+      "bytes": 15276,
+      "sha256": "8542a0b68b853930979b27e2818ef754604db3859591f7dd047ff6cd45560456"
+    },
+    {
+      "path": "src/test/java/com/ping/participant/AvatarV3Tests.java",
+      "bytes": 16265,
+      "sha256": "dc87c72fb333514194284ae35d1f94378a1ddc682a6cae3b6b45e30ac722d863"
+    },
+    {
+      "path": "src/test/java/com/ping/participant/ParticipantTests.java",
+      "bytes": 6954,
+      "sha256": "bc0b73689aea0cbb56651fcd58c586abea7817ce5d898bbd799cee7a2b340484"
+    },
+    {
+      "path": "src/test/java/com/ping/reward/EventBenefitTests.java",
+      "bytes": 4555,
+      "sha256": "282f1a8a1ab6e60b5af467b7066203f4df5950bf9f1adae559089f4df3ddab8d"
+    },
+    {
+      "path": "src/test/java/com/ping/reward/RewardTests.java",
+      "bytes": 11397,
+      "sha256": "cb0fe0575b0cadf8b7da3d7ba867a4077f0221bbe9b389edbdd8da485228caa9"
+    },
+    {
+      "path": "src/test/java/com/ping/support/TestBrowser.java",
+      "bytes": 3648,
+      "sha256": "ee02269436adb19b3cfb278e667ce265a4e8c445f4b5ee3b59b6722fd6b5bbe5"
+    },
+    {
+      "path": "src/test/java/com/ping/verification/VerificationTests.java",
+      "bytes": 18482,
+      "sha256": "8bf39cb4a1ad7271e773978fc769cc9c2adc564b529830e17bc85b9ec3d057d7"
+    },
+    {
+      "path": "src/test/java/com/ping/verification/WorkIntegrationTests.java",
+      "bytes": 7568,
+      "sha256": "d65bcc35024c4a88fe3c617a6f014aedff42a5469aef4558e3760259e67c839c"
+    },
+    {
+      "path": "src/test/java/com/ping/verification/WorkMySqlVerification.java",
+      "bytes": 5091,
+      "sha256": "b96ceb6eb8d24a4e61240446483e7a3b7b9c6dc94e104194c1001e5d4e95daea"
+    },
+    {
+      "path": "src/test/java/com/ping/web/PagePresentationTests.java",
+      "bytes": 1900,
+      "sha256": "e63f47dc79c9734458ee1278cb105233084a4dfbef85b6b827c93f9729788ab2"
+    },
+    {
+      "path": "src/test/java/com/ping/web/PublicResourceTests.java",
+      "bytes": 3286,
+      "sha256": "e3f4683741e8d36f9f889fc148adcb3fe4f409046567d6477e0c94761dedf790"
+    },
+    {
+      "path": "src/test/java/com/ping/web/RecoveryWebTests.java",
+      "bytes": 4130,
+      "sha256": "113d34e9c35021cf33467ba54abad44a3c06333c56f918c8fb534bf1b58cee4c"
+    },
+    {
+      "path": "src/test/resources/application-test.properties",
+      "bytes": 202,
+      "sha256": "9656cbde7b6dbde263b998b489d0f827e4097d78a23a298f9a0f10d5303a5efa"
+    }
+  ]
+}

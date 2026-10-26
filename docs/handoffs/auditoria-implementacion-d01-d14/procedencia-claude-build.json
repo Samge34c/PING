@@ -1,0 +1,25 @@
+{
+  "command": "./mvnw -Dspring.profiles.default=test clean verify",
+  "invokedAt": "2026-10-25T20:40:44.832Z",
+  "reportedAt": "2026-10-25T20:41:57.785Z",
+  "logSha256": "55e63e4c3873c25eccf3bfacc9852999f886eb9fe74b4070ed21a9d224d26f8c",
+  "tail": [
+    "[INFO] Tests run: 309, Failures: 0, Errors: 0, Skipped: 0",
+    "[INFO] ",
+    "[INFO] ",
+    "[INFO] --- jar:3.5.1:jar (default-jar) @ ping ---",
+    "[INFO] Building jar: C:\\Users\\river\\PING-movil\\target\\ping-0.0.1-SNAPSHOT.jar",
+    "[INFO] ",
+    "[INFO] --- spring-boot:4.1.1:repackage (repackage) @ ping ---",
+    "[INFO] Replacing main artifact C:\\Users\\river\\PING-movil\\target\\ping-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.",
+    "[INFO] The original artifact has been renamed to C:\\Users\\river\\PING-movil\\target\\ping-0.0.1-SNAPSHOT.jar.original",
+    "[INFO] ------------------------------------------------------------------------",
+    "[INFO] BUILD SUCCESS",
+    "[INFO] ------------------------------------------------------------------------",
+    "[INFO] Total time:  01:04 min",
+    "[INFO] Finished at: 2026-10-25T15:41:53-05:00",
+    "[INFO] ------------------------------------------------------------------------",
+    "exit 0",
+    ""
+  ]
+}

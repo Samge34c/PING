@@ -128,7 +128,7 @@ class FinalMvpTests {
             jul.post(path+"/confirm",Map.of()); assertThat(sam.get(path).body()).contains("Conexión completada 🎉");
             sam.post(path+"/feedback",Map.of("rating","USEFUL"));
             sam.post(path+"/report",Map.of("reason","OTHER","comment","<script>alert(1)</script>"));
-            assertThat(sam.get("/me").body()).contains("Feedback guardado", "Elijan un juego o stand", "+10 puntos acreditados");
+            assertThat(sam.get("/me/connections").body()).contains("Feedback guardado", "Elijan un juego o stand", "+10 puntos"); // DEC-058 · D12
             String panel=sam.get("/admin?eventId="+event).body();
             assertThat(panel).contains("Samuel", "Julián", "Positivo", "100%", "&lt;script&gt;").doesNotContain("<script>alert(1)</script>");
             assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(b).points()).isEqualTo(10);

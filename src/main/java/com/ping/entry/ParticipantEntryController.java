@@ -26,7 +26,7 @@ public class ParticipantEntryController {
     // The receipt and participant ID never come from request parameters.
     private static class Draft {
         final String key = UUID.randomUUID().toString();
-        Avatar avatar=Avatar.defaults(); long revision; String alias = ""; Long eventId; List<Long> ids = List.of(); Long receipt;
+        Avatar avatar=Avatar.defaults().withV3(com.ping.participant.AvatarV3.defaults()); long revision; String alias = ""; Long eventId; List<Long> ids = List.of(); Long receipt;
     }
     /** Read-only context chosen through the validated event-code flow; never an identity grant. */
     public static Optional<Long> pendingEventId(HttpSession session) {
@@ -47,6 +47,7 @@ public class ParticipantEntryController {
         if (!model.containsAttribute("participantForm")) {
             ParticipantForm f = new ParticipantForm(); f.setAlias(d.alias); f.setEventId(d.eventId); model.addAttribute("participantForm", f);
         }
+        com.ping.participant.AvatarCatalog.addTo(model,d.avatar.v3()!=null?d.avatar.v3():com.ping.participant.AvatarV3.suggestionFor(d.avatar));
         model.addAttribute("avatar",d.avatar);model.addAttribute("avatarAnimals",Avatar.ANIMALS);model.addAttribute("avatarHats",Avatar.HATS);model.addAttribute("avatarAccessories",Avatar.ACCESSORIES);model.addAttribute("avatarColors",Avatar.COLORS);
         if (d.eventId == null) return eventCode(d, model);
         var event = events.get(d.eventId); model.addAttribute("entryEvent", event); model.addAttribute("entryEventOpen", event.canStartNewMatches());
@@ -99,7 +100,7 @@ public class ParticipantEntryController {
         }
     }
     @PostMapping public String details(@Valid @ModelAttribute("participantForm") ParticipantForm form, BindingResult errors,
-            @RequestParam String draftKey, @RequestParam long revision, @RequestParam(defaultValue="gato") String animal,@RequestParam(defaultValue="none") String hat,@RequestParam(defaultValue="none") String accessory,@RequestParam(defaultValue="violeta") String background, @RequestParam(defaultValue="interests") String action, HttpSession session, Model model, HttpServletResponse response) {
+            @RequestParam String draftKey, @RequestParam long revision, @RequestParam(defaultValue="gato") String animal,@RequestParam(defaultValue="none") String hat,@RequestParam(defaultValue="none") String accessory,@RequestParam(defaultValue="violeta") String background, @RequestParam(required=false) String palette,@RequestParam(defaultValue="none") String head,@RequestParam(required=false) String headColor,@RequestParam(defaultValue="none") String audio,@RequestParam(required=false) String audioColor,@RequestParam(defaultValue="none") String face,@RequestParam(required=false) String faceColor,@RequestParam(defaultValue="none") String neck,@RequestParam(required=false) String neckColor, @RequestParam(defaultValue="interests") String action, HttpSession session, Model model, HttpServletResponse response) {
         synchronized (session) {
             if (entered(session)) return "redirect:/me";
             Draft d = draft(session);
@@ -108,7 +109,9 @@ public class ParticipantEntryController {
             if (d.eventId == null) return "redirect:/join";
             if (!d.eventId.equals(form.getEventId())) { response.setStatus(409); model.asMap().remove("participantForm"); model.addAttribute("entryError", "Usa Cambiar evento para identificar otro evento con su código."); return details(d, model); }
             d.alias = form.getAlias();
-            try{d.avatar=new Avatar(animal,hat,accessory,background);}catch(BusinessRuleException ex){response.setStatus(400);model.addAttribute("entryError",ex.getMessage());return details(d,model);}
+            // DEC-058: el formulario V3 envía palette; sin palette se acepta el formulario del catálogo anterior (compatibilidad).
+            try{d.avatar=palette==null?new Avatar(animal,hat,accessory,background):d.avatar.withV3(new com.ping.participant.AvatarV3(animal,palette,head,headColor,audio,audioColor,face,faceColor,neck,neckColor));}
+            catch(BusinessRuleException ex){response.setStatus(400);model.addAttribute("entryError",ex.getMessage());if(palette!=null)d.avatar=d.avatar.withV3(com.ping.participant.AvatarV3.lenient(animal,palette,head,headColor,audio,audioColor,face,faceColor,neck,neckColor));return details(d,model);}
             if (action.equals("changeEvent")) { d.revision++; return "redirect:/join/event"; }
             if (!action.equals("interests")) { response.setStatus(400); model.addAttribute("entryError", "Usa los botones de esta entrada para continuar."); return details(d, model); }
             if (!errors.hasFieldErrors("eventId") && participants.registrationEvents().stream().noneMatch(e -> e.getId().equals(d.eventId))) errors.rejectValue("eventId", "closed", "Elige un evento abierto para continuar.");

@@ -1,6 +1,6 @@
 (() => {
   const path = location.pathname;
-  const section = path === '/' ? 'home' : path.startsWith('/me/benefits') || path.startsWith('/me/claims') ? 'benefits' : path.includes('/interests') ? 'interests' : path.startsWith('/me') ? 'me' : path.startsWith('/connect') || path.startsWith('/matches') || path.startsWith('/demo') ? 'connect' : path.startsWith('/events') || path.startsWith('/organizer') ? 'events' : path.startsWith('/participants') ? 'people' : path.startsWith('/admin') ? 'admin' : path.startsWith('/account') ? 'account' : path.startsWith('/login') ? 'login' : path.startsWith('/join') ? 'join' : '';
+  const section = path === '/' ? 'home' : path.startsWith('/me/benefits') || path.startsWith('/me/claims') ? 'benefits' : path.includes('/interests') ? 'interests' : path.startsWith('/me/connections') ? 'history' : path.startsWith('/me') ? 'me' : path.startsWith('/connect') || path.startsWith('/matches') || path.startsWith('/demo') ? 'connect' : path.startsWith('/events') || path.startsWith('/organizer') ? 'events' : path.startsWith('/participants') ? 'people' : path.startsWith('/admin') ? 'admin' : path.startsWith('/account') ? 'account' : path.startsWith('/login') ? 'login' : path.startsWith('/join') ? 'join' : '';
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === section) a.setAttribute('aria-current', 'page'); });
   document.querySelectorAll('[data-page-title]').forEach(el => { el.textContent = document.title.split(' · ')[0]; });
   document.querySelectorAll('.session-chip').forEach(chip => {
@@ -41,7 +41,8 @@
     const label = tile.querySelector('[data-interest-description]'); if (label) label.textContent = description;
   });
   decorateInterests(document);
-  const updateInterestCount = form => { const count = form.querySelectorAll('input[type="checkbox"]:checked').length; const label = form.querySelector('[data-selected-count]'); if (label) label.textContent = count === 1 ? '1 interés seleccionado' : count + ' intereses seleccionados'; };
+  // El selector por categorías (interest-selector.js) escribe su propio resumen; este contador queda para formularios sin él.
+  const updateInterestCount = form => { if (!form || form.dataset.categoriesReady) return; const count = form.querySelectorAll('input[type="checkbox"]:checked').length; const label = form.querySelector('[data-selected-count]'); if (label) label.textContent = count === 1 ? '1 interés seleccionado' : count + ' intereses seleccionados'; };
   document.querySelectorAll('[data-interest-editor]').forEach(updateInterestCount);
   document.addEventListener('change', e => { const form = e.target.closest('[data-interest-editor]'); if (form) updateInterestCount(form); });
   const inlineEditor = document.querySelector('[data-interest-selection-url]');

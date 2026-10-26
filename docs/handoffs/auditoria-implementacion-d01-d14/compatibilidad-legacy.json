@@ -1,0 +1,21 @@
+{
+  "rawLegacy": 200,
+  "legacyBefore": {
+    "text": "Tu avatar actual es del catálogo anterior. Ese animal no está en el catálogo nuevo: elige uno. Se conserva hasta que guardes uno nuevo.",
+    "chip": "Propuesta · sin guardar",
+    "legacy": [
+      "/img/avatars/animales/panda-8e04499ca1d29830ad6c561868aa3573.svg",
+      "/img/avatars/accesorios/gafas-eaa663afd489bdeaf9684a344c4453fb.svg",
+      "/img/avatars/sombreros/corona-3b2da0ca332f7522afcb0dcf59ec26ab.svg"
+    ]
+  },
+  "afterReload": {
+    "text": "Saltar al contenido\nMi Ping\nConectar\nEvento\nBeneficios\nMás\nTú\nMi Ping de\nBruno Auditoría\n\nAuditoría aislada D01–D14 · \n10\npuntos\n\nDisponible\nConexión completada · +10 puntos\nDar feedback opcional\nTu avatar\nPanda · Corona · Gafas · fondo Azul\nEditar\nTus gustos\nEditar\nAnime\nIr a Conectar\nCómo reconocerme · opcional\nConexiones anteriores\n1 completada de 1\n\nTu estado se actualiza automáticamente.\n\nActualizar\nVer beneficios\nSalir de Mi Ping\nConexiones en tu evento\nProyecto académico · Samuel Riveros & Julián Caicedo",
+    "imgs": [
+      "/img/avatars/animales/panda-8e04499ca1d29830ad6c561868aa3573.svg",
+      "/img/avatars/accesorios/gafas-eaa663afd489bdeaf9684a344c4453fb.svg",
+      "/img/avatars/sombreros/corona-3b2da0ca332f7522afcb0dcf59ec26ab.svg"
+    ]
+  },
+  "method": "Contrato preset anterior sobre cuenta sintética sin SQL; no prueba migración histórica MySQL"
+}

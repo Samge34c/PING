@@ -1,0 +1,262 @@
+{
+  "state": "C:\\Users\\river\\AppData\\Local\\PING\\launcher-tests\\https 20261025-194922",
+  "checks": [
+    {
+      "name": "isolated MySQL initialized",
+      "ok": true
+    },
+    {
+      "name": "new isolated database configured (password via stdin)",
+      "ok": true
+    },
+    {
+      "name": "first start through INICIAR-PING.cmd",
+      "ok": true
+    },
+    {
+      "name": "origin is HTTPS on the Wi-Fi IP",
+      "ok": true,
+      "detail": "https://192.168.1.8:54985"
+    },
+    {
+      "name": "PING_PUBLIC_BASE_URL equals the HTTPS origin",
+      "ok": true
+    },
+    {
+      "name": "server certificate SAN = Wi-Fi IP only",
+      "ok": true,
+      "detail": [
+        [
+          "IP Address",
+          "192.168.1.8"
+        ]
+      ]
+    },
+    {
+      "name": "verified HTTPS response with the local CA",
+      "ok": true
+    },
+    {
+      "name": "Windows store alone does not trust it (verification is real, not skipped)",
+      "ok": true
+    },
+    {
+      "name": "certificate rejected for a different IP",
+      "ok": true
+    },
+    {
+      "name": "TLS negotiated",
+      "ok": true,
+      "detail": "TLSv1.3"
+    },
+    {
+      "name": "plain HTTP on the HTTPS port does not serve PING",
+      "ok": true,
+      "detail": 400
+    },
+    {
+      "name": "setup page announced",
+      "ok": true,
+      "detail": "http://192.168.1.8:54986/"
+    },
+    {
+      "name": "setup page reachable on the Wi-Fi IP",
+      "ok": true
+    },
+    {
+      "name": "setup page serves exactly the public CA (DER)",
+      "ok": true
+    },
+    {
+      "name": "private file not served: ca.p12",
+      "ok": true
+    },
+    {
+      "name": "private file not served: server.p12",
+      "ok": true
+    },
+    {
+      "name": "private file not served: https/ca.p12",
+      "ok": true
+    },
+    {
+      "name": "private file not served: config.dpapi",
+      "ok": true
+    },
+    {
+      "name": "private file not served: ping-ca.pem",
+      "ok": true
+    },
+    {
+      "name": "no private key material in setup responses",
+      "ok": true
+    },
+    {
+      "name": "panel shows HTTPS address and preparation",
+      "ok": true
+    },
+    {
+      "name": "panel qr.svg",
+      "ok": true
+    },
+    {
+      "name": "panel setup.svg",
+      "ok": true
+    },
+    {
+      "name": "panel HTTPS status verified",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "text": "Certificado verificado con la CA local · 396 días de vigencia"
+      }
+    },
+    {
+      "name": "access QR regenerated for the HTTPS origin",
+      "ok": true
+    },
+    {
+      "name": "login page over HTTPS",
+      "ok": true
+    },
+    {
+      "name": "session/CSRF cookies are Secure and HttpOnly",
+      "ok": true,
+      "detail": [
+        "JSESSIONID"
+      ]
+    },
+    {
+      "name": "HSTS header present on HTTPS",
+      "ok": true
+    },
+    {
+      "name": "no mixed content on /login",
+      "ok": true,
+      "detail": []
+    },
+    {
+      "name": "login redirect stays on the HTTPS origin",
+      "ok": true,
+      "detail": "https://192.168.1.8:54985/me"
+    },
+    {
+      "name": "HTTPS page /organizer without mixed content",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "name": "HTTPS page /events without mixed content",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "name": "HTTPS page /demo/prepare without mixed content",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "name": "HTTPS page / without mixed content",
+      "ok": true,
+      "detail": 200
+    },
+    {
+      "name": "form POST over HTTPS (demo preparation)",
+      "ok": true
+    },
+    {
+      "name": "event entry link uses the HTTPS origin",
+      "ok": true
+    },
+    {
+      "name": "event QR image served over HTTPS",
+      "ok": true
+    },
+    {
+      "name": "polling /me/state over HTTPS",
+      "ok": true
+    },
+    {
+      "name": "verification e-mail link uses the HTTPS origin",
+      "ok": true,
+      "detail": 1
+    },
+    {
+      "name": "second start reuses the running PING (same identity)",
+      "ok": true
+    },
+    {
+      "name": "CA and server certificate reused unchanged",
+      "ok": true
+    },
+    {
+      "name": "stop through DETENER-PING.cmd",
+      "ok": true
+    },
+    {
+      "name": "preparation port closed after stop",
+      "ok": true
+    },
+    {
+      "name": "isolated MySQL untouched by stop",
+      "ok": true
+    },
+    {
+      "name": "HTTP-mode instance for scanner checks",
+      "ok": true
+    },
+    {
+      "name": "back to HTTPS reuses the same CA",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from aplicacion.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from buzon.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from compilacion.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from mysql.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from test-start-2.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from test-start-39.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from test-start-44.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from test-start-45.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from test-stop-41.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from test-stop-45.log",
+      "ok": true
+    },
+    {
+      "name": "secrets absent from test-stop-46.log",
+      "ok": true
+    }
+  ],
+  "started": 1792975763.0046046,
+  "ca_fingerprint": "4C 68 4F D5 CE F4 96 22 B2 8A AE 45 0D 7E 3E CE 96 9A 10 B8 4E E2 FA 73 87 AE EB 22 4F CA A8 2A",
+  "event_link_host": "192.168.1.8:54985",
+  "isolated_mysql_shutdown": true,
+  "finished": 1792976110.0126877
+}

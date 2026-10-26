@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-25T23:13:00.362Z",
+  "ownedPids": {
+    "java": 51004,
+    "chrome": 37280
+  },
+  "javaExit": null,
+  "chromeExit": 0,
+  "removed": [
+    ".browser-runtime",
+    "hsperfdata_CodexSandboxOffline",
+    "tomcat-docbase.18193.1373832131171710808",
+    "tomcat.18193.9432128336544372607"
+  ],
+  "portsStillListening": []
+}

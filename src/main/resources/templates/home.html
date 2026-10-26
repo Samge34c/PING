@@ -1,27 +1,29 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Inicio')}"></head><body class="home-festival-page"><nav th:replace="~{fragments/layout :: nav}"></nav>
-<main id="main-content" class="container hm-page">
-<section class="hm-intro" aria-labelledby="hm-title">
-  <div class="hm-copy">
-    <p class="hm-context"><svg th:replace="~{fragments/layout :: icon('calendar')}"></svg>Demo académica inspirada en SOFA 2026</p>
-    <h1 id="hm-title">Comparte gustos.<span>Conecta en persona.</span></h1>
-    <p class="hm-description">PING conecta personas por intereses para encontrarse dentro del evento.</p>
-    <div class="hm-actions">
-      <a class="btn hm-primary" th:href="${session.pingDemoParticipantId != null} ? @{/me} : @{/join}"><span th:text="${session.pingDemoParticipantId != null ? 'Volver a Mi Ping' : 'Empezar'}"></span><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
-      <a class="hm-secondary" th:href="${session.pingDemoParticipantId != null} ? @{/me/event} : @{/events}"><span th:text="${session.pingDemoParticipantId != null ? 'Ir a mi evento' : 'Explorar eventos'}"></span><svg th:replace="~{fragments/layout :: icon('pin')}"></svg></a>
-    </div>
-    <p class="hm-unofficial">Simulación académica. Sin vínculo oficial con SOFA.</p>
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Inicio')}"></head><body class="home-festival-page fe-home-page"><nav th:replace="~{fragments/layout :: nav}"></nav>
+<!-- DEC-058 · D06-1: llegada «Festival editorial» (Figma 19:263) con tokens V2. Cartel amarillo a sangre, pasos numerados y accesos reales. -->
+<main id="main-content" class="fe-home">
+<section class="fe-hero" aria-labelledby="hm-title"><div class="fe-wrap fe-hero-grid">
+  <div class="fe-hero-copy">
+    <h1 id="hm-title">Conecta en tu evento por lo que te gusta.</h1>
+    <p class="fe-lead">Elige tus gustos, recibe una propuesta y, si ambos aceptan, encuéntrense en un punto del evento.</p>
+    <a class="fe-cta" th:if="${session.pingDemoParticipantId == null}" th:href="@{/join/event}">Unirme a un evento <svg th:replace="~{fragments/layout :: icon('qr')}"></svg></a>
+    <a class="fe-cta" th:if="${session.pingDemoParticipantId != null}" th:href="@{/me}">Volver a Mi Ping <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+    <a class="fe-login" th:if="${session.pingDemoParticipantId == null}" th:href="@{/login}">Ya tengo cuenta · Entrar</a>
+    <a class="fe-login" th:if="${session.pingDemoParticipantId != null}" th:href="@{/me/event}">Ir a mi evento</a>
   </div>
-  <figure class="hm-art"><img th:src="@{/img/sofa/convencion-social.webp}" width="1536" height="1024" fetchpriority="high" decoding="async" alt="Ilustración de dos personas encontrándose entre puestos de distintas aficiones en una convención."></figure>
-</section>
-<section class="hm-how" aria-labelledby="hm-how-title"><h2 id="hm-how-title">De tus intereses al encuentro</h2>
-  <ol class="hm-steps">
-    <li><span class="hm-step-icon"><svg th:replace="~{fragments/layout :: icon('heart')}"></svg></span><div><h3>Elige intereses</h3><p>Usa un alias, elige tus gustos y marca cuándo quieres conectar.</p></div></li>
-    <li><span class="hm-step-icon"><svg th:replace="~{fragments/layout :: icon('link')}"></svg></span><div><h3>Aceptan ambos</h3><p>La propuesta solo se activa si las dos personas quieren conectar.</p></div></li>
-    <li><span class="hm-step-icon"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg></span><div><h3>Encuéntrense</h3><p>Punto, palabra y actividad. Puntos según la actividad, solo al completar y confirmar ambos.</p></div></li>
+  <figure class="fe-art"><img th:src="@{/img/sofa/convencion-social.webp}" width="1536" height="1024" fetchpriority="high" decoding="async" alt="Ilustración de dos personas encontrándose entre puestos de distintas aficiones en una convención."></figure>
+</div></section>
+<section class="fe-how" aria-labelledby="hm-how-title"><div class="fe-wrap">
+  <h2 id="hm-how-title">Así funciona</h2>
+  <ol class="fe-steps">
+    <li><span class="fe-num" aria-hidden="true">1</span><div><h3>Elige tus gustos</h3><p>Del catálogo del evento: juegos, anime, música y más.</p></div></li>
+    <li><span class="fe-num" aria-hidden="true">2</span><div><h3>Acepten los dos</h3><p>PING propone; nadie conecta sin aceptar.</p></div></li>
+    <li><span class="fe-num" aria-hidden="true">3</span><div><h3>Encuéntrense</h3><p>En un punto del evento, con una actividad corta.</p></div></li>
+    <li><span class="fe-num" aria-hidden="true">4</span><div><h3>Suman puntos</h3><p>Al confirmar ambos, canjeables por beneficios.</p></div></li>
   </ol>
-</section>
-<section class="hm-demo" aria-label="Accesos de la demo académica">
-  <div><svg th:replace="~{fragments/layout :: icon('bolt')}"></svg><p>¿Quieres probar antes?<span>Explora la demo académica con participantes de prueba.</span></p><a th:if="${demoEnabled == true}" th:href="@{/demo}">Probar la demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
-  <nav th:if="${session.pingDemoParticipantId != null}" class="hm-session-tools" aria-label="Otros accesos"><a th:if="${demoEnabled == true}" th:href="@{/demo}">Elegir participante demo</a><a th:href="@{/events}">Explorar eventos</a></nav>
-</section>
-<p class="container"><a th:href="@{/login(next='/organizer')}">Organizo un evento</a> · <a th:href="@{/login}">Entrar a mi cuenta</a></p></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+  <div class="fe-more">
+    <p th:if="${demoEnabled == true}"><a th:href="@{/demo}">Probar la demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a><span>Explora la demo académica con participantes de prueba.</span></p>
+    <p class="fe-links"><a th:href="@{/events}">Explorar eventos</a><a th:href="@{/login(next='/organizer')}">Organizo un evento</a></p>
+  </div>
+  <p class="fe-note">Proyecto académico. La demo SOFA no tiene vínculo oficial con el evento.</p>
+</div></section>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

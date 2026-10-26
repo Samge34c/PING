@@ -1,0 +1,153 @@
+{
+  "platform": "Windows nativo, usuario actual, Python 3.14.7",
+  "unit_tests": 37,
+  "native_checks": [
+    {
+      "name": "new isolated database configured (password via stdin)",
+      "ok": true
+    },
+    {
+      "name": "secret absent from command output",
+      "ok": true
+    },
+    {
+      "name": "wrong password fails without exposing secret",
+      "ok": true
+    },
+    {
+      "name": "secret absent from command output",
+      "ok": true
+    },
+    {
+      "name": "occupied port rejected without killing its owner",
+      "ok": true
+    },
+    {
+      "name": "secret absent from command output",
+      "ok": true
+    },
+    {
+      "name": "root CMD first real startup, other folder, spaced path",
+      "ok": true
+    },
+    {
+      "name": "public response validated on real Wi-Fi origin",
+      "ok": true
+    },
+    {
+      "name": "panel HTTP 200 /",
+      "ok": true
+    },
+    {
+      "name": "panel HTTP 200 health",
+      "ok": true
+    },
+    {
+      "name": "panel HTTP 200 qr.svg",
+      "ok": true
+    },
+    {
+      "name": "panel HTTP 200 status",
+      "ok": true
+    },
+    {
+      "name": "panel HTTP 200 mail",
+      "ok": true
+    },
+    {
+      "name": "secret absent from command output",
+      "ok": true
+    },
+    {
+      "name": "already running: same app PID, no duplicate",
+      "ok": true
+    },
+    {
+      "name": "compiled cache tied to sources and jar",
+      "ok": true
+    },
+    {
+      "name": "secret absent from aplicacion.log",
+      "ok": true
+    },
+    {
+      "name": "secret absent from arranque.log",
+      "ok": true
+    },
+    {
+      "name": "secret absent from compilacion.log",
+      "ok": true
+    },
+    {
+      "name": "secret absent from mysql.log",
+      "ok": true
+    },
+    {
+      "name": "secret absent from test-start-14.log",
+      "ok": true
+    },
+    {
+      "name": "secret absent from test-start-2.log",
+      "ok": true
+    },
+    {
+      "name": "secret absent from test-start-4.log",
+      "ok": true
+    },
+    {
+      "name": "secret absent from test-start-6.log",
+      "ok": true
+    },
+    {
+      "name": "secret absent from command output",
+      "ok": true
+    },
+    {
+      "name": "stop root CMD",
+      "ok": true
+    },
+    {
+      "name": "shared/reused mailbox preserved",
+      "ok": true
+    },
+    {
+      "name": "MySQL remains available after stop",
+      "ok": true
+    },
+    {
+      "name": "secret absent from command output",
+      "ok": true
+    },
+    {
+      "name": "second startup saved configuration and missing mailbox",
+      "ok": true
+    },
+    {
+      "name": "build cache unchanged",
+      "ok": true
+    },
+    {
+      "name": "secret absent from command output",
+      "ok": true
+    },
+    {
+      "name": "stop owns only tracked processes",
+      "ok": true
+    },
+    {
+      "name": "tracked app and mailbox stopped",
+      "ok": true
+    }
+  ],
+  "native_exit": "completed without failure",
+  "generated_secret_absent_from_repository_files": true,
+  "source_fingerprint": "1cc373b7fcd5bebb10253c6787d3f8840e8b4a12469ffb890b657ae1392bb82c",
+  "compiled_source_matches_current": true,
+  "tracked_processes_remaining": [],
+  "limits": [
+    "No iPhone fisico",
+    "No SMTP externo enviado",
+    "No certificado HTTPS existente probado",
+    "No UAC/firewall aceptado automaticamente"
+  ]
+}

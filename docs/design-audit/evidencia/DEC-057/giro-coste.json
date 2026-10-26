@@ -1,0 +1,67 @@
+{
+ "fluida": {
+  "runs": [
+   {
+    "composicionMs": 1155.1,
+    "principalMs": 205.5
+   },
+   {
+    "composicionMs": 1023.2,
+    "principalMs": 24.3
+   }
+  ],
+  "fotogramas2s": 200
+ },
+ "5 pasos/s": {
+  "runs": [
+   {
+    "composicionMs": 250,
+    "principalMs": 10.2
+   },
+   {
+    "composicionMs": 143,
+    "principalMs": 1.9
+   }
+  ],
+  "fotogramas2s": 11
+ },
+ "10 pasos/s": {
+  "runs": [
+   {
+    "composicionMs": 170.1,
+    "principalMs": 66.1
+   },
+   {
+    "composicionMs": 175.5,
+    "principalMs": 2.4
+   }
+  ],
+  "fotogramas2s": 21
+ },
+ "15 pasos/s": {
+  "runs": [
+   {
+    "composicionMs": 200.4,
+    "principalMs": 3.4
+   },
+   {
+    "composicionMs": 207.8,
+    "principalMs": 3.5
+   }
+  ],
+  "fotogramas2s": 31
+ },
+ "sin giro": {
+  "runs": [
+   {
+    "composicionMs": 7.8,
+    "principalMs": 12.5
+   },
+   {
+    "composicionMs": 1.1,
+    "principalMs": 4.5
+   }
+  ],
+  "fotogramas2s": 1
+ }
+}

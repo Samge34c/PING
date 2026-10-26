@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 import socketserver
 import uuid
+import base64
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -40,7 +41,10 @@ def main():
                     continue
                 cmd = line.split(b' ', 1)[0].strip().upper()
                 if cmd in (b'EHLO', b'HELO'):
-                    self.wfile.write(b'250 localhost\r\n')
+                    # Loopback metadata lets the existing Windows launcher find the actual
+                    # private mailbox directory instead of guessing from an open TCP port.
+                    encoded = base64.urlsafe_b64encode(str(root).encode('utf-8'))
+                    self.wfile.write(b'250-localhost PING development mailbox\r\n250 X-PING-MAILBOX ' + encoded + b'\r\n')
                 elif cmd in (b'MAIL', b'RCPT', b'RSET', b'NOOP'):
                     self.wfile.write(b'250 ok\r\n')
                 elif cmd == b'DATA':

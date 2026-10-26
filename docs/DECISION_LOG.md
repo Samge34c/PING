@@ -473,3 +473,44 @@ Sin cambios de backend, migraciones, datos, cuentas, permisos, privacidad, match
 ## DEC-056 — Acabado móvil comprobado tras DEC-055
 
 Samuel autoriza21 octubre2026 este bloque completo (Issue #51), sin atribuir aprobación a Julián. Base remota contrastada `claude/sweet-ritchie-ja97c7@3755c129cee95f6ece533b52a226c21969c6a52e`, árbol limpio; rama propia `fix/mobile-visual-finish`. Mejorar composición/densidad del selector compartido de Intereses y bandeja, corregir etiquetas del avatar compartido y Hub con texto ampliado; comprobar ACTIVE sin red/sesión, recibos y plano con imagen con datos ficticios aislados. Sin reconstruir componentes válidos ni cambiar backend, esquema, reglas, permisos, privacidad, snapshots o máximo de intereses. Comparaciones con datos/estado/viewport/tema idénticos, evidencia real emulada y verificaciones proporcionales. Sin merge/main/force-push. Estado vigente e historial identificados en docs/design-audit/ y continuidad única.
+
+## DEC-057 — Pareja de avatares en la propuesta de Conectar
+
+Solicitud explícita de Samuel, 25 octubre 2026, en la sesión de Claude Code: diseñar en Figma e implementar en la aplicación la pareja de avatares de la propuesta (`/matches/{id}` en estado OFFERED). **No se atribuye aprobación a Julián**; la propuesta de Figma tampoco queda aprobada. Rama propia `feature/connect-avatar-pair` desde `design/conectar-figma@49e9482`; sin commit, push, merge ni despliegue en este encargo. Issue: preparar en GitHub al publicar (no se publica en este encargo).
+
+Alcance: presentación y comportamiento visual de los dos avatares. Dos círculos del mismo diámetro definidos por una variable, ilustración completa con margen (encuadre del 84 % aprobado para miniaturas), aro discontinuo fino con colores existentes, resplandor estático tenue y vínculo pequeño entre ambos. Los aros giran solo mientras la persona ya aceptó y espera a la otra (OFFERED con aceptación propia); se detienen con movimiento reducido. La onda de conexión se reproduce una vez en la primera carga de ACTIVE que sigue a una vista OFFERED de esa conexión en la misma pestaña (transición real observada); la recarga posterior muestra el aro estable sin onda. En ACTIVE solo se añade ese aro al avatar existente; no se rediseña ACTIVE (DEC-032).
+
+Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, aceptación bilateral, Saga, datos ni dependencias. Se reutilizan `live.js` (estado y recarga existentes) y el bloqueo de doble envío de `ui.js`. «Retomar contacto» queda fuera.
+
+## DEC-058 — Implementación de la selección final de diseño (D01–D14)
+
+**Selección.** Samuel eligió el 25 de octubre de 2026, en la sesión de Claude Code, las opciones de la página de Figma «PING · Selección final para implementación» (`133:262`): D01-1, D02-1, D03-1, D04-1, D05-1, D06-1, D07-1, D08-1, D09-1, D10-1, D11-2, D12-1, D13-1 y D14-1. **No se atribuye aprobación a Julián.** La selección autoriza la implementación; la validación final de lo implementado queda pendiente de revisión humana.
+
+**Implementación.** Rama `feature/seleccion-implementacion`, creada desde el estado sin commit de `feature/connect-avatar-pair` (DEC-057), que se conserva íntegro. No se hace commit, push, merge ni despliegue en este encargo.
+
+**Alcance:**
+- Sistema visual V2 (tokens, tipografía y componentes) en ambos temas y marca C en la cabecera y el favicon. Elegir la marca no comprueba que esté libre en el registro de marcas.
+- Avatares V3 con persistencia mediante una migración Flyway compatible: los avatares preset existentes se conservan y se siguen mostrando hasta que la persona guarda uno V3. No hay conversión automática.
+- Personalizador con áreas táctiles de al menos 44 px y miniaturas al 84 %.
+- Llegada (D06) y Beneficios (D14) adaptados al sistema V2 sin cambiar su estructura.
+- Identidad, Intereses, Mi Ping, historial y recibo según sus opciones.
+- D10 reutiliza DEC-057.
+- D11-2 conserva el encuentro activo.
+
+**Conservar:** reglas, permisos, matching, aceptación bilateral, llegadas, verificación, confirmación, Saga, puntos, canjes, idempotencia, bloqueos, reportes y funciones de administración. «Retomar contacto» y el rediseño de administración quedan fuera.
+
+**Estado de implementación (25 de octubre de 2026, sin commit).** D01–D10 y D12–D14 implementados en la app; D11-2 conservado sin cambios en `active-mission.html` (solo hereda tokens V2). Cambios de datos: migración `V23__avatar_v3.sql` (columnas añadidas en `participants`, sin borrar ni convertir). Ruta nueva `GET /me/connections` (D12, mismos datos que Mi Ping) enlazada desde «Más» y la barra lateral. Revisión de Codex (`docs/handoffs/CODEX_APOYO_IMPLEMENTACION.md`) incorporada: el editor compara Deshacer y el estado «guardado» con la selección persistida (también tras un 400), «Verificado» solo con ambas verificaciones personales, y el recibo usa la caducidad real de la credencial. Detalle, evidencia y pendientes en `docs/handoffs/FIGMA_CONSOLIDADO.md`, sección «Implementación DEC-058». **Validación final pendiente de revisión humana.**
+
+## DEC-059 — Infraestructura de la demostración pública a US$0 (propuesta)
+
+**Estado: propuesta, pendiente de aceptación.** Solicitud de Samuel el 25 de octubre de 2026 en la sesión de Claude Code. No se atribuye aprobación a Julián.
+
+**Propuesta:**
+- Una sola imagen Docker (`Dockerfile`, JRE 21, usuario sin privilegios) en un Render Web Service Free, con TLS en el proxy de Render y subdominio `onrender.com`.
+- Base de datos en Aiven MySQL Free 8.4, con validación TLS obligatoria de la CA del proyecto.
+- Correo por API HTTPS (Brevo), porque Render Free bloquea SMTP. Adaptador `HttpApiMail`, activo solo por configuración; en local se mantiene SMTP.
+- Sin cambios en las reglas del producto, sin microservicios ni datos personales.
+
+**Archivos:** `Dockerfile`, `.dockerignore`, `deploy/render/entrypoint.sh`, `render.yaml`, `src/main/resources/application-render.properties`, `HttpApiMail` y `PrivateMail`.
+
+**Comprobaciones y pendientes:** en `docs/DEPLOY_RENDER_AIVEN.md`. Antes de publicar falta la autorización de commit y push. La entrega real de correo no está probada.

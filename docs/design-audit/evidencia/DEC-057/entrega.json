@@ -1,0 +1,817 @@
+{
+ "errores": [],
+ "propuesta": "/matches/3",
+ "recorte-capas-avatar": [
+  [
+   "animales/buho",
+   "150x150",
+   38513,
+   0
+  ],
+  [
+   "animales/conejo",
+   "150x150",
+   44185,
+   0
+  ],
+  [
+   "animales/gato",
+   "150x150",
+   38321,
+   0
+  ],
+  [
+   "animales/oso",
+   "150x150",
+   43440,
+   0
+  ],
+  [
+   "animales/panda",
+   "150x150",
+   43440,
+   0
+  ],
+  [
+   "animales/perro",
+   "150x150",
+   41974,
+   0
+  ],
+  [
+   "animales/rana",
+   "150x150",
+   40076,
+   0
+  ],
+  [
+   "animales/zorro",
+   "150x150",
+   38086,
+   0
+  ],
+  [
+   "sombreros/corona",
+   "150x150",
+   12085,
+   0
+  ],
+  [
+   "sombreros/fiesta",
+   "150x150",
+   9305,
+   0
+  ],
+  [
+   "sombreros/gorra",
+   "150x150",
+   17374,
+   0
+  ],
+  [
+   "sombreros/gorro",
+   "150x150",
+   19381,
+   0
+  ],
+  [
+   "accesorios/bufanda",
+   "150x150",
+   6893,
+   0
+  ],
+  [
+   "accesorios/gafas",
+   "150x150",
+   5302,
+   0
+  ],
+  [
+   "accesorios/pajarita",
+   "150x150",
+   6105,
+   0
+  ]
+ ],
+ "capturas-propuesta": {
+  "app-propuesta-390-oscuro": {
+   "pares": [
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-propuesta-390-claro": {
+   "pares": [
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-propuesta-360-oscuro": {
+   "pares": [
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-propuesta-360-claro": {
+   "pares": [
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-propuesta-390-oscuro-x13": {
+   "pares": [
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-propuesta-360-claro-x13": {
+   "pares": [
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  }
+ },
+ "capturas-esperando": {
+  "app-esperando-390-oscuro": {
+   "pares": [
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-esperando-390-claro": {
+   "pares": [
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-esperando-360-oscuro": {
+   "pares": [
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-esperando-360-claro": {
+   "pares": [
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-esperando-390-oscuro-x13": {
+   "pares": [
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      105.3,
+      105.3
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  },
+  "app-esperando-360-claro-x13": {
+   "pares": [
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/zorro.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/gafas.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/corona.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    },
+    {
+     "d": [
+      97.2,
+      97.2
+     ],
+     "capas": [
+      {
+       "src": "animales/buho.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "accesorios/bufanda.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      },
+      {
+       "src": "sombreros/fiesta.svg",
+       "cargada": true,
+       "cuadrada": true,
+       "dentro": true
+      }
+     ]
+    }
+   ],
+   "desborde": 0
+  }
+ },
+ "movimiento-reducido": {
+  "animaciones": 0,
+  "hiloPrincipal30s": 0.036,
+  "traza5sMs": {
+   "CrRendererMain": 6.5,
+   "Compositor": 0.8,
+   "VizCompositorThread": 0.4,
+   "CrGpuMain": 2.8
+  }
+ },
+ "grabacion-1": {
+  "frames": 141,
+  "marks": {
+   "aceptaOtra": 3276,
+   "activa": 4985,
+   "celebraTrasCambio": true,
+   "recarga": 6796,
+   "celebraTrasRecarga": false
+  }
+ },
+ "grabacion-2": {
+  "frames": 49,
+  "marks": {
+   "rechazaOtra": 2751,
+   "cancelada": 4902,
+   "estado": {
+    "fase": "CANCELLED",
+    "pareja": false,
+    "animaciones": 3
+   }
+  }
+ },
+ "errores-consola-red": []
+}

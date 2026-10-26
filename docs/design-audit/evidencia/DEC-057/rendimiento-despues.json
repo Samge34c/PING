@@ -1,0 +1,76 @@
+{
+ "tag": "despues",
+ "seconds": 60,
+ "state": "waiting",
+ "requests": 17,
+ "failed": [],
+ "bytesNote": "conteo de respuestas en la carga del documento",
+ "newAssets": [
+  "/img/avatars/animales/zorro-fe02dd7d4326d75dc62e9e28cd92befa.svg 200",
+  "/img/avatars/accesorios/gafas-eaa663afd489bdeaf9684a344c4453fb.svg 200",
+  "/img/avatars/sombreros/corona-3b2da0ca332f7522afcb0dcf59ec26ab.svg 200",
+  "/img/avatars/animales/buho-7f9d3fd324f9cbe84257bc95624969c2.svg 200",
+  "/img/avatars/accesorios/bufanda-847fc62892e7bff472b07c384564a917.svg 200",
+  "/img/avatars/sombreros/fiesta-8f783491ff0083e7084fde8e7a61fecf.svg 200",
+  "/js/connect-pair-bab0b981020773a481dd75ede12564d0.js 200"
+ ],
+ "clsLoad": 0,
+ "clickToFrameMs": [
+  9.8,
+  9.9,
+  10.4,
+  10.2,
+  10
+ ],
+ "metricsDelta": {
+  "TaskDuration": 0.072,
+  "ScriptDuration": 0.008,
+  "LayoutCount": 12,
+  "RecalcStyleCount": 12,
+  "LayoutDuration": 0.003,
+  "RecalcStyleDuration": 0.006,
+  "JSEventListeners": -28,
+  "Nodes": -425,
+  "JSHeapUsedSize": -309996
+ },
+ "metricsEnd": {
+  "JSEventListeners": 97,
+  "Nodes": 1793,
+  "JSHeapUsedSizeKB": 1668
+ },
+ "longTasksDuringWait": [],
+ "clsEnd": 0,
+ "trace5sMs": {
+  "CrRendererMain": 11.5,
+  "Compositor": 75.5,
+  "VizCompositorThread": 81.6,
+  "CrGpuMain": 24.4
+ },
+ "trace5sCounts": {
+  "UpdateLayoutTree": 1,
+  "Layout": 1,
+  "Paint": 2
+ },
+ "listenersNodesAfterReentry": [
+  [
+   130,
+   2249
+  ],
+  [
+   182,
+   3029
+  ],
+  [
+   216,
+   3243
+  ],
+  [
+   211,
+   3145
+  ],
+  [
+   211,
+   3145
+  ]
+ ]
+}

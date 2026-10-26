@@ -1,0 +1,43 @@
+{
+  "environment": "H2 2.4.240, perfil integration-test, JAR final sin recompilar",
+  "responses": [
+    {
+      "url": "/organizer/redemptions/deliver",
+      "status": 503
+    },
+    {
+      "url": "/organizer/redemptions/deliver",
+      "status": 503
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "names": [
+        "_csrf",
+        "_csrf",
+        "credential",
+        "status"
+      ],
+      "statusValues": [
+        "DELIVERED"
+      ],
+      "credentialLength": 26
+    },
+    {
+      "method": "POST",
+      "names": [
+        "_csrf",
+        "_csrf",
+        "credential",
+        "status"
+      ],
+      "statusValues": [
+        "DELIVERED"
+      ],
+      "credentialLength": 26
+    }
+  ],
+  "screen": "18-recibo-entregado-360.png conserva REQUESTED: la entrega NO se completó",
+  "diagnostic": "Sin excepción SQL registrada por WebAdvice.storageUnavailable; intento JFR aislado no pudo inicializar el grabador. Causa no identificada; reproducir en MySQL antes de atribuir regresión."
+}

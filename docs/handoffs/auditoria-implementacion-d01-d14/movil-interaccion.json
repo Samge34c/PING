@@ -1,0 +1,64 @@
+{
+  "beforeTouch": 0,
+  "after": 154,
+  "overflow": 390,
+  "viewport": 390,
+  "font": "Manrope, system-ui, \"Segoe UI\", sans-serif",
+  "fontReady": "loaded",
+  "visibleRadios": [
+    {
+      "text": "Gato",
+      "rect": {
+        "x": 24,
+        "y": 471.59375,
+        "width": 79.5,
+        "height": 100.25,
+        "top": 471.59375,
+        "right": 103.5,
+        "bottom": 571.84375,
+        "left": 24
+      }
+    },
+    {
+      "text": "Conejo",
+      "rect": {
+        "x": 111.5,
+        "y": 471.59375,
+        "width": 79.5,
+        "height": 100.25,
+        "top": 471.59375,
+        "right": 191,
+        "bottom": 571.84375,
+        "left": 111.5
+      }
+    },
+    {
+      "text": "Nutria",
+      "rect": {
+        "x": 199,
+        "y": 471.59375,
+        "width": 79.5,
+        "height": 100.25,
+        "top": 471.59375,
+        "right": 278.5,
+        "bottom": 571.84375,
+        "left": 199
+      }
+    },
+    {
+      "text": "Panda rojo",
+      "rect": {
+        "x": 286.5,
+        "y": 471.59375,
+        "width": 79.5,
+        "height": 100.25,
+        "top": 471.59375,
+        "right": 366,
+        "bottom": 571.84375,
+        "left": 286.5
+      }
+    }
+  ],
+  "touchedTab": "Audio",
+  "method": "Chrome CDP touchStart/move/end, emulación; no teléfono físico"
+}

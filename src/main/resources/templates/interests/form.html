@@ -6,5 +6,5 @@
 <input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" th:field="*{version}">
 <div th:if="${#fields.hasAnyErrors()}" class="ping-notice" role="alert"><p>Revisa la selección y vuelve a guardar.</p><p th:each="err : ${#fields.allErrors()}" th:text="${err}"></p><a th:href="@{/participants/{id}/interests(id=${participant.id})}">Recargar selección guardada</a></div>
 <div th:replace="~{interests/selector :: choices}"></div>
-<div class="ic-actions"><p data-selected-count role="status" aria-live="polite" th:text="${#lists.size(selectedNames) + ' intereses seleccionados'}"></p><button class="btn btn-primary">Guardar intereses <svg th:replace="~{fragments/layout :: icon('check')}"></svg></button></div>
+<div class="ic-actions"><div class="ic-actions-line"><p data-selected-count role="status" aria-live="polite" th:text="${#lists.size(selectedNames) + ' intereses seleccionados'}"></p><button type="button" class="ic-review" data-review aria-controls="ic-tray" aria-expanded="false" hidden>Revisar</button></div><button class="btn btn-primary">Guardar intereses <svg th:replace="~{fragments/layout :: icon('check')}"></svg></button></div>
 </form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

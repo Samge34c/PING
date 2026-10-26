@@ -1,0 +1,27 @@
+{
+  "only_verified_test_datadirs": [
+    {
+      "test": "prueba con espacios 20261025-185645",
+      "verified_datadir": true,
+      "shutdown_requested": true
+    },
+    {
+      "test": "prueba con espacios 20261025-185716",
+      "verified_datadir": true,
+      "shutdown_requested": true
+    },
+    {
+      "test": "prueba con espacios 20261025-185746",
+      "verified_datadir": true,
+      "shutdown_requested": true
+    },
+    {
+      "test": "prueba con espacios 20261025-190716",
+      "verified_datadir": true,
+      "shutdown_requested": true
+    }
+  ],
+  "shared_mysql_3306_touched": false,
+  "test_ports_closed": true,
+  "shared_mysql_3306_preserved": true
+}

@@ -1,0 +1,292 @@
+[
+  {
+    "name": "01-inicio-390-oscuro",
+    "url": "/",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "02-cuenta-390",
+    "url": "/register",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "03-identidad-390",
+    "url": "/join",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "04-identidad-borrador-390",
+    "url": "/join",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "05-intereses-390",
+    "url": "/join/interests",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "06-mi-ping-390",
+    "url": "/me",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "07-avatar-cabeza-390",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "08-avatar-post-rechazado",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "09-propuesta-390",
+    "url": "/matches/1",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "10-esperando-390",
+    "url": "/matches/1",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "11-activo-390",
+    "url": "/matches/1",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "11-activo-390",
+    "url": "/matches/1",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "12-completado-390",
+    "url": "/matches/1",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "13-historial-390",
+    "url": "/me/connections",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "14-beneficios-390",
+    "url": "/me/benefits",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "15-recibo-pendiente-390",
+    "url": "/me/claims/1",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "16-avatar-360-oscuro",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 360,
+      "h": 800,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "17-avatar-360-final-scroll",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 360,
+      "h": 800,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "18-recibo-pendiente-tras-503-360",
+    "url": "/me/claims/1",
+    "viewport": {
+      "w": 360,
+      "h": 800,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "19-avatar-360-claro",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 360,
+      "h": 800,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "20-mi-ping-390-claro",
+    "url": "/me",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "21-historial-390-claro",
+    "url": "/me/connections",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "30-admin-escritorio-oscuro",
+    "url": "/events",
+    "viewport": {
+      "w": 1366,
+      "h": 900,
+      "theme": "dark"
+    }
+  },
+  {
+    "name": "31-admin-escritorio-claro",
+    "url": "/events",
+    "viewport": {
+      "w": 1366,
+      "h": 900,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "avatar-gato-390-claro",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "avatar-conejo-390-claro",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "avatar-nutria-390-claro",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "avatar-panda-rojo-390-claro",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 390,
+      "h": 844,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "32-mi-ping-escritorio-claro",
+    "url": "/me",
+    "viewport": {
+      "w": 1366,
+      "h": 900,
+      "theme": "light"
+    },
+    "note": "Captura descartada para Mi Ping: sesión caducada, muestra acceso. No se usa como evidencia de esa pantalla."
+  },
+  {
+    "name": "33-admin-formulario-escritorio-claro",
+    "url": "/events/1/encounters",
+    "viewport": {
+      "w": 1366,
+      "h": 900,
+      "theme": "light"
+    }
+  },
+  {
+    "name": "22-avatar-360-texto130",
+    "url": "/me/avatar",
+    "viewport": {
+      "w": 360,
+      "h": 800,
+      "theme": "light"
+    },
+    "note": "Intento CDP de texto1.3 sin aumento efectivo confirmado. No demuestra cobertura de texto ampliado."
+  },
+  {
+    "name": "23-intereses-familias-360-claro",
+    "url": "/participants/1/interests",
+    "viewport": {
+      "w": 360,
+      "h": 800,
+      "theme": "light"
+    }
+  }
+]

@@ -6,26 +6,29 @@
  document.querySelectorAll('[data-scanner]').forEach(root=>{
   if(root.dataset.ready)return;root.dataset.ready='true';
   const start=root.querySelector('[data-scan-start]'),cancel=root.querySelector('[data-scan-stop]'),video=root.querySelector('video'),status=root.querySelector('[data-scan-status]'),input=document.getElementById(root.dataset.target),camera=root.querySelector('[data-scan-camera]'),cameraLabel=root.querySelector('[data-scan-camera-label]');
-  const capable=window.isSecureContext&&!!navigator.mediaDevices?.getUserMedia;let sessionGone=false;
-  let stream,capture,timer,running=false,generation=0;
-  const stop=(notify=true)=>{generation++;running=false;root.dataset.scannerRunning='false';clearTimeout(timer);if(capture){capture.width=0;capture.height=0;capture=null;}stream?.getTracks().forEach(t=>t.stop());stream=null;video.srcObject=null;video.hidden=true;cancel.hidden=true;cameraLabel.hidden=true;start.disabled=!capable||sessionGone;if(notify)document.dispatchEvent(new Event('ping:credential-settled'));};
+  // a) A QR that opens an address, b) camera capture, c) decoding and d) server validation are separate steps:
+  // this script only does b) and c) locally and fills the form; the server keeps validating the code.
+  const secure=window.isSecureContext,capable=secure&&!!navigator.mediaDevices?.getUserMedia;let sessionGone=false;
+  let stream,capture,timer,hint,running=false,generation=0;
+  const state=value=>{root.dataset.scanState=value;};
+  const stop=(notify=true)=>{generation++;running=false;root.dataset.scannerRunning='false';clearTimeout(timer);clearTimeout(hint);if(root.dataset.scanState!=='read')state('idle');if(capture){capture.width=0;capture.height=0;capture=null;}stream?.getTracks().forEach(t=>t.stop());stream=null;video.srcObject=null;video.hidden=true;cancel.hidden=true;cameraLabel.hidden=true;start.disabled=!capable||sessionGone;if(notify)document.dispatchEvent(new Event('ping:credential-settled'));};
   const parse=text=>{
    if(root.dataset.purpose==='EVENT_JOIN'){
     if(/^[A-Z0-9]{5,32}$/.test(text))return text;
-    try{const url=new URL(text);const origins=new Set([location.origin]);if(root.dataset.allowedOrigin)origins.add(new URL(root.dataset.allowedOrigin).origin);if(!['http:','https:'].includes(url.protocol)||!origins.has(url.origin)||url.username||url.password||url.pathname!==new URL(root.dataset.joinPath,location.origin).pathname)return null;const code=url.searchParams.get('code')||'';return /^[A-Z0-9]{5,32}$/.test(code)?code:null;}catch(_){return null;}
+    try{const url=new URL(text);const hosts=new Set([location.host]);if(root.dataset.allowedOrigin)hosts.add(new URL(root.dataset.allowedOrigin).host);/* Same PING host over http or https: only the code is extracted, nothing is opened. */if(!['http:','https:'].includes(url.protocol)||!hosts.has(url.host)||url.username||url.password||url.pathname!==new URL(root.dataset.joinPath,location.origin).pathname)return null;const code=url.searchParams.get('code')||'';return /^[A-Z0-9]{5,32}$/.test(code)?code:null;}catch(_){return null;}
    }
    const prefix='PING:'+root.dataset.purpose+':';return text.startsWith(prefix)&&/^[A-Za-z0-9_-]{43}$/.test(text.slice(prefix.length))?text:null;
   };
-  const accept=(text,revision)=>{if(!running||revision!==generation)return;const value=parse(text);if(!value){status.textContent='Este QR no corresponde a esta acción. Prueba otro o introduce el código.';return;}input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}));stop();status.textContent='Código leído. Revisa y pulsa el botón del formulario para continuar.';input.focus();};
+  const accept=(text,revision)=>{if(!running||revision!==generation)return;const value=parse(text);if(!value){clearTimeout(hint);state('wrong');status.textContent='Leímos un QR, pero no corresponde a esta acción. Prueba el QR correcto o introduce el código.';return;}input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}));state('read');stop();status.textContent='Código leído. Revisa y pulsa el botón del formulario para continuar.';input.focus();};
   cancel.addEventListener('click',()=>{stop();status.textContent='Cámara detenida. Puedes introducir el código.';});
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&running){stop(false);status.textContent='Cámara detenida al salir de la pantalla. Puedes reabrirla.';}});
   window.addEventListener('pagehide',()=>stop(false));document.addEventListener('ping:session-lost',()=>{sessionGone=true;stop(false);start.disabled=true;status.textContent='Sesión finalizada. Entra de nuevo antes de escanear.';});
-  if(!capable){start.disabled=true;status.textContent='La cámara requiere HTTPS y un navegador compatible. En HTTP por Wi-Fi, introduce el código manualmente.';return;}
+  if(!capable){start.disabled=true;state('unavailable');status.textContent=secure?'Este navegador no permite usar la cámara en esta página. Introduce el código.':'La cámara necesita abrir PING por HTTPS (la dirección https:// del panel, con el certificado de PING en confianza). Mientras tanto, introduce el código.';return;}
   camera.addEventListener('change',()=>{stop();start.click();});
   start.addEventListener('click',async()=>{
-   if(sessionGone)return;const revision=++generation;running=true;root.dataset.scannerRunning='true';start.disabled=true;cancel.hidden=false;status.textContent='Solicitando acceso a la cámara…';
+   if(sessionGone||running)return;const revision=++generation;running=true;root.dataset.scannerRunning='true';start.disabled=true;cancel.hidden=false;state('requesting');status.textContent='Solicitando acceso a la cámara…';
    try{
-    const next=await navigator.mediaDevices.getUserMedia({video:camera.value?{deviceId:{exact:camera.value}}:{facingMode:{ideal:'environment'}},audio:false});if(!running||revision!==generation){next.getTracks().forEach(t=>t.stop());return;}stream=next;video.srcObject=stream;video.hidden=false;await video.play();status.textContent='Apunta al QR. No enviamos imágenes ni abrimos enlaces externos.';
+    const next=await navigator.mediaDevices.getUserMedia({video:camera.value?{deviceId:{exact:camera.value}}:{facingMode:{ideal:'environment'}},audio:false});if(!running||revision!==generation){next.getTracks().forEach(t=>t.stop());return;}stream=next;video.srcObject=stream;video.hidden=false;await video.play();state('active');status.textContent='Apunta al QR. No enviamos imágenes ni abrimos enlaces externos.';hint=setTimeout(()=>{if(running&&revision===generation&&root.dataset.scanState==='active')status.textContent='Aún no se lee el QR. Acércalo hasta que ocupe buena parte de la imagen, evita reflejos y mantén el teléfono quieto.';},12000);
     if(navigator.mediaDevices.enumerateDevices){const devices=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='videoinput');if(!running||revision!==generation)return;const selected=stream.getVideoTracks()[0]?.getSettings().deviceId;camera.replaceChildren();devices.forEach((d,i)=>{const option=document.createElement('option');option.value=d.deviceId;option.textContent=d.label||'Cámara '+(i+1);option.selected=d.deviceId===selected;camera.append(option);});cameraLabel.hidden=devices.length<2;}
     let native;
     try{if(window.BarcodeDetector&&(await BarcodeDetector.getSupportedFormats()).includes('qr_code'))native=new BarcodeDetector({formats:['qr_code']});}catch(_){}
@@ -42,7 +45,9 @@
       if(running&&revision===generation)timer=setTimeout(scanLocal,220);
      };scanLocal();
     }
-   }catch(error){if(revision!==generation)return;stop();const messages={NotAllowedError:'Permiso de cámara denegado. Puedes introducir el código o cambiar el permiso del navegador.',NotFoundError:'No encontramos una cámara. Introduce el código.',NotReadableError:'La cámara está ocupada. Cierra la otra aplicación y reintenta.'};status.textContent=messages[error.name]||'No pudimos abrir el lector. Reintenta o introduce el código manualmente.';}
+   }catch(error){if(revision!==generation)return;stop();state('error');if(error.name==='OverconstrainedError'){camera.replaceChildren();cameraLabel.hidden=true;}
+    const messages={NotAllowedError:'Permiso de cámara denegado. En Safari: menú de la página (aA) → Ajustes del sitio web → Cámara → Permitir; después pulsa «Escanear QR». También puedes introducir el código.',SecurityError:'El navegador bloqueó la cámara en esta página. Abre PING por HTTPS con su certificado en confianza o introduce el código.',NotFoundError:'No encontramos una cámara. Introduce el código.',NotReadableError:'La cámara está ocupada. Cierra la otra aplicación y reintenta.',OverconstrainedError:'La cámara elegida ya no está disponible. Pulsa «Escanear QR» para usar la trasera.',AbortError:'La cámara no pudo iniciarse. Pulsa «Escanear QR» para reintentar o introduce el código.'};
+    status.textContent=error.message==='decoder unavailable'?'No se pudo cargar el lector de QR. Recarga la página o introduce el código.':messages[error.name]||'No pudimos abrir el lector. Reintenta o introduce el código manualmente.';}
   });
  });
 })();

@@ -1,0 +1,54 @@
+{
+ "url": "/matches/6",
+ "giro": [
+  [
+   "pair-spin",
+   "steps(360)",
+   "24s",
+   "normal"
+  ],
+  [
+   "pair-spin",
+   "steps(360)",
+   "24s",
+   "reverse"
+  ]
+ ],
+ "listeners-documento-actual": {
+  "total": 28,
+  "enLaPareja": 6,
+  "tipos": {
+   "error": 6
+  }
+ },
+ "contador-global-documento-actual": 89,
+ "contador-global-tras-reentradas": [
+  [
+   28,
+   535
+  ],
+  [
+   28,
+   535
+  ],
+  [
+   28,
+   535
+  ],
+  [
+   28,
+   535
+  ],
+  [
+   28,
+   535
+  ]
+ ],
+ "listeners-documento-tras-reentradas": {
+  "total": 28,
+  "enLaPareja": 6,
+  "tipos": {
+   "error": 6
+  }
+ }
+}

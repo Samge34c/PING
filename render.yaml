@@ -1,0 +1,32 @@
+# Blueprint opcional de Render para la demostración pública de PING (plan Free, US$0).
+# Los valores con sync:false NO se guardan aquí: Render los pide en el panel al crear el Blueprint.
+services:
+  - type: web
+    name: ping-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /login
+    autoDeploy: false
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: mysql,render
+      - key: DB_URL            # jdbc:mysql://HOST:PUERTO/defaultdb  (sin sslMode: lo añade el entrypoint)
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_CA_PEM         # CA del proyecto Aiven (PEM). Alternativa: Secret File + DB_CA_FILE
+        sync: false
+      - key: PING_PUBLIC_BASE_URL   # https://NOMBRE.onrender.com
+        sync: false
+      - key: PING_MAIL_API_PROVIDER
+        value: brevo
+      - key: PING_MAIL_API_KEY
+        sync: false
+      - key: PING_MAIL_FROM
+        sync: false
+      - key: PING_DEMO_ENABLED
+        value: "false"

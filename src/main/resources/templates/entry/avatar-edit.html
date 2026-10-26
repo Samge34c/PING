@@ -1,1 +1,11 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Tu avatar')}"></head><body><nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container ping-form-layout"><a class="pi-back" th:href="@{/me}">← Mi Ping</a><h1>Tu avatar</h1><form method="post" th:action="@{/me/avatar}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><div class="av-edit-head"><span th:replace="~{entry/avatar :: preview}"></span></div><fieldset th:replace="~{entry/avatar :: editor}"></fieldset><button class="btn btn-primary pe-primary">Guardar avatar</button></form></main></body></html>
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Tu avatar')}"></head><body class="av3-page"><nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container av3-layout">
+<a class="pi-back link-44" th:href="@{/me}">← Mi Ping</a>
+<h1 class="visually-hidden">Personaliza tu avatar</h1>
+<p th:if="${avatarError}" class="ping-notice" role="alert" tabindex="-1" data-error-summary th:text="${avatarError}"></p>
+<div th:if="${legacyPreset}" class="av3-legacy" role="note"><span th:replace="~{entry/avatar :: portrait(${avatar})}"></span><p><strong>Tu avatar actual es del catálogo anterior.</strong> <span th:text="${legacyEquivalent} ? 'Te proponemos el mismo animal en el catálogo nuevo.' : 'Ese animal no está en el catálogo nuevo: elige uno.'"></span> Se conserva hasta que guardes uno nuevo.</p></div>
+<form method="post" th:action="@{/me/avatar}" class="av3-form" data-av3-form>
+<input type="hidden" name="_csrf" th:value="${csrfToken}">
+<div th:replace="~{entry/avatar :: stage}"></div>
+<fieldset th:replace="~{entry/avatar :: editor}"></fieldset>
+<div class="av3-actions"><button class="btn btn-primary pe-primary">Guardar avatar</button></div>
+</form></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

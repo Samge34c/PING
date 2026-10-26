@@ -5,7 +5,7 @@
      Los checkboxes name=interestIds con el ID real son el único estado; interest-selector.js solo muestra, filtra y resume.
      Sin JavaScript queda la lista completa por categorías. -->
 <div th:fragment="choices" class="interest-category-selector" data-interest-selector>
-  <div class="ic-tray" data-tray hidden>
+  <div class="ic-tray" id="ic-tray" data-tray hidden>
     <div class="ic-tray-line">
       <div class="ic-tray-head"><strong>Elegidos</strong><output data-tray-count aria-hidden="true">0</output></div>
       <div class="ic-tray-chips" data-tray-chips></div>
@@ -28,25 +28,30 @@
     </div>
     <div th:if="${interestOptionCount > 12}">
       <label for="interest-search" class="form-label">Buscar un interés</label>
-      <input class="form-control" type="search" id="interest-search" data-interest-search autocomplete="off" placeholder="Escribe un nombre">
+      <input class="form-control" type="search" id="interest-search" data-interest-search autocomplete="off" th:placeholder="${'Buscar entre ' + interestOptionCount + ' gustos'}">
     </div>
     <p class="ic-filter-status" data-filter-status role="status" aria-live="polite"></p>
   </div>
+  <!-- DEC-058 · D08-1 (Figma 133:1703): mundos en una tira de pestañas y, dentro del mundo, grupos por familia con su recuento.
+       interest-selector.js coloca las filas reales en cada familia; con búsqueda vuelven a su categoría. -->
   <div th:if="${taxonomyNodes != null}" class="ic-taxonomy" data-taxonomy hidden>
-    <div class="ic-nav" data-taxonomy-nav hidden>
-      <button type="button" class="ic-back" data-taxonomy-back><svg class="ping-icon" aria-hidden="true"><use href="" data-back-icon></use></svg>Mundos</button>
-      <h2 class="ic-world-title" data-taxonomy-heading tabindex="-1">Explora tus mundos</h2>
-    </div>
-    <div class="ic-worlds">
-      <button th:each="node : ${taxonomyNodes}" th:if="${node.parent == null}" type="button" class="ic-world" th:attr="data-node-key=${node.key},data-node-parent=${node.parent},data-node-label=${node.label}">
-        <span class="ic-world-name" th:text="${node.label}"></span>
-        <span class="ic-world-meta"><b data-node-selected hidden></b><span data-node-count></span></span>
+    <div class="ic-nav" data-taxonomy-nav hidden><h2 class="ic-world-title" data-taxonomy-heading tabindex="-1">Resultados</h2></div>
+    <div class="ic-worlds" role="group" aria-label="Mundos de gustos">
+      <button th:each="node : ${taxonomyNodes}" th:if="${node.parent == null}" type="button" class="ic-world" aria-pressed="false" th:attr="data-node-key=${node.key},data-node-parent=${node.parent},data-node-label=${node.label}">
         <svg class="ping-icon ic-world-icon" aria-hidden="true"><use href="" data-world-icon></use></svg>
+        <span class="ic-world-name" th:text="${node.label}"></span>
+        <b class="ic-world-count" data-node-selected aria-hidden="true"></b>
       </button>
     </div>
-    <div class="ic-subs" data-subs hidden>
-      <button type="button" class="ic-sub" data-sub-all aria-pressed="true">Todo</button>
-      <button th:each="node : ${taxonomyNodes}" th:if="${node.parent != null}" type="button" class="ic-sub" aria-pressed="false" th:attr="data-node-key=${node.key},data-node-parent=${node.parent},data-node-label=${node.label}" th:text="${node.label}"></button>
+    <div class="ic-families" data-families>
+      <section th:each="node : ${taxonomyNodes}" th:if="${node.parent != null}" class="ic-fam" hidden th:attr="data-family-key=${node.key},data-family-parent=${node.parent}">
+        <div class="ic-fam-head"><h3 th:text="${node.label}"></h3><span data-family-count></span></div>
+        <div class="interest-list" data-family-list></div>
+      </section>
+      <section class="ic-fam" hidden data-family-rest>
+        <div class="ic-fam-head"><h3>Más opciones</h3><span data-family-count></span></div>
+        <div class="interest-list" data-family-list></div>
+      </section>
     </div>
   </div>
   <div class="ic-groups">

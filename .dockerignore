@@ -1,0 +1,12 @@
+# Solo entra lo necesario para compilar: nada de documentación, evidencias, herramientas locales ni configuración privada.
+*
+!.mvn/
+!mvnw
+!pom.xml
+!src/main/
+!deploy/render/entrypoint.sh
+# Render copia los Secret Files a la raíz del contexto de compilación: nunca deben entrar en la imagen.
+ca.pem
+*.pem
+*.p12
+*.key

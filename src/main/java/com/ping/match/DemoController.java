@@ -62,6 +62,11 @@ public class DemoController {
         model.addAttribute("held", history.stream().anyMatch(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE));
         model.addAttribute("completedCount", history.stream().filter(m -> m.status() == MatchStatus.COMPLETED).count()); return "demo/dashboard";
     }
+    /** DEC-058 · D12-1: lista V3 de conexiones anteriores, con los mismos datos que Mi Ping y accesible desde la navegación. */
+    @GetMapping("/me/connections") public String connections(HttpSession session, Model model) {
+        String page = dashboard(session, model);
+        return page.startsWith("redirect:") ? page : "demo/connections";
+    }
     @GetMapping("/connect") public String connect(HttpSession session, Model model) {
         String page = dashboard(session, model);
         if (page.startsWith("redirect:")) return page;

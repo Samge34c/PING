@@ -1,0 +1,57 @@
+{
+ "url": "/matches/5",
+ "giro": [
+  [
+   "pair-spin",
+   "steps(360)",
+   "24s",
+   "normal"
+  ],
+  [
+   "pair-spin",
+   "steps(360)",
+   "24s",
+   "reverse"
+  ]
+ ],
+ "listeners-documento-actual": {
+  "total": 28,
+  "enLaPareja": 6,
+  "tipos": {
+   "error": 6
+  }
+ },
+ "contador-global-documento-actual": 119,
+ "contador-global-tras-reentradas": [
+  [
+   171,
+   3073
+  ],
+  [
+   205,
+   3368
+  ],
+  [
+   211,
+   3388
+  ],
+  [
+   211,
+   3388
+  ],
+  [
+   211,
+   3388
+  ]
+ ],
+ "listeners-documento-tras-reentradas": {
+  "total": 28,
+  "enLaPareja": 6,
+  "tipos": {
+   "error": 6
+  }
+ },
+ "onda-tras-aceptar-ambos": true,
+ "onda-tras-recargar": false,
+ "nueva-espera": "/matches/6"
+}

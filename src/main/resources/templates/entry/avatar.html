@@ -1,58 +1,53 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<!-- Vista previa del avatar elegido: la actualiza avatar.js dentro del mismo formulario. -->
-<span th:fragment="preview" class="preset-avatar av-preview" th:classappend="${'avatar-bg-'+avatar.background}" data-avatar-preview role="img" aria-label="Vista previa de tu avatar">
-<img th:src="@{/img/avatars/animales/{id}.svg(id=${avatar.animal})}" alt="" width="100" height="100" data-layer="animal">
-<img th:if="${avatar.accessory!='none'}" th:src="@{/img/avatars/accesorios/{id}.svg(id=${avatar.accessory})}" alt="" width="100" height="100" data-layer="accessory">
-<img th:if="${avatar.hat!='none'}" th:src="@{/img/avatars/sombreros/{id}.svg(id=${avatar.hat})}" alt="" width="100" height="100" data-layer="hat">
-</span>
-<!-- Editor compartido por /join y /me/avatar. Radios nativos name=animal|hat|accessory|background con las listas del servidor.
-     Sin JavaScript se ven todos los grupos; avatar.js los convierte en pestañas y compone las miniaturas solo del grupo visible.
-     Los mapas del servidor no tienen orden estable: se ordenan por clave para que las opciones no cambien entre arranques. -->
-<fieldset th:fragment="editor" class="av-editor" data-avatar-picker>
+<!-- DEC-058 · Avatares V3. Retrato compartido: alta, edición, Mi Ping, conexión e historial usan este fragmento.
+     Un avatar V3 se compone por capas sobre el mismo lienzo 256×256 (encuadre al 84 %, D05). Los avatares del catálogo
+     anterior (estilo preset) se siguen mostrando con sus recursos hasta que la persona guarda uno V3. -->
+<span th:fragment="portrait(value)" th:remove="tag"><span th:if="${value.v3 != null}" class="preset-avatar avatar-public avatar-v3" th:style="'--avatar-disc:' + ${value.v3.disc()}" role="img" th:attr="aria-label=${'Avatar: '+value.label()}"><img th:each="src : ${value.v3.layers()}" th:src="@{${src}}" alt="" width="256" height="256" decoding="async"></span><span th:if="${value.v3 == null}" class="preset-avatar avatar-public" th:classappend="${'avatar-bg-'+value.background}" role="img" th:attr="aria-label=${'Avatar: '+value.label()}"><img th:src="@{/img/avatars/animales/{id}.svg(id=${value.animal})}" alt=""><img th:if="${value.accessory!='none'}" th:src="@{/img/avatars/accesorios/{id}.svg(id=${value.accessory})}" alt=""><img th:if="${value.hat!='none'}" th:src="@{/img/avatars/sombreros/{id}.svg(id=${value.hat})}" alt=""></span></span>
+
+<!-- Vista previa pequeña del borrador (alta): la actualiza avatar.js dentro del mismo formulario. -->
+<span th:fragment="preview" class="preset-avatar avatar-v3 av3-preview" data-avatar-preview th:style="'--avatar-disc:' + ${avatarDraft.disc()}" role="img" th:attr="aria-label=${'Vista previa de tu avatar: '+avatarDraft.label()}"><img th:each="src : ${avatarDraft.layers()}" th:src="@{${src}}" alt="" width="256" height="256" decoding="async"></span>
+
+<!-- Escenario del personalizador (/me/avatar): estado del borrador, Deshacer y vista grande. -->
+<div th:fragment="stage" class="av3-stage">
+<div class="av3-status"><span class="av3-chip" data-av3-chip>Tu avatar guardado</span><button type="button" class="av3-undo" data-av3-undo hidden disabled>Deshacer</button></div>
+<span class="av3-ring" data-av3-ring><span class="preset-avatar avatar-v3 av3-preview av3-preview-lg" data-avatar-preview th:style="'--avatar-disc:' + ${avatarDraft.disc()}" role="img" th:attr="aria-label=${'Vista previa de tu avatar: '+avatarDraft.label()}"><img th:each="src : ${avatarDraft.layers()}" th:src="@{${src}}" alt="" width="256" height="256" decoding="async"></span></span>
+<p class="av3-summary" data-av3-summary th:text="${avatarDraft.label()}"></p>
+</div>
+
+<!-- Un grupo de opciones del editor. kind: animal|palette|head|audio|face|neck. -->
+<section th:fragment="group(kind,name,label,options,selected)" class="av3-panel" th:attr="data-av-panel=${kind},data-label=${label}">
+<h3 class="av3-title" th:text="${label}"></h3>
+<div class="av3-grid" th:classappend="${kind=='palette'} ? 'av3-grid-3' : ''">
+<label class="av3-opt" th:each="e : ${options}" th:classappend="${e.key=='none'} ? 'is-none' : ''">
+<input type="radio" th:name="${name}" th:value="${e.key}" th:checked="${e.key==selected}" th:attr="data-label=${e.value}">
+<span class="av3-thumb" data-av3-tile th:attr="data-kind=${kind},data-id=${e.key}" th:style="'--avatar-disc:' + ${kind=='palette' ? avatarV3Discs.get(e.key) : avatarDraft.disc()}"><img th:each="src : ${avatarDraft.tile(kind,e.key)}" th:src="@{${src}}" alt="" width="256" height="256" loading="lazy" decoding="async"></span>
+<span class="av3-name" th:text="${e.value}"></span>
+</label>
+</div>
+</section>
+
+<!-- Colores de la pieza de un slot; solo se aplican cuando hay pieza. -->
+<div th:fragment="colors(slot,name,selected)" class="av3-colors" th:attr="data-av3-colors=${slot}">
+<span class="av3-colors-label">Color de la pieza</span>
+<div class="av3-color-row"><label class="av3-color" th:each="c : ${avatarV3Colors}"><input type="radio" th:name="${name}" th:value="${c.key}" th:checked="${c.key==selected}" th:attr="data-label=${c.value}"><i th:class="${'av3-swatch av3-swatch-'+c.key}"></i><span th:text="${c.value}"></span></label></div>
+</div>
+
+<!-- Editor V3 compartido por /join y /me/avatar. Radios nativos con las listas del servidor; sin JavaScript se ven todos los grupos.
+     avatar.js los convierte en pestañas, compone la vista previa, retira la pieza incompatible avisando antes de guardar
+     y repinta las miniaturas cuando cambian el animal o el pelaje. El servidor vuelve a validar al guardar. -->
+<!-- data-saved (solo /me/avatar): selección persistida; «none» = aún no hay avatar V3 guardado, el borrador es una propuesta. -->
+<fieldset th:fragment="editor" class="av3-editor" data-avatar-v3 th:attr="data-bulky=${avatarV3Bulky},data-saved=${legacyPreset == null ? null : (avatarSaved == null ? 'none' : avatarSaved.formFields())}">
 <legend class="visually-hidden">Personaliza tu avatar</legend>
-<section class="av-panel" data-av-panel="animal" data-label="Animal">
-<h3 class="av-title">Animal</h3>
-<div class="av-opts" data-cols="4">
-<label class="av-opt" th:each="k : ${#lists.sort(#lists.toList(avatarAnimals.keySet()))}">
-<input type="radio" name="animal" th:value="${k}" th:checked="${k==avatar.animal}" th:attr="data-label=${avatarAnimals.get(k)}">
-<span class="av-face" data-kind="animal" th:attr="data-id=${k}"><img th:src="@{/img/avatars/animales/{id}.svg(id=${k})}" alt="" width="100" height="100" loading="lazy"></span>
-<span class="av-name" th:text="${avatarAnimals.get(k)}"></span>
-</label>
-</div>
-</section>
-<section class="av-panel" data-av-panel="hat" data-label="Sombrero">
-<h3 class="av-title">Sombrero</h3>
-<div class="av-opts" data-cols="5">
-<label class="av-opt" th:each="k : ${#lists.sort(#lists.toList(avatarHats.keySet()))}" th:classappend="${k=='none'} ? 'is-none' : ''">
-<input type="radio" name="hat" th:value="${k}" th:checked="${k==avatar.hat}" th:attr="data-label=${avatarHats.get(k)}">
-<span class="av-face" data-kind="hat" th:attr="data-id=${k}"></span>
-<span class="av-name" th:text="${avatarHats.get(k)}"></span>
-</label>
-</div>
-</section>
-<section class="av-panel" data-av-panel="accessory" data-label="Accesorio">
-<h3 class="av-title">Accesorio</h3>
-<div class="av-opts" data-cols="4">
-<label class="av-opt" th:each="k : ${#lists.sort(#lists.toList(avatarAccessories.keySet()))}" th:classappend="${k=='none'} ? 'is-none' : ''">
-<input type="radio" name="accessory" th:value="${k}" th:checked="${k==avatar.accessory}" th:attr="data-label=${avatarAccessories.get(k)}">
-<span class="av-face" data-kind="accessory" th:attr="data-id=${k}"></span>
-<span class="av-name" th:text="${avatarAccessories.get(k)}"></span>
-</label>
-</div>
-</section>
-<section class="av-panel" data-av-panel="background" data-label="Color">
-<h3 class="av-title">Color</h3>
-<div class="av-opts av-colors">
-<label class="av-color" th:each="k : ${#lists.sort(#lists.toList(avatarColors.keySet()))}">
-<input type="radio" name="background" th:value="${k}" th:checked="${k==avatar.background}" th:attr="data-label=${avatarColors.get(k)}">
-<i th:classappend="${'avatar-bg-'+k}"></i><span th:text="${avatarColors.get(k)}"></span>
-</label>
-</div>
-</section>
+<p class="av3-conflict" data-av3-conflict role="status" th:attr="hidden=${avatarError == null ? 'hidden' : null}" th:text="${avatarError}"></p>
+<section th:replace="~{entry/avatar :: group('animal','animal','Animal',${avatarV3Animals},${avatarDraft.animal})}"></section>
+<section th:replace="~{entry/avatar :: group('palette','palette','Pelaje',${avatarV3Palettes},${avatarDraft.palette})}"></section>
+<div class="av3-slot" data-av3-slot="head"><section th:replace="~{entry/avatar :: group('head','head','Cabeza',${avatarV3Heads},${avatarDraft.head})}"></section><div th:replace="~{entry/avatar :: colors('head','headColor',${avatarDraft.headColor})}"></div></div>
+<div class="av3-slot" data-av3-slot="audio"><section th:replace="~{entry/avatar :: group('audio','audio','Audio',${avatarV3Audios},${avatarDraft.audio})}"></section><div th:replace="~{entry/avatar :: colors('audio','audioColor',${avatarDraft.audioColor})}"></div></div>
+<div class="av3-slot" data-av3-slot="face"><section th:replace="~{entry/avatar :: group('face','face','Cara',${avatarV3Faces},${avatarDraft.face})}"></section><div th:replace="~{entry/avatar :: colors('face','faceColor',${avatarDraft.faceColor})}"></div></div>
+<div class="av3-slot" data-av3-slot="neck"><section th:replace="~{entry/avatar :: group('neck','neck','Cuello',${avatarV3Necks},${avatarDraft.neck})}"></section><div th:replace="~{entry/avatar :: colors('neck','neckColor',${avatarDraft.neckColor})}"></div></div>
 <script th:src="@{/js/avatar.js}" defer></script>
 </fieldset>
-<span th:fragment="portrait(value)" class="preset-avatar avatar-public" th:classappend="${'avatar-bg-'+value.background}" role="img" th:attr="aria-label=${'Avatar: '+value.label()}"><img th:src="@{/img/avatars/animales/{id}.svg(id=${value.animal})}" alt=""><img th:if="${value.accessory!='none'}" th:src="@{/img/avatars/accesorios/{id}.svg(id=${value.accessory})}" alt=""><img th:if="${value.hat!='none'}" th:src="@{/img/avatars/sombreros/{id}.svg(id=${value.hat})}" alt=""></span>
 </body>
 </html>

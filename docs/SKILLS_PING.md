@@ -202,3 +202,59 @@ No se instalaron plugins, colecciones ni servicios; no se actualizó ninguna rev
 ## logo-design — 24 octubre 2026
 
 Instalada a petición explícita de Samuel para el trabajo de marca V2. Fuente: https://github.com/kaankiziltug/logo-design-skill, commit `734090317a2155c5bf1ae8bd4cc85c6848a0128f` (release 1.4.5), licencia MIT (atribución en `.agents/skills/logo-design/LICENSE`). Copia selectiva con alcance de proyecto: `SKILL.md`, `references/`, `scripts/`, `templates/`, `LICENSE` y `TRADEMARKS.md`. **No** se instaló la biblioteca `assets/library/` (1 432 logotipos de terceros, marcas registradas, solo de referencia), por lo que `search_library.py` no funciona. Scripts revisados: Python estándar; `render_png.py` usa renderizadores locales (aquí Chrome) mediante subprocess, sin red. Sin instalador, plugin ni hooks. Puntero manual en `.claude/skills/logo-design` (`disable-model-invocation: true`). Registro y SHA-256 en `.agents/skill-installation.json`. Uso: conceptos, construcción SVG y pruebas de la propuesta `docs/design-proposals/v2`; la pausa de la skill tras los conceptos se omitió porque el encargo autorizaba elegir sin consulta intermedia.
+
+## Revisión de inventario — 25 octubre 2026
+
+Encargo: preparar el menor conjunto útil para PING móvil. **Resultado: no se instala nada nuevo.** Las nueve skills de proyecto ya cubren las necesidades; cualquier añadido sería redundante.
+
+| Necesidad | Cubierta por |
+|---|---|
+| Identidad gráfica y vectores | logo-design (fuente exacta: kaankiziltug/logo-design-skill @ `734090317a21`, release 1.4.5) |
+| Composición y jerarquía móvil | redesign-existing-projects; revisión final con impeccable |
+| Formularios, teclado, navegación, estados, accesibilidad | mobile-native, ui-ux-pro-max; movimiento con emil-design-eng |
+| Implementación Thymeleaf/CSS | Ninguna skill específica: las anteriores no imponen React ni Tailwind (sus ejemplos de otros stacks no autorizan dependencias). Para pasar de Figma a código: `figma:figma-design-to-code` del plugin de Figma |
+| Diagnóstico | systematic-debugging |
+| Verificación y continuidad | verification-before-completion, ping-efficient-work |
+
+Descartado por redundancia: otra skill de UX o de auditoría visual (cubiertas por ui-ux-pro-max e impeccable), skills Thymeleaf/Spring de terceros (no aportan sobre las instrucciones del proyecto y amplían la superficie) y copias locales de las skills de Figma.
+
+**Skills de Figma.** Las proporciona el plugin `figma@claude-plugins-official` (activado en la configuración de usuario): `figma:figma-use` (obligatoria antes de `use_figma`), `figma:figma-generate-design`, `figma:figma-generate-library`, `figma:figma-design-to-code` y el resto se cargan desde el plugin con la herramienta Skill. No se copian al repositorio.
+
+**Comprobado hoy (Claude Code 2.1.302, Windows).**
+
+- SHA-256 de los nueve SKILL.md coincide con el manifiesto tras normalizar finales de línea (Git en Windows con `core.autocrlf=true` los deja en CRLF). Archivos instalados y referencias relativas presentes.
+- Descubrimiento: las cuatro automáticas aparecen en el listado de la sesión. Las cinco manuales (`impeccable`, `ui-ux-pro-max`, `redesign-existing-projects`, `emil-design-eng`, `logo-design`) no aparecen ahí por diseño; su invocación con `/nombre` por el usuario sigue sin observarse.
+- Prueba mínima: `python .agents/skills/ui-ux-pro-max/scripts/search.py "form error validation" --domain ux -n 1` → exit 0, un resultado. Con `python -I` falla (`No module named 'core'`): el script necesita su carpeta en `sys.path`. `svg_audit.py` de logo-design sobre `docs/design-proposals/v2/marca/*.svg` → 99/100.
+- Hooks: no hay `.claude/settings*.json` de proyecto; Impeccable conserva `hook.enabled: false`. El plugin Tandem (usuario) aporta sus propios hooks; no se modificaron.
+
+**Invocación.**
+
+| Skill | Modo | Cómo |
+|---|---|---|
+| ping-efficient-work, mobile-native, systematic-debugging, verification-before-completion | Automática por descripción | El modelo la carga cuando aplica; también `/nombre` |
+| redesign-existing-projects, emil-design-eng, ui-ux-pro-max, impeccable, logo-design | Manual | El usuario escribe `/nombre`. Si el modelo solo lee el SKILL.md, debe decir que lo leyó, no que ejecutó su flujo |
+| Skills de Figma | Del plugin | Herramienta Skill (`figma:figma-use`, etc.) |
+
+Dependencias: Python 3 (ui-ux-pro-max, logo-design); renderizador local solo para `render_png.py`; Impeccable sin motor ni hooks.
+
+**Codex.** Lee `.agents/skills/` del repositorio, la misma fuente; no se duplica nada. El descubrimiento de las nueve se comprobó en el catálogo de la sesión Codex descrita abajo. `disable-model-invocation` corresponde a los punteros de Claude Code; Codex usa `policy.allow_implicit_invocation` en `agents/openai.yaml`. Tandem no instala ni sincroniza skills: solo conecta Claude y Codex. Las skills de Figma dependen de la conexión/plugin propios de cada agente y no forman parte de las nueve instalaciones del repositorio.
+
+## Descubrimiento real en Codex — 25 octubre 2026
+
+**Evidencia:** el catálogo `Available skills` que recibió esta sesión Codex enumera los nueve nombres y sus rutas `C:/Users/river/PING-movil/.agents/skills/<nombre>/SKILL.md`. Es evidencia de descubrimiento por el agente, no solo de archivos presentes. No demuestra ejecución de los nueve flujos, funcionamiento de scripts ni disponibilidad de recursos excluidos. Se inspeccionaron únicamente los metadatos de las nueve; no se cargaron sus instrucciones completas en bloque.
+
+| Estado de uso en Codex | Skills |
+|---|---|
+| Descubiertas; selección implícita cuando corresponda | `ping-efficient-work`, `mobile-native`, `systematic-debugging`, `verification-before-completion` |
+| Descubiertas en el catálogo actual; reserva explícita de PING | `logo-design`, `impeccable`, `ui-ux-pro-max`, `redesign-existing-projects`, `emil-design-eng` |
+| No descubiertas entre las nueve del registro | Ninguna |
+
+**Ajuste mínimo:** se añadió `policy.allow_implicit_invocation: false` a `agents/openai.yaml` de las cinco reservadas para uso explícito. En Impeccable se conservó la interfaz existente; en las otras cuatro se añadió solo una interfaz breve y la política. Se reutilizan los directorios existentes, sin duplicar SKILL.md, recursos o licencias ni cambiar sus revisiones upstream. No se modificaron los punteros de Claude ni se activaron hooks. Esta es una adaptación local de metadatos; el registro conserva la procedencia y las verificaciones previas.
+
+**Diferencia de invocación:** Claude reserva esas cinco mediante `disable-model-invocation: true` en `.claude/skills/` y permite invocarlas como `/nombre`. Codex aplica la política en `.agents/skills/<nombre>/agents/openai.yaml`; la invocación explícita documentada es `$nombre` en CLI/IDE, o la selección de la skill en la interfaz que ofrezca el cliente. Leer un archivo no equivale a ejecutar su flujo. Fuente: [documentación oficial de OpenAI sobre skills e invocación](https://learn.chatgpt.com/docs/build-skills#optional-metadata).
+
+**logo-design confirmado:** `kaankiziltug/logo-design-skill`, versión **1.4.5**, commit registrado **`734090317a2155c5bf1ae8bd4cc85c6848a0128f`** (`734090317a21`), licencia MIT, instalación reutilizada `.agents/skills/logo-design/`. La biblioteca opcional de logotipos excluida continúa excluida; eso no impide el descubrimiento de la skill.
+
+**Pendiente concreto:** comprobar tras recargar el catálogo o abrir una sesión nueva que las cinco políticas recién añadidas se reflejen en el selector/invocación explícita y dejen de ofrecerse para selección implícita. La lista inicial de esta sesión es anterior al ajuste y no se presenta como una prueba posterior a la recarga. No se reinició el cliente ni se provocó la ejecución de flujos para aparentar esa comprobación.
+
+No se repitieron hashes, auditorías de integridad ni smoke tests que Claude ya registró como válidos; no se ejecutaron pruebas Java ni se modificaron Figma o la aplicación. Las tablas de executor/cloud anteriores son evidencia histórica de otras sesiones y no sustituyen este resultado local.

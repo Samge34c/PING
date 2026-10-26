@@ -64,8 +64,11 @@ public class WebAdvice {
         response.setStatus(409); model.addAttribute("errorMessage", error.getMessage()); return errorView(request, model);
     }
     @ExceptionHandler(org.springframework.dao.DataAccessException.class)
-    public String storageUnavailable(HttpServletRequest request, Model model, HttpServletResponse response) {
-        response.setStatus(503); model.addAttribute("errorMessage", "No pudimos completar la operación con los datos guardados. Recarga y comprueba su estado antes de reintentar."); return errorView(request, model);
+    public String storageUnavailable(org.springframework.dao.DataAccessException error, HttpServletRequest request, Model model, HttpServletResponse response) {
+        // Auditoría D01–D14 · A01: conservar la causa SQL para diagnosticar un 503 sin exponerla en pantalla.
+        String reference = UUID.randomUUID().toString().substring(0, 8);
+        org.slf4j.LoggerFactory.getLogger(WebAdvice.class).error("Error de datos de Ping en {} {}, referencia {}", request.getMethod(), request.getRequestURI(), reference, error);
+        response.setStatus(503); model.addAttribute("errorMessage", "No pudimos completar la operación con los datos guardados. Recarga y comprueba su estado antes de reintentar. Referencia: " + reference); return errorView(request, model);
     }
     @ExceptionHandler(Exception.class)
     public String unexpected(Exception error, HttpServletRequest request, Model model, HttpServletResponse response) {

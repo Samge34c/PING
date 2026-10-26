@@ -1,0 +1,104 @@
+{
+  "width": 360,
+  "scroll": 360,
+  "tabs": [
+    {
+      "t": "Animal",
+      "w": 79.5625,
+      "h": 46,
+      "font": "14px"
+    },
+    {
+      "t": "Pelaje",
+      "w": 74.921875,
+      "h": 46,
+      "font": "14px"
+    },
+    {
+      "t": "Cabeza",
+      "w": 85.09375,
+      "h": 46,
+      "font": "14px"
+    },
+    {
+      "t": "Audio",
+      "w": 72.59375,
+      "h": 46,
+      "font": "14px"
+    },
+    {
+      "t": "Cara",
+      "w": 65.375,
+      "h": 46,
+      "font": "14px"
+    },
+    {
+      "t": "Cuello",
+      "w": 77.140625,
+      "h": 46,
+      "font": "14px"
+    }
+  ],
+  "labels": [
+    {
+      "t": "Ninguno",
+      "w": 70,
+      "sw": 70
+    },
+    {
+      "t": "Gorro tejido",
+      "w": 70,
+      "sw": 70
+    },
+    {
+      "t": "Gorra",
+      "w": 70,
+      "sw": 70
+    },
+    {
+      "t": "Sombrero bucket",
+      "w": 70,
+      "sw": 70
+    },
+    {
+      "t": "Banda deportiva",
+      "w": 70,
+      "sw": 70
+    },
+    {
+      "t": "Lazo",
+      "w": 68,
+      "sw": 68
+    },
+    {
+      "t": "Pin estrella",
+      "w": 70,
+      "sw": 70
+    },
+    {
+      "t": "Vincha de estrellas",
+      "w": 70,
+      "sw": 70
+    },
+    {
+      "t": "Violeta",
+      "w": 48,
+      "sw": 48
+    },
+    {
+      "t": "Amarillo",
+      "w": 48,
+      "sw": 48
+    },
+    {
+      "t": "Menta",
+      "w": 48,
+      "sw": 48
+    },
+    {
+      "t": "Coral",
+      "w": 48,
+      "sw": 48
+    }
+  ]
+}

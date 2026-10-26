@@ -1,113 +1,125 @@
-// Editor de avatar (/join y /me/avatar). El servidor entrega radios nativos con las listas permitidas;
-// aquí se agrupan en pestañas, se actualiza la vista previa y las miniaturas se componen solo para el grupo visible.
-document.querySelectorAll('[data-avatar-picker]').forEach(root => {
+// DEC-058 · Editor de avatar V3 (/join y /me/avatar). El servidor entrega radios nativos con el catálogo y valida al guardar;
+// aquí se agrupan en pestañas, se componen la vista previa y las miniaturas con las mismas reglas de capas que AvatarV3.layers(),
+// se retira la pieza incompatible avisando antes de guardar y se marca el borrador «sin guardar». Sin temporizadores ni consultas.
+document.querySelectorAll('[data-avatar-v3]').forEach(root => {
   const form = root.closest('form') || root;
-  const previews = [...new Set([...form.querySelectorAll('[data-avatar-preview]'), ...root.querySelectorAll('[data-avatar-preview]')])];
-  const panels = [...root.querySelectorAll('[data-av-panel]')];
-  const folders = { animal: 'animales', accessory: 'accesorios', hat: 'sombreros' };
-  const order = ['animal', 'accessory', 'hat']; // orden de capas: animal, accesorio, sombrero
-
-  const checked = name => root.querySelector(`input[name="${name}"]:checked`);
-  const current = () => ({
-    animal: checked('animal')?.value, hat: checked('hat')?.value,
-    accessory: checked('accessory')?.value, background: checked('background')?.value
-  });
-  const allowed = (name, id) => [...root.querySelectorAll(`input[name="${name}"]`)].some(input => input.value === id);
-
-  function layers(avatar) {
-    return order.filter(key => avatar[key] && avatar[key] !== 'none' && allowed(key, avatar[key])).map(key => {
-      const img = document.createElement('img');
-      img.alt = '';
-      img.width = 100;
-      img.height = 100;
-      img.decoding = 'async';
-      img.src = '/img/avatars/' + folders[key] + '/' + encodeURIComponent(avatar[key]) + '.svg';
-      return img;
-    });
+  const bulky = new Set((root.dataset.bulky || '').split(',').filter(Boolean));
+  const withRear = new Set(['auriculares', 'microfono', 'vincha', 'pase']);
+  const discs = { natural: '#ECE4F6', dorado: '#FBE9CF', lila: '#E6DDF5', perla: '#E1E8F0', cacao: '#E9DDD2', coral: '#FAE0DB' };
+  const slots = ['head', 'audio', 'face', 'neck'];
+  const value = name => form.querySelector(`input[name="${name}"]:checked`)?.value;
+  const label = name => form.querySelector(`input[name="${name}"]:checked`)?.dataset.label || '';
+  const state = () => {
+    const s = { animal: value('animal'), palette: value('palette') };
+    slots.forEach(k => { s[k] = value(k) || 'none'; s[k + 'Color'] = value(k + 'Color') || 'violeta'; });
+    return s;
+  };
+  const base = '/img/avatars/v3/';
+  function layers(s) {
+    const out = [];
+    [['neck'], ['head'], ['audio']].forEach(([k]) => { if (withRear.has(s[k])) out.push(`${base}rear/${s.animal}-${s[k]}-${s[k + 'Color']}.svg`); });
+    out.push(`${base}base/${s.animal}-${s.palette}.svg`);
+    ['neck', 'face', 'head'].forEach(k => { if (s[k] !== 'none') out.push(`${base}front/${s.animal}-${s[k]}-${s[k + 'Color']}.svg`); });
+    if (s.animal === 'conejo' && s.head === 'bucket') out.push(`${base}base/conejo-${s.palette}-orejas.svg`);
+    if (s.audio !== 'none') out.push(`${base}front/${s.animal}-${s.audio}-${s.audioColor}.svg`);
+    return out;
   }
+  const paint = (node, s, lazy) => {
+    node.style.setProperty('--avatar-disc', discs[s.palette] || discs.natural);
+    const srcs = layers(s);
+    const current = [...node.querySelectorAll('img')].map(i => i.getAttribute('src').replace(/-[0-9a-f]{32}(?=\.svg$)/, ''));
+    if (current.join('|') === srcs.join('|')) return;
+    node.replaceChildren(...srcs.map(src => { const img = document.createElement('img'); img.alt = ''; img.width = 256; img.height = 256; img.decoding = 'async'; if (lazy) img.loading = 'lazy'; img.src = src; return img; }));
+  };
+  const blank = s => ({ animal: s.animal, palette: s.palette, head: 'none', headColor: s.headColor, audio: 'none', audioColor: s.audioColor, face: 'none', faceColor: s.faceColor, neck: 'none', neckColor: s.neckColor });
 
-  function paintPreview() {
-    const avatar = current();
-    previews.forEach(node => {
-      node.className = node.className.replace(/\bavatar-bg-\S+/g, '').trim() + ' avatar-bg-' + avatar.background;
-      node.replaceChildren(...layers(avatar));
-    });
-  }
-
-  // Miniaturas de sombrero y accesorio: se muestran sobre el animal elegido, solo para el panel activo.
-  function paintPanel(panel) {
-    if (!panel) return;
-    const avatar = current();
-    const signature = [avatar.animal, avatar.hat, avatar.accessory, avatar.background].join('|');
-    if (panel.dataset.painted === signature) return;
-    panel.dataset.painted = signature;
-    panel.querySelectorAll('.av-face').forEach(face => {
-      face.className = face.className.replace(/\bavatar-bg-\S+/g, '').trim() + ' avatar-bg-' + avatar.background;
-      const kind = face.dataset.kind;
-      if (kind === 'animal') return; // la imagen ya viene del servidor
-      face.replaceChildren(...layers({ ...avatar, [kind]: face.dataset.id }));
-    });
-  }
-
-  if (panels.length) {
-    root.classList.add('av-js');
-    const tabs = document.createElement('div');
-    tabs.className = 'av-tabs';
-    tabs.setAttribute('role', 'tablist');
-    tabs.setAttribute('aria-label', 'Partes del avatar');
+  // Pestañas: Animal, Pelaje y un slot por pieza (con su fila de color). Sin JS se ven todos los grupos apilados.
+  const targets = [...root.querySelectorAll(':scope > [data-av-panel], :scope > [data-av3-slot]')];
+  const keyOf = t => t.dataset.avPanel || t.dataset.av3Slot;
+  const titleOf = t => (t.dataset.label || t.querySelector('[data-av-panel]')?.dataset.label);
+  let tabs = [];
+  if (targets.length) {
+    root.classList.add('av3-js');
+    const list = document.createElement('div'); list.className = 'av3-tabs'; list.setAttribute('role', 'tablist'); list.setAttribute('aria-label', 'Partes del avatar');
     const uid = Math.random().toString(36).slice(2, 7);
-    panels.forEach(panel => {
-      const key = panel.dataset.avPanel;
-      const tab = document.createElement('button');
-      tab.type = 'button';
-      tab.className = 'av-tab';
-      tab.id = `av-tab-${key}-${uid}`;
-      tab.dataset.avTab = key;
-      tab.setAttribute('role', 'tab');
-      tab.setAttribute('aria-controls', `av-panel-${key}-${uid}`);
-      tab.innerHTML = '<b></b><small></small>';
-      tab.firstChild.textContent = panel.dataset.label;
-      tabs.append(tab);
-      panel.id = `av-panel-${key}-${uid}`;
-      panel.setAttribute('role', 'tabpanel');
-      panel.setAttribute('aria-labelledby', tab.id);
+    tabs = targets.map((t, i) => {
+      const tab = document.createElement('button'); tab.type = 'button'; tab.className = 'av3-tab'; tab.setAttribute('role', 'tab');
+      tab.id = `av3-tab-${uid}-${i}`; t.id = t.id || `av3-panel-${uid}-${i}`; tab.setAttribute('aria-controls', t.id);
+      t.setAttribute('role', 'tabpanel'); t.setAttribute('aria-labelledby', tab.id); tab.textContent = titleOf(t);
+      tab.addEventListener('click', () => select(i, false));
+      tab.addEventListener('keydown', e => { const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault(); select((i + d + tabs.length) % tabs.length, true); });
+      list.append(tab); return tab;
     });
-    panels[0].before(tabs);
-
-    const select = (key, focus) => {
-      tabs.querySelectorAll('.av-tab').forEach(tab => {
-        const on = tab.dataset.avTab === key;
-        tab.setAttribute('aria-selected', String(on));
-        tab.tabIndex = on ? 0 : -1;
-        if (on && focus) tab.focus();
-      });
-      panels.forEach(panel => { panel.hidden = panel.dataset.avPanel !== key; });
-      paintPanel(panels.find(panel => panel.dataset.avPanel === key));
-    };
-    const labels = () => tabs.querySelectorAll('.av-tab').forEach(tab => {
-      const name = tab.dataset.avTab;
-      const value = checked(name)?.dataset.label || '';
-      tab.lastChild.textContent = value;
-      tab.setAttribute('aria-label', `${panels.find(panel => panel.dataset.avPanel === name).dataset.label}: ${value}`);
-    });
-    tabs.addEventListener('click', event => {
-      const tab = event.target.closest('.av-tab');
-      if (tab) select(tab.dataset.avTab, false);
-    });
-    tabs.addEventListener('keydown', event => {
-      const keys = panels.map(panel => panel.dataset.avPanel);
-      const index = keys.indexOf(tabs.querySelector('[aria-selected="true"]').dataset.avTab);
-      const next = { ArrowRight: keys[(index + 1) % keys.length], ArrowLeft: keys[(index + keys.length - 1) % keys.length], Home: keys[0], End: keys[keys.length - 1] }[event.key];
-      if (next) { event.preventDefault(); select(next, true); }
-    });
-    root.addEventListener('change', () => {
-      labels();
-      paintPreview();
-      paintPanel(panels.find(panel => !panel.hidden));
-    });
-    labels();
-    select('animal', false);
-  } else {
-    root.addEventListener('change', paintPreview);
+    root.querySelector('.av3-conflict').after(list);
   }
+  function select(i, focus) {
+    tabs.forEach((tab, j) => { const on = i === j; tab.setAttribute('aria-selected', String(on)); tab.tabIndex = on ? 0 : -1; targets[j].hidden = !on; });
+    if (focus) tabs[i].focus();
+    tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    paintTiles(targets[i]);
+  }
+  function paintTiles(target) {
+    const s = state();
+    target.querySelectorAll('[data-av3-tile]').forEach(tile => {
+      const kind = tile.dataset.kind, id = tile.dataset.id, t = blank(s);
+      if (kind === 'animal') t.animal = id; else if (kind === 'palette') t.palette = id; else t[kind] = id;
+      paint(tile, t, true);
+    });
+  }
+
+  // Estado del borrador frente a lo guardado (radios con defaultChecked).
+  const chip = form.querySelector('[data-av3-chip]'), undo = form.querySelector('[data-av3-undo]'), ring = form.querySelector('[data-av3-ring]');
+  const summary = form.querySelector('[data-av3-summary]'), notice = root.querySelector('[data-av3-conflict]');
+  const radios = () => [...root.querySelectorAll('input[type="radio"]')];
+  // Referencia de «guardado»: data-saved trae la selección persistida (/me/avatar). Tras un 400 los radios muestran el borrador
+  // rechazado, así que no se compara con defaultChecked. data-saved="none": no hay V3 guardado y el borrador es una propuesta.
+  const savedAttr = root.dataset.saved;
+  const proposal = savedAttr === 'none';
+  const saved = savedAttr && !proposal ? Object.fromEntries(savedAttr.split(';').map(p => p.split('='))) : null;
+  const isSaved = r => saved ? saved[r.name] === r.value : r.defaultChecked;
+  const dirty = () => proposal || radios().some(r => r.checked !== isSaved(r));
+  const changed = () => radios().some(r => r.checked !== isSaved(r));
+  const describe = () => {
+    const s = state(), parts = [label('animal'), 'pelaje ' + label('palette').toLowerCase()];
+    slots.forEach(k => { if (s[k] !== 'none') parts.push(label(k) + ' color ' + label(k + 'Color').toLowerCase()); });
+    return parts.join(', ');
+  };
+  function refresh() {
+    const s = state();
+    form.querySelectorAll('[data-avatar-preview]').forEach(p => { paint(p, s, false); p.setAttribute('aria-label', 'Vista previa de tu avatar: ' + describe()); });
+    if (summary) summary.textContent = describe();
+    slots.forEach(k => { const row = root.querySelector(`[data-av3-colors="${k}"]`); if (row) { const off = s[k] === 'none'; row.classList.toggle('is-off', off); row.querySelectorAll('input').forEach(i => { i.disabled = off; }); } });
+    const isDirty = dirty();
+    if (chip) chip.textContent = proposal ? 'Propuesta · sin guardar' : isDirty ? 'Probando · sin guardar' : 'Tu avatar guardado';
+    ring?.classList.toggle('is-trying', isDirty);
+    if (undo) { undo.hidden = false; undo.disabled = !changed(); }
+    const visible = targets.find(t => !t.hidden); if (visible && targets.length) paintTiles(visible);
+  }
+  // Incompatibilidad: la última elección se conserva y se retira la otra pieza, explicándolo antes de guardar.
+  function resolve(changed) {
+    const s = state();
+    if (s.audio === 'none' || !bulky.has(s.head)) return;
+    const drop = changed === 'audio' ? 'head' : 'audio';
+    const keep = changed === 'audio' ? label('audio') : label('head');
+    const removed = drop === 'audio' ? label('audio') : label('head');
+    form.querySelector(`input[name="${drop}"][value="none"]`).checked = true;
+    notice.textContent = `Quitamos «${removed}»: no combina con «${keep}» porque se cruzan. Puedes elegir otra pieza.`;
+    notice.hidden = false;
+  }
+  root.addEventListener('change', e => {
+    const name = e.target.name;
+    if (name === 'head' || name === 'audio') { notice.hidden = true; resolve(name); }
+    if (name === 'animal' || name === 'palette') targets.forEach(t => { if (!t.hidden) paintTiles(t); });
+    refresh();
+  });
+  undo?.addEventListener('click', () => { radios().forEach(r => { r.checked = isSaved(r); }); notice.hidden = true; notice.textContent = ''; refresh(); undo.disabled = true; chip?.focus?.(); });
+  if (targets.length) select(0, false);
+  refresh();
+});
+
+// D07: «Así te verán» refleja el alias mientras se escribe (solo texto; el servidor valida al guardar).
+document.querySelectorAll('[data-alias-echo]').forEach(echo => {
+  const input = echo.closest('form')?.querySelector('#alias');
+  if (!input) return;
+  input.addEventListener('input', () => { echo.textContent = input.value.trim() || echo.dataset.empty; });
 });

@@ -28,7 +28,24 @@
     "state": "disabled"
    }
   },
-  "notices": "NOTICE.md: ehmo platform-design-skills, MIT"
+  "notices": "NOTICE.md: ehmo platform-design-skills, MIT",
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "manual (disable-model-invocation); /impeccable by user not yet observed",
+   "codex": "discovered in this Codex session catalog from .agents/skills/impeccable/SKILL.md; full workflow execution not implied"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "explicit-only",
+   "policy_file": ".agents/skills/impeccable/agents/openai.yaml",
+   "policy_readback": "allow_implicit_invocation: false",
+   "runtime_policy_reload": "pending fresh catalog/session verification",
+   "integrity_audit": "reused existing Claude verification; not repeated"
+  },
+  "codex_adaptation": "Project-only agents/openai.yaml enforces existing PING explicit-only policy; upstream SKILL.md, references, resources and license unchanged"
  },
  {
   "name": "ui-ux-pro-max",
@@ -55,7 +72,25 @@
     "domain": "ux",
     "results": 1
    }
-  }
+  },
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "manual (disable-model-invocation); /ui-ux-pro-max by user not yet observed",
+   "codex": "discovered in this Codex session catalog from .agents/skills/ui-ux-pro-max/SKILL.md; full workflow execution not implied",
+   "smoke_test": "search.py 'form error validation' --domain ux -n 1: exit 0, 1 result (needs normal python, not -I)"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "explicit-only",
+   "policy_file": ".agents/skills/ui-ux-pro-max/agents/openai.yaml",
+   "policy_readback": "allow_implicit_invocation: false",
+   "runtime_policy_reload": "pending fresh catalog/session verification",
+   "integrity_audit": "reused existing Claude verification; not repeated"
+  },
+  "codex_adaptation": "Project-only agents/openai.yaml enforces existing PING explicit-only policy; upstream SKILL.md, references, resources and license unchanged"
  },
  {
   "name": "redesign-existing-projects",
@@ -73,7 +108,24 @@
   "verification": {
    "manual_read": true,
    "executor_discovery": false
-  }
+  },
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "manual (disable-model-invocation); /redesign-existing-projects by user not yet observed",
+   "codex": "discovered in this Codex session catalog from .agents/skills/redesign-existing-projects/SKILL.md; full workflow execution not implied"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "explicit-only",
+   "policy_file": ".agents/skills/redesign-existing-projects/agents/openai.yaml",
+   "policy_readback": "allow_implicit_invocation: false",
+   "runtime_policy_reload": "pending fresh catalog/session verification",
+   "integrity_audit": "reused existing Claude verification; not repeated"
+  },
+  "codex_adaptation": "Project-only agents/openai.yaml enforces existing PING explicit-only policy; upstream SKILL.md, references, resources and license unchanged"
  },
  {
   "name": "systematic-debugging",
@@ -122,7 +174,23 @@
   "local_files": [
    "PING_NOTES.md"
   ],
-  "source_license_path": "LICENSE"
+  "source_license_path": "LICENSE",
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "listed for model invocation",
+   "codex": "discovered in this Codex session catalog from .agents/skills/systematic-debugging/SKILL.md; full workflow execution not implied"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "implicit when task matches description",
+   "policy_file": null,
+   "policy_readback": "Codex default true",
+   "runtime_policy_reload": "no policy change",
+   "integrity_audit": "reused existing Claude verification; not repeated"
+  }
  },
  {
   "name": "verification-before-completion",
@@ -155,7 +223,23 @@
   "local_files": [
    "PING_NOTES.md"
   ],
-  "source_license_path": "LICENSE"
+  "source_license_path": "LICENSE",
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "listed for model invocation",
+   "codex": "discovered in this Codex session catalog from .agents/skills/verification-before-completion/SKILL.md; full workflow execution not implied"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "implicit when task matches description",
+   "policy_file": null,
+   "policy_readback": "Codex default true",
+   "runtime_policy_reload": "no policy change",
+   "integrity_audit": "reused existing Claude verification; not repeated"
+  }
  },
  {
   "name": "ping-efficient-work",
@@ -176,6 +260,22 @@
    "manual_read": true,
    "executor_discovery": false,
    "runtime_cli": "none; instructions only"
+  },
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "listed for model invocation",
+   "codex": "discovered in this Codex session catalog from .agents/skills/ping-efficient-work/SKILL.md; full workflow execution not implied"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "implicit when task matches description",
+   "policy_file": null,
+   "policy_readback": "Codex default true",
+   "runtime_policy_reload": "no policy change",
+   "integrity_audit": "reused existing Claude verification; not repeated"
   }
  },
  {
@@ -199,6 +299,22 @@
    "manual_read": true,
    "executor_discovery": false,
    "runtime_cli": "none; instructions only"
+  },
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "listed for model invocation",
+   "codex": "discovered in this Codex session catalog from .agents/skills/mobile-native/SKILL.md; full workflow execution not implied"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "implicit when task matches description",
+   "policy_file": null,
+   "policy_readback": "Codex default true",
+   "runtime_policy_reload": "no policy change",
+   "integrity_audit": "reused existing Claude verification; not repeated"
   }
  },
  {
@@ -213,7 +329,8 @@
   "dependencies": [],
   "installed_files": [
    "SKILL.md",
-   "LICENSE"
+   "LICENSE",
+   "agents/openai.yaml"
   ],
   "automatic_hooks": false,
   "installation": "selected instructions and root license, project scope; no global installer",
@@ -222,7 +339,24 @@
    "manual_read": true,
    "executor_discovery": false,
    "runtime_cli": "none; instructions only"
-  }
+  },
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "manual (disable-model-invocation); /emil-design-eng by user not yet observed",
+   "codex": "discovered in this Codex session catalog from .agents/skills/emil-design-eng/SKILL.md; full workflow execution not implied"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "explicit-only",
+   "policy_file": ".agents/skills/emil-design-eng/agents/openai.yaml",
+   "policy_readback": "allow_implicit_invocation: false",
+   "runtime_policy_reload": "pending fresh catalog/session verification",
+   "integrity_audit": "reused existing Claude verification; not repeated"
+  },
+  "codex_adaptation": "Project-only agents/openai.yaml enforces existing PING explicit-only policy; upstream SKILL.md, references, resources and license unchanged"
  },
  {
   "name": "logo-design",
@@ -266,7 +400,8 @@
    "scripts/svg_audit.py",
    "scripts/svglib.py",
    "templates/brand-guidelines-template.md",
-   "templates/presentation-spec.example.json"
+   "templates/presentation-spec.example.json",
+   "agents/openai.yaml"
   ],
   "excluded": [
    "skills/logo-design/assets/library/ (1,432 third-party trademark SVGs, reference only; see TRADEMARKS.md)",
@@ -281,6 +416,24 @@
   "verification": {
    "manual_read": true,
    "scripts_reviewed": "stdlib only; render_png.py calls local renderers via subprocess; no network"
-  }
+  },
+  "check_2026_10_25": {
+   "date": "2026-10-25",
+   "sha256_lf_normalized_match": true,
+   "files_and_references_present": true,
+   "claude_code_discovery": "manual (disable-model-invocation); /logo-design by user not yet observed",
+   "codex": "discovered in this Codex session catalog from .agents/skills/logo-design/SKILL.md; full workflow execution not implied",
+   "smoke_test": "svg_audit.py docs/design-proposals/v2/marca/*.svg: ran, score 99/100"
+  },
+  "codex_check_2026_10_25": {
+   "evidence": "Current session Available skills catalog names and project paths; not inferred from disk presence",
+   "discovered_in_current_session": true,
+   "invocation": "explicit-only",
+   "policy_file": ".agents/skills/logo-design/agents/openai.yaml",
+   "policy_readback": "allow_implicit_invocation: false",
+   "runtime_policy_reload": "pending fresh catalog/session verification",
+   "integrity_audit": "reused existing Claude verification; not repeated"
+  },
+  "codex_adaptation": "Project-only agents/openai.yaml enforces existing PING explicit-only policy; upstream SKILL.md, references, resources and license unchanged"
  }
 ]

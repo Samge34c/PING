@@ -1,0 +1,100 @@
+{
+ "avatar-check.json": {
+  "inicial": {
+   "tabs": [
+    "Animal",
+    "Pelaje",
+    "Cabeza",
+    "Audio",
+    "Cara",
+    "Cuello"
+   ],
+   "chip": "Tu avatar guardado",
+   "legacy": true,
+   "preview": 1,
+   "undo": true
+  },
+  "conflicto": {
+   "aviso": "Quitamos «Auriculares»: no combina con «Gorra» porque se cruzan. Puedes elegir otra pieza.",
+   "audio": "none",
+   "head": "gorra",
+   "chip": "Probando · sin guardar",
+   "undo": false
+  },
+  "deshacer": {
+   "head": "none",
+   "audio": "none",
+   "chip": "Tu avatar guardado"
+  },
+  "tras-guardar": {
+   "url": "/me",
+   "toast": "Avatar guardado.",
+   "v3": [
+    "/img/avatars/v3/base/nutria-dorado.svg",
+    "/img/avatars/v3/front/nutria-gafas-redondas-violeta.svg",
+    "/img/avatars/v3/front/nutria-gorra-amarillo.svg"
+   ]
+  },
+  "mismo-avatar-al-volver": {
+   "igual": true,
+   "before": [
+    "/img/avatars/v3/base/nutria-dorado.svg",
+    "/img/avatars/v3/front/nutria-gafas-redondas-violeta.svg",
+    "/img/avatars/v3/front/nutria-gorra-amarillo.svg"
+   ],
+   "after": [
+    "/img/avatars/v3/base/nutria-dorado.svg",
+    "/img/avatars/v3/front/nutria-gafas-redondas-violeta.svg",
+    "/img/avatars/v3/front/nutria-gorra-amarillo.svg"
+   ],
+   "legacy": false
+  },
+  "errores": []
+ },
+ "avatar-400.json": {
+  "guardado": {
+   "saved": {
+    "animal": "nutria",
+    "palette": "dorado",
+    "head": "gorra",
+    "headColor": "amarillo",
+    "audio": "none",
+    "audioColor": "violeta",
+    "face": "gafas-redondas",
+    "faceColor": "violeta",
+    "neck": "none",
+    "neckColor": "violeta"
+   },
+   "chip": "Tu avatar guardado"
+  },
+  "tras-400": {
+   "error": "Los auriculares no combinan con gorro tejido, gorra, sombrero bucket ni vincha: se cruzan. Elige solo una de las dos piezas.",
+   "chip": "Probando · sin guardar",
+   "undoDisabled": false,
+   "mostrado": {
+    "animal": "nutria",
+    "palette": "coral",
+    "head": "gorro",
+    "headColor": "amarillo",
+    "audio": "none",
+    "audioColor": "violeta",
+    "face": "gafas-redondas",
+    "faceColor": "violeta",
+    "neck": "none",
+    "neckColor": "violeta"
+   }
+  },
+  "tras-deshacer": {
+   "igualGuardado": true,
+   "chip": "Tu avatar guardado"
+  },
+  "recarga": {
+   "igualGuardado": true
+  },
+  "preset-sin-v3": {
+   "chip": "Propuesta · sin guardar",
+   "undoDisabled": true,
+   "legacy": true
+  }
+ }
+}

@@ -152,7 +152,7 @@ class DemoImprovementTests {
             available(a,false); available(b,false);
             long c = id(s,"Ana"), d = id(s,"Carlos"); available(c,true); available(d,true);
             long other = matching.search(c); matchService.accept(other,c); matchService.accept(other,d); matchService.arrive(other,c); matchService.arrive(other,d); matchService.confirm(other,c); matchService.confirm(other,d);
-            assertThat(browser.get("/me").body()).contains("<span>1</span> conexiones completadas por ti.");
+            assertThat(browser.get("/me/connections").body()).contains("1 completada por ti en"); // DEC-058 · D12: el historial vive en /me/connections
             assertThat(metrics(s.eventId()).completed()).isEqualTo(2);
         }
     }

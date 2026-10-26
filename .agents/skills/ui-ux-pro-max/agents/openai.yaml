@@ -1,0 +1,6 @@
+interface:
+  display_name: "UI UX Pro Max"
+  short_description: "Consulta puntual de UX y accesibilidad para PING"
+
+policy:
+  allow_implicit_invocation: false

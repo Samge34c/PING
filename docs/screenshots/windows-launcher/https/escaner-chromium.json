@@ -1,0 +1,96 @@
+{
+ "0-http-wifi": {
+  "state": "unavailable",
+  "running": null,
+  "status": "La cámara necesita abrir PING por HTTPS (la dirección https:// del panel, con el certificado de PING en confianza). Mientras tanto, introduce el código.",
+  "input": "",
+  "startDisabled": true,
+  "video": false,
+  "secure": false,
+  "manual": true
+ },
+ "preparacion": {
+  "match": "1",
+  "eventCode": true,
+  "codigosDistintos": true
+ },
+ "1-evento-valido": {
+  "state": "read",
+  "running": "false",
+  "status": "Código leído. Revisa y pulsa el botón del formulario para continuar.",
+  "input": "1D1F68370610",
+  "startDisabled": false,
+  "video": false,
+  "coincide": true,
+  "camaraLiberada": true
+ },
+ "1-evento-envio": {
+  "url": "/login"
+ },
+ "1-cancelar": {
+  "state": "read",
+  "running": "false",
+  "status": "Cámara detenida. Puedes introducir el código.",
+  "input": "1D1F68370610",
+  "startDisabled": false,
+  "video": false,
+  "tracksTerminados": true
+ },
+ "1-permiso-denegado": {
+  "state": "error",
+  "running": "false",
+  "status": "Permiso de cámara denegado. En Safari: menú de la página (aA) → Ajustes del sitio web → Cámara → Permitir; después pulsa «Escanear QR». También puedes introducir el código.",
+  "input": "",
+  "startDisabled": false,
+  "video": false
+ },
+ "1-reintento": {
+  "state": "read",
+  "input": true
+ },
+ "1-salir-pantalla": {
+  "state": "read",
+  "running": "false",
+  "status": "Código leído. Revisa y pulsa el botón del formulario para continuar.",
+  "input": "1D1F68370610",
+  "startDisabled": false,
+  "video": false,
+  "tracksTerminados": true
+ },
+ "2-qr-de-otro-flujo": {
+  "state": "wrong",
+  "running": "true",
+  "status": "Leímos un QR, pero no corresponde a esta acción. Prueba el QR correcto o introduce el código.",
+  "input": "",
+  "startDisabled": true,
+  "video": true,
+  "sigueActiva": true,
+  "campoVacio": true
+ },
+ "3-anterior-leido": {
+  "state": "read",
+  "formato": true
+ },
+ "3-anterior-rechazado": {
+  "aviso": "El código no es válido para esta acción, caducó o fue sustituido. Pide uno nuevo y reintenta.",
+  "sigueSinVerificar": true
+ },
+ "4-vigente-leido": {
+  "state": "read",
+  "formato": true
+ },
+ "4-verificado": {
+  "verificaPendiente": false,
+  "texto": "verificado."
+ },
+ "4-repetido": {
+  "respuesta": "opaqueredirect:0",
+  "sigueVerificado": true
+ },
+ "5-ilegible": {
+  "state": "active",
+  "aviso": "Aún no se lee el QR. Acércalo hasta que ocupe buena parte de la imagen, evita reflejos y mantén el teléfono quieto.",
+  "cancelable": true
+ },
+ "errores-js": []
+}

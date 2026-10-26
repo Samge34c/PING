@@ -1,0 +1,22 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Conexiones anteriores')}"></head><body class="mi-ping-page"><nav th:replace="~{fragments/layout :: nav}"></nav>
+<!-- DEC-058 · D12-1: lista V3 de conexiones anteriores (Figma 68:6727). Mismos datos que el historial de Mi Ping:
+     avatar real de la otra persona, fecha, puntos acreditados y estado («Verificado» solo si ambas verificaciones personales constan); cada fila abre el detalle de la conexión. -->
+<main id="main-content" class="container cx3-page" th:with="pastMatches=${matches.?[status.name() != 'OFFERED' and status.name() != 'ACTIVE']}">
+<a class="pi-back" th:href="@{/me}">← Mi Ping</a>
+<h1>Conexiones anteriores</h1>
+<p class="cx3-sub" th:text="${completedCount + (completedCount == 1 ? ' completada' : ' completadas') + ' por ti en ' + participant.eventName + '.'}"></p>
+<p th:if="${#lists.isEmpty(pastMatches)}" class="cx3-empty">Aún no tienes conexiones anteriores. Cuando completes un encuentro aparecerá aquí.</p>
+<ul class="cx3-list" th:unless="${#lists.isEmpty(pastMatches)}">
+<li th:each="m : ${pastMatches}"><a class="cx3-row mp-history-row" th:href="@{/matches/{id}(id=${m.id})}">
+  <span th:replace="~{entry/avatar :: portrait(${m.otherAvatar})}"></span>
+  <span class="cx3-text"><strong th:text="${m.otherAlias}"></strong>
+    <span class="cx3-meta" th:text="${#temporals.format(m.createdAt,'dd/MM HH:mm','America/Bogota') + (m.status.name() == 'COMPLETED' ? ' · +' + m.rewardPoints + ' puntos' : ' · Sin puntos')}"></span>
+    <span class="cx3-note" th:if="${m.activity != null}" th:text="${m.activity}"></span>
+    <span class="cx3-note" th:if="${m.status.name() == 'COMPLETED'}" th:text="${m.feedback == null} ? 'Feedback opcional pendiente' : 'Feedback guardado'"></span>
+    <span class="cx3-note" th:if="${m.status.name() == 'CANCELLED'}">Abre para ver detalles o reportar</span></span>
+  <span class="ping-status cx3-status" th:with="checked=${m.status.name() == 'COMPLETED' and m.verified and m.otherVerified}" th:attr="data-status=${m.status.name()},data-verified=${checked}"><th:block th:if="${checked}"><svg th:replace="~{fragments/layout :: icon('shield')}"></svg></th:block><span th:text="${checked ? 'Verificado' : m.status.label}"></span></span>
+</a></li>
+</ul>
+<div th:replace="~{experience/fragments :: badges}"></div>
+<p class="cx3-tz">Horas de Bogotá.</p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -102,7 +102,7 @@ class EventEntryFlowTests {
             assertThat(guest.get("/connect").headers().firstValue("Location").orElseThrow()).endsWith("/join");
             long aid=enter(a,"A "+event.getId()),bid=enter(b,"B "+event.getId());
             assertThat(a.get("/connect").body()).contains("Activar disponibilidad");assertThat(participants.get(aid).available()).isFalse();assertThat(matches.list(aid)).isEmpty();
-            assertThat(a.get("/me").body()).contains("Mis intereses","Ir a Conectar").doesNotContain("data-search-form");
+            assertThat(a.get("/me").body()).contains("Tus gustos","Ir a Conectar").doesNotContain("data-search-form");
             for(var pair:List.of(Map.entry(a,aid),Map.entry(b,bid))) {
                 pair.getKey().get("/connect");assertThat(pair.getKey().post("/me/availability",Map.of("version",""+participants.get(pair.getValue()).version(),"available","true","returnTo","connect")).headers().firstValue("Location").orElseThrow()).endsWith("/connect");
             }

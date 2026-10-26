@@ -1,0 +1,145 @@
+{
+ "pasos": [
+  [
+   "no-disponible",
+   "María"
+  ],
+  [
+   "no-disponible",
+   "Julián"
+  ],
+  [
+   "propuesta-1",
+   {
+    "s": "/matches/9",
+    "forms": [
+     "/matches/9/accept|Aceptar conexión",
+     "/matches/9/reject|Ahora no",
+     "/matches/9/block|Bloquear futuras conexiones con Ana"
+    ]
+   }
+  ],
+  [
+   "julian-ve",
+   {
+    "j": "/matches/9",
+    "forms": [
+     "/matches/9/accept|Aceptar conexión",
+     "/matches/9/reject|Ahora no",
+     "/matches/9/block|Bloquear futuras conexiones con Samuel"
+    ]
+   }
+  ],
+  [
+   "tras-rechazo",
+   {
+    "s": "/connect",
+    "j": "/matches/9"
+   }
+  ],
+  [
+   "propuesta-2",
+   {
+    "s": "/matches/10"
+   }
+  ],
+  [
+   "estado-samuel-tras-aceptar",
+   "waiting"
+  ],
+  [
+   "doble-envio-aceptar",
+   {
+    "j": "/matches/10",
+    "segundoPOST": "opaqueredirect:0"
+   }
+  ],
+  [
+   "active",
+   {
+    "s": "/matches/10",
+    "pairS": "pair-avatar is-connected is-celebrating",
+    "formsS": [
+     "/matches/10/arrive|Ya llegué",
+     "/me/recognition-hint|Camiseta",
+     "/matches/10/cancel|Cancelar conexión",
+     "/matches/10/block|Bloquear futuras conexiones con Ana"
+    ],
+    "formsJ": [
+     "/matches/10/arrive|Ya llegué",
+     "/me/recognition-hint|Camiseta",
+     "/matches/10/cancel|Cancelar conexión",
+     "/matches/10/block|Bloquear futuras conexiones con Samuel"
+    ]
+   }
+  ],
+  [
+   "recarga-julian",
+   "/matches/10"
+  ],
+  [
+   "S-llega",
+   1
+  ],
+  [
+   "J-llega",
+   1
+  ],
+  [
+   "S-verifica",
+   26
+  ],
+  [
+   "J-verifica",
+   25
+  ],
+  [
+   "S-confirma",
+   1
+  ],
+  [
+   "J-confirma",
+   1
+  ],
+  [
+   "final-match",
+   {
+    "formsS": [
+     "/matches/10/feedback|👍 Útil / agradable",
+     "/matches/10/block|Bloquear futuras conexiones con Ana",
+     "/matches/10/report|Enviar reporte"
+    ],
+    "texto": "← Mi Ping\nCompletada\nConexión completada 🎉\n\nTu encuentro con Ana\n\nAmbos confirmaron. Cada participante recibió +10 puntos una sola vez.\n\n+10 PTS\n20\ntu saldo de puntos\nBuscar otra conexión\nVer beneficios\n¿Te sirvió esta conexión?\n\nFeedback "
+   }
+  ],
+  [
+   "historial",
+   [
+    "Ana 25/10 15:26 · +10 puntos Feedback opcional pendiente Verificado",
+    "Ana 25/10 15:25 · Sin puntos Abre para ver detalles o reportar Cancelada"
+   ]
+  ],
+  [
+   "canje",
+   {
+    "before": "20",
+    "after": "0",
+    "url": "/me/benefits",
+    "canjes": 1
+   }
+  ],
+  [
+   "recibo",
+   {
+    "url": "/me/claims/1",
+    "code": true,
+    "qr": true,
+    "filas": "Coste 20 puntos · cobrados una vez Tu saldo actual 0 puntos Dónde Consulta al encargado: este recibo anterior no guardó ubicación. Solicitado 25/10 15:26 Recibo #1"
+   }
+  ],
+  [
+   "errores",
+   []
+  ]
+ ]
+}

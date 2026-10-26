@@ -1,0 +1,6 @@
+interface:
+  display_name: "Logo Design"
+  short_description: "Identidad gráfica, proporción y legibilidad de PING"
+
+policy:
+  allow_implicit_invocation: false

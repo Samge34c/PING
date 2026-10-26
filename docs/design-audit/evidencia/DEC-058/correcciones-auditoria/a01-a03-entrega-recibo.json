@@ -1,0 +1,31 @@
+{
+ "canje": {
+  "antes": "10",
+  "despues": "5",
+  "canjes": 1
+ },
+ "recibo-pendiente": {
+  "url": "/me/claims/1",
+  "estado": "Por entregar",
+  "saldo": "Coste 5 puntos · cobrados una vez Tu saldo actual 5 puntos Dónde Mesa B · vestíbulo Código válido hasta 26/10 18:28 Solicitado 25/10 18:28 Recibo #1"
+ },
+ "consulta": "← Organización Entregar un beneficio Escanea o introduce el código del recibo. Solo puedes entregar beneficios de eventos autorizados. Código del recibo Escanear QR También puedes introducir el código. La cámara se abre solo cuando la solicitas. Consultar recibo Botella de agua de ensayo Cantidad: 1",
+ "formulario-entrega": "<form method=\"post\" action=\"/organizer/redemptions/deliver\"><input type=\"hidden\" name=\"_csrf\" value=\"…\"><input type=\"hidden\" name=\"_csrf\" value=\"…\"><input type=\"hidden\" name=\"credential\" value=\"…\"><div class=\"action-row\"><button class=\"btn btn-primary\" name=\"status\" value=\"DELIVERED\">Confirmar entrega</button><button class=\"btn btn-outline-secondary\" name=\"status\" value=\"INCIDENT\">Registrar incidencia</button></div></form>",
+ "entrega": {
+  "url": "/organizer/redemptions",
+  "texto": "← Organización Entregar un beneficio Escanea o introduce el código del recibo. Solo puedes entregar beneficios de eventos autorizados. Resultado registrado. No se cobraron puntos adicionales. Código d"
+ },
+ "reintento": "opaqueredirect:0",
+ "recibo-entregado-390-dark-sw": 390,
+ "recibo-entregado-390-light-sw": 390,
+ "recibo-entregado-360-dark-sw": 360,
+ "recibo-entregado-360-light-sw": 360,
+ "recibo-entregado": {
+  "estado": "Entregado",
+  "seguimiento": "Seguimiento Solicitado 25/10 18:28 · se descontaron 5 puntos Código comprobado La persona encargada comprobó tu código. Entregado Registrado por la persona encargada del evento.",
+  "filas": "Coste 5 puntos · cobrados una vez Tu saldo actual 5 puntos Dónde Mesa B · vestíbulo Solicitado 25/10 18:28 Recibo #1",
+  "codigo": false,
+  "acciones": 0
+ },
+ "errores": []
+}
