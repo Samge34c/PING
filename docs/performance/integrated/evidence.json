@@ -1,0 +1,406 @@
+{
+  "date": "2026-10-26",
+  "issue": 57,
+  "branch": "perf/integrated-mobile-response",
+  "base": "2346585d0c047ed113686aa7fb15060ffe52f198",
+  "backend": "66420acf36f742140fddc423e90f281d2a6aa4ed",
+  "frontend": "4fe3435c2d5fe9776b26bc9efda40fa5941fe0d0",
+  "cleanVerify": {
+    "sourceCommit": "20d9aa057021b98d3d491b30c372e877f72a2ee4",
+    "tests": 331,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 63,
+    "command": "mvnw.cmd --batch-mode --no-transfer-progress -Dspring.profiles.default=test -DargLine=-javaagent:<local mockito-core-5.23.0.jar> clean verify",
+    "logSha256": "5634440c64744aa04c9dfcd373448d0e0e5afb47e37cedc0cd8f07211f9e19fd"
+  },
+  "afterVisualFix": {
+    "scope": ".am-location .am-word-help color token only",
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "command": "mvnw.cmd -Dspring.profiles.default=test -DargLine=-javaagent:<local mockito jar> -Dtest=PublicResourceTests,FrontendBundleTests test",
+    "logSha256": "78a3599757319cb75bf8b416ca3a587841498b797e189f176fb4cbe8beed023e",
+    "bootstrapCheck": "passed without regeneration",
+    "finalPackage": "package -DskipTests: success; packaged CSS/font bytes equal final source",
+    "jarSha256": "8152c69121fb48164953ec58b2c502dc63a619d4c33936d81d079850ed6e353f"
+  },
+  "sql": [
+    {
+      "scenario": "pending-false",
+      "selects": 1,
+      "resultRowsMatches": 1,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": null
+    },
+    {
+      "scenario": "pending-true",
+      "selects": 1,
+      "resultRowsMatches": 1,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": null
+    },
+    {
+      "scenario": "pending-false",
+      "selects": 1,
+      "resultRowsMatches": 1,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": null
+    },
+    {
+      "scenario": "benefits-sofa",
+      "selects": 7,
+      "resultRowsMatches": 1,
+      "resultRowsBenefits": 2,
+      "loopbackHttpMs": 30.051
+    },
+    {
+      "scenario": "connect-idle",
+      "selects": 5,
+      "resultRowsMatches": 0,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": 10.511
+    },
+    {
+      "scenario": "connect-OFFERED-0",
+      "selects": 3,
+      "resultRowsMatches": 1,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": 3.067
+    },
+    {
+      "scenario": "connect-OFFERED-1",
+      "selects": 3,
+      "resultRowsMatches": 1,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": 2.064
+    },
+    {
+      "scenario": "connect-ACTIVE-0",
+      "selects": 3,
+      "resultRowsMatches": 1,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": 3.111
+    },
+    {
+      "scenario": "connect-ACTIVE-1",
+      "selects": 3,
+      "resultRowsMatches": 1,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": 2.401
+    },
+    {
+      "scenario": "active-hint",
+      "selects": 14,
+      "resultRowsMatches": 3,
+      "resultRowsBenefits": 0,
+      "loopbackHttpMs": 13.648
+    }
+  ],
+  "sqlDefinitions": "JDBC SELECT executions and consumed result rows in isolated H2 fixtures, not network packets/MySQL scanned rows. Single loopback HTTP observations are not isolated server timings or a benchmark.",
+  "assets": {
+    "vendor/bootstrap/bootstrap.min.css": {
+      "bytes": 232116,
+      "sha256": "596a918e5d4c71cb731b23412d5b145e429c2203a23e9bf7ba90eff3e291bbb8",
+      "gzipBytesLevel9": 31008
+    },
+    "vendor/bootstrap/bootstrap.ping.min.css": {
+      "bytes": 32762,
+      "sha256": "61a0bad4908e4843e142c2c923fb781b10fed7f3afdb24d63a5feae60fc82503",
+      "gzipBytesLevel9": 7290
+    },
+    "fonts/Manrope-Variable.ttf": {
+      "bytes": 164700,
+      "sha256": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6",
+      "gzipBytesLevel9": 68008
+    },
+    "fonts/Manrope-Variable-core.ttf": {
+      "bytes": 88704,
+      "sha256": "a79861b39dc315a07a9fb0dfbd1b67f9ee51d5dd7359e82778144d4ae6831459",
+      "gzipBytesLevel9": 36742
+    },
+    "fonts/Manrope-Variable-extra.ttf": {
+      "bytes": 86100,
+      "sha256": "28c5b3b1d7915166b2812f8b6d91ae48e2794e5276a308589a643659ec76694c",
+      "gzipBytesLevel9": 37411
+    },
+    "img/sofa/convencion-social.webp": {
+      "bytes": 319502,
+      "sha256": "1cca94859b1c16e6f421443dfddfc1ddbec6b7880757ccdc00929f7319f04146",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    "img/sofa/convencion-social-1152.webp": {
+      "bytes": 207174,
+      "sha256": "134ebffabe37249b672583d650d0d4d61f5b869544c6b6d984b198092229e90b",
+      "dimensions": [
+        1152,
+        768
+      ]
+    },
+    "img/sofa/convencion-social-768.webp": {
+      "bytes": 115238,
+      "sha256": "7f97ee592afe79b9bf4378480fc82e0fde8f11b9f661450f52cdee9c47ab4bce",
+      "dimensions": [
+        768,
+        512
+      ]
+    }
+  },
+  "journey": {
+    "status": "passed",
+    "checks": [
+      "Evento aislado creado",
+      "Luna de prueba entra por cuenta, evento, alias, avatar e intereses",
+      "Sol de prueba entra por cuenta, evento, alias, avatar e intereses",
+      "Reintento de alta conserva solo dos participaciones",
+      "Beneficios muestra cuatro locales y el genÃ©rico sin catÃ¡logo ajeno",
+      "Vista /participants/1/interests 390 dark",
+      "Intereses bÃºsqueda cine y selecciÃ³n reversible",
+      "Vista /participants/1/interests 360 light",
+      "Intereses guarda y conserva selecciÃ³n tras recargar",
+      "Vista /me/avatar 390 dark",
+      "Conectar sin encuentro conserva alias y acciones",
+      "Vista /connect 390 dark",
+      "Vista /connect 360 light",
+      "Vista /matches/1 390 dark",
+      "Vista /matches/1 360 light",
+      "Una aceptaciÃ³n mantiene propuesta",
+      "ConfirmaciÃ³n prematura bloqueada",
+      "CÃ³digo personal separado por sesiÃ³n",
+      "PÃ¡gina privada y estado sin cachÃ© pÃºblica",
+      "Primera confirmaciÃ³n no acredita",
+      "ConfirmaciÃ³n bilateral y reintentos acreditan solo una vez",
+      "Vista /me/benefits 390 dark",
+      "Vista /me/benefits 360 light",
+      "Canje usa recibo",
+      "Reintento de canje devuelve mismo recibo",
+      "Un solo dÃ©bito y un solo canje",
+      "Otra persona no accede al recibo",
+      "OrganizaciÃ³n valida recibo",
+      "Entrega y reintento cierran recibo sin nuevo dÃ©bito",
+      "Vista /me/claims/1 390 dark",
+      "Vista /me 1280 dark",
+      "Vista /admin?eventId=1 1280 light",
+      "Vista /login?error 360 dark",
+      "Control recibe foco con indicador visible",
+      "Avatar V3 conserva capas y colores guardados",
+      "Fuente nÃºcleo precargada con huella",
+      "Vista / 390 dark",
+      "Imagen adaptable con proporciÃ³n 3:2",
+      "Recorrido sin excepciones JavaScript"
+    ],
+    "receiptDeniedStatus": 409,
+    "accountSessions": 2,
+    "staffSession": "separate authorized account",
+    "smtp": "loopback only",
+    "database": "H2 memory; no Aiven",
+    "rewardPerPerson": 10,
+    "claimCost": 5,
+    "finalBalanceA": 5,
+    "claimCountA": 1,
+    "retries": [
+      "entry",
+      "arrival",
+      "verification",
+      "confirmation",
+      "claim",
+      "delivery"
+    ]
+  },
+  "visual": {
+    "status": "passed",
+    "screens": [
+      {
+        "name": "final-avatar-390-oscuro",
+        "path": "/me/avatar",
+        "width": 390,
+        "scrollWidth": 390,
+        "theme": "dark",
+        "fonts": true,
+        "broken": 0,
+        "title": "Tu avatar Â· Ping"
+      },
+      {
+        "name": "final-propuesta-390-oscuro",
+        "path": "/matches/1",
+        "width": 390,
+        "scrollWidth": 390,
+        "theme": "dark",
+        "fonts": true,
+        "broken": 0,
+        "title": "Mi conexiÃ³n Â· Ping"
+      },
+      {
+        "name": "final-active-390-dark",
+        "path": "/matches/1",
+        "width": 390,
+        "scrollWidth": 390,
+        "theme": "dark",
+        "fonts": true,
+        "broken": 0,
+        "title": "Mi conexiÃ³n Â· Ping"
+      },
+      {
+        "name": "final-active-360-light",
+        "path": "/matches/1",
+        "width": 360,
+        "scrollWidth": 360,
+        "theme": "light",
+        "fonts": true,
+        "broken": 0,
+        "title": "Mi conexiÃ³n Â· Ping"
+      },
+      {
+        "name": "final-error-360-oscuro",
+        "path": "/login",
+        "width": 360,
+        "scrollWidth": 360,
+        "theme": "dark",
+        "fonts": true,
+        "broken": 0,
+        "title": "Tu cuenta PING Â· Ping"
+      },
+      {
+        "name": "final-admin-1280-claro",
+        "path": "/admin",
+        "width": 1280,
+        "scrollWidth": 1265,
+        "theme": "light",
+        "fonts": true,
+        "broken": 0,
+        "title": "Panel de eventos Â· Ping"
+      },
+      {
+        "name": "final-inicio-390-oscuro",
+        "path": "/",
+        "width": 390,
+        "scrollWidth": 390,
+        "theme": "dark",
+        "fonts": true,
+        "broken": 0,
+        "title": "Inicio Â· Ping"
+      }
+    ],
+    "contrast": [
+      {
+        "width": 390,
+        "theme": "dark",
+        "color": "rgb(189, 181, 202)",
+        "background": "rgb(21, 18, 28)",
+        "text": "Busca el punto pÃºblico indicado. Si no lo identificas, consulta al organizador.",
+        "rect": [
+          574.78125,
+          610.78125
+        ],
+        "token": "#BDB5CA",
+        "ratio": 9.360805681265502
+      },
+      {
+        "width": 360,
+        "theme": "light",
+        "color": "rgb(94, 86, 107)",
+        "background": "rgb(247, 244, 239)",
+        "text": "Busca el punto pÃºblico indicado. Si no lo identificas, consulta al organizador.",
+        "rect": [
+          574.78125,
+          610.78125
+        ],
+        "token": "#5E566B",
+        "ratio": 6.3395909214075035
+      }
+    ],
+    "focus": {
+      "type": "email",
+      "border": "rgb(248, 232, 54)",
+      "shadow": "color(srgb 0.972549 0.909804 0.211765 / 0.35) 0px 0px 0px 3px",
+      "outline": "none",
+      "outlineColor": "rgb(247, 244, 239)"
+    },
+    "bootstrap": [
+      {
+        "path": "/events/3/rewards/new",
+        "selectors": [
+          ".form-control",
+          ".form-select",
+          ".text-danger",
+          ".btn-primary",
+          "input[type=\"checkbox\"]"
+        ],
+        "identical": true
+      },
+      {
+        "path": "/me/avatar",
+        "selectors": [
+          ".av3-opt:has(input:checked)",
+          ".btn-primary",
+          "button:disabled"
+        ],
+        "identical": true
+      },
+      {
+        "path": "/login?error",
+        "selectors": [
+          ".form-control",
+          ".btn-primary",
+          "[role=\"alert\"]"
+        ],
+        "identical": true
+      }
+    ],
+    "resources": {
+      "preload": "http://127.0.0.1:8098/fonts/Manrope-Variable-core-fc80a78ee7a4c5843ac3b9320358daac.ttf",
+      "brand": "http://127.0.0.1:8098/css/brand-ffa44ba4d712d6e232a52fef92b9ce5c.css",
+      "fontRequests": [
+        "http://127.0.0.1:8098/fonts/Manrope-Variable-core-fc80a78ee7a4c5843ac3b9320358daac.ttf"
+      ]
+    },
+    "checks": [
+      "Evento aislado creado",
+      "Luna de prueba entra por cuenta, evento, alias, avatar e intereses",
+      "Sol de prueba entra por cuenta, evento, alias, avatar e intereses",
+      "Reintento de alta conserva solo dos participaciones",
+      "Beneficios muestra cuatro locales y el genÃ©rico sin catÃ¡logo ajeno",
+      "Vista /me/avatar 390 dark",
+      "Vista /matches/1 390 dark",
+      "AcciÃ³n de aceptar alcanzable al desplazar, sin quedar tapada",
+      "Vista /matches/1 390 dark",
+      "Vista /matches/1 360 light",
+      "Ayuda de ubicaciÃ³n con contraste suficiente dark",
+      "Ayuda de ubicaciÃ³n con contraste suficiente light",
+      "Vista /login?error 360 dark",
+      "Foco conserva indicador visible tras la transiciÃ³n",
+      "Vista /admin?eventId=3 1280 light",
+      "Vista /events/3/rewards/new 390 dark",
+      "Bootstrap completo/subconjunto equivalentes en /events/3/rewards/new",
+      "Vista /me/avatar 390 dark",
+      "Bootstrap completo/subconjunto equivalentes en /me/avatar",
+      "Vista /login?error 390 dark",
+      "Bootstrap completo/subconjunto equivalentes en /login?error",
+      "Vista /me 390 dark",
+      "CSS final sirve la correcciÃ³n y la misma huella de fuente precargada",
+      "Fuente extra disponible para glifos fuera del nÃºcleo",
+      "Vista / 390 dark",
+      "RevisiÃ³n final sin excepciones JavaScript"
+    ],
+    "pixelComparisons": "reuse frontend PR56@4fe3435 evidence, explicitly historical; no new full audit"
+  },
+  "harnessIncidents": [
+    "PowerShell policy blocked helper before Maven; commands executed directly, policy unchanged.",
+    "Receipt isolation initially assumed 403; inspected actual 409 without receipt data and corrected harness only.",
+    "Continuation helper lacked a local variable; corrected and resumed pending steps.",
+    "Final visual instance initially not ready (ECONNREFUSED); waited for Started before retry.",
+    "New fixture initially selected an older loopback token; restricted mailbox selection to newest token from final instance. No PING auth changes."
+  ],
+  "limits": [
+    "No deployment or benchmark on Render.",
+    "No iPhone/Safari physical test.",
+    "No real MySQL/Aiven access.",
+    "No current isolated server timing benchmark; no speed percentage inferred from SQL.",
+    "331 and 3 are distinct runs; not summed as a fresh suite."
+  ]
+}

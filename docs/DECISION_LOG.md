@@ -524,3 +524,10 @@ Investigar antes de modificar: separar conexión HTTPS del tiempo de respuesta, 
 Comparar los mismos recorridos antes/después con pruebas de aislamiento y revocación, contar trabajo evitado y distinguir medidas locales de resultados del servicio público. La validación no autoriza atribuir a Render las latencias del entorno de medición. Detalle, resultados y límites en `docs/RENDER_PERFORMANCE.md`.
 
 La validación externa encontró dos problemas previos de CI Windows, no de la app: faltaba preparar Java21 para los ensayos del lanzador/HTTPS y una aserción confundía nombres largos/cortos de una misma carpeta. Se acota su corrección a la preparación del JDK y la comparación de identidad física de la carpeta en esa prueba; no se alteran las herramientas operativas ni se omiten controles. Evidencia y seguimiento en el informe de rendimiento.
+
+
+## DEC-061 — Integración de las optimizaciones terminadas
+
+Samuel autoriza el 26 octubre 2026 la integración de PR #53/#55/#56 en un worktree nuevo y `perf/integrated-mobile-response`, desde `2346585d0c047ed113686aa7fb15060ffe52f198`, conservando la procedencia de backend `66420acf36f742140fddc423e90f281d2a6aa4ed` y frontend `4fe3435c2d5fe9776b26bc9efda40fa5941fe0d0`. Issue #57. Sin aprobación atribuida a Julián. Se autorizan commits/push solo de esta rama y PR borrador hacia `deploy/render-demo`; no merge, cierre de PR anteriores, force-push ni despliegue. No se amplía producto, arquitectura ni alojamiento. Validación proporcional en H2 efímero, sin Aiven real; sin compresión/caché privada ni sondeo adicional. Informe y continuidad: `docs/performance/integrated/README.md`.
+
+Revisión móvil de DEC-061: se observa en ACTIVE claro sin plano que `.am-word-help` conserva `#d9cce6` fuera de la tarjeta oscura (contraste aproximado 1,4:1). Es un defecto heredado de la base, reproducido en el CSS común; se limita la corrección a `.am-location .am-word-help` usando el token de texto secundario vigente de cada tema. No cambia estructura ni funciones de ACTIVE. Verificación afectada y capturas posteriores en el informe integrado.
