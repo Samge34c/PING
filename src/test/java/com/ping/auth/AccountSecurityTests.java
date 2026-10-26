@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.assertj.core.api.Assertions.*;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.url=jdbc:h2:mem:account-security;MODE=MySQL;DB_CLOSE_DELAY=-1","spring.datasource.username=sa","spring.datasource.password=","spring.jpa.hibernate.ddl-auto=validate","ping.mail.from=ping@example.test","ping.public-base-url=http://127.0.0.1:8090"}) @ActiveProfiles("security-test")
 class AccountSecurityTests {
- @Autowired AccountService accounts;@Autowired EventService events;@Autowired ParticipantService participants;@Autowired JdbcTemplate jdbc;@Autowired AuthThrottle throttle;@LocalServerPort int port;@MockitoBean JavaMailSender sender;
+ @org.springframework.test.context.bean.override.mockito.MockitoSpyBean AccountService accounts;@Autowired EventService events;@Autowired ParticipantService participants;@Autowired JdbcTemplate jdbc;@Autowired AuthThrottle throttle;@LocalServerPort int port;@MockitoBean JavaMailSender sender;
  final List<SimpleMailMessage> mail=new CopyOnWriteArrayList<>();static final String PASSWORD="Prueba local de cuenta2026";
  @BeforeEach void transport(){mail.clear();doAnswer(i->{mail.add(new SimpleMailMessage(i.getArgument(0)));return null;}).when(sender).send(any(SimpleMailMessage.class));}
  String address(){return "persona-"+UUID.randomUUID()+"@example.test";}
@@ -73,6 +73,37 @@ class AccountSecurityTests {
    var response=b.get("/join");assertThat(response.statusCode()).isEqualTo(200);
    assertThat(response.body()).contains(events.get(target).getName()).doesNotContain("Alias anterior privado");
    assertThat(accounts.participant(a,target)).isEmpty();assertThat(participants.get(person).points()).isZero();
+  }
+ }
+ @Test void authenticatedPagesRefreshTheAccountOnlyOncePerRequest()throws Exception{
+  String email=address();long a=account(email),e=event("Lectura acotada");
+  var p=new ParticipantForm();p.setAlias("Persona de ensayo");p.setEventId(e);accounts.bind(a,participants.create(p).id(),e);
+  try(var b=new TestBrowser(port)){
+   login(b,email);
+   var checks=new org.assertj.core.api.SoftAssertions();
+   for(String path:List.of("/","/account","/me/state")){
+    clearInvocations(accounts);
+    assertThat(b.get(path).statusCode()).isEqualTo(200);
+    long reads=mockingDetails(accounts).getInvocations().stream().filter(i->i.getMethod().getName().equals("user")).count();
+    System.out.println("PERF account_reads "+path+"="+reads);
+    checks.assertThat(reads).as("fresh account reads for %s",path).isEqualTo(1);
+   }
+   checks.assertAll();
+  }
+ }
+ @Test void publicClasspathAssetsDoNotReadAccountsEvenWithASessionCookie()throws Exception{
+  String email=address();account(email);
+  try(var b=new TestBrowser(port)){
+   login(b,email);
+   var checks=new org.assertj.core.api.SoftAssertions();
+   for(String path:List.of("/css/brand.css","/js/ui.js","/img/favicon.svg")){
+    clearInvocations(accounts);
+    assertThat(b.get(path).statusCode()).isEqualTo(200);
+    long reads=mockingDetails(accounts).getInvocations().stream().filter(i->i.getMethod().getName().equals("user")).count();
+    System.out.println("PERF account_reads "+path+"="+reads);
+    checks.assertThat(reads).as("account reads for public asset %s",path).isZero();
+   }
+   checks.assertAll();
   }
  }
  @Test void loginResumesTheParticipationOfTheChosenEvent()throws Exception{

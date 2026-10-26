@@ -37,3 +37,10 @@ Variables de fondo, superficies, navbar, inputs, botones, texto, bordes y foco s
 ## Dirección App Social Dark
 
 La dirección «Cartel en vivo» usa B oscuro `#101015` / superficies `#1B1822` y `#211D29`, morado `#BB9CFF` y amarillo `#F5DF65`; D claro `#F6F3EE`, superficies blancas y morado `#7444BA`. Cards de 10 px solo para objetos independientes; controles de 6 px; misión, pasos, saldo e historial usan tipografía y divisores. La paleta original del JPG se conserva. Sidebar de 224 px, navegación inferior móvil, SVG propios y Manrope variable local (licencia SIL OFL incluida en `static/fonts/OFL.txt`). Sin CDN. Las ondas son ilustraciones de conexión; no sustituyen el logo oficial.
+
+
+## Bootstrap generado · integración de rendimiento (26 octubre 2026)
+
+El layout sirve `static/vendor/bootstrap/bootstrap.ping.min.css`, un subconjunto generado del Bootstrap 5.3.8 local, con licencia MIT. El original `bootstrap.min.css` se conserva como fuente; no editar el subconjunto a mano. Los estilos de PING siguen en `brand.css` y `v2.css`.
+
+Tras añadir clases en templates, JavaScript o Java, ejecutar desde la raíz `python docs/performance/frontend/tools/bootstrap_subset.py --check`. Si el marcado cambió legítimamente, regenerar con el mismo comando sin `--check`, revisar el diff y repetir la comprobación. Conservar clases de estados dinámicos literalmente en el corpus; si se construyen por concatenación, ampliar primero el generador y su protección. `FrontendBundleTests` comprueba cobertura de clases. Revisar además error, foco, controles deshabilitados y administración en los temas oscuro y claro: la prueba de clases no demuestra la apariencia. Las huellas de recursos se resuelven por contenido, incluida la precarga de Manrope núcleo; no fijar hashes a mano.

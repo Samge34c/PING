@@ -1,0 +1,65 @@
+{
+  "base_commit": "40f22473d35fbe8164e9ba7ef5e025051858426e",
+  "branch": "perf/render-response",
+  "environment": "local H2 isolated; real HTTP tests; no cloud credentials",
+  "verification": {
+    "tests": 323,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "comparison": [
+    {
+      "metric": "fresh_account_reads",
+      "path": "/",
+      "before": 2,
+      "after": 1
+    },
+    {
+      "metric": "fresh_account_reads",
+      "path": "/account",
+      "before": 3,
+      "after": 1
+    },
+    {
+      "metric": "fresh_account_reads",
+      "path": "/me/state",
+      "before": 1,
+      "after": 1
+    },
+    {
+      "metric": "fresh_account_reads",
+      "paths": [
+        "/css/brand.css",
+        "/js/ui.js",
+        "/img/favicon.svg"
+      ],
+      "before": 1,
+      "after": 0
+    },
+    {
+      "metric": "history_loads",
+      "states": [
+        "OFFERED",
+        "ACTIVE"
+      ],
+      "before": 1,
+      "after": 0
+    },
+    {
+      "metric": "event_reads",
+      "states": [
+        "OFFERED",
+        "ACTIVE"
+      ],
+      "before": 2,
+      "after": 1
+    }
+  ],
+  "limits": [
+    "Not a total SQL query count",
+    "No authenticated production before/after timing",
+    "No physical Safari test",
+    "No changes deployed yet"
+  ]
+}
