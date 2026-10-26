@@ -514,3 +514,11 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 **Archivos:** `Dockerfile`, `.dockerignore`, `deploy/render/entrypoint.sh`, `render.yaml`, `src/main/resources/application-render.properties`, `HttpApiMail` y `PrivateMail`.
 
 **Comprobaciones y pendientes:** en `docs/DEPLOY_RENDER_AIVEN.md`. Antes de publicar falta la autorización de commit y push. La entrega real de correo no está probada.
+
+## DEC-060 — Respuestas más ligeras en Render Free
+
+Samuel solicita el 25 de octubre de 2026 optimizar la versión pública sin pagar ni perder funciones. Base `deploy/render-demo@40f22473d35fbe8164e9ba7ef5e025051858426e`; copia y rama propias `perf/render-response`. Esta solicitud fija el alcance técnico del Issue propuesto en `docs/RENDER_PERFORMANCE.md`; no se atribuye aprobación a Julián. Sin cambios de diseño, reglas, esquema, datos de uso ni planes de pago.
+
+Investigar antes de modificar: separar conexión HTTPS del tiempo de respuesta, contar consultas repetidas de autenticación y lecturas duplicadas del encuentro. Reutilizar la identidad consultada solo dentro de la misma petición y autenticación; volver a comprobar roles y caducidad en cada petición privada posterior. Los recursos públicos del classpath no necesitan consultar cuentas; los controladores privados siguen sujetos a los controles actuales. Conservar CSRF, revocación, aislamiento, estados en vivo, privacidad, Saga y puntos/canjes idempotentes. No añadir caché global de cuentas, permisos o páginas privadas, sondeos para evitar la suspensión, servicios ni dependencias nuevas.
+
+Comparar los mismos recorridos antes/después con pruebas de aislamiento y revocación, contar trabajo evitado y distinguir medidas locales de resultados del servicio público. La validación no autoriza atribuir a Render las latencias del entorno de medición. Detalle, resultados y límites en `docs/RENDER_PERFORMANCE.md`.

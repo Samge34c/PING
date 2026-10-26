@@ -52,13 +52,13 @@ public class DemoController {
         long id = self(session); var history = matches.list(id);
         model.addAttribute("recognitionHintForm", hints.ownForm(id));
         var participant = participants.get(id); model.addAttribute("participant", participant); model.addAttribute("matches", history);
-        model.addAttribute("event", events.get(participant.eventId()));
+        var event = events.get(participant.eventId()); model.addAttribute("event", event);
         model.addAttribute("currentMatch", current(history));
         var experience = com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName());
         model.addAttribute("experience", experience);
         if (experience != null) model.addAttribute("badges", com.ping.experience.EventExperienceCatalog.badges(history));
         model.addAttribute("lastCompletion", !history.isEmpty() && history.getFirst().status() == MatchStatus.COMPLETED ? history.getFirst() : null);
-        model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(history)));
+        model.addAttribute("liveSignature", signature(participant, event.getStatus(), current(history)));
         model.addAttribute("held", history.stream().anyMatch(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE));
         model.addAttribute("completedCount", history.stream().filter(m -> m.status() == MatchStatus.COMPLETED).count()); return "demo/dashboard";
     }
@@ -82,7 +82,7 @@ public class DemoController {
         catch (BusinessRuleException error) { flash.addFlashAttribute("message", error.getMessage()); flash.addFlashAttribute("messageTone", "notice"); return "connect".equals(returnTo) ? "redirect:/connect" : "redirect:/me"; }
     }
     @GetMapping("/matches/{id}") public String match(@PathVariable long id, HttpSession session, Model model) {
-        long selected = self(session); var participant = participants.get(selected); model.addAttribute("participant", participant); model.addAttribute("event", events.get(participant.eventId()));
+        long selected = self(session); var participant = participants.get(selected); model.addAttribute("participant", participant); var event = events.get(participant.eventId()); model.addAttribute("event", event);
         model.addAttribute("moderation", moderation.status(id, selected));
         model.addAttribute("reportReasons", com.ping.moderation.ReportReason.values());
         var match = matches.get(id, selected); model.addAttribute("match", match);
@@ -99,7 +99,9 @@ public class DemoController {
             model.addAttribute("badges", com.ping.experience.EventExperienceCatalog.badges(history));
             model.addAttribute("promoUnlocked", com.ping.experience.EventExperienceCatalog.promoUnlocked(history));
         }
-        if (match.status() == MatchStatus.OFFERED || match.status() == MatchStatus.ACTIVE) model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(matches.list(selected)))); return "demo/match";
+        // A participant has at most one OFFERED/ACTIVE match. Its view is already
+        // authorized and loaded above; a live signature does not need all history.
+        if (match.status() == MatchStatus.OFFERED || match.status() == MatchStatus.ACTIVE) model.addAttribute("liveSignature", signature(participant, event.getStatus(), match)); return "demo/match";
     }
     @PostMapping("/matches/{id}/accept") public String accept(@PathVariable long id, HttpSession session, RedirectAttributes flash) {
         try { matches.accept(id, self(session)); }
