@@ -13,7 +13,6 @@ import com.ping.web.*;
 public class DemoController {
     private static final String SELECTED = "pingDemoParticipantId";
     private final com.ping.moderation.ModerationService moderation;
-    private final com.ping.experience.DemoRecognitionHints recognition;
     private final RecognitionHintService hints;
     private final ParticipantService participants;
     private final MatchingService matching;
@@ -23,8 +22,8 @@ public class DemoController {
     private final com.ping.verification.CredentialService credentials;
     private final com.ping.auth.AuthSupport auth;
     private final org.springframework.jdbc.core.JdbcTemplate jdbc;
-    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc,com.ping.verification.CredentialService credentials, MatchLiveState liveState) { this.liveState=liveState;this.credentials=credentials;this.auth=auth;this.jdbc=jdbc;
-        this.moderation = moderation; this.recognition = recognition; this.hints = hints;
+    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc,com.ping.verification.CredentialService credentials, MatchLiveState liveState) { this.liveState=liveState;this.credentials=credentials;this.auth=auth;this.jdbc=jdbc;
+        this.moderation = moderation; this.hints = hints;
         this.participants = participants; this.matching = matching; this.matches = matches; this.events = events;
     }
     @GetMapping("/demo") public String select(@RequestParam(required = false) Long participantId, Model model) { model.addAttribute("selectedParticipantId", participantId); model.addAttribute("participants", participants.list().stream().filter(p->auth.legacyFixture()||jdbc.queryForObject("select count(*) from demo_scenarios d where d.event_id=?",Integer.class,p.eventId())>0&&jdbc.queryForObject("select count(*) from account_participations where participant_id=?",Integer.class,p.id())==0).toList()); return "demo/select"; }
@@ -98,10 +97,13 @@ public class DemoController {
         var personalCode=com.ping.verification.CredentialSession.get(session,"ENCOUNTER",id,selected);
         model.addAttribute("myCredential",personalCode!=null&&credentials.valid(personalCode)&&!match.otherVerified()?personalCode:null);
         model.addAttribute("recognitionHintForm", hints.ownForm(selected));
-        if (match.status() == MatchStatus.ACTIVE) { var authorized = hints.other(id, selected); if (authorized != null) model.addAttribute("recognitionRevision", authorized.revision()); }
+        // Text and revision come from the same fresh, ownership/state-checked read.
+        var authorizedHint = hints.other(id, selected);
+        if (match.status() == MatchStatus.ACTIVE && authorizedHint != null)
+            model.addAttribute("recognitionRevision", authorizedHint.revision());
         var experience = com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName());
         model.addAttribute("experience", experience);
-        model.addAttribute("recognitionHint", recognition.forMatch(participant.eventId(), selected, match));
+        model.addAttribute("recognitionHint", authorizedHint == null ? null : authorizedHint.text());
         if (experience != null && match.status() == MatchStatus.COMPLETED) {
             var history = matches.list(selected);
             model.addAttribute("badges", com.ping.experience.EventExperienceCatalog.badges(history));
