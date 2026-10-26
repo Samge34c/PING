@@ -22,10 +22,10 @@ public class RewardService {
     public RewardService(BenefitRepository benefits, RewardClaimRepository claims, ParticipantRepository participants, MatchRepository matches, EventService events,com.ping.match.JourneyPolicy policy,com.ping.auth.AuthSupport auth) {this.policy=policy;this.auth=auth;
         this.benefits = benefits; this.claims = claims; this.participants = participants; this.matches = matches; this.events = events;
     }
-    public List<Benefit> catalog() { return benefits.findByActiveTrueOrderByIdAsc().stream().filter(b->b.getEventId()==null).toList(); }
-    public List<Benefit> catalog(long event) { return benefits.findByActiveTrueOrderByIdAsc().stream().filter(b->b.getEventId()==null || b.getEventId()==event).sorted(Comparator.comparing((Benefit b)->b.getEventId()==null).thenComparing(Benefit::getId)).toList(); }
+    public List<Benefit> catalog() { return benefits.findByActiveTrueAndEventIdIsNullOrderByIdAsc(); }
+    public List<Benefit> catalog(long event) { return benefits.catalogForEvent(event).stream().sorted(Comparator.comparing((Benefit b)->b.getEventId()==null).thenComparing(Benefit::getId)).toList(); }
     public List<ClaimView> personal(long self) { return claims.findByParticipantIdOrderByIdDesc(self).stream().map(this::view).toList(); }
-    public boolean pendingCompletion(long self) { return matches.forParticipant(self).stream().anyMatch(m -> m.isCompletionPending()); }
+    public boolean pendingCompletion(long self) { return matches.hasPendingCompletion(self); }
     private ClaimView view(RewardClaim c) { return new ClaimView(c.getId(), c.getParticipant().getAlias(), c.getBenefitName(), c.getCost(), c.getStatus(), c.getCreatedAt(),c.getBenefitDescription(),c.getClaimLocation(),c.getClaimInstructions()); }
     public Summary forEvent(long eventId) {
         var rows = claims.forEvent(eventId).stream().map(this::view).toList();
