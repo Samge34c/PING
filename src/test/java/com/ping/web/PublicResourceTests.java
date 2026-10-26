@@ -40,7 +40,7 @@ class PublicResourceTests {
             assertThat(valid.statusCode()).isEqualTo(200);
             assertThat(valid.headers().firstValue("Cache-Control")).hasValue("public, max-age=31536000, immutable");
             // CSS references must use the same fingerprint as the font preload.
-            assertThat(valid.body()).contains(urls.getForLookupPath("/fonts/Manrope-Variable.ttf").substring(1));
+            assertThat(valid.body()).contains(urls.getForLookupPath("/fonts/Manrope-Variable-core.ttf").substring(1));
             var plain = browser.get("/css/brand.css");
             assertThat(plain.statusCode()).isEqualTo(200);
             assertThat(plain.headers().firstValue("Cache-Control").orElse("")).doesNotContain("immutable");
