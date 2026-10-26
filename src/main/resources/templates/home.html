@@ -10,7 +10,7 @@
     <a class="fe-login" th:if="${session.pingDemoParticipantId == null}" th:href="@{/login}">Ya tengo cuenta · Entrar</a>
     <a class="fe-login" th:if="${session.pingDemoParticipantId != null}" th:href="@{/me/event}">Ir a mi evento</a>
   </div>
-  <figure class="fe-art"><img th:src="@{/img/sofa/convencion-social.webp}" width="1536" height="1024" fetchpriority="high" decoding="async" alt="Ilustración de dos personas encontrándose entre puestos de distintas aficiones en una convención."></figure>
+  <figure class="fe-art"><img th:src="@{/img/sofa/convencion-social.webp}" th:srcset="@{/img/sofa/convencion-social-768.webp} + ' 768w, ' + @{/img/sofa/convencion-social-1152.webp} + ' 1152w, ' + @{/img/sofa/convencion-social.webp} + ' 1536w'" sizes="(min-width: 768px) 640px, calc(100vw - 32px)" width="1536" height="1024" fetchpriority="high" decoding="async" alt="Ilustración de dos personas encontrándose entre puestos de distintas aficiones en una convención."></figure>
 </div></section>
 <section class="fe-how" aria-labelledby="hm-how-title"><div class="fe-wrap">
   <h2 id="hm-how-title">Así funciona</h2>
