@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.*;
 @ActiveProfiles("test")
 class MatchLiveStateTests {
     @Autowired MatchLiveState live;
-    @Autowired MatchService matches;
+    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean MatchService matches;
     @Autowired MatchingService matching;
     @Autowired ParticipantService participants;
-    @Autowired EventService events;
+    @org.springframework.test.context.bean.override.mockito.MockitoSpyBean EventService events;
     @Autowired JdbcTemplate jdbc;
     @LocalServerPort int port;
 
@@ -80,6 +80,30 @@ class MatchLiveStateTests {
         assertThat(live.forParticipant(p[0])).containsEntry("matchStatus", "NONE");
         agreesWithHtml(p[0], "/me");
         assertThatThrownBy(() -> live.forParticipant(Long.MAX_VALUE)).isInstanceOf(NotFoundException.class);
+    }
+
+    @Test void openingAnOfferedOrActiveMissionDoesNotLoadHistoryAndReadsTheEventOnce() throws Exception {
+        long[] p = pair(); long id = matching.search(p[0]);
+        try (var browser = new TestBrowser(port)) {
+            browser.get("/demo"); browser.post("/demo", Map.of("participantId", Long.toString(p[0])));
+            var checks = new org.assertj.core.api.SoftAssertions();
+            for (var status : java.util.List.of(MatchStatus.OFFERED, MatchStatus.ACTIVE)) {
+                if (status == MatchStatus.ACTIVE) { matches.accept(id, p[0]); matches.accept(id, p[1]); }
+                String expected = live.forParticipant(p[0]).get("signature");
+                org.mockito.Mockito.clearInvocations(matches, events);
+                var page = browser.get("/matches/" + id);
+                assertThat(page.statusCode()).isEqualTo(200);
+                assertThat(page.body()).contains("data-ping-live=\"" + expected + "\"");
+                long historyReads = org.mockito.Mockito.mockingDetails(matches).getInvocations().stream()
+                        .filter(i -> i.getMethod().getName().equals("list")).count();
+                long eventReads = org.mockito.Mockito.mockingDetails(events).getInvocations().stream()
+                        .filter(i -> i.getMethod().getName().equals("get")).count();
+                System.out.println("PERF mission " + status + " history_reads=" + historyReads + " event_reads=" + eventReads);
+                checks.assertThat(historyReads).as("history reads for %s", status).isZero();
+                checks.assertThat(eventReads).as("event reads for %s", status).isEqualTo(1);
+            }
+            checks.assertAll();
+        }
     }
 
     @Test void ownCredentialRevisionIsScopedAndOldPolicyIsCompatible() throws Exception {

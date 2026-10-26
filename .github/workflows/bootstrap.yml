@@ -57,6 +57,13 @@ jobs:
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: '3.12'
+      - name: JDK 21 for launcher and local HTTPS checks
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          verify-signature: true
+          overwrite-settings: false
       - name: Parse with Windows PowerShell 5.1
         shell: powershell
         run: .\tools\windows\Test-Scripts.ps1
