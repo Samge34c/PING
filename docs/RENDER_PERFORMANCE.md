@@ -54,3 +54,7 @@ Resumen de evidencia sanitizada: [render-performance-evidence.json](render-perfo
 5. Reversión de código: desplegar `deploy/render-demo@40f22473d35fbe8164e9ba7ef5e025051858426e`. No hay migración ni transformación de datos que revertir.
 
 **Límites:** no se ha medido todavía una mejora de segundos en la versión pública autenticada ni probado Safari físico. Una comprobación pública adicional con conexión HTTPS reutilizada dio Login 0,396 s e Inicio 0,204 s desde este entorno, antes del despliegue del parche. No demuestra el rendimiento de las rutas privadas. Render Free conserva su suspensión por inactividad, CPU/RAM limitadas y la latencia hacia Aiven; este trabajo no promete eliminarlas.
+
+## Verificación de GitHub Actions
+
+La primera ejecución de la PR #53 confirmó Java/Linux en verde (323 pruebas), pero Windows detectó dos fallos en archivos idénticos a la base `40f2247`: el trabajo no preparaba el JDK21 que ahora necesitan los ensayos del lanzador/HTTPS, y la prueba SMTP comparaba literalmente la carpeta temporal larga con su alias corto 8.3. Ajuste mínimo: preparar Temurin21 con la misma acción fijada de Linux y comprobar que ambas rutas designan la misma carpeta existente (`samefile`). Sin cambios de los scripts de arranque, correo, certificados o copia/restauración. Los resultados finales del nuevo ensayo Windows se consultan en la PR; no se presentan como aprobados antes de ejecutarlos.
