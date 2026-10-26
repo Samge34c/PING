@@ -14,7 +14,7 @@ Los 323 tests Java y 43 Python de PR #53 son resultados históricos de la base, 
 
 Skills seleccionadas: ping-efficient-work, systematic-debugging y verification-before-completion; sin instalaciones ni skills visuales. No hay Tandem disponible en las herramientas de esta sesión; los límites de archivos y la base común permiten avanzar sin el puente. Antes de cada entrega se revisará el diff contra la base y se informarán los cambios de contrato relevantes a frontend, si los hubiera.
 
-Estado: tres oportunidades medidas y verificadas con pruebas dirigidas; pendiente el control completo de cierre. Commit/push y PR en borrador autorizados; no merge ni despliegue.
+Estado: tres mejoras implementadas y verificadas; clean verify completo aprobado. Pendiente integración y despliegue por separado. Commit/push y PR en borrador autorizados; no merge ni despliegue.
 
 Issue asociado: https://github.com/Samge34c/PING/issues/54 (alcance leído y autorizado por esta petición).
 
@@ -39,3 +39,27 @@ Verificación final de esta unidad: 83 pruebas dirigidas, 0 fallos/errores/omiti
 ACTIVE obtenía la misma pista con dos llamadas a RecognitionHintService.other: una para revisión y otra a través de DemoRecognitionHints para texto. Ahora usa un único resultado autorizado para ambos atributos. Se conserva la comprobación fresca de pertenencia, ACTIVE y aceptación bilateral; una nueva petición vuelve a leer la pista. El helper original permanece disponible, sin cambiar otros consumidores.
 
 Antes/después: 2→1 llamadas Java a hints.other, 16→14 SELECT y 4→3 filas de encuentros consumidas. Misma solicitud, datos y perfil de seguridad. La reproducción corregida falla antes por 2 llamadas; después pasan 8 pruebas dirigidas (RecognitionReadWorkTests y RecognitionHintTests), 0 fallos/errores/omitidas. Comprueba dos cuentas, aceptación parcial/bilateral, cambio de pista entre peticiones, cancelación y una cuenta ajena. Registros privados recognition-before-corrected.log y recognition-after-corrected.log.
+## Resultado y verificación final
+
+| Petición / operación | SELECT antes→después | Filas de encuentros consumidas antes→después |
+|---|---:|---:|
+| Conectar con OFFERED | 7→3 | 49→1 |
+| Conectar con ACTIVE | 8→3 | 49→1 |
+| Conectar sin encuentro vigente | 7→5 | 49→0 |
+| Beneficios SOFA | 9→7 | 98→1 |
+| Pista en ACTIVE | 16→14 | 4→3 |
+| Predicado de finalización pendiente | 1→1 | 49→1 |
+
+Beneficios además evita materializar 24 filas ajenas: 26→2. En ACTIVE, hints.other pasa de 2→1 llamadas Java. Son tres unidades; el predicado forma parte de Beneficios. No son porcentajes ni segundos de mejora de la aplicación pública.
+
+`clean verify` ejecutado una sola vez al cierre con las fuentes de `977e6258327a584eb7c6226b81d6a30a39773be8`, finalizado el 2026-10-25 a las 23:17:39 -05:00: **330 pruebas, 0 fallos, 0 errores, 0 omitidas; BUILD SUCCESS y JAR generado**. Coinciden resumen Maven y 42 informes XML de Surefire. Los siete tests nuevos se añaden a los 323 de la base; no se atribuye a esta ejecución el resultado histórico de Python. Las únicas modificaciones posteriores a la prueba completa son documentación exclusiva de esta carpeta.
+
+Comando: `./mvnw.cmd -B --no-transfer-progress -Dspring.profiles.default=test -Dbackend.phase=final -DargLine=-javaagent:<mockito-core-5.23.0.jar local> clean verify`. Windows, Temurin 21.0.12 y Maven Wrapper; agente Mockito local sin modificar POM. H2 aislado, correo interceptado en memoria y HTTP real en loopback. No se ha arrancado ni detenido MySQL o la aplicación habitual.
+
+Protecciones cubiertas por la suite: cuenta/roles/revocación, CSRF y pertenencia, matching/desempates, ambas aceptaciones/llegadas y verificación, confirmación/Saga, canjes/idempotencia, snapshots y planos. Las pruebas nuevas comprueban dos sesiones independientes, cuenta/evento ajenos y refresco entre peticiones. La densidad histórica y algunos estados se preparan con SQL sintético en H2; no se presentan como un recorrido manual completo ni como un ensayo sobre MySQL/Aiven.
+
+El contador observa ejecuciones SELECT en JDBC y filas recorridas por ResultSet.next. No cuenta filas examinadas internamente, paquetes TCP o viajes físicos a MySQL. Los checkouts/commits del registro tampoco equivalen a conexiones de red. Se conservaron muestras HTTP individuales, pero no son un benchmark de latencia: no tienen DNS/TLS y no permiten extrapolar segundos en Render. La proyección agrupada reduce trabajo y operaciones; no se ha medido un plan de ejecución en MySQL.
+
+Resultados completos fuera de Git: `%LOCALAPPDATA%/PING/performance-backend/`, incluidos full-final.log y full-final-surefire.zip. [evidence.json](evidence.json) contiene recuentos, comandos, procedencia, huellas SHA256 de logs y fuentes, además de los fallos de preparación/expectativa corregidos. No contiene cookies, tokens, correos de verificación ni valores privados.
+
+Límites: no hay benchmark nuevo autenticado en Render, Aiven ni iPhone. La suspensión y recursos de Render Free permanecen. No se propone índice sin EXPLAIN, no se instala caché y no se cambian reglas funcionales. Se conserva el clon habitual en deploy/render-demo@40f2247, limpio; ningún archivo reservado a Claude o compartido se modificó. [Handoff de integración](HANDOFF.md).

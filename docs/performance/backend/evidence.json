@@ -1,0 +1,333 @@
+{
+    "schema":  1,
+    "issue":  "https://github.com/Samge34c/PING/issues/54",
+    "base":  "2346585d0c047ed113686aa7fb15060ffe52f198",
+    "branch":  "perf/backend-roundtrips",
+    "testedSourceCommit":  "977e6258327a584eb7c6226b81d6a30a39773be8",
+    "finalRunFinished":  "2026-10-25T23:17:39-05:00",
+    "environment":  "Windows; Temurin 21.0.12; Maven Wrapper; H2 isolated; real loopback HTTP; security-test without legacy fixture",
+    "definitions":  [
+                        "SELECT executions observed at JDBC, not Java method calls or TCP packets.",
+                        "Result rows consumed through ResultSet.next, not rows scanned internally by MySQL. Aggregate output counts as one result row.",
+                        "Connection checkouts and JDBC commit calls are observations, not measured physical connections or network roundtrips.",
+                        "HTTP samples are single loopback observations, include app/security/template work, no DNS/TLS; not a benchmark or a production latency estimate.",
+                        "pending-* is a service-only measurement; its zero HTTP duration means not applicable."
+                    ],
+    "fixtures":  "Two independent cookie sessions/accounts per pair; additional foreign pair. Connect/benefits use 48 synthetic cancelled historical matches; benefits has 24 foreign catalog entries plus own and generic entries. Fixed cardinalities/states, regenerated synthetic identities. Fixture SQL sets edge states, not claimed as a complete real journey.",
+    "baselineNotes":  [
+                          "before.log: initial compilation failure due private fixture constant; fixed before valid measurements.",
+                          "before-sql.log: 6 tests, 5 failures, 0 errors. Four performance failures; fifth was an incorrect own-hint assertion in new test, corrected without production change.",
+                          "recognition-after.log: 55 tests, 1 failure from that same test expectation.",
+                          "Corrected ACTIVE reproduction against 84d2e50 (ACTIVE code unchanged from base): 1 failure, 0 errors, specifically 2 guarded reads instead of 1. Corrected after: 8 tests pass."
+                      ],
+    "before":  [
+                   {
+                       "label":  "connect-idle",
+                       "phase":  "before",
+                       "selects":  7,
+                       "consumedMatchResultRows":  49,
+                       "consumedBenefitResultRows":  0,
+                       "jdbcConnectionCheckouts":  6,
+                       "jdbcCommitCalls":  6,
+                       "singleHttpSampleMs":  162.459
+                   },
+                   {
+                       "label":  "pending-false",
+                       "phase":  "before",
+                       "selects":  1,
+                       "consumedMatchResultRows":  49,
+                       "consumedBenefitResultRows":  0,
+                       "jdbcConnectionCheckouts":  1,
+                       "jdbcCommitCalls":  1,
+                       "singleHttpSampleMs":  0
+                   },
+                   {
+                       "label":  "connect-OFFERED-0",
+                       "phase":  "before",
+                       "selects":  7,
+                       "consumedMatchResultRows":  49,
+                       "consumedBenefitResultRows":  0,
+                       "jdbcConnectionCheckouts":  6,
+                       "jdbcCommitCalls":  6,
+                       "singleHttpSampleMs":  37.364
+                   },
+                   {
+                       "label":  "connect-OFFERED-1",
+                       "phase":  "before",
+                       "selects":  7,
+                       "consumedMatchResultRows":  49,
+                       "consumedBenefitResultRows":  0,
+                       "jdbcConnectionCheckouts":  6,
+                       "jdbcCommitCalls":  6,
+                       "singleHttpSampleMs":  28.417
+                   },
+                   {
+                       "label":  "connect-ACTIVE-0",
+                       "phase":  "before",
+                       "selects":  8,
+                       "consumedMatchResultRows":  49,
+                       "consumedBenefitResultRows":  0,
+                       "jdbcConnectionCheckouts":  7,
+                       "jdbcCommitCalls":  6,
+                       "singleHttpSampleMs":  29.664
+                   },
+                   {
+                       "label":  "connect-ACTIVE-1",
+                       "phase":  "before",
+                       "selects":  8,
+                       "consumedMatchResultRows":  49,
+                       "consumedBenefitResultRows":  0,
+                       "jdbcConnectionCheckouts":  7,
+                       "jdbcCommitCalls":  6,
+                       "singleHttpSampleMs":  25.336
+                   },
+                   {
+                       "label":  "benefits-sofa",
+                       "phase":  "before",
+                       "selects":  9,
+                       "consumedMatchResultRows":  98,
+                       "consumedBenefitResultRows":  26,
+                       "jdbcConnectionCheckouts":  8,
+                       "jdbcCommitCalls":  8,
+                       "singleHttpSampleMs":  105.426
+                   },
+                   {
+                       "label":  "active-hint",
+                       "phase":  "before",
+                       "selects":  16,
+                       "consumedMatchResultRows":  4,
+                       "consumedBenefitResultRows":  0,
+                       "jdbcConnectionCheckouts":  10,
+                       "jdbcCommitCalls":  9,
+                       "singleHttpSampleMs":  68.228
+                   }
+               ],
+    "recognitionCorrectedBefore":  {
+                                       "label":  "active-hint",
+                                       "phase":  "recognition-before-corrected",
+                                       "selects":  16,
+                                       "consumedMatchResultRows":  4,
+                                       "consumedBenefitResultRows":  0,
+                                       "jdbcConnectionCheckouts":  10,
+                                       "jdbcCommitCalls":  9,
+                                       "singleHttpSampleMs":  120.082
+                                   },
+    "after":  [
+                  {
+                      "label":  "pending-false",
+                      "phase":  "final",
+                      "selects":  1,
+                      "consumedMatchResultRows":  1,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  1,
+                      "jdbcCommitCalls":  1,
+                      "singleHttpSampleMs":  0
+                  },
+                  {
+                      "label":  "pending-true",
+                      "phase":  "final",
+                      "selects":  1,
+                      "consumedMatchResultRows":  1,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  1,
+                      "jdbcCommitCalls":  1,
+                      "singleHttpSampleMs":  0
+                  },
+                  {
+                      "label":  "pending-false",
+                      "phase":  "final",
+                      "selects":  1,
+                      "consumedMatchResultRows":  1,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  1,
+                      "jdbcCommitCalls":  1,
+                      "singleHttpSampleMs":  0
+                  },
+                  {
+                      "label":  "benefits-sofa",
+                      "phase":  "final",
+                      "selects":  7,
+                      "consumedMatchResultRows":  1,
+                      "consumedBenefitResultRows":  2,
+                      "jdbcConnectionCheckouts":  7,
+                      "jdbcCommitCalls":  7,
+                      "singleHttpSampleMs":  44.23
+                  },
+                  {
+                      "label":  "connect-idle",
+                      "phase":  "final",
+                      "selects":  5,
+                      "consumedMatchResultRows":  0,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  5,
+                      "jdbcCommitCalls":  5,
+                      "singleHttpSampleMs":  20.258
+                  },
+                  {
+                      "label":  "connect-OFFERED-0",
+                      "phase":  "final",
+                      "selects":  3,
+                      "consumedMatchResultRows":  1,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  3,
+                      "jdbcCommitCalls":  3,
+                      "singleHttpSampleMs":  9.047
+                  },
+                  {
+                      "label":  "connect-OFFERED-1",
+                      "phase":  "final",
+                      "selects":  3,
+                      "consumedMatchResultRows":  1,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  3,
+                      "jdbcCommitCalls":  3,
+                      "singleHttpSampleMs":  4.035
+                  },
+                  {
+                      "label":  "connect-ACTIVE-0",
+                      "phase":  "final",
+                      "selects":  3,
+                      "consumedMatchResultRows":  1,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  3,
+                      "jdbcCommitCalls":  3,
+                      "singleHttpSampleMs":  4.7
+                  },
+                  {
+                      "label":  "connect-ACTIVE-1",
+                      "phase":  "final",
+                      "selects":  3,
+                      "consumedMatchResultRows":  1,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  3,
+                      "jdbcCommitCalls":  3,
+                      "singleHttpSampleMs":  3.173
+                  },
+                  {
+                      "label":  "active-hint",
+                      "phase":  "final",
+                      "selects":  14,
+                      "consumedMatchResultRows":  3,
+                      "consumedBenefitResultRows":  0,
+                      "jdbcConnectionCheckouts":  9,
+                      "jdbcCommitCalls":  8,
+                      "singleHttpSampleMs":  22.118
+                  }
+              ],
+    "verification":  {
+                         "command":  "./mvnw.cmd -B --no-transfer-progress -Dspring.profiles.default=test -Dbackend.phase=final -DargLine=-javaagent:\u003clocal mockito-core-5.23.0.jar\u003e clean verify",
+                         "exitCode":  0,
+                         "tests":  330,
+                         "failures":  0,
+                         "errors":  0,
+                         "skipped":  0,
+                         "surefireReports":  42,
+                         "jarBuilt":  true,
+                         "additionalFullLocalRuns":  0
+                     },
+    "logsOutsideGit":  "%LOCALAPPDATA%/PING/performance-backend/",
+    "logs":  [
+                 {
+                     "name":  "before.log",
+                     "sha256":  "7a9d5e9e768eb5d035b9d87a0856fa3b5a85cb32011d08b6810a385579ca8e8c",
+                     "bytes":  5258
+                 },
+                 {
+                     "name":  "before-sql.log",
+                     "sha256":  "575cf67570701797f90eacad5e9185ee3d6bbe755e88b0b8b55977d1b3aa4e95",
+                     "bytes":  224402
+                 },
+                 {
+                     "name":  "connect-after.log",
+                     "sha256":  "561aa9c11cb0f9afb2d0eecda8444436cac64936d91a58f8a56f02fdcbef6a46",
+                     "bytes":  83846
+                 },
+                 {
+                     "name":  "benefits-after.log",
+                     "sha256":  "886b5ec64e86e465e5be3b84236765d1ca5ef62157be0349b9e955be1c10b11f",
+                     "bytes":  143784
+                 },
+                 {
+                     "name":  "benefits-predicates.log",
+                     "sha256":  "8b9eeab607fe0a5bde967062f766181a77847a2085f05bde1524cad9d84bf7d7",
+                     "bytes":  60266
+                 },
+                 {
+                     "name":  "benefits-final.log",
+                     "sha256":  "a81c6700434caa69cef3e481372925735fdc0d7e769a88928569fd44c3d7092a",
+                     "bytes":  166436
+                 },
+                 {
+                     "name":  "recognition-after.log",
+                     "sha256":  "a351c4f36be07a14c15077985a6e535e310450043f0ad63ad31dddf8bf420769",
+                     "bytes":  224476
+                 },
+                 {
+                     "name":  "recognition-before-corrected.log",
+                     "sha256":  "10abed2696f574c479ae9ed6b94acb4b710113b90757bd79b208d8c747fe7608",
+                     "bytes":  47578
+                 },
+                 {
+                     "name":  "recognition-after-corrected.log",
+                     "sha256":  "55dc31d0ebea6215685f3d1a73a16f86161484aee75e5591890f7be81534a3a9",
+                     "bytes":  64940
+                 },
+                 {
+                     "name":  "full-final.log",
+                     "sha256":  "18366779290558ce2f9bcaf8a6813125ba3cd14df28c8c0c99dbf87e0d3c7900",
+                     "bytes":  794956
+                 }
+             ],
+    "sourceSha256":  [
+                         {
+                             "path":  "src/main/java/com/ping/match/DemoController.java",
+                             "sha256":  "ef5ffde137d3af8115b4085bb57a6e854864054e9b162ea271ec4e6307e1766c"
+                         },
+                         {
+                             "path":  "src/main/java/com/ping/match/MatchRepository.java",
+                             "sha256":  "601830ff4ced88b7a3529030efe6e6de6cf10dd3e8abac7a4c159b3458023014"
+                         },
+                         {
+                             "path":  "src/main/java/com/ping/match/MatchService.java",
+                             "sha256":  "2a75519a587676998268a8c23c93c1b5c3dab515e4218bad5d03eff7c5ce456f"
+                         },
+                         {
+                             "path":  "src/main/java/com/ping/reward/BenefitRepository.java",
+                             "sha256":  "740155d51b3aa7008d2bc034ccfb6fc86529dbd66df4cd6d7c6420b1a572915b"
+                         },
+                         {
+                             "path":  "src/main/java/com/ping/reward/RewardController.java",
+                             "sha256":  "ad03a16b1849377723da5076e5c8399e89f49f0acbc6f2e0454e1722e4828442"
+                         },
+                         {
+                             "path":  "src/main/java/com/ping/reward/RewardService.java",
+                             "sha256":  "d3c869e7a7aeb474bae6b119e856e3b8f655b55b9f4baa0dc2bc4d801bd21a40"
+                         },
+                         {
+                             "path":  "src/test/java/com/ping/performance/BackendReadWorkSupport.java",
+                             "sha256":  "dc2c98579e01c6b62df3b68069d19eebaf4d794869c6fdbc2f72c7037f109ec1"
+                         },
+                         {
+                             "path":  "src/test/java/com/ping/performance/BenefitsReadWorkTests.java",
+                             "sha256":  "4dba1a541950f5806ca97b0b37f91004061a74e461c4645cd4cd6399c8db1b3e"
+                         },
+                         {
+                             "path":  "src/test/java/com/ping/performance/ConnectReadWorkTests.java",
+                             "sha256":  "a95de03c24a401604dc63e33d608457a592dc004eb7f0a2a9897599dfe24cdcc"
+                         },
+                         {
+                             "path":  "src/test/java/com/ping/performance/RecognitionReadWorkTests.java",
+                             "sha256":  "eeb07b5892f8b00c698c507cefb86bd7142b7a4fd87c768c1409eceec9e7082a"
+                         },
+                         {
+                             "path":  "src/test/java/com/ping/performance/SqlProbe.java",
+                             "sha256":  "8ac4d6e7bf1f2961a205a61604746e6bfe7ce45dbbb5861a7966bdaf0ff1908b"
+                         }
+                     ],
+    "limitations":  [
+                        "No Aiven/production database or Render deployment touched. No authenticated production/iPhone benchmark.",
+                        "No EXPLAIN/index proposal or measured physical MySQL network trips. H2 validates behavior and executed work; real MySQL execution plans not benchmarked.",
+                        "No global/session caching or change to authorization/write/Saga policy.",
+                        "GitHub Actions results are separate; consult draft PR for current head. Historical 323 Java/43 Python results are not current evidence."
+                    ]
+}
