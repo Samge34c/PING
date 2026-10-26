@@ -28,6 +28,12 @@ public class MatchService {
         return matches.currentIds(participantId, List.of(MatchStatus.OFFERED, MatchStatus.ACTIVE),
                 org.springframework.data.domain.Pageable.ofSize(1)).stream().findFirst();
     }
+    public record CompletionState(boolean completed, boolean pending) { }
+    /** Both flags from one fresh operation; never retained across requests or used to authorize a debit. */
+    public CompletionState completionState(long participantId) {
+        var totals = matches.completionTotals(participantId);
+        return new CompletionState(totals.getCompleted() > 0, totals.getPending() > 0);
+    }
     public long completedCount() { return matches.countByStatus(MatchStatus.COMPLETED); }
     public List<MatchView> list(long participantId) {
         var ratings = feedback.findByParticipantId(participantId).stream().collect(java.util.stream.Collectors.toMap(Feedback::matchId, f -> f.getRating().name()));

@@ -25,3 +25,11 @@ Reproducción válida antes de producción: 6 pruebas HTTP/JDBC, 5 fallos de ase
 Consulta paginada del identificador OFFERED/ACTIVE más reciente, con el mismo orden/predicado que el historial anterior. Si existe, redirección inmediata; sin encuentro se construyen solo participante, evento, held=false y firma que consume la plantilla. No se cambian templates ni controles de pertenencia del interceptor/destino.
 
 Después: OFFERED 3 SELECT y 1 fila de encuentro; ACTIVE 3/1; inactivo 5 SELECT y 0 filas de encuentros. Antes: 7/49, 8/49 y 7/49 respectivamente. Se evitan historiales y formularios que esa ruta no usa. 22 pruebas dirigidas aprobadas (ConnectReadWorkTests, MatchLiveStateTests, AccountSecurityTests), 0 fallos/errores/omitidas. Registros privados: connect-after.log. El tiempo HTTP de una ejecución local no es una comparación estadística ni latencia de Render.
+
+## Unidad 2 · Beneficios y predicados
+
+El catálogo se filtra en SQL a activos del evento y genéricos; conserva locales primero y orden por ID. Los indicadores de completada/promoción y finalización pendiente se agrupan en una proyección agregada fresca de una sola operación para GET. El POST no reutiliza esa proyección: mantiene su consulta fresca de pendiente después de adquirir el bloqueo del evento, así como débito, requestKey y snapshots existentes.
+
+Mismo escenario SOFA: 9→7 SELECT, 98→1 filas de encuentros consumidas por JDBC y 26→2 beneficios materializados. El predicado pendingCompletion independiente mantiene 1 SELECT, con 49→1 filas de resultado. Una primera versión intermedia usaba dos predicados separados (8 SELECT/2 filas); la medición justificó agruparlos antes de guardar esta unidad. Esto no cuenta filas que MySQL examina internamente ni paquetes de red.
+
+Verificación final de esta unidad: 83 pruebas dirigidas, 0 fallos/errores/omitidas; BenefitsReadWorkTests, EventExperienceTests, RewardTests, EventBenefitTests, VerificationTests, VariableRewardTests y MatchCompletionSagaTests. Ambas orientaciones, datos ajenos y cambios de bandera entre operaciones comprobados. Registros privados benefits-final.log. Primera unidad respaldada en remoto: 4f6d66a.

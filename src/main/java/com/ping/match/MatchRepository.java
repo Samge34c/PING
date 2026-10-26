@@ -20,5 +20,10 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     /** Same newest OFFERED/ACTIVE selection as history, without hydrating it. */
     @Query("select m.id from Match m where (m.first.id=:id or m.second.id=:id) and m.status in :statuses order by m.id desc")
     List<Long> currentIds(@Param("id") long id, @Param("statuses") Collection<MatchStatus> statuses, org.springframework.data.domain.Pageable page);
+    @Query("select count(m)>0 from Match m where (m.first.id=:id or m.second.id=:id) and m.completionPending=true")
+    boolean hasPendingCompletion(@Param("id") long id);
+    interface CompletionTotals { long getCompleted(); long getPending(); }
+    @Query("select coalesce(sum(case when m.status=com.ping.match.MatchStatus.COMPLETED then 1 else 0 end),0) as completed, coalesce(sum(case when m.completionPending=true then 1 else 0 end),0) as pending from Match m where m.first.id=:id or m.second.id=:id")
+    CompletionTotals completionTotals(@Param("id") long id);
     long countByStatus(MatchStatus status);
 }
