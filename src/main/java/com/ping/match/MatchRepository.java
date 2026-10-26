@@ -17,5 +17,8 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     List<Match> findByEventIdOrderByIdDesc(long eventId);
     @Query("select case when m.first.id=:self then m.second.id else m.first.id end from Match m where m.event.id=:event and m.status=com.ping.match.MatchStatus.COMPLETED and(m.first.id=:self or m.second.id=:self)")
     List<Long> successfulPartners(@Param("event")long event,@Param("self")long self);
+    /** Same newest OFFERED/ACTIVE selection as history, without hydrating it. */
+    @Query("select m.id from Match m where (m.first.id=:id or m.second.id=:id) and m.status in :statuses order by m.id desc")
+    List<Long> currentIds(@Param("id") long id, @Param("statuses") Collection<MatchStatus> statuses, org.springframework.data.domain.Pageable page);
     long countByStatus(MatchStatus status);
 }

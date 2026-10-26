@@ -23,6 +23,11 @@ public class MatchService {
         this.encounters=encounters;
         this.matches = matches; this.reservations = reservations; this.feedback = feedback; this.events = events; this.completion = completion;
     }
+    /** Read only the routing decision. Ownership remains checked at the HTTP boundary and destination. */
+    public java.util.Optional<Long> currentId(long participantId) {
+        return matches.currentIds(participantId, List.of(MatchStatus.OFFERED, MatchStatus.ACTIVE),
+                org.springframework.data.domain.Pageable.ofSize(1)).stream().findFirst();
+    }
     public long completedCount() { return matches.countByStatus(MatchStatus.COMPLETED); }
     public List<MatchView> list(long participantId) {
         var ratings = feedback.findByParticipantId(participantId).stream().collect(java.util.stream.Collectors.toMap(Feedback::matchId, f -> f.getRating().name()));

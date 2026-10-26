@@ -68,10 +68,18 @@ public class DemoController {
         return page.startsWith("redirect:") ? page : "demo/connections";
     }
     @GetMapping("/connect") public String connect(HttpSession session, Model model) {
-        String page = dashboard(session, model);
-        if (page.startsWith("redirect:")) return page;
-        MatchView match = (MatchView) model.getAttribute("currentMatch");
-        return match == null ? "demo/connect" : "redirect:/matches/" + match.id();
+        if (session.getAttribute(SELECTED) == null) return "redirect:/join";
+        long id = self(session);
+        var current = matches.currentId(id);
+        if (current.isPresent()) return "redirect:/matches/" + current.get();
+        var participant = participants.get(id);
+        var event = events.get(participant.eventId());
+        model.addAttribute("participant", participant);
+        model.addAttribute("event", event);
+        model.addAttribute("held", false);
+        model.addAttribute("experience", com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName()));
+        model.addAttribute("liveSignature", signature(participant, event.getStatus(), null));
+        return "demo/connect";
     }
     @PostMapping("/me/availability") public String availability(@ModelAttribute AvailabilityForm form, @RequestParam(defaultValue="me") String returnTo, HttpSession session) {
         participants.setAvailability(self(session), form); return "connect".equals(returnTo) ? "redirect:/connect" : "redirect:/me";
