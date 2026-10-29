@@ -29,11 +29,14 @@ import static org.assertj.core.api.Assertions.*;
  * real state/nonce checks, RS256 ID-token signature, client authentication and single-use codes.
  * It does not contact Google and does not prove the Google Cloud configuration or consent screen.
  */
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.url=jdbc:h2:mem:oauth-flow;MODE=MySQL;DB_CLOSE_DELAY=-1","spring.datasource.username=sa","spring.datasource.password=","spring.jpa.hibernate.ddl-auto=validate","ping.oauth.enabled=true","PING_GOOGLE_CLIENT_ID="+OAuthLoginFlowTests.CLIENT,"PING_GOOGLE_CLIENT_SECRET="+OAuthLoginFlowTests.SECRET}) @ActiveProfiles("security-test")
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.url=jdbc:h2:mem:oauth-flow;MODE=MySQL;DB_CLOSE_DELAY=-1","spring.datasource.username=sa","spring.datasource.password=","spring.jpa.hibernate.ddl-auto=validate","ping.oauth.enabled=true","PING_GOOGLE_CLIENT_ID="+OAuthLoginFlowTests.CLIENT,"PING_GOOGLE_CLIENT_SECRET="+OAuthLoginFlowTests.SECRET,"ping.mail.from=ping@example.test","ping.public-base-url=http://127.0.0.1:8090"}) @ActiveProfiles("security-test")
 class OAuthLoginFlowTests{
  static final String CLIENT="ping-local-test-client",SECRET="local-test-not-a-credential",PASSWORD="Prueba local de cuenta2026";
  static final FakeGoogle google=new FakeGoogle();
  @TestConfiguration static class Provider{@Bean @Primary ClientRegistrationRepository fakeGoogle(){return new InMemoryClientRegistrationRepository(CommonOAuth2Provider.GOOGLE.getBuilder("google").clientId(CLIENT).clientSecret(SECRET).scope("openid","email","profile").redirectUri("{baseUrl}/login/oauth2/code/{registrationId}").issuerUri(google.base).tokenUri(google.base+"/token").jwkSetUri(google.base+"/jwks").userInfoUri(google.base+"/userinfo").build());}}
+ @org.springframework.test.context.bean.override.mockito.MockitoBean org.springframework.mail.javamail.JavaMailSender sender;final List<org.springframework.mail.SimpleMailMessage> mail=new java.util.concurrent.CopyOnWriteArrayList<>();
+ @BeforeEach void transport(){mail.clear();org.mockito.Mockito.doAnswer(i->{mail.add(new org.springframework.mail.SimpleMailMessage((org.springframework.mail.SimpleMailMessage)i.getArgument(0)));return null;}).when(sender).send(org.mockito.ArgumentMatchers.any(org.springframework.mail.SimpleMailMessage.class));}
+ String token(){var m=java.util.regex.Pattern.compile("token=([A-Za-z0-9_-]{43})").matcher(mail.getLast().getText());assertThat(m.find()).isTrue();return m.group(1);}
  @Autowired AccountService accounts;@Autowired EventService events;@Autowired InterestService interests;@Autowired JdbcTemplate jdbc;@Autowired PasswordEncoder encoder;@LocalServerPort int port;
  @AfterAll static void stop(){google.server.stop(0);}
  String address(){return "persona-"+UUID.randomUUID()+"@example.test";}
@@ -91,32 +94,63 @@ class OAuthLoginFlowTests{
    var cancelled=b.get("/login/oauth2/code/google?error=access_denied&state="+state);assertThat(location(cancelled)).isEqualTo("/login?oauthError=cancelled&provider=google");
    assertThat(b.get(location(cancelled)).body()).contains("Cancelaste el acceso con Google");
    var replay=b.get("/login/oauth2/code/google?code=x&state="+state);assertThat(location(replay)).isEqualTo("/login?oauthError=expired&provider=google");
-   assertThat(b.get(location(replay)).body()).contains("caducó o se abrió en otra pestaña");
+   assertThat(b.get(location(replay)).body()).contains("El acceso con Google caducó");
    b.get("/oauth2/authorization/google");var forged=b.get("/login/oauth2/code/google?code=x&state=forged");assertThat(location(forged)).isEqualTo("/login?oauthError=expired&provider=google");
    start=b.get("/oauth2/authorization/google");q=query(start.headers().firstValue("Location").orElseThrow());
    var rejected=b.get("/login/oauth2/code/google?code=unknown-code&state="+URLEncoder.encode(q.get("state"),StandardCharsets.UTF_8));assertThat(location(rejected)).isEqualTo("/login?oauthError=provider&provider=google");
    assertThat(b.get("/account").statusCode()).isEqualTo(302);
-   var unverified=google(b,"g-"+UUID.randomUUID(),email,false);assertThat(location(unverified)).isEqualTo("/login?oauthError=unverified&provider=google");
+   var unverified=google(b,"g-"+UUID.randomUUID(),email,false);assertThat(location(unverified)).isEqualTo("/login?sent=true");assertThat(mail.getLast().getSubject()).isEqualTo("Activa tu cuenta de PING");assertThat(b.get("/account").statusCode()).isEqualTo(302);
   }
-  assertThat(accounts.find(email)).isEmpty();
+  assertThat(accounts.user(accounts.find(email).orElseThrow()).verified()).isFalse();
  }
 
- @Test void matchingEmailIsNeverMergedUntilThePersonProvesAccessToTheExistingAccount()throws Exception{
-  String email=address(),subject="g-"+UUID.randomUUID();long existing=local(email);String hash=accounts.user(existing).passwordHash();
+ @Test void matchingEmailIsConfirmedInOneStepThenLinkedAndTheChosenEventContinues()throws Exception{
+  var e=event("Vincular");String email=address(),subject="g-"+UUID.randomUUID();long existing=local(email);String hash=accounts.user(existing).passwordHash();
   try(var b=new TestBrowser(port)){
-   b.get("/login");var collision=google(b,subject,email,true);assertThat(location(collision)).isEqualTo("/login?oauthError=existing&provider=google");
+   b.get("/join?code="+e.getEntryCode());b.get("/login");
+   assertThat(location(google(b,subject,email,true))).isEqualTo("/login/link");
+   var page=b.get("/login/link");assertThat(page.body()).contains("Confirma que es tu cuenta",email,e.getName(),"Vincular Google y continuar","Entrar sin vincular");
+   assertThat(b.get("/login/link").statusCode()).isEqualTo(200);assertThat(b.get("/account").statusCode()).isEqualTo(302);
+   assertThat(count("select count(*) from external_identities where subject=?",subject)).isZero();
+   var wrong=b.post("/login/link",Map.of("password","no es la contraseña","action","link"));assertThat(wrong.statusCode()).isEqualTo(200);assertThat(wrong.body()).contains("La contraseña no es correcta");
    assertThat(count("select count(*) from external_identities where subject=?",subject)).isZero();assertThat(b.get("/account").statusCode()).isEqualTo(302);
-   assertThat(b.get("/login?oauthError=existing&provider=google").body()).contains("Ya tienes una cuenta PING con ese correo","Recupera el acceso");
-   assertThat(location(b.post("/login",Map.of("email",email,"password",PASSWORD)))).isEqualTo("/account?offer=google");
-   assertThat(b.get("/account?offer=google").body()).contains("Vincula Google a esta cuenta","Vincular Google");
-   assertThat(location(b.post("/account/link/google",Map.of()))).isEqualTo("/oauth2/authorization/google");
-   assertThat(location(google(b,subject,email,true))).isEqualTo("/account?linked=google");
-   assertThat(b.get("/account?linked=google").body()).contains("Google quedó vinculado","Google · vinculado");
+   var confirmed=b.post("/login/link",Map.of("password",PASSWORD,"action","link"));assertThat(location(confirmed)).isEqualTo("/join");
+   assertThat(confirmed.headers().allValues("Set-Cookie")).anyMatch(c->c.startsWith("JSESSIONID="));
+   assertThat(b.get("/join").body()).contains(e.getName());
+   // Double tap / repeated POST: nothing new, still signed in.
+   assertThat(location(b.post("/login/link",Map.of("password",PASSWORD,"action","link")))).isEqualTo("/me");
   }
   assertThat(count("select count(*) from external_identities where subject=? and account_id=?",subject,existing)).isOne();
-  assertThat(count("select count(*) from ping_accounts where email=?",email)).isOne();
-  assertThat(accounts.user(existing).passwordHash()).isEqualTo(hash);assertThat(accounts.user(existing).general()).isFalse();
-  try(var later=new TestBrowser(port)){later.get("/login");assertThat(location(google(later,subject,email,true))).isEqualTo("/me");assertThat(later.get("/account").body()).contains(email);}
+  assertThat(count("select count(*) from ping_accounts where email=?",email)).isOne();assertThat(accounts.user(existing).passwordHash()).isEqualTo(hash);assertThat(accounts.user(existing).general()).isFalse();
+  try(var later=new TestBrowser(port)){later.get("/join?code="+e.getEntryCode());assertThat(location(google(later,subject,email,true))).isEqualTo("/join");}
+ }
+
+ @Test void enteringWithoutLinkingSignsInButCreatesNoIdentityAndAnotherAccountCannotConsumeTheIntent()throws Exception{
+  String email=address(),other=address(),subject="g-"+UUID.randomUUID();local(email);local(other);
+  try(var b=new TestBrowser(port)){b.get("/login");google(b,subject,email,true);b.get("/login/link");
+   assertThat(location(b.post("/login/link",Map.of("password",PASSWORD,"action","skip")))).isEqualTo("/join");assertThat(b.get("/account").body()).contains(email);}
+  assertThat(count("select count(*) from external_identities where subject=?",subject)).isZero();
+  try(var b=new TestBrowser(port)){b.get("/login");google(b,subject,email,true);b.get("/login");
+   // A sign-in with a different account in the same session drops the intent instead of linking it there.
+   assertThat(location(b.post("/login",Map.of("email",other,"password",PASSWORD)))).isEqualTo("/join");
+   assertThat(location(b.get("/login/link"))).isEqualTo("/login?oauthError=expired&provider=google");}
+  assertThat(count("select count(*) from external_identities where subject=?",subject)).isZero();
+  assertThat(new AccessContinuation.PendingLink("google",subject,email,1,Instant.now().minusSeconds(1)).expired()).isTrue();
+ }
+
+ @Test void squatterPasswordNeverConfirmsAndTheOwnerRecoversThenLinksInTheSameJourney()throws Exception{
+  var e=event("Recuperar");String email=address(),subject="g-"+UUID.randomUUID(),squatter="Contraseña del intruso2026",owner="Contraseña nueva del dueño2026";
+  jdbc.update("insert into ping_accounts(email,password_hash,email_verified) values(?,?,false)",email,encoder.encode(squatter));long id=accounts.find(email).orElseThrow();
+  try(var b=new TestBrowser(port)){
+   b.get("/join?code="+e.getEntryCode());b.get("/login");assertThat(location(google(b,subject,email,true))).isEqualTo("/login/link");b.get("/login/link");
+   assertThat(b.post("/login/link",Map.of("password",squatter,"action","link")).body()).contains("aún no está activada");assertThat(b.get("/account").statusCode()).isEqualTo(302);
+   assertThat(b.get("/account/recover").body()).contains("value=\""+email+"\"");b.post("/account/recover",Map.of("email",email));assertThat(mail.getLast().getSubject()).isEqualTo("Activa tu cuenta de PING");String t=token();
+   b.get("/account/reset?token="+t);assertThat(location(b.post("/account/reset",Map.of("token",t,"password",owner,"repeat",owner)))).isEqualTo("/login/link");
+   var confirm=b.get("/login/link").body();assertThat(confirm).contains("Vincula Google","Vincular Google y continuar").doesNotContain("name=\"password\"");
+   assertThat(location(b.post("/login/link",Map.of("action","link")))).isEqualTo("/join");assertThat(b.get("/join").body()).contains(e.getName());
+  }
+  assertThat(count("select count(*) from external_identities where subject=? and account_id=?",subject,id)).isOne();assertThat(accounts.user(id).verified()).isTrue();
+  try(var squatterBrowser=new TestBrowser(port)){squatterBrowser.get("/login");assertThat(location(squatterBrowser.post("/login",Map.of("email",email,"password",squatter)))).isEqualTo("/login?error=true");}
  }
 
  @Test void cancelledOrRejectedLinkKeepsTheLocalSessionAndChangesNothing()throws Exception{

@@ -536,3 +536,25 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - No cambian permisos ni vinculaciones.
 
 **Detalle, configuración y reversión:** [GOOGLE_LOGIN.md](GOOGLE_LOGIN.md).
+
+## DEC-061 — Acceso y registro en un recorrido continuo (propuesta)
+
+**Estado: propuesta, pendiente de aceptación.** Solicitud de Samuel el 28 de octubre de 2026 en la sesión de Claude Code. No se atribuye aprobación a Julián. Rama `feature/continuous-access` desde `deploy/render-demo` (`99d757b`); sin despliegue.
+
+**Decisiones:**
+- Una política única de continuación tras cualquier acceso: el evento elegido primero, luego el espacio propio y, sin participación, la entrada por código. Sin destinos externos ni participaciones de otro evento.
+- Correo de Google coincidente con una cuenta sin vincular:
+  - La identidad pendiente se guarda en la sesión del servidor durante 10 minutos.
+  - Un paso pide la contraseña de esa cuenta (activa).
+  - Por POST con CSRF ofrece «Vincular Google y continuar» o «Entrar sin vincular».
+  - Si se recupera el acceso en el mismo navegador, se vuelve a ese paso.
+  - Nunca hay vinculación automática por correo, por GET ni por un acceso con otra cuenta.
+- Registro con correo:
+  - «Revisa tu correo» con reenvío y cambio de dirección.
+  - El enlace, con la contraseña del registro, inicia la sesión en el navegador donde se abre y continúa.
+  - El navegador que solo registró nunca queda autenticado.
+- Correo ya registrado: la misma respuesta pública, sin duplicar ni modificar la cuenta. El dueño recibe un enlace para entrar o elegir contraseña.
+- Login fallido: conserva el correo escrito en la sesión (nunca la contraseña) y ofrece crear la cuenta. Sin consulta pública de existencia de cuentas.
+- Se conservan las protecciones de DEC-060: proveedor y `sub`, CSRF, cambio de sesión, caducidad y uso único de enlaces, `auth_epoch` y roles básicos.
+
+**Sin migraciones.** Detalle en [GOOGLE_LOGIN.md](GOOGLE_LOGIN.md).

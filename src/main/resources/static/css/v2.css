@@ -271,9 +271,9 @@
 .social-note {margin:10px 2px 0!important}
 .social-or {display:flex;align-items:center;gap:12px;margin:20px 0 12px;font-size:13px;font-weight:700;color:var(--ping-muted)}
 .social-or::before,.social-or::after {content:"";flex:1;height:1px;background:var(--ping-border)}
-.account-link-offer {margin:12px 0 20px;padding:14px 16px;border:1px solid var(--ping-border);border-radius:16px;background:var(--ping-surface)}
-.account-link-offer p {margin:0 0 6px}.account-link-offer strong {display:block;font-weight:800}
-.account-link-offer span {display:block;font-size:14px;color:var(--ping-muted);margin-top:2px}
+/* DEC-061 · Confirmar cuenta y «Revisa tu correo»: correo largo sin desbordar y acción secundaria con área de toque completa. */
+.fe-mail {overflow-wrap:anywhere;color:var(--ping-text)}
+.fe-secondary {min-height:48px;font-weight:700}
 .account-linked {margin:8px 0;font-weight:700}
 /* D07-1 · Identidad V2: banda «Así te verán» con avatar grande, alias público y editor V3 debajo. */
 .participant-entry-page main.pe-page.id2-page {max-width:640px}
