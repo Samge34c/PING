@@ -259,6 +259,22 @@
 .fe-private p {margin:0}.fe-private strong {display:block;font-weight:800}
 .fe-private span {display:block;font-size:13px;color:var(--ping-muted);margin-top:2px}
 .fe-account .pe-primary {width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
+/* Acceso con Google: botón según las pautas de marca de Google (tema oscuro #131314/#8E918F/#E3E3E3 o claro #FFF/#747775/#1F1F1F, G a color sin modificar), escalado a 48 px de toque. */
+.gsi-btn {display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:48px;padding:0 16px 0 14px;border:1px solid #8E918F;border-radius:999px;background:#131314;color:#E3E3E3;font:500 16px/20px "Google Sans",Roboto,Arial,sans-serif;letter-spacing:.25px;text-decoration:none;cursor:pointer}
+[data-theme="light"] .gsi-btn {background:#FFFFFF;border-color:#747775;color:#1F1F1F}
+@media (hover:hover) and (pointer:fine) {.gsi-btn:hover {color:#E3E3E3;background:#1F1F21}[data-theme="light"] .gsi-btn:hover {color:#1F1F1F;background:#F7F8F8}}
+.gsi-btn:active {background:#2A2A2C}[data-theme="light"] .gsi-btn:active {background:#ECEDED}
+.gsi-btn:focus-visible {outline:3px solid var(--ping-accent);outline-offset:2px}
+.gsi-btn[aria-disabled="true"] {opacity:.6;pointer-events:none}
+.gsi-logo {width:20px;height:20px;flex:none}
+.social-access {margin:16px 0 0}
+.social-note {margin:10px 2px 0!important}
+.social-or {display:flex;align-items:center;gap:12px;margin:20px 0 12px;font-size:13px;font-weight:700;color:var(--ping-muted)}
+.social-or::before,.social-or::after {content:"";flex:1;height:1px;background:var(--ping-border)}
+.account-link-offer {margin:12px 0 20px;padding:14px 16px;border:1px solid var(--ping-border);border-radius:16px;background:var(--ping-surface)}
+.account-link-offer p {margin:0 0 6px}.account-link-offer strong {display:block;font-weight:800}
+.account-link-offer span {display:block;font-size:14px;color:var(--ping-muted);margin-top:2px}
+.account-linked {margin:8px 0;font-weight:700}
 /* D07-1 · Identidad V2: banda «Así te verán» con avatar grande, alias público y editor V3 debajo. */
 .participant-entry-page main.pe-page.id2-page {max-width:640px}
 .id2-hero {display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;margin:4px -16px 16px;padding:16px;background:var(--ping-hero-start)}

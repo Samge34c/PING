@@ -96,7 +96,8 @@ class LaunchChecks(unittest.TestCase):
                 launch.wait_until(lambda: launch.smtp_probe(config)[0], timeout=8, explanation='test mailbox failed')
                 self.assertTrue(launch.smtp_probe(config)[0])
                 self.assertTrue(launch.smtp_probe(config)[0])
-                self.assertEqual(Path(launch.mailbox_path(config)), Path(temp))
+                # Windows can report the same directory using its 8.3 alias.
+                self.assertTrue(Path(launch.mailbox_path(config)).samefile(temp))
                 self.assertEqual(list(Path(temp).glob('*.eml')), [])  # NOOP/EHLO did not send messages
             finally:
                 launch.terminate_owned(record)
