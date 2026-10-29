@@ -24,7 +24,9 @@ public class AccountService implements UserDetailsService {
  @Override public UserDetails loadUserByUsername(String name){try{return user(find(email(name)).orElseThrow(()->new UsernameNotFoundException("Acceso no válido")));}catch(BusinessRuleException ex){throw new UsernameNotFoundException("Acceso no válido");}}
  private long create(String email,String password,boolean verified){jdbc.update("insert into ping_accounts(email,password_hash,email_verified) values(?,?,?)",email,encoder.encode(password),verified);return find(email).orElseThrow();}
  private void token(long id,String purpose){var u=user(id);token(id,purpose,purpose.equals("RESET")&&!u.verified()?"ACTIVATE":purpose);}
- private void token(long id,String purpose,String label){String value=secret();var u=user(id);jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=? and consumed=false",id,purpose);jdbc.update("insert into account_tokens(token_hash,account_id,purpose,expires_at) values(?,?,?,?)",hash(value),id,purpose,Timestamp.from(Instant.now().plusSeconds(purpose.equals("RESET")?1800:86400)));mail.send(u.email(),label,value);}
+ private void token(long id,String purpose,String label){String value=secret();var u=user(id);jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=? and consumed=false",id,purpose);jdbc.update("insert into account_tokens(token_hash,account_id,purpose,expires_at) values(?,?,?,?)",hash(value),id,purpose,Timestamp.from(Instant.now().plus(lifetime(purpose))));mail.send(u.email(),label,value,lifetime(purpose));}
+ /** Single source for link lifetimes: the stored expiry and the text shown in the e-mail. */
+ public static java.time.Duration lifetime(String purpose){return purpose.equals("RESET")?java.time.Duration.ofMinutes(30):java.time.Duration.ofHours(24);}
  // An unverified account may have been registered by someone else with this address: whoever reaches it from the
  // mailbox later (re-registering, recovering, external sign-in) must choose a new password, which replaces the old one.
  @Transactional(isolation=Isolation.READ_COMMITTED)

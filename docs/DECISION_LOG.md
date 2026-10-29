@@ -558,3 +558,16 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - Se conservan las protecciones de DEC-060: proveedor y `sub`, CSRF, cambio de sesión, caducidad y uso único de enlaces, `auth_epoch` y roles básicos.
 
 **Sin migraciones.** Detalle en [GOOGLE_LOGIN.md](GOOGLE_LOGIN.md).
+
+## DEC-062 — Correos de cuenta con el diseño de PING (propuesta)
+
+**Estado: propuesta, pendiente de aceptación.** Solicitud de Samuel el 28 de octubre de 2026 en la sesión de Claude Code. No se atribuye aprobación a Julián. Rama `feature/transactional-emails` desde `deploy/render-demo` (`477c72a`). Samuel autorizó publicarla e integrarla por PR; eso no equivale a la aceptación de esta decisión. Sin despliegue automático.
+
+**Decisiones:**
+- Los correos de verificación, activación, recuperación y cuenta existente pasan a una sola plantilla HTML diseñada en Figma (página «PING · Correos transaccionales»), con una alternativa en texto que lleva la misma acción y la URL completa.
+- Marca «P en común» como PNG servido por PING. Tokens del tema oscuro, fuentes del sistema y botón HTML real.
+- Brevo recibe `htmlContent` y `textContent`; SMTP recibe `multipart/alternative`. Sin campañas, listas ni seguimiento en los enlaces.
+- Las caducidades se muestran desde la misma configuración que las aplica (`AccountService.lifetime`).
+- Las reglas de autenticación no cambian.
+
+**Detalle:** [CORREOS_TRANSACCIONALES.md](CORREOS_TRANSACCIONALES.md).
