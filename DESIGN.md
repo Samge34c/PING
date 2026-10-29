@@ -37,6 +37,8 @@ Orden móvil: catálogo real por puntos → solicitudes y entrega → promoción
 
 Entrada funcional diseñada desde390 px. Mensaje breve y acción antes del arte; contexto explícito de demo académica SOFA, sin confundirlo con el evento de una sesión. Invitado: entrada demo y explorar eventos. Con sesión: Mi Ping y resolución real de su evento mediante `/me/event`; selección demo, exploración y preparación siguen accesibles.
 
+DEC-063 (propuesta, 29 oct 2026): Inicio usa la ilustración propia «Encuentro editorial» (HOME_ART_PROVENANCE.json); la del Hub no cambia. Se retira «Explorar eventos» (ruta solo de organización). La barra de visitante Inicio · Unirme · Entrar continúa en código, acceso y registro y se oculta mientras se escribe.
+
 Escena social del Hub reutilizada sin alterar el archivo (ver HUB_ART_PROVENANCE.json), recorte compacto que conserva personas/manos, tamaño reservado y sin carga diferida. Secuencia enlazada con iconos locales e intereses → aceptación bilateral → encuentro/actividad/confirmación; sin tarjetas repetidas ni instrucciones duplicadas. Desktop amplía el arte al lateral del flujo móvil. Variables existentes, Manrope y Festival Social en ambos temas; sin navegación compartida nueva ni dependencias.
 
 ## Continuidad del recorrido móvil — DEC-036

@@ -10,7 +10,7 @@
     <a class="fe-login" th:if="${session.pingDemoParticipantId == null}" th:href="@{/login}">Ya tengo cuenta · Entrar</a>
     <a class="fe-login" th:if="${session.pingDemoParticipantId != null}" th:href="@{/me/event}">Ir a mi evento</a>
   </div>
-  <figure class="fe-art"><img th:src="@{/img/sofa/convencion-social.webp}" width="1536" height="1024" fetchpriority="high" decoding="async" alt="Ilustración de dos personas encontrándose entre puestos de distintas aficiones en una convención."></figure>
+  <figure class="fe-art"><img th:src="@{/img/sofa/encuentro-editorial-1152.webp}" th:srcset="@{/img/sofa/encuentro-editorial-768.webp} + ' 768w, ' + @{/img/sofa/encuentro-editorial-1152.webp} + ' 1152w, ' + @{/img/sofa/encuentro-editorial-1400.webp} + ' 1400w'" sizes="(min-width: 768px) 566px, calc(100vw - 32px)" width="1400" height="940" fetchpriority="high" decoding="async" alt="Ilustración de dos personas que se ríen al descubrir un gusto en común en un evento con música, juegos de mesa e ilustración."></figure>
 </div></section>
 <section class="fe-how" aria-labelledby="hm-how-title"><div class="fe-wrap">
   <h2 id="hm-how-title">Así funciona</h2>
@@ -22,7 +22,7 @@
   </ol>
   <div class="fe-more">
     <p th:if="${demoEnabled == true}"><a th:href="@{/demo}">Probar la demo <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a><span>Explora la demo académica con participantes de prueba.</span></p>
-    <p class="fe-links"><a th:href="@{/events}">Explorar eventos</a><a th:href="@{/login(next='/organizer')}">Organizo un evento</a></p>
+    <p class="fe-links"><a th:href="@{/login(next='/organizer')}">Organizo un evento</a></p>
   </div>
   <p class="fe-note">Proyecto académico. La demo SOFA no tiene vínculo oficial con el evento.</p>
 </div></section>

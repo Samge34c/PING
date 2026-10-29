@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-29T21:35:09.172Z",
+  "environment": "Java21 / H2 memory / Chrome headless; no Render/Aiven/iPhone",
+  "status": "failed",
+  "checks": [
+    "Pista vacía nativa visible y sugerencias omitidas",
+    "POST nativo guarda pista sin JavaScript",
+    "Vista /me 390 dark",
+    "Respuesta400 real mantiene borrador",
+    "Vista /me/agenda 390 dark",
+    "Agenda indica Ahora, Terminada y Próxima con texto",
+    "Tarjetas de agenda adaptan altura sin recorte",
+    "Vista /me/agenda 360 light",
+    "Vista /me/agenda 390 dark",
+    "Agenda abre el punto existente autorizado"
+  ],
+  "screens": [
+    {
+      "name": "agenda-estados-390",
+      "path": "/me/agenda",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    },
+    {
+      "name": "agenda-estados-360",
+      "path": "/me/agenda",
+      "width": 360,
+      "scrollWidth": 360,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    }
+  ]
+}

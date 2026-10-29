@@ -18,12 +18,14 @@ public class RecognitionHintController {
     @PostMapping("/me/recognition-hint") public String save(@Valid @ModelAttribute("recognitionHintForm") RecognitionHintForm form,
             BindingResult errors, HttpSession session, Model model, HttpServletResponse response, RedirectAttributes flash) {
         long self = DemoSession.participantId(session); // Never bind an owner from client-supplied participantId.
+        model.addAttribute("persistedRecognitionHint", hints.ownForm(self).getHint());
         response.setHeader("Cache-Control", "no-store, private");
         if (errors.hasErrors()) { response.setStatus(400); model.addAttribute("hintError", "Revisa la pista. No se guardaron cambios."); return "recognition/edit"; }
         try { hints.save(self, form); }
         catch (BusinessRuleException error) {
             response.setStatus(409); model.addAttribute("hintError", error.getMessage());
-            form.setVersion(hints.ownForm(self).getVersion()); return "recognition/edit";
+            var fresh = hints.ownForm(self); form.setVersion(fresh.getVersion());
+            model.addAttribute("persistedRecognitionHint", fresh.getHint()); return "recognition/edit";
         }
         flash.addFlashAttribute("message", "Cómo reconocerme guardado. Solo lo verá tu conexión mientras el encuentro esté activo.");
         return "redirect:/me";

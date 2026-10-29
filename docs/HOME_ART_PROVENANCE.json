@@ -1,18 +1,30 @@
 {
-  "asset": "src/main/resources/static/img/sofa/convencion-social.webp",
-  "reused_from": "docs/HUB_ART_PROVENANCE.json",
-  "sha256": "1cca94859b1c16e6f421443dfddfc1ddbec6b7880757ccdc00929f7319f04146",
-  "served_bytes": 319502,
-  "dimensions": [
-    1536,
-    1024
-  ],
-  "type": "Existing AI-generated original convention illustration from the Hub prototype",
-  "generated_in_this_task": false,
-  "modified_in_this_task": false,
-  "purpose": "Illustrative human encounter, not real attendees or live activity",
+  "asset": "src/main/resources/static/img/sofa/encuentro-editorial-{768,1152,1400}.webp",
+  "decision": "DEC-063 (propuesta, integrada localmente sin commit)",
+  "type": "AI-generated original illustration",
+  "provenance": "docs/design-proposals/entrada-editorial/PROCEDENCIA.json (herramienta, resumen del prompt, fuente, recorte, SHA-256 y descarte)",
+  "served": {
+    "768": 100448,
+    "1152": 160342,
+    "1400": 192982
+  },
+  "dimensions": {
+    "768": [
+      768,
+      516
+    ],
+    "1152": [
+      1152,
+      773
+    ],
+    "1400": [
+      1400,
+      940
+    ]
+  },
+  "delivery": "srcset con huella de contenido, sizes \"(min-width: 768px) 566px, calc(100vw - 32px)\", dimensiones declaradas, fetchpriority high, sin carga diferida",
+  "crop": "Móvil 358/220 con object-position 50% 18%; escritorio 1,35:1 con 50% 30%; caras y gesto protegidos",
   "official_SOFA_art": false,
-  "crop": "CSS object-fit:cover; mobile aspect1.7, desktop aspect1.35; preserves both people and handshake",
-  "delivery": "Existing optimized local WebP, explicit dimensions, fetchpriority high, no lazy loading",
-  "other_resources": "Existing local Manrope/OFL and img/icons.svg; no new tools or dependencies"
+  "purpose": "Encuentro ilustrativo entre dos personas adultas; no documenta asistentes ni actividad real",
+  "previous_asset": "src/main/resources/static/img/sofa/convencion-social.webp (sha256 1cca9485…, 319502 B) sigue en el repositorio para el Hub; sus variantes 768/1152 de rendimiento ya no las usa Inicio"
 }

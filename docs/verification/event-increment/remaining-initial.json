@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-29T21:28:05.286Z",
+  "environment": "Java21 / H2 memory / Chrome headless; no Render/Aiven/iPhone",
+  "status": "failed",
+  "checks": [
+    "Vista /me 390 dark",
+    "Pista conserva relleno V2 y Editar no tapa ayuda",
+    "Ayuda se abre como hoja modal voluntaria",
+    "Foco entra en la ayuda",
+    "Escape cierra y devuelve foco al enlace",
+    "Vista /join/event 360 light",
+    "Ayuda de código no añade paso obligatorio",
+    "Vista /me/experience 390 dark"
+  ],
+  "screens": [
+    {
+      "name": "pista-final-guardada-390",
+      "path": "/me",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi Ping · Ping"
+    },
+    {
+      "name": "ayuda-codigo-360",
+      "path": "/join/event",
+      "width": 360,
+      "scrollWidth": 360,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Entra a tu evento · Ping"
+    },
+    {
+      "name": "tarjeta-final-390",
+      "path": "/me/experience",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    }
+  ]
+}

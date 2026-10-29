@@ -13,7 +13,6 @@ import com.ping.web.*;
 public class DemoController {
     private static final String SELECTED = "pingDemoParticipantId";
     private final com.ping.moderation.ModerationService moderation;
-    private final com.ping.experience.DemoRecognitionHints recognition;
     private final RecognitionHintService hints;
     private final ParticipantService participants;
     private final MatchingService matching;
@@ -23,8 +22,8 @@ public class DemoController {
     private final com.ping.verification.CredentialService credentials;
     private final com.ping.auth.AuthSupport auth;
     private final org.springframework.jdbc.core.JdbcTemplate jdbc;
-    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, com.ping.experience.DemoRecognitionHints recognition, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc,com.ping.verification.CredentialService credentials, MatchLiveState liveState) { this.liveState=liveState;this.credentials=credentials;this.auth=auth;this.jdbc=jdbc;
-        this.moderation = moderation; this.recognition = recognition; this.hints = hints;
+    public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc,com.ping.verification.CredentialService credentials, MatchLiveState liveState) { this.liveState=liveState;this.credentials=credentials;this.auth=auth;this.jdbc=jdbc;
+        this.moderation = moderation; this.hints = hints;
         this.participants = participants; this.matching = matching; this.matches = matches; this.events = events;
     }
     @GetMapping("/demo") public String select(@RequestParam(required = false) Long participantId, Model model) { model.addAttribute("selectedParticipantId", participantId); model.addAttribute("participants", participants.list().stream().filter(p->auth.legacyFixture()||jdbc.queryForObject("select count(*) from demo_scenarios d where d.event_id=?",Integer.class,p.eventId())>0&&jdbc.queryForObject("select count(*) from account_participations where participant_id=?",Integer.class,p.id())==0).toList()); return "demo/select"; }
@@ -50,15 +49,15 @@ public class DemoController {
     @GetMapping("/me") public String dashboard(HttpSession session, Model model) {
         if (session.getAttribute(SELECTED) == null) return "redirect:/join";
         long id = self(session); var history = matches.list(id);
-        model.addAttribute("recognitionHintForm", hints.ownForm(id));
+        var ownHint = hints.ownForm(id); model.addAttribute("recognitionHintForm", ownHint); model.addAttribute("persistedRecognitionHint", ownHint.getHint());
         var participant = participants.get(id); model.addAttribute("participant", participant); model.addAttribute("matches", history);
-        model.addAttribute("event", events.get(participant.eventId()));
+        var event = events.get(participant.eventId()); model.addAttribute("event", event);
         model.addAttribute("currentMatch", current(history));
         var experience = com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName());
         model.addAttribute("experience", experience);
         if (experience != null) model.addAttribute("badges", com.ping.experience.EventExperienceCatalog.badges(history));
         model.addAttribute("lastCompletion", !history.isEmpty() && history.getFirst().status() == MatchStatus.COMPLETED ? history.getFirst() : null);
-        model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(history)));
+        model.addAttribute("liveSignature", signature(participant, event.getStatus(), current(history)));
         model.addAttribute("held", history.stream().anyMatch(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE));
         model.addAttribute("completedCount", history.stream().filter(m -> m.status() == MatchStatus.COMPLETED).count()); return "demo/dashboard";
     }
@@ -68,10 +67,18 @@ public class DemoController {
         return page.startsWith("redirect:") ? page : "demo/connections";
     }
     @GetMapping("/connect") public String connect(HttpSession session, Model model) {
-        String page = dashboard(session, model);
-        if (page.startsWith("redirect:")) return page;
-        MatchView match = (MatchView) model.getAttribute("currentMatch");
-        return match == null ? "demo/connect" : "redirect:/matches/" + match.id();
+        if (session.getAttribute(SELECTED) == null) return "redirect:/join";
+        long id = self(session);
+        var current = matches.currentId(id);
+        if (current.isPresent()) return "redirect:/matches/" + current.get();
+        var participant = participants.get(id);
+        var event = events.get(participant.eventId());
+        model.addAttribute("participant", participant);
+        model.addAttribute("event", event);
+        model.addAttribute("held", false);
+        model.addAttribute("experience", com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName()));
+        model.addAttribute("liveSignature", signature(participant, event.getStatus(), null));
+        return "demo/connect";
     }
     @PostMapping("/me/availability") public String availability(@ModelAttribute AvailabilityForm form, @RequestParam(defaultValue="me") String returnTo, HttpSession session) {
         participants.setAvailability(self(session), form); return "connect".equals(returnTo) ? "redirect:/connect" : "redirect:/me";
@@ -82,24 +89,29 @@ public class DemoController {
         catch (BusinessRuleException error) { flash.addFlashAttribute("message", error.getMessage()); flash.addFlashAttribute("messageTone", "notice"); return "connect".equals(returnTo) ? "redirect:/connect" : "redirect:/me"; }
     }
     @GetMapping("/matches/{id}") public String match(@PathVariable long id, HttpSession session, Model model) {
-        long selected = self(session); var participant = participants.get(selected); model.addAttribute("participant", participant); model.addAttribute("event", events.get(participant.eventId()));
+        long selected = self(session); var participant = participants.get(selected); model.addAttribute("participant", participant); var event = events.get(participant.eventId()); model.addAttribute("event", event);
         model.addAttribute("moderation", moderation.status(id, selected));
         model.addAttribute("reportReasons", com.ping.moderation.ReportReason.values());
         var match = matches.get(id, selected); model.addAttribute("match", match);
         model.addAttribute("credentialRequestKey",java.util.UUID.randomUUID().toString());
         var personalCode=com.ping.verification.CredentialSession.get(session,"ENCOUNTER",id,selected);
         model.addAttribute("myCredential",personalCode!=null&&credentials.valid(personalCode)&&!match.otherVerified()?personalCode:null);
-        model.addAttribute("recognitionHintForm", hints.ownForm(selected));
-        if (match.status() == MatchStatus.ACTIVE) { var authorized = hints.other(id, selected); if (authorized != null) model.addAttribute("recognitionRevision", authorized.revision()); }
+        var ownHint = hints.ownForm(selected); model.addAttribute("recognitionHintForm", ownHint); model.addAttribute("persistedRecognitionHint", ownHint.getHint());
+        // Text and revision come from the same fresh, ownership/state-checked read.
+        var authorizedHint = hints.other(id, selected);
+        if (match.status() == MatchStatus.ACTIVE && authorizedHint != null)
+            model.addAttribute("recognitionRevision", authorizedHint.revision());
         var experience = com.ping.experience.EventExperienceCatalog.forEvent(participant.eventName());
         model.addAttribute("experience", experience);
-        model.addAttribute("recognitionHint", recognition.forMatch(participant.eventId(), selected, match));
+        model.addAttribute("recognitionHint", authorizedHint == null ? null : authorizedHint.text());
         if (experience != null && match.status() == MatchStatus.COMPLETED) {
             var history = matches.list(selected);
             model.addAttribute("badges", com.ping.experience.EventExperienceCatalog.badges(history));
             model.addAttribute("promoUnlocked", com.ping.experience.EventExperienceCatalog.promoUnlocked(history));
         }
-        if (match.status() == MatchStatus.OFFERED || match.status() == MatchStatus.ACTIVE) model.addAttribute("liveSignature", signature(participant, events.get(participant.eventId()).getStatus(), current(matches.list(selected)))); return "demo/match";
+        // A participant has at most one OFFERED/ACTIVE match. Its view is already
+        // authorized and loaded above; a live signature does not need all history.
+        if (match.status() == MatchStatus.OFFERED || match.status() == MatchStatus.ACTIVE) model.addAttribute("liveSignature", signature(participant, event.getStatus(), match)); return "demo/match";
     }
     @PostMapping("/matches/{id}/accept") public String accept(@PathVariable long id, HttpSession session, RedirectAttributes flash) {
         try { matches.accept(id, self(session)); }

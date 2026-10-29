@@ -1,5 +1,15 @@
 # Registro de decisiones — Ping
 
+## Incremento de experiencia del evento · autorización de Samuel, 29 octubre 2026
+
+Solicitud explícita posterior a PR #58 sobre la entrega PR #61: pista propia visible con edición/cancelación segura; resumen real de preparación; ayuda/contacto oficial opcionales; tarjeta propia voluntaria; agenda general opcional por evento; reto voluntario fijo de dos conexiones COMPLETED, sin nuevos puntos. Autorizada persistencia aditiva compatible, mismo stack y worktree, sin publicación. No se atribuye aprobación a Julián. Scope/Issue preparado, reservas y evidencia en [INCREMENTO_EVENTO.md](handoffs/INCREMENTO_EVENTO.md). Sustituye para estas funciones las exclusiones históricas que las dejaban fuera; mantiene privacidad, autenticación/roles, matching, Saga, saldos y snapshots anteriores. Los campos nuevos no bloquean datos antiguos.
+
+## Cierre técnico 29 octubre 2026 · Issue #57 / PR #58 sobre PR #61
+
+Samuel autoriza integrar las optimizaciones existentes sobre `deploy/render-demo@3a528cab9312cdb314ac40252bd7ba3782afd0b0`, conservando Google, acceso continuo, correos HTML y todas las funciones. Rama local propia `perf/closure-current`; fuente de rendimiento `PR #58@b54aaae494202c7a4bb3e930ad5efc2a22f414a1`. Sin commit, push, merge, despliegue, Aiven ni credenciales de producción. Sin aprobación atribuida a Julián ni nueva decisión de producto. Alcance y evidencia: [CIERRE_RENDIMIENTO.md](handoffs/CIERRE_RENDIMIENTO.md).
+
+**Desambiguación histórica:** DEC-060/061 designan asuntos distintos en las dos ramas. Se conservan sus textos: rendimiento = PR #53 (`2346585`) y PR #58 (`b54aaae`); Google = PR #59 (merge `99d757b`); acceso continuo = PR #60 (merge `477c72a`); correos = PR #61 (merge `3a528ca`). Citar siempre PR/SHA, sin sobrescribir decisiones ni heredar autorizaciones de publicación anteriores.
+
 ## DEC-049 — Evolución funcional Work, R01–R12
 
 Solicitud explícita de Samuel,19 octubre2026 Bogotá, ZIP PING_WORK_CODEX_ENTREGA leído íntegramente. Base remota comprobada8c94cd7/PR42, árbol limpio; rama propia feature/work-functional-evolution. No se atribuye aprobación a Julián. La autorización actual sustituye las exclusiones temporales de cuentas/permisos, QR de encuentro y llegada opcional en nuevos ACTIVE; no cambia políticas/snapshots de activos anteriores ni Saga iniciadas. El alcance concreto queda en docs/work-handoff/ESPECIFICACION.md y PROMPT_CODEX.md.
@@ -571,3 +581,15 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - Las reglas de autenticación no cambian.
 
 **Detalle:** [CORREOS_TRANSACCIONALES.md](CORREOS_TRANSACCIONALES.md).
+
+## DEC-063 — Entrada editorial y continuidad pública móvil (propuesta)
+
+**Estado: propuesta, integrada localmente sin commit en `perf/closure-current`; pendiente de aceptación.** Solicitud explícita de Samuel el 29 de octubre de 2026 en la sesión de Claude Code (pulido visual de entrega) y autorización suya, ese mismo día, de integrarla localmente sobre el cierre de rendimiento. No se atribuye aprobación a Julián. Sin commit, push, merge ni despliegue.
+
+**Decisiones (solo presentación):**
+- Arte de Inicio «Encuentro editorial»: ilustración original generada, con variantes 768/1152/1400 servidas por `srcset` con huella. Procedencia: `docs/design-proposals/entrada-editorial/PROCEDENCIA.json`. La ilustración anterior se conserva para el Hub.
+- Se retira «Explorar eventos» de Inicio: llevaba a `/events`, restringida a organización, y el visitante acababa en el login. La barra lateral muestra «Unirme a un evento» al visitante y «Eventos» solo a quien participa u organiza. No se crea un catálogo público.
+- Cabecera amarilla de Inicio: nota, punto y miga en `#0D0B12` (antes 1,56:1).
+- La barra de visitante (Inicio · Unirme · Entrar) continúa en `/join/event`, `/login` y `/register`, como en el diseño seleccionado (Figma `133:1572` y variantes del componente). Se oculta sin cambiar su altura mientras un campo de texto tiene foco. Los pasos 2–3 del alta e Intereses conservan su flujo sin otra barra fija.
+
+**Sin cambios** en autenticación, rutas, permisos, reglas, puntos, canjes, Saga, base de datos, proveedores, planos, Hub ni ACTIVE. Figma: página `156:317`. Cierre: `docs/handoffs/CIERRE_RENDIMIENTO.md`, sección «Integración visual DEC-063».

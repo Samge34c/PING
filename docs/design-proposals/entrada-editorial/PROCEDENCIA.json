@@ -1,0 +1,31 @@
+{
+  "asset": "Arte de entrada «Encuentro editorial» (propuesta DEC-063, no integrada)",
+  "type": "AI-generated original illustration",
+  "tool": "Tandem image_generate (Codex, gpt-image-2), 29 octubre 2026",
+  "reference_images": 0,
+  "official_SOFA_art": false,
+  "purpose": "Ilustración de un encuentro presencial entre dos personas adultas; no documenta asistentes, cifras ni actividad real",
+  "prompt_summary": "Ilustración editorial contemporánea (no anime, no foto de stock): dos adultos de unos veinte años se encuentran en un evento con varias aficiones; ella señala el pin de un dado en la bolsa de él, que lleva un juego de mesa; al fondo, escenario con guitarrista, mesa de juego y puesto de ilustración. Paleta #0D0B12, #2A1638, #8853DC, #C2A6FF, #F8E836, #F7F4EF. Sin texto, logotipos, cifras, móviles con interfaz, universidad ni planos; márgenes laterales tranquilos para recortes 1,35:1 y 1,63:1.",
+  "selected": {
+    "source": "fuentes/encuentro-editorial-a-94e546.png",
+    "source_dimensions": [1672, 941],
+    "source_bytes": 2517402,
+    "source_sha256": "539adbb000358ef02b279533b8a933e0f8ba111fee3068a4cb5e37f1a7056e72",
+    "defect_corrected": "Franjas negras laterales en la salida del generador (contenido útil x 137–1542); se recorta a x 140–1540, y 0–940. Sin retoque de contenido.",
+    "visual_review": "Inspeccionadas a resolución real caras, ojos, manos (gesto de señalar, mano en el asa, mano bajada) y accesorios: correctos. Sin texto legible. El pin del dado es un icono, no texto."
+  },
+  "variants": [
+    {"file": "variantes/encuentro-editorial-768.webp", "dimensions": [768, 516], "webp_quality": 87, "bytes": 100448, "sha256": "65ac2813edd43b06df47f2295414b3fcb5d0586db01b4ee3a8bd689057e6773f"},
+    {"file": "variantes/encuentro-editorial-1152.webp", "dimensions": [1152, 773], "webp_quality": 84, "bytes": 160342, "sha256": "c2a9eb3f65b0769c9934a5a49ce4e2ae2c060a0d4f700d62b7cfe9ab8aa72a26"},
+    {"file": "variantes/encuentro-editorial-1400.webp", "dimensions": [1400, 940], "webp_quality": 82, "bytes": 192982, "sha256": "f8f27c83f2354f218bd1e78ad7d508bb92e5b61e9d8bb8a25798296144c27b6b"}
+  ],
+  "variant_tool": "tools/variantes.py (Pillow 12.3 con WebP; no es dependencia de la app). La fuente útil mide 1406 px: no hay variante mayor que 1400 ni se amplía.",
+  "crops": "Móvil 358×220 (aspect 358/220, object-position 50% 18%); escritorio 1,35:1 (object-position 50% 30%). Caras y gesto dentro de ambos recortes, comprobado en capturas 390/360/300/1280.",
+  "discarded": {
+    "source": "fuentes/encuentro-editorial-b-326434.png",
+    "source_sha256": "e415218a0ab92a014b4a52d2088eb3bcbd4b1799ad9d43d6f7507560627f2b3b",
+    "reason": "Buena anatomía, pero bebidas en la mesa (encaje dudoso para eventos universitarios) y un rastro de letras en el telón del escenario."
+  },
+  "alternative_kept": "src/main/resources/static/img/sofa/convencion-social.webp sin cambios (HOME_ART_PROVENANCE.json / HUB_ART_PROVENANCE.json); el Hub la sigue usando y EventExperienceTests la comprueba.",
+  "figma": "https://www.figma.com/design/WCrjKj5eGOZQ8wUaxsEqfc/PING?node-id=156-317 (subida como JPEG 1400×940 porque Figma no decodificó el WebP)"
+}

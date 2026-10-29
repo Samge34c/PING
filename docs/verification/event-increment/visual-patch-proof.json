@@ -1,0 +1,24 @@
+{
+  "base": {
+    "patchSha256": "aadf34f6fc1ada0b3c83cd5660740da36fbb46c0008d8c55b6f0fbbe11c47dfe",
+    "gitApplyCheck": "passed",
+    "gitApply": "passed",
+    "currentVisualProjectionEqual": true,
+    "excludedIncrement": [
+      "event-extras CSS link",
+      "optional join help details and script"
+    ],
+    "sourceBase": "3a528ca"
+  },
+  "sobre-cierre": {
+    "patchSha256": "6a8ddd4785b9a2cddd8ed6a35d92ae0f1f090ad3082f820b9e24541986d30933",
+    "gitApplyCheck": "passed",
+    "gitApply": "passed",
+    "currentVisualProjectionEqual": true,
+    "excludedIncrement": [
+      "event-extras CSS link",
+      "optional join help details and script"
+    ],
+    "sourceBase": "3a528ca with b54aaae home/layout"
+  }
+}

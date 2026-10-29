@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-29T21:45:09.400Z",
+  "environment": "Java21 / H2 memory / Chrome headless; no Render/Aiven/iPhone",
+  "status": "passed",
+  "checks": [
+    "Luna de prueba entra por cuenta, evento, alias, avatar e intereses",
+    "Sol de prueba entra por cuenta, evento, alias, avatar e intereses",
+    "Vista /me 390 dark",
+    "Ayuda abre desde título visible y foco inicial accesible",
+    "Escape cierra y devuelve foco después del ajuste",
+    "Vista /me 390 dark",
+    "Tarjeta final conserva palabras completas del nombre",
+    "Vista /me/experience 390 dark",
+    "Descarga final real PNG1080x1350",
+    "Vista /events/1/preparation 390 dark",
+    "Vista /events/1/preparation 1280 light",
+    "Vista /me 360 light",
+    "Ayuda estrecha sin desbordar",
+    "Ajustes finales sin excepciones JavaScript"
+  ],
+  "screens": [
+    {
+      "name": "tarjeta-final-390",
+      "path": "/me/experience",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    },
+    {
+      "name": "preparacion-final-390",
+      "path": "/events/1/preparation",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    },
+    {
+      "name": "preparacion-final-1280",
+      "path": "/events/1/preparation",
+      "width": 1280,
+      "scrollWidth": 1265,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    }
+  ],
+  "pngBytes": 124856,
+  "help": {
+    "top": 0,
+    "titleVisible": true,
+    "focus": true
+  }
+}

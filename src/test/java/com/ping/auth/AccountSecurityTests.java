@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.assertj.core.api.Assertions.*;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.url=jdbc:h2:mem:account-security;MODE=MySQL;DB_CLOSE_DELAY=-1","spring.datasource.username=sa","spring.datasource.password=","spring.jpa.hibernate.ddl-auto=validate","ping.mail.from=ping@example.test","ping.public-base-url=http://127.0.0.1:8090"}) @ActiveProfiles("security-test")
 class AccountSecurityTests {
- @Autowired AccountService accounts;@Autowired EventService events;@Autowired ParticipantService participants;@Autowired JdbcTemplate jdbc;@Autowired AuthThrottle throttle;@Autowired com.ping.interest.InterestService interests;@LocalServerPort int port;@MockitoBean JavaMailSender sender;
+ @org.springframework.test.context.bean.override.mockito.MockitoSpyBean AccountService accounts;@Autowired EventService events;@Autowired ParticipantService participants;@Autowired JdbcTemplate jdbc;@Autowired AuthThrottle throttle;@Autowired com.ping.interest.InterestService interests;@LocalServerPort int port;@MockitoBean JavaMailSender sender;
  final List<com.ping.support.MailCapture.Mail> mail=new CopyOnWriteArrayList<>();static final String PASSWORD="Prueba local de cuenta2026";
  @BeforeEach void transport(){mail.clear();com.ping.support.MailCapture.capture(sender,mail);}
  String address(){return "persona-"+UUID.randomUUID()+"@example.test";}
@@ -173,5 +173,36 @@ class AccountSecurityTests {
   assertThat(sent.to()).isEqualTo(email);assertThat(sent.getSubject()).isEqualTo("Verifica tu correo de PING");
   assertThat(sent.text()).contains("Verificar mi correo:\n"+url,"24 horas");assertThat(sent.html()).contains("href=\""+url+"\"",">Verificar mi correo</a>","http://127.0.0.1:8090/img/email/ping-logo.png");
   try(var b=new TestBrowser(port)){var logo=b.bytes("/img/email/ping-logo.png");assertThat(logo.statusCode()).isEqualTo(200);assertThat(logo.headers().firstValue("Content-Type").orElse("")).startsWith("image/png");assertThat(logo.body().length).isGreaterThan(1000);}
+ }
+ @Test void authenticatedPagesRefreshTheAccountOnlyOncePerRequest()throws Exception{
+  String email=address();long a=account(email),e=event("Lectura acotada");
+  var p=new ParticipantForm();p.setAlias("Persona de ensayo");p.setEventId(e);accounts.bind(a,participants.create(p).id(),e);
+  try(var b=new TestBrowser(port)){
+   login(b,email);
+   var checks=new org.assertj.core.api.SoftAssertions();
+   for(String path:List.of("/","/account","/me/state")){
+    clearInvocations(accounts);
+    assertThat(b.get(path).statusCode()).isEqualTo(200);
+    long reads=mockingDetails(accounts).getInvocations().stream().filter(i->i.getMethod().getName().equals("user")).count();
+    System.out.println("PERF account_reads "+path+"="+reads);
+    checks.assertThat(reads).as("fresh account reads for %s",path).isEqualTo(1);
+   }
+   checks.assertAll();
+  }
+ }
+ @Test void publicClasspathAssetsDoNotReadAccountsEvenWithASessionCookie()throws Exception{
+  String email=address();account(email);
+  try(var b=new TestBrowser(port)){
+   login(b,email);
+   var checks=new org.assertj.core.api.SoftAssertions();
+   for(String path:List.of("/css/brand.css","/js/ui.js","/img/favicon.svg")){
+    clearInvocations(accounts);
+    assertThat(b.get(path).statusCode()).isEqualTo(200);
+    long reads=mockingDetails(accounts).getInvocations().stream().filter(i->i.getMethod().getName().equals("user")).count();
+    System.out.println("PERF account_reads "+path+"="+reads);
+    checks.assertThat(reads).as("account reads for public asset %s",path).isZero();
+   }
+   checks.assertAll();
+  }
  }
 }

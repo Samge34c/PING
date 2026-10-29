@@ -1,0 +1,461 @@
+{
+  "verifiedAt": "2026-10-29T21:51:55.211763+00:00",
+  "base": "3a528cab9312cdb314ac40252bd7ba3782afd0b0",
+  "branch": "perf/closure-current",
+  "uncommitted": true,
+  "command": ".\\mvnw.cmd --batch-mode --no-transfer-progress -Dspring.profiles.default=test -DargLine=-javaagent:C:/Users/river/.m2/repository/org/mockito/mockito-core/5.23.0/mockito-core-5.23.0.jar clean verify",
+  "exitCode": 0,
+  "testTotals": {
+    "tests": 369,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "suites": [
+    {
+      "name": "com.ping.auth.AccountMailTests",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.auth.AccountSecurityTests",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.auth.AuthSupportTests",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.auth.HttpApiMailTests",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.auth.OAuthCancellationTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.auth.OAuthIncompleteConfigTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.auth.OAuthLoginFlowTests",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.demo.DemoImprovementTests",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.demo.EventExperienceTests",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.demo.RecognitionHintTests",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.entry.EventEntryFlowTests",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.entry.ParticipantEntryTests",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.event.EncounterMigrationTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.event.EventEntryMigrationTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.event.EventTests",
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.event.WorkEditorTests",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.eventextras.EventExtrasTests",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.floorplan.FloorplanMigrationTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.floorplan.FloorplanTests",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.floorplan.FloorplanViewTests",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.floorplan.FloorplanWebTests",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.interest.InterestCategoryAdminTests",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.interest.InterestCategoryMigrationTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.interest.InterestCategoryTests",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.interest.InterestTests",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.match.EncounterConfigurationTests",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.match.MatchCompletionSagaTests",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.match.MatchLiveStateTests",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.match.MatchTests",
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.match.SofaDemoTests",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.match.StructuredEncounterTests",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.match.VariableRewardTests",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.moderation.FinalMvpTests",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.participant.AvatarV3Tests",
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.participant.ParticipantTests",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.performance.BenefitsReadWorkTests",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.performance.ConnectReadWorkTests",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.performance.RecognitionReadWorkTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.PingApplicationTests",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.reward.EventBenefitTests",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.reward.RewardTests",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.verification.VerificationTests",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.verification.WorkIntegrationTests",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.web.FrontendBundleTests",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.web.PagePresentationTests",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.web.PublicResourceTests",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "name": "com.ping.web.RecoveryWebTests",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "log": "C:\\Users\\river\\PING-movil\\target\\increment-evidence\\final-verify.log",
+  "logSha256": "0e08e89e479454f66cfa2be6f8aeee1109e02823c18374c9e744d522597b74ac",
+  "finishedAt": "2026-10-29T16:44:32-05:00",
+  "sourceManifestSha256": "3506fce38eb845a6144f9202220dde05912a400d7c2918ed9296577c207d21ce",
+  "jarSha256": "3b74f151872292ce1e0e404d325d2e5e6e30a3f0f4cfb12cccd8b70eaabeabbb",
+  "matchingJarResources": 514,
+  "matchingJarClasses": 200,
+  "bootstrapBytes": 33352,
+  "runtimeReports": [
+    {
+      "report": "journey-initial.json",
+      "status": "failed",
+      "checks": 79
+    },
+    {
+      "report": "remaining-initial.json",
+      "status": "failed",
+      "checks": 8
+    },
+    {
+      "report": "downloads-review.json",
+      "status": "passed",
+      "checks": 13
+    },
+    {
+      "report": "states-before-h2-closure.json",
+      "status": "failed",
+      "checks": 10
+    },
+    {
+      "report": "priority-stale-h2.json",
+      "status": "failed",
+      "checks": 0
+    },
+    {
+      "report": "priority-fresh.json",
+      "status": "passed",
+      "checks": 10
+    },
+    {
+      "report": "post-visual.json",
+      "status": "passed",
+      "checks": 14
+    },
+    {
+      "report": "state-detail.json",
+      "status": "passed",
+      "checks": 4
+    }
+  ],
+  "claudeHandoffSha256": "ba413395b62cff1456953246e2a18e5e04e8203496c06fcbbf70b6986a739f1f",
+  "screens": {
+    "agenda-390.png": "027a0d49b9e749bbdc733ba9bab1829d49929350e802c09420554e6ef3cbf2e2",
+    "agenda-estados-360.png": "bc3d49308c102a77c076990761569e86ca379af78b26bcdf8ed4401610ae3ebe",
+    "agenda-estados-390.png": "bca0b37da3e8ae54d2dff43db4d566304564aafcf8b80612d5955b13db64e05e",
+    "ayuda-390.png": "c6f2e251feaea7f8679e32a1bfb02fca1a9c0e50393866eb8de870700aabdc71",
+    "ayuda-codigo-360.png": "595894ab9e7f69bef9f17dc9940ba368300f28699b6aecedea4efd21f6473619",
+    "ayuda-hoja-360.png": "8f3fb0ec5bec9a20a88cbcecee16a00e20ea68c0361a5cb114492a8a0fffe660",
+    "ayuda-hoja-390.png": "d724034a031c731f1e04f4b949b99f1ec2fcfeab0006b8e32cc90b0e4d92a54e",
+    "entrada-editorial-final-1280.png": "d478979c05bc59f11ef22dfd5d43f61978a25c881cb10aa9a77356fb21206e64",
+    "entrada-editorial-final-390.png": "73a74d2964114604eb7071b144e0b49e65fe2d1e036f5cfbe496dc5dd330f7ed",
+    "miping-final-1280.png": "bae7ce9471e95fb06eb63781937cc7de2be619ea3385395c7244b726ed0894d4",
+    "pista-active-360.png": "3273e4309ffb27996c35f9dd2c3363fd726b9c3e891eb5d5461754664637f225",
+    "pista-edicion-390.png": "ff256d6c2bf18323287d6ea8d923272f523b660ef9ee9c5b89594890dc2f3bba",
+    "pista-final-error-390.png": "e06ab3ca34ba89a25bc1b5ea5aaaabb070bacfbc6191116bd99092e023bc1487",
+    "pista-final-guardada-360.png": "54406797c9cb838cd1e9db8f496a12de1d659e328355cf18b2675b23c921d02b",
+    "pista-final-guardada-390.png": "fa794d84739cd956ac3a6dd18f093de082fb5cc726c1155465fe1701e2377ce1",
+    "pista-final-vacia-390.png": "b5e9d6cb4f5c50cdbc29b4e6c903de4ac7522ef0fca267d82703be72e97af437",
+    "pista-guardada-360.png": "7351d62ac340e01f0ff48539699f4a2ebdb3dcdb0bf9d49549ea65eb95924b60",
+    "pista-obsoleta-390.png": "bd26afb0f5ee827bd4977383bbeb1eca69f8042d91b6d85d8708ae1f652fa0fd",
+    "pista-obsoleta-final-390.png": "6a3c38c0fdbb0d63f58ece10e1de9b1f34ac64c6322776b256130f1bb9ddf249",
+    "pista-propuesta-390.png": "68d7f9e9ba2eb87f29bbdc9679acbc46b9377f7e920ab17d06f5b95d68a4f942",
+    "pista-vacia-390.png": "1fb807becede60da2cb4c49f6f25c0c5c5c11fb13444aecf0b4964e0ae6612f2",
+    "pista-vacia-formulario-390.png": "b7a77dcece5b39d5566c1647b884a408abd70a4e9d1b53d430c17af2e64a7bcd",
+    "preparacion-390.png": "bd4dd59ee66ceb28379458361267be653b0e9f3a0308e6c592fcda42fb222b0e",
+    "preparacion-final-1280.png": "9aba39c35695cb7f36eec618a54e1a67061777da9cd84f5c662fb4e99940b677",
+    "preparacion-final-390.png": "5c20c7c69b8f0da1c1f4ece6147f2920742af493b5cab96826b6b2839074f2b9",
+    "reto-final-390.png": "1155c36a2e766d3d68988da3a804ddd4063b734d7d976b05978691ec43ecef62",
+    "tarjeta-descargada.png": "743946b872d692455deff7d7312d5ea0021377f87b9ed0b50130afbeaacc4206",
+    "tarjeta-error-390.png": "0bbfef46447d50ddbda6bc0c1ae773ebdc2164f6484dc4a3fbe3515c3bbd09a5",
+    "tarjeta-final-390.png": "572037c717d72b717268140ba2302cf83a783fbb5a581fe9f119b68f6e5b8618"
+  },
+  "limits": [
+    "Local H2, not production MySQL/Aiven",
+    "Headless Chrome, not physical iPhone/Safari",
+    "Real Google consent and real mail clients not exercised",
+    "No commit, push, merge or deployment"
+  ],
+  "visualPatchProofSha256": "b0208de01f29c21fe749f3b8bad2316a19956d6d1de1440551cbfb1061ebb797",
+  "localLogSha256": {
+    "card-wrap-compile.log": "f57c539dc336fe6c2deef4467c29f155b58633728623e8ba4f78145290a05e13",
+    "download-review.log": "1e28facd13847590d84c713b0b8ee6c7258e184d14a276c3782c51876fc57bf4",
+    "figma-directed.log": "bcbd8564e21b85a2b89b750a439760f795279baf3a946b7f99f9ec6f976dfa05",
+    "final-states.log": "3635f12425a3b862c54cf0a32b5b0c7dbecc89a8222c8b9b5593bef271102d7a",
+    "final-verify.log": "0e08e89e479454f66cfa2be6f8aeee1109e02823c18374c9e744d522597b74ac",
+    "fresh-priority.log": "ce8d51793f29d27f3f2fd9b573a91fc3e467015baec1774743ecaf6a07129b0c",
+    "png-context-failed.log": "1602afad471ef9beaf77c60242f12e505d122fd92b97b1c2e6e388d6db2ca540",
+    "png-download-canceled.log": "c3cbe9f6ede1aadd3ef454486b81a4c73bc81d1f00375babd9b6dcaaf31a312a",
+    "png-download-context.log": "1a39935038096543244a0d44c711510ff600fb07d464225957c1507737c358e2",
+    "post-visual.log": "7b5d499bdc636d6d1cba736cbbe92e47c82bae4d3465f21f04748d78c72f4972",
+    "pre-review-compile.log": "5bf7658ae024360cf7bf7b3b4a06f1d0d3b6b01d4fc5dbf60643530a22f43756",
+    "priority-review.log": "35d52233272c29af148b43ff601710d59a53cfd53ba399e2a333353c6cb085c0",
+    "remaining-geometry-failed.log": "d9c8498f552ba2a0496f85f72de3b5f28b02809ff60ef3c545d359cb5eabf893",
+    "remaining-review.log": "1a39935038096543244a0d44c711510ff600fb07d464225957c1507737c358e2",
+    "remaining-touch-geometry.log": "bbe3c3a3fd46fe3a276e823626dce2a89d0d52bf63fe3cfd64dd90b96dbacca1",
+    "review-resources.log": "db5aa1b6965ad4d5486e2e6eff7dce416fea9ca88766943ffb5ec7155e1e0494",
+    "review.log": "776c65617189eb9212e8aafed91b2a7bf2433541628f70f11bed5c42d25417da",
+    "state-detail.log": "589090f59afc339466274673a2cc3a84200d678cf844950199108a8dd141395f"
+  },
+  "localPortsClosed": [
+    8119,
+    1039,
+    8120,
+    1040,
+    9989
+  ]
+}

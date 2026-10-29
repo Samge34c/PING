@@ -1,0 +1,69 @@
+/* Incremento de experiencia: controles propios, sin alterar tokens ni pantallas anteriores. */
+.hint-visible {position:relative;margin:16px 0;padding:14px;border:1px solid var(--ping-border);border-radius:14px;background:var(--ping-surface)}
+.mp-own-hint .hint-editor.hint-visible {position:relative;margin:16px 0;padding:14px;border:1px solid var(--ping-border);border-radius:14px}
+.hint-editor.hint-visible form {margin-top:12px;max-width:none}
+.hint-visible h2 {display:flex;align-items:center;min-height:44px;font-size:1rem;line-height:1.5;margin:0 0 8px;padding-right:60px}
+.hint-visible>p {margin-bottom:10px}
+.hint-visible details>summary {min-height:44px;cursor:pointer;font-weight:700}
+.hint-visible details[data-hint-empty="true"]>summary {display:none}
+.hint-visible details:not([open])>summary {position:absolute;top:14px;right:14px;list-style:none;display:inline-flex;align-items:center;padding:0;min-height:44px;color:var(--ping-primary);font-weight:800;font-size:14px}
+.hint-visible details[open]>summary {display:none}
+.hint-visible textarea {font-size:1rem;min-height:72px;resize:vertical}
+.hint-visible .hint-saved-text {font-size:18px;font-weight:800;line-height:1.4;border-left:4px solid var(--ping-indicator);padding-left:10px;white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0}
+.hint-visible .hint-meta {gap:8px;flex-wrap:wrap}
+.hint-visible .hint-suggestions {display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.hint-visible .hint-suggestions[hidden]{display:none}
+.hint-visible .hint-suggestions button {min-height:44px;border:1px solid var(--ping-control-border);border-radius:999px;padding:10px 14px;background:var(--ping-surface-alt);color:var(--ping-text);font:700 16px/24px Manrope,sans-serif;touch-action:manipulation}
+.hint-visible .hint-suggestions button:active {background:var(--ping-surface);padding-top:11px;padding-bottom:9px}
+.hint-visible .action-row .btn-primary {flex:1;min-height:52px}
+.hint-visible .action-row button[type="submit"] {flex:1;min-height:52px}
+.hint-visible .hint-suggestions button:focus-visible {outline:3px solid var(--ping-focus);outline-offset:3px}
+.hint-visible .form-control[aria-invalid="true"] {border-color:var(--ping-danger)}
+.event-extras {max-width:850px;margin:24px auto;padding:0 16px 32px}
+.event-extras h1 {font-size:clamp(1.8rem,6vw,2.5rem);line-height:1.12}
+.event-extras h2 {font-size:1.25rem;margin-top:24px}
+.event-extras .extra-row {padding:16px 0;border-bottom:1px solid var(--ping-border);overflow-wrap:anywhere}
+.event-extras .extra-row h3 {font-size:1.1rem;margin:0 0 8px}
+.event-extras .extra-row p {margin:6px 0}
+.event-extras label {display:block;font-weight:650;margin:16px 0 6px}
+.event-extras input:not([type=checkbox]),.event-extras textarea,.event-extras select {width:100%;font-size:1rem;min-height:48px}
+.event-extras input[type=checkbox] {width:22px;height:22px;vertical-align:middle;margin-right:8px}
+.event-extras .action-row {margin-top:20px;flex-wrap:wrap;gap:12px}
+.event-extras .extra-status {color:var(--ping-muted);font-size:.9rem}
+.event-extras .extra-links {display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
+.event-extras .extra-links a {min-height:44px;display:inline-flex;align-items:center}
+.experience-preview {display:block;width:100%;max-width:420px;height:auto;aspect-ratio:4/5;border-radius:20px}
+.challenge-result {padding:12px 16px;border:1px solid var(--ping-border);border-radius:12px;margin:16px 0}
+.event-extras progress {width:100%;height:20px;accent-color:var(--ping-primary)}
+.event-extras .agenda-activity {display:flex;gap:12px;margin:16px 0;padding:12px 14px;min-height:80px;height:auto;border:1px solid var(--ping-border);border-radius:14px;background:var(--ping-surface)}
+.agenda-hour {flex:0 0 46px;font-weight:800;line-height:20px}
+.agenda-detail {min-width:0;overflow-wrap:anywhere;flex:1}
+.event-extras .agenda-detail h2 {font-size:16px;line-height:24px;margin:4px 0}
+.agenda-state {font-size:13px;font-weight:700;color:var(--ping-muted)}
+.agenda-activity[data-agenda-state="Ahora"] {border-left:4px solid var(--ping-indicator)}
+.agenda-activity[data-agenda-state="Ahora"] .agenda-state {color:var(--ping-highlight-text)}
+.agenda-activity[data-agenda-state="Terminada"] :is(h2,.agenda-hour) {color:var(--ping-muted)}
+.agenda-detail p {font-size:14px;line-height:20px;white-space:normal}
+.extra-empty {padding:14px;border-radius:12px;background:var(--ping-info-bg)}
+.challenge-card {border:1px solid var(--ping-border);background:var(--ping-surface);border-radius:14px;padding:14px;margin:16px 0}
+.event-extras .challenge-card h2 {font-size:16px;line-height:24px;margin-top:0}
+.challenge-card[data-reached="true"] progress {accent-color:var(--ping-success)}
+.challenge-card .challenge-result {background:var(--ping-success-bg);border:0}
+.event-extras .preparation-step {display:flex;gap:14px;align-items:flex-start}
+.preparation-step>.ping-icon {flex:none;width:32px;height:32px;padding:6px;border-radius:50%;background:var(--ping-info-bg);color:var(--ping-info)}
+.preparation-copy {min-width:0}
+.event-extras .preparation-copy h2 {font-size:16px;margin:2px 0;line-height:24px}
+.event-extras .preparation-copy p {font-size:14px;line-height:20px}
+.entry-code-help {margin:12px 0;color:var(--ping-primary)}
+.entry-code-help summary {min-height:44px;display:flex;align-items:center;cursor:pointer}
+.entry-code-help [data-help-content] {color:var(--ping-text)}
+.help-sheet {box-sizing:border-box;position:fixed;inset:auto 0 0;margin:0 auto;width:100%;max-width:640px;max-height:80dvh;border:1px solid var(--ping-border);border-radius:20px 20px 0 0;padding:12px 20px calc(28px + env(safe-area-inset-bottom));background:var(--ping-surface);color:var(--ping-text);overflow:auto;overscroll-behavior:contain}
+.help-sheet::backdrop {background:rgb(0 0 0 / .6)}
+body:has(.help-sheet[open]) {overflow:hidden}
+.help-handle {width:40px;height:4px;background:var(--ping-border);border-radius:2px;margin-bottom:16px}
+.help-sheet :is(h1,h2) {font-size:20px;line-height:1.4}
+.help-sheet p,.help-sheet li {font-size:15px;line-height:1.5}
+.help-sheet .btn {min-height:52px;width:100%}
+.help-body section {margin:16px 0}
+[data-card-error] {background:var(--ping-danger-bg);border-radius:12px;padding:14px}
+@media(min-width:900px){.event-extras{padding:0 28px 40px}.event-extras .extra-row{padding:20px 0}}
