@@ -115,4 +115,18 @@ class RecognitionHintTests {
         assertThat(matching.search(a)).isEqualTo(m); assertThat(matches.get(m,a).status()).isEqualTo(MatchStatus.ACTIVE);
         assertThat(participants.get(b).points()).isZero();
     }
+    @Test void failedDraftIsSeparateFromTheLatestPersistedValueUsedByCancel() throws Exception {
+        save(a,"Morral guardado");
+        try(var browser=new TestBrowser(port)) {
+            enter(browser,a);var stale=fields(a,"Borrador pendiente");save(a,"Gorra guardada desde otra pestaña");
+            var conflict=browser.post("/me/recognition-hint",stale);
+            assertThat(conflict.statusCode()).isEqualTo(409);
+            assertThat(conflict.body()).contains("Borrador pendiente","Gorra guardada desde otra pestaña");
+            assertThat(hints.ownForm(a).getHint()).isEqualTo("Gorra guardada desde otra pestaña");
+            var invalid=browser.post("/me/recognition-hint",fields(a,"x".repeat(121)));
+            assertThat(invalid.statusCode()).isEqualTo(400);
+            assertThat(invalid.body()).contains("Gorra guardada desde otra pestaña","x".repeat(121));
+            assertThat(browser.get("/me/state").body()).doesNotContain("Gorra guardada desde otra pestaña");
+        }
+    }
 }

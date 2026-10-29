@@ -15,6 +15,9 @@ public class AccessPolicy implements WebMvcConfigurer {
  private void deny(){throw new AccessDeniedException("No tienes permiso para esta acción.");}
  private long eventOf(String table,long id){var rows=jdbc.query("select event_id from "+table+" where id=?",(r,n)->r.getLong(1),id);if(rows.isEmpty())deny();return rows.getFirst();}
  @Override public void addInterceptors(InterceptorRegistry registry){registry.addInterceptor(new HandlerInterceptor(){@Override public boolean preHandle(HttpServletRequest r,HttpServletResponse response,Object handler)throws Exception{
+  // Classpath assets contain no account data. SecurityFilterChain still runs;
+  // dynamic floorplans, credentials and private controllers do not take this path.
+  if(handler instanceof org.springframework.web.servlet.resource.ResourceHttpRequestHandler)return true;
   if(auth.legacyFixture())return true;
   String path=org.springframework.web.util.UrlPathHelper.defaultInstance.getLookupPathForRequest(r);var current=auth.current();if(current==null)return true;
   var stored=SecurityContextHolder.getContext().getAuthentication().getPrincipal();if(stored instanceof PingUser old&&old.epoch()!=current.epoch()){r.getSession().invalidate();SecurityContextHolder.clearContext();if(path.equals("/me/state")){response.setStatus(401);response.setContentType("application/json");response.getWriter().write("{\"error\":\"SESSION_REQUIRED\",\"entryUrl\":\"/login\"}");}else response.sendRedirect("/login?expired=true");return false;}

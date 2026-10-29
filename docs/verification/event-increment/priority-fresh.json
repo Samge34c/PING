@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-29T21:41:10.062Z",
+  "environment": "Java21 / H2 memory / Chrome headless; no Render/Aiven/iPhone",
+  "status": "passed",
+  "checks": [
+    "Luna de prueba entra por cuenta, evento, alias, avatar e intereses",
+    "Sol de prueba entra por cuenta, evento, alias, avatar e intereses",
+    "Vista /me 390 dark",
+    "Propuesta mantiene acción dominante antes de pista",
+    "Vista /me 360 light",
+    "ACTIVE mantiene Volver al encuentro dominante",
+    "Ayuda contextual usa la llegada real actual",
+    "Acción principal alcanzable sobre navegación",
+    "Vista /me 1280 light",
+    "Estados finales sin excepciones JavaScript"
+  ],
+  "screens": [
+    {
+      "name": "pista-propuesta-390",
+      "path": "/me",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi Ping · Ping"
+    },
+    {
+      "name": "pista-active-360",
+      "path": "/me",
+      "width": 360,
+      "scrollWidth": 360,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi Ping · Ping"
+    },
+    {
+      "name": "miping-final-1280",
+      "path": "/me",
+      "width": 1280,
+      "scrollWidth": 1265,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi Ping · Ping"
+    }
+  ],
+  "proposalPriority": {
+    "action": "Ver propuesta",
+    "above": true,
+    "secondary": true
+  },
+  "action": {
+    "hit": true,
+    "bottom": 432.34375
+  }
+}

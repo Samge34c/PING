@@ -1,0 +1,103 @@
+{
+  "date": "2026-10-29T21:33:14.230Z",
+  "environment": "Java21 / H2 memory / Chrome headless; no Render/Aiven/iPhone",
+  "status": "passed",
+  "checks": [
+    "Vista /me/experience 390 dark",
+    "Descarga PNG real completada",
+    "PNG tiene resolución1080x1350",
+    "Error de generación es recuperable sin cambiar datos",
+    "Vista /me 360 light",
+    "Texto ampliado sin desbordar",
+    "Vista /me/agenda 360 light",
+    "Vista /me/challenges 390 dark",
+    "Vista /events/1/preparation 390 dark",
+    "Vista /events/1/preparation 1280 light",
+    "Vista / 390 dark",
+    "Vista / 1280 light",
+    "Revisión restante sin excepciones JavaScript"
+  ],
+  "screens": [
+    {
+      "name": "tarjeta-final-390",
+      "path": "/me/experience",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    },
+    {
+      "name": "pista-final-guardada-360",
+      "path": "/me",
+      "width": 360,
+      "scrollWidth": 360,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi Ping · Ping"
+    },
+    {
+      "name": "agenda-final-360",
+      "path": "/me/agenda",
+      "width": 360,
+      "scrollWidth": 360,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    },
+    {
+      "name": "reto-final-390",
+      "path": "/me/challenges",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    },
+    {
+      "name": "preparacion-final-390",
+      "path": "/events/1/preparation",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    },
+    {
+      "name": "preparacion-final-1280",
+      "path": "/events/1/preparation",
+      "width": 1280,
+      "scrollWidth": 1265,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Mi evento · Ping"
+    },
+    {
+      "name": "entrada-editorial-final-390",
+      "path": "/",
+      "width": 390,
+      "scrollWidth": 390,
+      "theme": "dark",
+      "fonts": true,
+      "broken": 0,
+      "title": "Inicio · Ping"
+    },
+    {
+      "name": "entrada-editorial-final-1280",
+      "path": "/",
+      "width": 1280,
+      "scrollWidth": 1265,
+      "theme": "light",
+      "fonts": true,
+      "broken": 0,
+      "title": "Inicio · Ping"
+    }
+  ],
+  "pngBytes": 126849
+}

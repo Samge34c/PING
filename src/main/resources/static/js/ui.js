@@ -1,6 +1,6 @@
 (() => {
   const path = location.pathname;
-  const section = path === '/' ? 'home' : path.startsWith('/me/benefits') || path.startsWith('/me/claims') ? 'benefits' : path.includes('/interests') ? 'interests' : path.startsWith('/me/connections') ? 'history' : path.startsWith('/me') ? 'me' : path.startsWith('/connect') || path.startsWith('/matches') || path.startsWith('/demo') ? 'connect' : path.startsWith('/events') || path.startsWith('/organizer') ? 'events' : path.startsWith('/participants') ? 'people' : path.startsWith('/admin') ? 'admin' : path.startsWith('/account') ? 'account' : path.startsWith('/login') ? 'login' : path.startsWith('/join') ? 'join' : '';
+  const section = path === '/' ? 'home' : path.startsWith('/me/benefits') || path.startsWith('/me/claims') ? 'benefits' : path.includes('/interests') ? 'interests' : path.startsWith('/me/connections') ? 'history' : path.startsWith('/me') ? 'me' : path.startsWith('/connect') || path.startsWith('/matches') || path.startsWith('/demo') ? 'connect' : path.startsWith('/events') || path.startsWith('/organizer') ? 'events' : path.startsWith('/participants') ? 'people' : path.startsWith('/admin') ? 'admin' : path.startsWith('/account') ? 'account' : path.startsWith('/login') || path.startsWith('/register') ? 'login' : path.startsWith('/join') ? 'join' : '';
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === section) a.setAttribute('aria-current', 'page'); });
   document.querySelectorAll('[data-page-title]').forEach(el => { el.textContent = document.title.split(' · ')[0]; });
   document.querySelectorAll('.session-chip').forEach(chip => {
@@ -18,7 +18,7 @@
     reserve();
     if ('ResizeObserver' in window) new ResizeObserver(reserve).observe(bottomNav); else addEventListener('resize', reserve);
   }
-  const background = [...document.querySelectorAll('main,.ping-topbar,.ping-sidebar,.ping-bottom-nav,.ping-footer,.h-header,.h-scroll')];
+  const background = [...document.querySelectorAll('main,.ping-topbar,.entry-topbar,.ping-sidebar,.ping-bottom-nav,.ping-footer,.h-header,.h-scroll')];
   const closeMenu = () => { if (!menu || menu.hidden) return; menu.hidden = true; background.forEach(el => { el.inert = false; }); toggle.setAttribute('aria-expanded', 'false'); document.body.classList.remove('menu-open'); toggle.focus(); };
   toggle?.addEventListener('click', () => { menu.hidden = false; background.forEach(el => { el.inert = true; }); toggle.setAttribute('aria-expanded', 'true'); document.body.classList.add('menu-open'); menu.querySelector('button').focus(); });
   document.querySelectorAll('[data-more-close]').forEach(el => el.addEventListener('click', closeMenu));

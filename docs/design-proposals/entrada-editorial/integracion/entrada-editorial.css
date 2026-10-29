@@ -1,0 +1,10 @@
+/* Entrada editorial (propuesta DEC-063): arte con caras protegidas en el recorte móvil, nota de cabecera legible sobre
+   el cartel amarillo y barra de visitante que no compite con el teclado mientras se escribe. */
+.fe-art {aspect-ratio:358/220}
+.fe-art img {object-position:50% 18%;color:#E6D8F5;font-size:14px}
+.fe-home-page .ping-topbar :is(.topbar-note,.desktop-crumb .eyebrow) {color:#0D0B12}
+.fe-home-page .ping-topbar .status-dot {background:#0D0B12}
+@media (min-width:768px){ .fe-art {aspect-ratio:1.35} .fe-art img {object-position:50% 30%} }
+@media (max-width:1023px){
+ body.participant-entry-page:has(:is(input:not([type="checkbox"],[type="radio"],[type="hidden"],[type="submit"],[type="button"]),textarea,select):focus) .ping-bottom-nav {visibility:hidden}
+}

@@ -1,0 +1,44 @@
+{
+  "base": "3a528cab9312cdb314ac40252bd7ba3782afd0b0",
+  "testedManifestSha256": "3506fce38eb845a6144f9202220dde05912a400d7c2918ed9296577c207d21ce",
+  "tests": {
+    "tests": 369,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "codeUnchanged": true,
+  "claudeOriginalsAndCopiesIdentical": true,
+  "textFilesScanned": 107,
+  "credentialPatternFindings": [],
+  "branch": "feature/event-increment-delivery",
+  "target": "deploy/render-demo",
+  "authorizedActions": [
+    "commit",
+    "push",
+    "draft pull request"
+  ],
+  "forbiddenActions": [
+    "merge",
+    "deployment",
+    "production data"
+  ],
+  "publishedSourceManifestSha256": "01df74f680c85dbc7e2dfc2565a3a743c717c0fee0ebeb2c22edec6157f638d9",
+  "lineEndingOnlyNormalizations": 640,
+  "verificationReused": "369 tests / BUILD SUCCESS at 2026-10-29T16:44:32-05:00; exact tested working tree plus documentation",
+  "notes": "The original source-manifest records Windows working-tree bytes. The published-source-manifest records repository-filtered Git blobs; only CRLF/LF can differ.",
+  "initialCandidateFiles": 193,
+  "initialCandidateBytes": 15031542,
+  "addedPublicationManifests": 2,
+  "publishedCandidateFiles": 195,
+  "guideStartupSmoke": {
+    "status": "passed",
+    "guideArgumentsUsedVerbatim": true,
+    "loginStatus": 200,
+    "migrations": 24,
+    "database": "isolated H2 memory",
+    "bindAddress": "127.0.0.1",
+    "externalServices": false,
+    "processesStopped": true
+  }
+}

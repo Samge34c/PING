@@ -1,0 +1,552 @@
+{
+  "base": "3a528cab9312cdb314ac40252bd7ba3782afd0b0",
+  "sourceManifestSha256": "c1815afd3ee79359a4446d3e87a1aa5759141167c3b15278242e06627f672fcc",
+  "jarSha256": "636b4ea85550ccfed8f5d4c1d49c1e1581a661e8787c5bad7e6e89845bbec250",
+  "packagedResourcesEqualSource": 499,
+  "tests": {
+    "tests": 358,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "fontGlyphUnionAndAxes": "passed",
+  "assets": {
+    "vendor/bootstrap/bootstrap.min.css": {
+      "bytes": 232116,
+      "gzipBytesLevel9": 31008,
+      "sha256": "596a918e5d4c71cb731b23412d5b145e429c2203a23e9bf7ba90eff3e291bbb8"
+    },
+    "vendor/bootstrap/bootstrap.ping.min.css": {
+      "bytes": 32850,
+      "gzipBytesLevel9": 7300,
+      "sha256": "4bc006c5fc393118b727ee9e59d1e4ff697a91e9c739074bf2a241abacef20d5"
+    },
+    "fonts/Manrope-Variable.ttf": {
+      "bytes": 164700,
+      "gzipBytesLevel9": 68008,
+      "sha256": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6"
+    },
+    "fonts/Manrope-Variable-core.ttf": {
+      "bytes": 88704,
+      "gzipBytesLevel9": 36742,
+      "sha256": "a79861b39dc315a07a9fb0dfbd1b67f9ee51d5dd7359e82778144d4ae6831459"
+    },
+    "fonts/Manrope-Variable-extra.ttf": {
+      "bytes": 86100,
+      "gzipBytesLevel9": 37411,
+      "sha256": "28c5b3b1d7915166b2812f8b6d91ae48e2794e5276a308589a643659ec76694c"
+    },
+    "img/sofa/convencion-social.webp": {
+      "bytes": 319502,
+      "gzipBytesLevel9": 319620,
+      "sha256": "1cca94859b1c16e6f421443dfddfc1ddbec6b7880757ccdc00929f7319f04146",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    "img/sofa/convencion-social-768.webp": {
+      "bytes": 115238,
+      "gzipBytesLevel9": 115296,
+      "sha256": "7f97ee592afe79b9bf4378480fc82e0fde8f11b9f661450f52cdee9c47ab4bce",
+      "dimensions": [
+        768,
+        512
+      ]
+    },
+    "img/sofa/convencion-social-1152.webp": {
+      "bytes": 207174,
+      "gzipBytesLevel9": 207257,
+      "sha256": "134ebffabe37249b672583d650d0d4d61f5b869544c6b6d984b198092229e90b",
+      "dimensions": [
+        1152,
+        768
+      ]
+    }
+  },
+  "logs": {
+    "before.log": "90fd5710699b5751dbc27f9ddc970052a3411ba4cc54358689f730356d865650",
+    "backend-after.log": "26b7a92de299315e2119dc26da1e41c23e8be08d2e44966c8d88a7b54ff75610",
+    "final-verify.log": "87e774d2a43536f7abb49c1c5029860298666bd361fc27b3b26d92e14ff037b7",
+    "journey.log": "31fc6dc2cca8b26ff3d9d68d86a0d5419b107e5e11e49648d2838f9938c35dbe",
+    "extra-click.log": "85b53c2e48707caa0fd4fc62416c718c2bc64a401edd1f8fde3581f2af90b024",
+    "extra-hidden-button.log": "c99b0dee870c91a0114d40096ffbcf80e350e44e82fb8d2666bfe82598a9622d",
+    "extra-post-navigated.log": "74f84ac1fc42a8612652b87690d231a36985eb32cdcb7302585a89a3394ae359",
+    "extra-scroll-diagnostic.log": "3ce5a28c0f8bb27241244cfd632d4053029cb474a89707e5efc0de10ac16bd27",
+    "extra.log": "1c4fa6606cd7644924b84215418ec9e8a185d16541dbff5e09d546871ebb8785",
+    "journey-before-ready.log": "f347d121cfacfac082c28bd5f33544f93a230b89ed272275ffdc25a1f7f16200",
+    "resume.log": "0b2c44b710e0e5e37dba66ad203403e31fbfb214ca8789a005567752d33b900e"
+  },
+  "selectorSemanticMarkupUnchanged": "passed; comments and whitespace between tags ignored, all fields/IDs/values retained",
+  "sourceDescription": "Base HEAD plus local src/ and frontend generator files identified by source-manifest.json; no commit created",
+  "date": "2026-10-29",
+  "branch": "perf/closure-current",
+  "performanceSource": "b54aaae494202c7a4bb3e930ad5efc2a22f414a1",
+  "baseline": {
+    "tests": 8,
+    "failures": 7,
+    "errors": 0,
+    "skipped": 0,
+    "meaning": "Expected performance assertions fail on current delivery before integration; aggregate-only assertions added after baseline"
+  },
+  "directedBackend": {
+    "tests": 115,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sqlDefinitions": "JDBC SELECT executions and consumed ResultSet rows in equivalent isolated H2 scenarios (48 terminal history entries and 24 foreign benefits). Not physical network round trips, MySQL scanned rows or Render/iPhone latency.",
+  "sql": {
+    "before": [
+      {
+        "scenario": "pending-false",
+        "selects": 1,
+        "matchResultRows": 49,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "benefits-sofa",
+        "selects": 10,
+        "matchResultRows": 98,
+        "benefitResultRows": 26
+      },
+      {
+        "scenario": "connect-idle",
+        "selects": 9,
+        "matchResultRows": 49,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "connect-OFFERED-0",
+        "selects": 9,
+        "matchResultRows": 49,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "connect-OFFERED-1",
+        "selects": 9,
+        "matchResultRows": 49,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "connect-ACTIVE-0",
+        "selects": 10,
+        "matchResultRows": 49,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "connect-ACTIVE-1",
+        "selects": 10,
+        "matchResultRows": 49,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "active-hint",
+        "selects": 20,
+        "matchResultRows": 5,
+        "benefitResultRows": 0
+      }
+    ],
+    "after": [
+      {
+        "scenario": "pending-false",
+        "selects": 1,
+        "matchResultRows": 1,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "pending-true",
+        "selects": 1,
+        "matchResultRows": 1,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "pending-false",
+        "selects": 1,
+        "matchResultRows": 1,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "benefits-sofa",
+        "selects": 7,
+        "matchResultRows": 1,
+        "benefitResultRows": 2
+      },
+      {
+        "scenario": "connect-idle",
+        "selects": 5,
+        "matchResultRows": 0,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "connect-OFFERED-0",
+        "selects": 3,
+        "matchResultRows": 1,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "connect-OFFERED-1",
+        "selects": 3,
+        "matchResultRows": 1,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "connect-ACTIVE-0",
+        "selects": 3,
+        "matchResultRows": 1,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "connect-ACTIVE-1",
+        "selects": 3,
+        "matchResultRows": 1,
+        "benefitResultRows": 0
+      },
+      {
+        "scenario": "active-hint",
+        "selects": 14,
+        "matchResultRows": 3,
+        "benefitResultRows": 0
+      }
+    ]
+  },
+  "accountReads": {
+    "before": {
+      "/css/brand.css": 1,
+      "/js/ui.js": 1,
+      "/img/favicon.svg": 1,
+      "/": 2,
+      "/account": 3,
+      "/me/state": 1
+    },
+    "after": {
+      "/css/brand.css": 0,
+      "/js/ui.js": 0,
+      "/img/favicon.svg": 0,
+      "/": 1,
+      "/account": 1,
+      "/me/state": 1
+    }
+  },
+  "journey": {
+    "functionalChecksBeforeCaptureHelperFailure": [
+      "Evento aislado creado",
+      "Luna de prueba entra por cuenta, evento, alias, avatar e intereses",
+      "Sol de prueba entra por cuenta, evento, alias, avatar e intereses",
+      "Reintento de alta conserva solo dos participaciones",
+      "Beneficios muestra cuatro locales y el genérico sin catálogo ajeno",
+      "Vista /participants/1/interests 390 dark",
+      "Intereses búsqueda cine y selección reversible",
+      "Vista /participants/1/interests 360 light",
+      "Intereses guarda y conserva selección tras recargar",
+      "Vista /me/avatar 390 dark",
+      "Conectar sin encuentro conserva alias y acciones",
+      "Conectar sin encuentro conserva alias y acciones",
+      "Vista /connect 390 dark",
+      "Vista /connect 360 light",
+      "Vista /matches/1 390 dark",
+      "Vista /matches/1 360 light",
+      "Una aceptación mantiene propuesta",
+      "Vista /matches/1 390 dark",
+      "Vista /matches/1 360 light",
+      "Confirmación prematura bloqueada",
+      "Confirmación prematura bloqueada",
+      "Código personal separado por sesión",
+      "Página privada y estado sin caché pública",
+      "Primera confirmación no acredita",
+      "Confirmación bilateral y reintentos acreditan solo una vez",
+      "Vista /me/benefits 390 dark",
+      "Vista /me/benefits 360 light",
+      "Canje usa recibo",
+      "Reintento de canje devuelve mismo recibo",
+      "Un solo débito y un solo canje",
+      "Otra persona no accede al recibo",
+      "Organización valida recibo",
+      "Entrega y reintento cierran recibo sin nuevo débito"
+    ],
+    "resumedChecks": [
+      "Delivered receipt and balance persist after interruption",
+      "Vista /me/claims/1 390 dark",
+      "Vista /me 1280 dark",
+      "Vista /admin?eventId=1 1280 light",
+      "Vista /login?error 360 dark",
+      "Control recibe foco con indicador visible",
+      "Avatar V3 conserva capas y colores guardados",
+      "Fuente núcleo precargada con huella",
+      "Vista / 390 dark",
+      "Imagen adaptable con proporción 3:2",
+      "Vista /events/1/rewards/new 390 dark",
+      "Bootstrap completo/subconjunto equivalentes en /events/1/rewards/new",
+      "Vista /me/avatar 390 dark",
+      "Bootstrap completo/subconjunto equivalentes en /me/avatar",
+      "Vista /login?error 390 dark",
+      "Bootstrap completo/subconjunto equivalentes en /login?error",
+      "Vista /me 390 dark",
+      "CSS final sirve la corrección y la misma huella de fuente precargada",
+      "Fuente extra disponible para glifos fuera del núcleo",
+      "Recorrido sin excepciones JavaScript"
+    ],
+    "extraChecks": [
+      "Delivered receipt and balance persist after interruption",
+      "Responsive hero 390 scale 3",
+      "Responsive hero 360 scale 2",
+      "Responsive hero 1280 scale 2",
+      "Native selector exposes all 264 choices without page JavaScript",
+      "Native label toggles checkbox without JavaScript",
+      "Native POST saves and returns after form submit",
+      "Native POST keeps selected IDs",
+      "Vista /participants/1/interests 390 dark",
+      "Save action is reachable above navigation",
+      "Vista /me 390 dark",
+      "Location help CSS contrast dark",
+      "Vista /me 360 light",
+      "Location help CSS contrast light",
+      "Extra checks without JavaScript exceptions"
+    ],
+    "functionalFlow": "Completed: two registrations and password verification over loopback MIME e-mail; selected event, avatar V3, interests, bilateral acceptance/arrival/personal verification/final confirmation; 10 points each; redemption 5 with replay; authorized third-party delivery with replay; final balance 5 and delivered receipt.",
+    "status": "passed across initial functional steps and resumed review; initial helper status remains failed in original log"
+  },
+  "browser": {
+    "environment": "Chrome headless emulation; no Safari/iPhone hardware",
+    "bootstrap": [
+      {
+        "path": "/events/1/rewards/new",
+        "selectors": [
+          ".form-control",
+          ".form-select",
+          ".text-danger",
+          ".btn-primary",
+          "input[type=\"checkbox\"]"
+        ],
+        "identical": true
+      },
+      {
+        "path": "/me/avatar",
+        "selectors": [
+          ".av3-opt:has(input:checked)",
+          ".btn-primary",
+          "button:disabled"
+        ],
+        "identical": true
+      },
+      {
+        "path": "/login?error",
+        "selectors": [
+          ".form-control",
+          ".btn-primary",
+          "[role=\"alert\"]"
+        ],
+        "identical": true
+      }
+    ],
+    "focus": {
+      "active": true,
+      "border": "rgb(248, 232, 54)",
+      "shadow": "color(srgb 0.972549 0.909804 0.211765 / 0.35) 0px 0px 0px 3px",
+      "outline": "none"
+    },
+    "heroSelections": [
+      {
+        "width": 358,
+        "scale": 3,
+        "src": "http://127.0.0.1:8107/img/sofa/convencion-social-1152-6d80a147fbc65ee71ef918fcf940f829.webp",
+        "sizes": "(min-width: 768px) 640px, calc(100vw - 32px)",
+        "complete": true
+      },
+      {
+        "width": 328,
+        "scale": 2,
+        "src": "http://127.0.0.1:8107/img/sofa/convencion-social-768-5d17c634778687db200b5af47e91d4eb.webp",
+        "sizes": "(min-width: 768px) 640px, calc(100vw - 32px)",
+        "complete": true
+      },
+      {
+        "width": 507.578125,
+        "scale": 2,
+        "src": "http://127.0.0.1:8107/img/sofa/convencion-social-155eae21f8a63e7c7392198ef74e5639.webp",
+        "sizes": "(min-width: 768px) 640px, calc(100vw - 32px)",
+        "complete": true
+      }
+    ],
+    "nativeSelector": {
+      "count": 264,
+      "selected": [
+        "6"
+      ],
+      "enhanced": false,
+      "visible": true,
+      "csrf": true,
+      "destination": "/me",
+      "savedIds": [
+        "6"
+      ]
+    },
+    "action": {
+      "top": 575.25,
+      "bottom": 627.25,
+      "hit": true
+    },
+    "contrast": [
+      {
+        "theme": "dark",
+        "color": "rgb(189, 181, 202)",
+        "background": "rgb(21, 18, 28)",
+        "ratio": 9.360805681265502,
+        "method": "Actual loaded CSS applied to temporary help element on body; ACTIVE screenshots separately inspected."
+      },
+      {
+        "theme": "light",
+        "color": "rgb(94, 86, 107)",
+        "background": "rgb(247, 244, 239)",
+        "ratio": 6.3395909214075035,
+        "method": "Actual loaded CSS applied to temporary help element on body; ACTIVE screenshots separately inspected."
+      }
+    ],
+    "javascriptExceptions": 0
+  },
+  "preservedDeliveryFiles": {
+    "src/main/resources/static/css/v2.css": "e1cd30aebbcb210941550a455ad0bc363df8868656ec893584e5c6222915b31a",
+    "src/main/java/com/ping/auth/AccessContinuation.java": "0e5d637f3fab1e0f978989c9bb703fd0b5e969f51bc4ae44408930574d880f0e",
+    "src/main/java/com/ping/auth/AccountController.java": "87fbb408e79023bcc387a2b7bc775f3f87265e6b6e80872384aad6c52aff5c51",
+    "src/main/java/com/ping/auth/AccountService.java": "dad13d07214fa1e10b59beae655198c95a0e5d5ab71686c001746a1ca3eeab71",
+    "src/main/java/com/ping/auth/AuthConfiguration.java": "682aa23417a2767ebfd7eda2a45ffa6ba9a16d6bcc0f66abd9fe6b9582fa0f43",
+    "src/main/java/com/ping/auth/LoginSuccess.java": "803353af0ef4e88e33d0688356ff74b64c052e812864dd73f005fb07d64e3d1d",
+    "src/main/java/com/ping/auth/AccountMail.java": "bb2982232e558cc29990b11b688fcd686d6c3aca631d757545e62f12ecec41d2",
+    "src/main/java/com/ping/auth/PrivateMail.java": "75fe2a2fd8b87e140e24c5ddd5f4c62a062198419ee1619ab7234a09577da4c3",
+    "src/main/java/com/ping/auth/HttpApiMail.java": "29160452791910217b681fdd39a2a6b2d5b6aac050d64fa94d4e03fd828f330f"
+  },
+  "specificTests": {
+    "com.ping.auth.AccountMailTests": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.auth.AccountSecurityTests": {
+      "tests": 23,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.auth.AuthSupportTests": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.auth.HttpApiMailTests": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.auth.OAuthCancellationTests": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.auth.OAuthIncompleteConfigTests": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.auth.OAuthLoginFlowTests": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.demo.RecognitionHintTests": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.floorplan.FloorplanMigrationTests": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.floorplan.FloorplanTests": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.floorplan.FloorplanViewTests": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.floorplan.FloorplanWebTests": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.match.MatchCompletionSagaTests": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.match.MatchLiveStateTests": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.participant.AvatarV3Tests": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.performance.RecognitionReadWorkTests": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.verification.VerificationTests": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "com.ping.verification.WorkIntegrationTests": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "helperIncidents": [
+    "Initial launch attempted HTTP before startup completed; readiness wait added.",
+    "Functional journey finished delivery; screenshot helper concatenated base with an absolute redirect URL. Resolved with new URL(path,base), then resumed only pending steps.",
+    "Native form helper initially selected hidden Review button; corrected to direct submit button. Diagnostics confirmed smooth scrolling was still moving (button y=7365/2548 outside viewport); instant scroll reached y=567 and POST navigated successfully. Removed a diagnostic that still expected the old form after navigation. No PING source changes for these incidents."
+  ],
+  "screenshots": {
+    "active-360-claro.png": "dce75912c01b12eb08c51b898c5507a24b104824da329739dca27629a468742c",
+    "active-390-oscuro.png": "e79c8e469235d30e340066b7a1883a4fa1c2d97d5967646fffa58d7b132802de",
+    "admin-1280-claro.png": "e86633c5f2d429c2f796d8388265774e05b6ca0cfe4017ad3dc414807ccb1c09",
+    "avatar-390-oscuro.png": "06244cbe182d6384f1ffea12e29eeedba411764e2587d2677d60ddeaf06c5942",
+    "beneficios-390-oscuro.png": "179f6557c660b395674750ecf44067f5c685324405080f7a9290e91604f0a5f9",
+    "entregado-390-oscuro.png": "553a633928e8ed008eda727e5727c852047e37ca02415065e325d6e29beaa5e6",
+    "inicio-390-oscuro.png": "2d0f3b20e5b802a730587a99bb3e0864a0cc967b061754227e0530be4c8330a3",
+    "intereses-360-claro.png": "d66894d0f479b3e1c0fc1c8534bcc5e68ebf4c2ac9bd6f40bc6832449299e9a2",
+    "intereses-390-oscuro.png": "919ec64a6717fabbfa940f5faa67b06b3ef58a6bea8197dae7bdeb0ac01b8bd9"
+  },
+  "cleanup": {
+    "ownAppPid": 38844,
+    "ownSmtpPid": 34684,
+    "stopped": "2026-10-29T17:20:38Z",
+    "remainingOwnAppMailProcesses": 0,
+    "remainingListeners8107_1037_9987": 0,
+    "otherServicesUntouched": true
+  }
+}

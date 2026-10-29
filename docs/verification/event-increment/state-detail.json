@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-29T21:47:44.563Z",
+  "environment": "Java21 / H2 memory / Chrome headless; no Render/Aiven/iPhone",
+  "status": "passed",
+  "checks": [
+    "Vista /me 390 dark",
+    "Versión obsoleta final mantiene borrador y texto persistido",
+    "Cancelar final vuelve al valor confirmado",
+    "Estado obsoleto sin excepciones JavaScript"
+  ],
+  "screens": []
+}
