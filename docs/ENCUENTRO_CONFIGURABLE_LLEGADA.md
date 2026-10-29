@@ -1,5 +1,26 @@
 # Continuidad PING — configuración, llegada y recompensas
 
+**Acceso con Google, 28 de octubre de 2026 (DEC-060 propuesta). Rama `feature/google-login`, PR en borrador hacia `deploy/render-demo`; sin merge ni despliegue.**
+- **Base:** copia `C:\Users\river\PING-movil`, rama `deploy/render-demo` @ `40f2247`, árbol inicial limpio.
+- **Qué se reutilizó:** el `oauth2Login` OIDC de DEC-049, `external_identities` y la vinculación desde Mi cuenta. No hay migración ni dependencias nuevas.
+- **Qué cambió:**
+  - La URI de retorno sale de `PING_PUBLIC_BASE_URL`.
+  - Una configuración incompleta oculta Google en lugar de impedir el arranque.
+  - Cada fallo tiene su motivo y su mensaje.
+  - La coincidencia de correo lleva a entrar con contraseña y después a «Vincular Google».
+  - Una vinculación fallida conserva la sesión, comprobando `auth_epoch`.
+  - Los callbacks concurrentes reutilizan una sola cuenta.
+  - No se guardan los tokens de Google.
+  - Botón con la marca de Google en «Entrar» y «Crear cuenta».
+  - Cuentas sin verificar: activarlas o recuperarlas exige contraseña nueva; el enlace del registro pide la contraseña original.
+- **Evidencia:**
+  - `mvnw verify` final, con la corrección de cuentas sin verificar: 325 pruebas, 0 fallos.
+  - Dos pruebas dirigidas: el intruso de un correo sin verificar pierde el acceso y el dueño entra con su contraseña nueva; el registro legítimo sigue funcionando. Comprobación por mutación: sin exigir la contraseña en VERIFY, la prueba del intruso falla.
+  - `OAuthLoginFlowTests` usa un proveedor OIDC local con RS256, nonce, state y códigos de un solo uso.
+  - Comprobación por mutación: sin la recuperación de la carrera, la prueba de concurrencia falla.
+  - Capturas locales a 390 px oscuro, 360 px claro y 1440 px, examinadas y sin desbordamiento horizontal.
+- **Pendiente:** autenticación real contra Google y prueba en Render y iPhone. Antes, configurar Google Cloud y Render según [GOOGLE_LOGIN.md](GOOGLE_LOGIN.md), y hacer commit y despliegue autorizados.
+
 **Diseño en curso, sin implementar (24 oct 2026, rama local `design/conectar-figma` desde `b98ca4f`):** propuesta visual en Figma (archivo WCrjKj5eGOZQ8wUaxsEqfc). V1 «Festival editorial» en páginas 01–04 ([resumen](design-proposals/festival-editorial/README.md)); V2 de marca y sistema en la página «05 · Propuesta V2» ([resumen](design-proposals/v2/README.md)): tres conceptos de logo, recomendado C «P en común», componentes y cuatro pantallas a 390/360/escritorio. Skill `logo-design` instalada solo en el proyecto (registro en SKILLS_PING.md). Ningún cambio de aplicación, datos, permisos ni main; sin push. Pendiente de decisión humana: adoptar la marca, autorizar cambios en ACTIVE y en el SVG de gafas. Avatares V3 (25 oct): página «PING · Avatares V3» con componentes editables y pantallas de personalización, Mi Ping y Conectar ([resumen](design-proposals/avatares-v2/README.md), [continuidad Figma](handoffs/FIGMA_CLAUDE.md)); Samuel aprobó el frame «Personalizar · Pelaje · 390»; miniaturas de «Cabeza» reservadas a Codex. DEC-057 (25 oct, rama `feature/connect-avatar-pair`, sin commit): pareja de avatares de la propuesta implementada y verificada con MySQL privada y dos sesiones; detalle en [FIGMA_CONSOLIDADO](handoffs/FIGMA_CONSOLIDADO.md).
 
 **Entrega terminada: DEC-056 — acabado móvil.** Copia /workspace/PING, remoto https://github.com/Samge34c/PING.git; base de Claude3755c129cee95f6ece533b52a226c21969c6a52e comprobada sin avances posteriores y árbol inicial limpio. Rama propia fix/mobile-visual-finish, [Issue51](https://github.com/Samge34c/PING/issues/51), [PR52 borrador](https://github.com/Samge34c/PING/pull/52) hacia claude/sweet-ritchie-ja97c7. Sin main/merge/force-push, sin atribuir aprobación a Julián. Toda la cadena y los componentes válidos de Claude conservados.

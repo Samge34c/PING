@@ -514,3 +514,25 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 **Archivos:** `Dockerfile`, `.dockerignore`, `deploy/render/entrypoint.sh`, `render.yaml`, `src/main/resources/application-render.properties`, `HttpApiMail` y `PrivateMail`.
 
 **Comprobaciones y pendientes:** en `docs/DEPLOY_RENDER_AIVEN.md`. Antes de publicar falta la autorización de commit y push. La entrega real de correo no está probada.
+
+## DEC-060 — Acceso con Google integrado en las cuentas existentes (propuesta)
+
+**Estado: propuesta, pendiente de aceptación.** Solicitud de Samuel el 28 de octubre de 2026 en la sesión de Claude Code. Se desarrolla dentro de DEC-049 («OAuth configurado externamente»). No se atribuye aprobación a Julián. Publicado en la rama `feature/google-login` con PR en borrador hacia `deploy/render-demo`; sin merge ni despliegue.
+
+**Decisiones técnicas:**
+- Se reutiliza Spring Security 7.1.1 (`oauth2Login`, OIDC). No hay dependencias, servicios de pago ni migraciones nuevas: se usan `ping_accounts` y `external_identities` de V20.
+- Identidad = proveedor + `sub` de Google. Una cuenta nueva solo se crea con `email_verified=true`, o con verificación propia por correo si el envío está configurado. Siempre recibe permisos básicos.
+- Si el correo coincide con una cuenta sin vincular, no hay fusión automática: primero se entra con esa cuenta (contraseña o recuperación) y después se ofrece la vinculación en Mi cuenta.
+- La URI de retorno sale de `PING_PUBLIC_BASE_URL`, porque no debe depender de las cabeceras del proxy de Render.
+- Un par de credenciales incompleto oculta el proveedor en lugar de impedir el arranque.
+- Los tokens de acceso de Google no se conservan.
+- Cada fallo (cancelación, caducidad, coincidencia de correo, proveedor) tiene un mensaje propio. Una vinculación fallida conserva la sesión local, salvo que la contraseña haya cambiado entretanto.
+- El botón sigue las pautas de marca de Google (G a color, tema claro u oscuro según PING) y aparece en «Entrar» y «Crear cuenta».
+
+**Riesgo previo corregido (autorización de Samuel, 28 de octubre de 2026):** una cuenta local sin verificar podía haberse registrado con un correo ajeno, y su verificación conservaba la contraseña de quien la registró. Ahora:
+- Volver a registrarse, recuperar el acceso o entrar con un proveedor sin correo verificado envía un enlace de activación (30 minutos, un solo uso) que exige elegir contraseña nueva.
+- Al usarlo se verifica el correo, se sustituye la contraseña anterior, aumenta `auth_epoch` (las sesiones previas caducan) y se anulan todos los enlaces pendientes de esa cuenta.
+- El enlace de verificación del registro (24 horas, un solo uso) exige la contraseña con la que se creó la cuenta.
+- No cambian permisos ni vinculaciones.
+
+**Detalle, configuración y reversión:** [GOOGLE_LOGIN.md](GOOGLE_LOGIN.md).

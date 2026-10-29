@@ -23,18 +23,31 @@ public class AccountService implements UserDetailsService {
  public PingUser user(long id){return jdbc.queryForObject("select a.*,exists(select 1 from event_administrators e where e.account_id=a.id) organizer from ping_accounts a where a.id=?",(r,n)->new PingUser(r.getLong("id"),r.getString("email"),r.getString("password_hash"),r.getBoolean("email_verified"),r.getBoolean("general_admin"),r.getBoolean("organizer"),r.getLong("auth_epoch")),id);}
  @Override public UserDetails loadUserByUsername(String name){try{return user(find(email(name)).orElseThrow(()->new UsernameNotFoundException("Acceso no válido")));}catch(BusinessRuleException ex){throw new UsernameNotFoundException("Acceso no válido");}}
  private long create(String email,String password,boolean verified){jdbc.update("insert into ping_accounts(email,password_hash,email_verified) values(?,?,?)",email,encoder.encode(password),verified);return find(email).orElseThrow();}
- private void token(long id,String purpose){String value=secret();jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=? and consumed=false",id,purpose);jdbc.update("insert into account_tokens(token_hash,account_id,purpose,expires_at) values(?,?,?,?)",hash(value),id,purpose,Timestamp.from(Instant.now().plusSeconds(purpose.equals("RESET")?1800:86400)));mail.send(user(id).email(),purpose,value);}
+ private void token(long id,String purpose){String value=secret();var u=user(id);jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=? and consumed=false",id,purpose);jdbc.update("insert into account_tokens(token_hash,account_id,purpose,expires_at) values(?,?,?,?)",hash(value),id,purpose,Timestamp.from(Instant.now().plusSeconds(purpose.equals("RESET")?1800:86400)));mail.send(u.email(),purpose.equals("RESET")&&!u.verified()?"ACTIVATE":purpose,value);}
+ // An unverified account may have been registered by someone else with this address: whoever reaches it from the
+ // mailbox later (re-registering, recovering, external sign-in) must choose a new password, which replaces the old one.
  @Transactional(isolation=Isolation.READ_COMMITTED)
- public void register(String value,String password){String e=email(value);password(password);if(!mail.available())throw new BusinessRuleException("El registro por correo requiere que la organización configure el envío.");var old=find(e);if(old.isPresent()){if(!user(old.get()).verified())token(old.get(),"VERIFY");return;}try{long id=create(e,password,false);token(id,"VERIFY");audit(id,"REGISTER",id,null);}catch(org.springframework.dao.DuplicateKeyException race){/* Same public response; retry through recovery. */}}
+ public void register(String value,String password){String e=email(value);password(password);if(!mail.available())throw new BusinessRuleException("El registro por correo requiere que la organización configure el envío.");var old=find(e);if(old.isPresent()){if(!user(old.get()).verified())token(old.get(),"RESET");return;}try{long id=create(e,password,false);token(id,"VERIFY");audit(id,"REGISTER",id,null);}catch(org.springframework.dao.DuplicateKeyException race){/* Same public response; retry through recovery. */}}
  @Transactional(isolation=Isolation.READ_COMMITTED)
- public void recover(String value){String e=email(value);var id=find(e);if(id.isPresent()&&mail.available())token(id.get(),user(id.get()).verified()?"RESET":"VERIFY");}
+ public void recover(String value){String e=email(value);var id=find(e);if(id.isPresent()&&mail.available())token(id.get(),"RESET");}
  @Transactional(isolation=Isolation.READ_COMMITTED)
  public void consume(String value,String purpose,String password){
   if(value==null||!value.matches("[A-Za-z0-9_-]{43}"))throw new BusinessRuleException("El enlace no es válido o ha caducado. Solicita otro.");
   var rows=jdbc.queryForList("select * from account_tokens where token_hash=? for update",hash(value));
   if(rows.isEmpty()||!purpose.equals(rows.getFirst().get("purpose"))||Boolean.TRUE.equals(rows.getFirst().get("consumed"))||((Timestamp)rows.getFirst().get("expires_at")).toInstant().isBefore(Instant.now()))throw new BusinessRuleException("El enlace no es válido o ha caducado. Solicita otro.");
-  long id=((Number)rows.getFirst().get("account_id")).longValue();if(purpose.equals("RESET")){password(password);jdbc.update("update ping_accounts set password_hash=?,auth_epoch=auth_epoch+1 where id=?",encoder.encode(password),id);}else jdbc.update("update ping_accounts set email_verified=true where id=?",id);
-  jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=?",id,purpose);audit(id,purpose,id,null);
+  long id=((Number)rows.getFirst().get("account_id")).longValue();
+  if(purpose.equals("RESET")){
+   // Mailbox control plus a new password: verifies the address, replaces any password chosen by whoever registered it,
+   // ends previous sessions (epoch) and voids every other pending verification/recovery link.
+   password(password);jdbc.update("update ping_accounts set password_hash=?,email_verified=true,auth_epoch=auth_epoch+1 where id=?",encoder.encode(password),id);
+   jdbc.update("update account_tokens set consumed=true where account_id=? and consumed=false",id);
+  }else{
+   // The registration link activates only for the person who also knows the password set at registration.
+   if(password==null||password.isEmpty()||!encoder.matches(password,user(id).passwordHash()))throw new BusinessRuleException("Esa no es la contraseña con la que se creó la cuenta. Si no la creaste tú o no la recuerdas, pide un enlace para elegir una nueva.");
+   jdbc.update("update ping_accounts set email_verified=true where id=?",id);
+   jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=?",id,purpose);
+  }
+  audit(id,purpose,id,null);
  }
  @Transactional(isolation=Isolation.READ_COMMITTED)
  public void bootstrap(String value,String password){if(value.isBlank()&&password.isBlank())return;if(value.isBlank()||password.isBlank())throw new IllegalStateException("Both PING_BOOTSTRAP_EMAIL and PING_BOOTSTRAP_PASSWORD are required for first setup");boolean used=Boolean.TRUE.equals(jdbc.queryForObject("select used from auth_setup_state where id=1 for update",Boolean.class));if(used)return;String e=email(value);password(password);if(find(e).isPresent())throw new IllegalStateException("Bootstrap requires a new dedicated account; no existing account is promoted");long id=create(e,password,true);jdbc.update("update ping_accounts set general_admin=true where id=?",id);jdbc.update("update auth_setup_state set used=true where id=1");audit(id,"BOOTSTRAP_GENERAL",id,null);}
@@ -55,13 +68,24 @@ public class AccountService implements UserDetailsService {
  }
  @Transactional(isolation=Isolation.READ_COMMITTED)
  public void assign(long actor,long target,long event,boolean grant){if(!user(actor).general())throw new org.springframework.security.access.AccessDeniedException("Solo administración general");jdbc.queryForObject("select id from ping_accounts where id=? for update",Long.class,target);jdbc.queryForObject("select id from events where id=? for update",Long.class,event);if(grant){if(!managed(target).contains(event))jdbc.update("insert into event_administrators(account_id,event_id) values(?,?)",target,event);}else jdbc.update("delete from event_administrators where account_id=? and event_id=?",target,event);audit(actor,grant?"GRANT_EVENT_ADMIN":"REVOKE_EVENT_ADMIN",target,event);}
+ /** Provider outcome with a stable reason the login and account pages explain separately. */
+ public static class ExternalAccessException extends BusinessRuleException{public final String reason;public ExternalAccessException(String reason,String message){super(message);this.reason=reason;}}
+ private Optional<Long> identity(String provider,String subject){return jdbc.query("select account_id from external_identities where provider=? and subject=?",(r,n)->r.getLong(1),provider,subject).stream().findFirst();}
+ public List<String> providersOf(long account){return jdbc.query("select distinct provider from external_identities where account_id=? order by provider",(r,n)->r.getString(1),account);}
  @Transactional(isolation=Isolation.READ_COMMITTED)
  public long external(String provider,String subject,String claimedEmail,boolean verified,Long linking){
-  if(!Set.of("google","facebook").contains(provider)||subject==null||subject.length()>255)throw new BusinessRuleException("No pudimos comprobar la identidad del proveedor.");
-  var old=jdbc.query("select account_id from external_identities where provider=? and subject=? for update",(r,n)->r.getLong(1),provider,subject);
-  if(!old.isEmpty()){if(linking!=null&&old.getFirst().longValue()!=linking)throw new BusinessRuleException("Esta identidad ya está vinculada a otra cuenta.");return old.getFirst();}
-  long id;if(linking!=null){id=linking;if(!user(id).verified())throw new BusinessRuleException("Verifica primero tu correo.");}else{String e=email(claimedEmail);if(find(e).isPresent())throw new BusinessRuleException("Entra con tu cuenta y vincula el proveedor desde Mi cuenta.");if(!verified&&!mail.available())throw new BusinessRuleException("Este proveedor requiere verificar el correo; el envío aún no está configurado.");id=create(e,secret(),verified);if(!verified)token(id,"VERIFY");}
-  jdbc.update("insert into external_identities(provider,subject,account_id) values(?,?,?)",provider,subject,id);audit(id,"LINK_"+provider.toUpperCase(Locale.ROOT),id,null);return id;
+  if(!Set.of("google","facebook").contains(provider)||subject==null||subject.isBlank()||subject.length()>255)throw new ExternalAccessException("provider","No pudimos comprobar la identidad del proveedor.");
+  try{
+   var old=jdbc.query("select account_id from external_identities where provider=? and subject=? for update",(r,n)->r.getLong(1),provider,subject);
+   if(!old.isEmpty()){if(linking!=null&&old.getFirst().longValue()!=linking)throw new ExternalAccessException("taken","Esta identidad ya está vinculada a otra cuenta.");return old.getFirst();}
+   long id;if(linking!=null){id=linking;if(!user(id).verified())throw new ExternalAccessException("provider","Verifica primero tu correo.");}else{String e;try{e=email(claimedEmail);}catch(BusinessRuleException invalid){throw new ExternalAccessException("provider","El proveedor no compartió un correo válido.");}if(find(e).isPresent())throw new ExternalAccessException("existing","Entra con tu cuenta y vincula el proveedor desde Mi cuenta.");if(!verified&&!mail.available())throw new ExternalAccessException("unverified","Este proveedor requiere verificar el correo; el envío aún no está configurado.");id=create(e,secret(),verified);if(!verified)token(id,"RESET");}
+   jdbc.update("insert into external_identities(provider,subject,account_id) values(?,?,?)",provider,subject,id);audit(id,"LINK_"+provider.toUpperCase(Locale.ROOT),id,null);return id;
+  }catch(org.springframework.dao.DuplicateKeyException race){
+   // A concurrent callback committed this identity or e-mail first: reuse that account, never create a second one.
+   var winner=identity(provider,subject);
+   if(winner.isPresent()&&(linking==null||winner.get()==linking.longValue()))return winner.get();
+   throw new ExternalAccessException(linking!=null?"taken":"existing","Entra con tu cuenta y vincula el proveedor desde Mi cuenta.");
+  }
  }
  @Transactional
  public void audit(long actor,String action,Long subject,Long event){jdbc.update("insert into auth_audit(actor_id,action,subject_id,event_id) values(?,?,?,?)",actor,action,subject,event);}

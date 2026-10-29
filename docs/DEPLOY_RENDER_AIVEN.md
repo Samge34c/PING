@@ -64,6 +64,9 @@ Fuentes:
 | `PING_MAIL_API_KEY` | clave API de Brevo | **secreta** |
 | `PING_MAIL_FROM` | remitente verificado en Brevo | normal |
 | `PING_DEMO_ENABLED` | `true` solo si quieres el escenario SOFA de demostración (lo usa únicamente una cuenta general) | normal |
+| `PING_OAUTH_ENABLED` | `true` para mostrar «Continuar con Google» (ver [GOOGLE_LOGIN.md](GOOGLE_LOGIN.md)) | normal (opcional) |
+| `PING_GOOGLE_CLIENT_ID` | Client ID del cliente web de Google | normal (opcional) |
+| `PING_GOOGLE_CLIENT_SECRET` | Client secret de Google | **secreta** (opcional) |
 
 - **Valores opcionales:**
   - `DB_SSL_MODE`: no la definas. Se usa `VERIFY_IDENTITY` (CA del proyecto + nombre del servidor). Si el registro muestra un error de nombre (`HostnameChecker` o `No subject alternative`), **no rebajes la verificación**: sigue antes el diagnóstico de «Si falla la identidad TLS».
