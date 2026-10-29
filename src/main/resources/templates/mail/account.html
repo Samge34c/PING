@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="supported-color-schemes" content="dark">
+<title th:text="${kind.subject}">PING</title>
+<!-- DEC-062 · Figma «PING · Correos transaccionales» (148:324). Estilos esenciales en línea; esta capa solo amplía en pantallas anchas. -->
+<style>
+ @media only screen and (min-width:480px){.ping-outer{padding:24px!important}.ping-card{padding:32px!important}.ping-title{font-size:28px!important;line-height:34px!important}}
+ a.ping-button:hover{background:#E2D21C!important}
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#15121C;-webkit-text-size-adjust:100%;">
+<div style="display:none;max-height:0;max-width:0;overflow:hidden;opacity:0;mso-hide:all;" th:text="${kind.body}">Resumen</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#15121C" style="background-color:#15121C;">
+<tr><td align="center" class="ping-outer" style="padding:16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;">
+<tr><td class="ping-card" bgcolor="#1D1926" style="background-color:#1D1926;border:1px solid #3A3347;border-radius:16px;padding:24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#F7F4EF;">
+ <img th:src="${logo}" src="ping-logo.png" width="88" height="32" alt="PING" style="display:block;width:88px;height:32px;border:0;outline:none;text-decoration:none;color:#F7F4EF;font-size:22px;line-height:32px;font-weight:800;letter-spacing:1px;">
+ <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:16px 0 0;"><tr>
+  <td width="28" height="4" bgcolor="#F8E836" style="width:28px;height:4px;background-color:#F8E836;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td>
+  <td width="4" style="width:4px;font-size:0;line-height:0;">&nbsp;</td>
+  <td width="12" height="4" bgcolor="#B58CF0" style="width:12px;height:4px;background-color:#B58CF0;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td>
+ </tr></table>
+ <h1 class="ping-title" style="margin:20px 0 0;font-size:24px;line-height:30px;font-weight:700;color:#F7F4EF;" th:text="${kind.title}">Título</h1>
+ <p style="margin:20px 0 0;font-size:16px;line-height:24px;color:#BDB5CA;" th:text="${kind.body}">Explicación</p>
+ <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0 0;"><tr>
+  <td align="center" bgcolor="#F8E836" style="background-color:#F8E836;border-radius:14px;">
+   <a class="ping-button" th:href="${url}" href="#" target="_blank" style="display:block;padding:16px 20px;font-size:16px;line-height:20px;font-weight:700;color:#0D0B12;text-decoration:none;border-radius:14px;text-align:center;" th:text="${kind.action}">Acción</a>
+  </td>
+ </tr></table>
+ <p style="margin:20px 0 0;font-size:14px;line-height:20px;color:#BDB5CA;" th:text="${expiry}">Caducidad</p>
+ <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:20px 0 0;"><tr><td height="1" bgcolor="#3A3347" style="height:1px;background-color:#3A3347;font-size:0;line-height:0;">&nbsp;</td></tr></table>
+ <p style="margin:20px 0 0;font-size:14px;line-height:20px;color:#BDB5CA;" th:text="${kind.ignore}">Si no lo pediste</p>
+ <p style="margin:12px 0 0;font-size:13px;line-height:20px;color:#BDB5CA;">¿El botón no funciona? Abre este enlace:<br><a th:href="${url}" href="#" target="_blank" style="color:#C2A6FF;text-decoration:underline;word-break:break-all;overflow-wrap:anywhere;" th:text="${url}">enlace</a></p>
+</td></tr>
+<tr><td align="center" style="padding:16px 8px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:20px;color:#BDB5CA;">
+ <strong style="font-weight:600;color:#BDB5CA;">PING · Conexiones en tu evento</strong><br>Recibes este correo por una acción en tu cuenta de PING.
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

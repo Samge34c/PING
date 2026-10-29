@@ -1,5 +1,7 @@
 # Continuidad PING — configuración, llegada y recompensas
 
+**Correos de cuenta con diseño, 28 de octubre de 2026 (DEC-062 propuesta).** Rama `feature/transactional-emails` desde `deploy/render-demo` @ `477c72a`, integrada por PR (autorizado por Samuel); sin despliegue automático ni envíos reales. Brevo puede reescribir los enlaces con seguimiento y su API no permite evitarlo por mensaje (ver la guía). Diseño en Figma (página 148:262), plantilla `templates/mail/account.html`, `AccountMail`, logo PNG en `static/img/email/`, Brevo con `htmlContent`, SMTP multipart. Evidencia y límites en [CORREOS_TRANSACCIONALES.md](CORREOS_TRANSACCIONALES.md). Pendiente: prueba real en clientes de correo y en el iPhone.
+
 **Acceso y registro continuos, 28 de octubre de 2026 (DEC-061 propuesta).** Rama `feature/continuous-access` desde `deploy/render-demo` @ `99d757b`; sin despliegue.
 - **Qué cambió:**
   - Nueva `AccessContinuation`, que fija el destino tras cualquier acceso.

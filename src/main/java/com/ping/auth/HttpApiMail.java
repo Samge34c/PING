@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
 import org.springframework.mail.*;
 import org.springframework.stereotype.Component;
-/** Transactional mail over an HTTPS API for hosts that block SMTP (Render Free). Only Brevo is implemented.
+/** Transactional mail over an HTTPS API for hosts that block SMTP (Render Free). Only Brevo is implemented; sends htmlContent plus textContent.
  *  The API key travels only in the request header; neither the key nor message bodies (with tokens) are logged. */
 @Component @Primary @Profile("!bootstrap") @ConditionalOnProperty(name="ping.mail.api.provider",havingValue="brevo")
 public class HttpApiMail implements MailSender {
@@ -23,7 +23,7 @@ public class HttpApiMail implements MailSender {
  @Override public void send(SimpleMailMessage message){
   if(message.getFrom()==null||message.getTo()==null||message.getTo().length!=1)throw new MailPreparationException("Exactly one sender and one recipient are required");
   String body="{\"sender\":{\"name\":"+json(senderName)+",\"email\":"+json(message.getFrom())+"},\"to\":[{\"email\":"+json(message.getTo()[0])+"}],"
-   +"\"subject\":"+json(Objects.toString(message.getSubject(),""))+",\"textContent\":"+json(Objects.toString(message.getText(),""))+"}";
+   +"\"subject\":"+json(Objects.toString(message.getSubject(),""))+(message instanceof PrivateMail.HtmlMailMessage h&&h.getHtml()!=null?",\"htmlContent\":"+json(h.getHtml()):"")+",\"textContent\":"+json(Objects.toString(message.getText(),""))+"}";
   var request=HttpRequest.newBuilder(endpoint).timeout(Duration.ofSeconds(15)).header("api-key",key).header("accept","application/json")
    .header("content-type","application/json").POST(HttpRequest.BodyPublishers.ofString(body)).build();
   try{

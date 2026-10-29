@@ -34,8 +34,8 @@ class OAuthLoginFlowTests{
  static final String CLIENT="ping-local-test-client",SECRET="local-test-not-a-credential",PASSWORD="Prueba local de cuenta2026";
  static final FakeGoogle google=new FakeGoogle();
  @TestConfiguration static class Provider{@Bean @Primary ClientRegistrationRepository fakeGoogle(){return new InMemoryClientRegistrationRepository(CommonOAuth2Provider.GOOGLE.getBuilder("google").clientId(CLIENT).clientSecret(SECRET).scope("openid","email","profile").redirectUri("{baseUrl}/login/oauth2/code/{registrationId}").issuerUri(google.base).tokenUri(google.base+"/token").jwkSetUri(google.base+"/jwks").userInfoUri(google.base+"/userinfo").build());}}
- @org.springframework.test.context.bean.override.mockito.MockitoBean org.springframework.mail.javamail.JavaMailSender sender;final List<org.springframework.mail.SimpleMailMessage> mail=new java.util.concurrent.CopyOnWriteArrayList<>();
- @BeforeEach void transport(){mail.clear();org.mockito.Mockito.doAnswer(i->{mail.add(new org.springframework.mail.SimpleMailMessage((org.springframework.mail.SimpleMailMessage)i.getArgument(0)));return null;}).when(sender).send(org.mockito.ArgumentMatchers.any(org.springframework.mail.SimpleMailMessage.class));}
+ @org.springframework.test.context.bean.override.mockito.MockitoBean org.springframework.mail.javamail.JavaMailSender sender;final List<com.ping.support.MailCapture.Mail> mail=new java.util.concurrent.CopyOnWriteArrayList<>();
+ @BeforeEach void transport(){mail.clear();com.ping.support.MailCapture.capture(sender,mail);}
  String token(){var m=java.util.regex.Pattern.compile("token=([A-Za-z0-9_-]{43})").matcher(mail.getLast().getText());assertThat(m.find()).isTrue();return m.group(1);}
  @Autowired AccountService accounts;@Autowired EventService events;@Autowired InterestService interests;@Autowired JdbcTemplate jdbc;@Autowired PasswordEncoder encoder;@LocalServerPort int port;
  @AfterAll static void stop(){google.server.stop(0);}

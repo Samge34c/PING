@@ -93,7 +93,10 @@ Fuentes:
 
    Los encargados de entregas se asignan en `/organizer/access`.
 
-## 4. Correo real (Brevo) · estado: preparado, sin probar
+## 4. Correo real (Brevo)
+
+Desde DEC-062 se envían `htmlContent` y `textContent` con la plantilla de [CORREOS_TRANSACCIONALES.md](CORREOS_TRANSACCIONALES.md). El logo se carga desde `PING_PUBLIC_BASE_URL/img/email/ping-logo.png`. PING no añade seguimiento, pero Brevo puede reescribir los enlaces transaccionales con su dominio de seguimiento, y su API no permite evitarlo por mensaje. Los detalles y la alternativa están en esa guía.
+ · estado: preparado, sin probar
 
 1. Crea una cuenta gratuita en Brevo. En **Senders** añade y verifica un remitente (Brevo envía un correo de confirmación).
 2. En **SMTP & API → API keys** crea una clave y pégala solo en `PING_MAIL_API_KEY` de Render.

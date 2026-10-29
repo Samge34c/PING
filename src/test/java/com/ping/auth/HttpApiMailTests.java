@@ -31,4 +31,9 @@ class HttpApiMailTests {
   assertThatThrownBy(()->new HttpApiMail("http://api.brevo.com/v3/smtp/email","k","PING")).isInstanceOf(IllegalStateException.class);
  }
  @Test void controlCharactersAreEscaped(){assertThat(HttpApiMail.json("a\u0001b\\c")).isEqualTo("\"a\\u0001b\\\\c\"");}
+ @Test void designedHtmlTravelsAsHtmlContentNextToTheTextAlternative(){
+  var m=new PrivateMail.HtmlMailMessage("<a href=\"https://ping.example/account/reset?token=abc\">Elegir nueva contraseña</a>");m.setFrom("remitente@ejemplo.test");m.setTo("persona@ejemplo.test");m.setSubject("Recupera tu acceso a PING");m.setText("Elegir nueva contraseña:\nhttps://ping.example/account/reset?token=abc");
+  mail().send(m);
+  assertThat(body.get()).contains("\"htmlContent\":\"<a href=\\\"https://ping.example/account/reset?token=abc\\\">Elegir nueva contraseña</a>\"","\"textContent\":\"Elegir nueva contraseña:\\nhttps://ping.example/account/reset?token=abc\"");
+ }
 }

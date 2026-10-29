@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.jdbc.core.JdbcTemplate;
 import static org.mockito.Mockito.*;
@@ -21,8 +20,8 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.url=jdbc:h2:mem:account-security;MODE=MySQL;DB_CLOSE_DELAY=-1","spring.datasource.username=sa","spring.datasource.password=","spring.jpa.hibernate.ddl-auto=validate","ping.mail.from=ping@example.test","ping.public-base-url=http://127.0.0.1:8090"}) @ActiveProfiles("security-test")
 class AccountSecurityTests {
  @Autowired AccountService accounts;@Autowired EventService events;@Autowired ParticipantService participants;@Autowired JdbcTemplate jdbc;@Autowired AuthThrottle throttle;@Autowired com.ping.interest.InterestService interests;@LocalServerPort int port;@MockitoBean JavaMailSender sender;
- final List<SimpleMailMessage> mail=new CopyOnWriteArrayList<>();static final String PASSWORD="Prueba local de cuenta2026";
- @BeforeEach void transport(){mail.clear();doAnswer(i->{mail.add(new SimpleMailMessage(i.getArgument(0)));return null;}).when(sender).send(any(SimpleMailMessage.class));}
+ final List<com.ping.support.MailCapture.Mail> mail=new CopyOnWriteArrayList<>();static final String PASSWORD="Prueba local de cuenta2026";
+ @BeforeEach void transport(){mail.clear();com.ping.support.MailCapture.capture(sender,mail);}
  String address(){return "persona-"+UUID.randomUUID()+"@example.test";}
  String token(){var m=Pattern.compile("token=([A-Za-z0-9_-]{43})").matcher(mail.getLast().getText());assertThat(m.find()).isTrue();return m.group(1);}
  long account(String email){accounts.register(email,PASSWORD);accounts.consume(token(),"VERIFY",PASSWORD);return accounts.find(email).orElseThrow();}
@@ -108,7 +107,7 @@ class AccountSecurityTests {
   assertThat(jdbc.queryForObject("select count(*) from external_identities where account_id=?",Integer.class,id)).isZero();
  }
  @Test void legitimateRegistrationStillActivatesWithItsOwnPasswordAndVerifiedRecoveryEndsSessions()throws Exception{
-  String email=address();accounts.register(email,PASSWORD);assertThat(mail.getLast().getSubject()).isEqualTo("Verifica tu cuenta de PING");String t=token();long id=accounts.find(email).orElseThrow();
+  String email=address();accounts.register(email,PASSWORD);assertThat(mail.getLast().getSubject()).isEqualTo("Verifica tu correo de PING");String t=token();long id=accounts.find(email).orElseThrow();
   try(var b=new TestBrowser(port)){assertThat(b.get("/account/verify?token="+t).body()).contains("name=\"password\"");var wrong=b.post("/account/verify",Map.of("token",t,"password","otra contraseña cualquiera"));assertThat(wrong.body()).contains("Esa no es la contraseña");assertThat(b.post("/account/verify",Map.of("token",t,"password",PASSWORD)).headers().firstValue("Location").orElse("")).endsWith("/join");assertThat(b.get("/account").statusCode()).isEqualTo(200);
    accounts.recover(email);assertThat(mail.getLast().getSubject()).isEqualTo("Recupera tu acceso a PING");accounts.consume(token(),"RESET","Otra contraseña de prueba2026");assertThat(b.get("/account").statusCode()).isEqualTo(302);}
   assertThat(accounts.user(id).verified()).isTrue();
@@ -168,5 +167,11 @@ class AccountSecurityTests {
    assertThat(b.get("/register").body()).contains("value=\""+email+"\"");
   }
   assertThat(jdbc.queryForObject("select count(*) from ping_accounts",Integer.class)).isEqualTo(before);assertThat(accounts.find(email)).isEmpty();
+ }
+ @Test void accountMailIsMultipartWithTheSameActionAndThePublicLogoNeedsNoSession()throws Exception{
+  String email=address();accounts.register(email,PASSWORD);var sent=mail.getLast();String t=token();String url="http://127.0.0.1:8090/account/verify?token="+t;
+  assertThat(sent.to()).isEqualTo(email);assertThat(sent.getSubject()).isEqualTo("Verifica tu correo de PING");
+  assertThat(sent.text()).contains("Verificar mi correo:\n"+url,"24 horas");assertThat(sent.html()).contains("href=\""+url+"\"",">Verificar mi correo</a>","http://127.0.0.1:8090/img/email/ping-logo.png");
+  try(var b=new TestBrowser(port)){var logo=b.bytes("/img/email/ping-logo.png");assertThat(logo.statusCode()).isEqualTo(200);assertThat(logo.headers().firstValue("Content-Type").orElse("")).startsWith("image/png");assertThat(logo.body().length).isGreaterThan(1000);}
  }
 }
