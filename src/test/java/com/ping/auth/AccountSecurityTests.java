@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.assertj.core.api.Assertions.*;
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT,properties={"spring.datasource.url=jdbc:h2:mem:account-security;MODE=MySQL;DB_CLOSE_DELAY=-1","spring.datasource.username=sa","spring.datasource.password=","spring.jpa.hibernate.ddl-auto=validate","ping.mail.from=ping@example.test","ping.public-base-url=http://127.0.0.1:8090"}) @ActiveProfiles("security-test")
 class AccountSecurityTests {
- @Autowired AccountService accounts;@Autowired EventService events;@Autowired ParticipantService participants;@Autowired JdbcTemplate jdbc;@Autowired AuthThrottle throttle;@LocalServerPort int port;@MockitoBean JavaMailSender sender;
+ @Autowired AccountService accounts;@Autowired EventService events;@Autowired ParticipantService participants;@Autowired JdbcTemplate jdbc;@Autowired AuthThrottle throttle;@Autowired com.ping.interest.InterestService interests;@LocalServerPort int port;@MockitoBean JavaMailSender sender;
  final List<SimpleMailMessage> mail=new CopyOnWriteArrayList<>();static final String PASSWORD="Prueba local de cuenta2026";
  @BeforeEach void transport(){mail.clear();doAnswer(i->{mail.add(new SimpleMailMessage(i.getArgument(0)));return null;}).when(sender).send(any(SimpleMailMessage.class));}
  String address(){return "persona-"+UUID.randomUUID()+"@example.test";}
@@ -30,14 +30,14 @@ class AccountSecurityTests {
  void login(TestBrowser b,String email)throws Exception{b.get("/login");assertThat(b.post("/login",Map.of("email",email,"password",PASSWORD)).statusCode()).isEqualTo(302);}
  long general(){String email="general-setup@example.test";if(accounts.find(email).isEmpty())accounts.bootstrap(email,PASSWORD);return accounts.find(email).orElseThrow();}
  @Test void anonymousCannotReadOrMutateAdministrativeRoutes()throws Exception{try(var b=new TestBrowser(port)){for(String p:List.of("/events","/participants","/admin","/organizer","/interests/categories"))assertThat(b.get(p).statusCode()).isEqualTo(302);assertThat(b.post("/events",Map.of("name","Intruso")).statusCode()).isEqualTo(403);assertThat(b.get("/me/state").statusCode()).isEqualTo(401);}}
- @Test void registrationVerificationAndReplayRequireCsrfAndPersistOnlyTokenHashes()throws Exception{String email=address();try(var b=new TestBrowser(port)){b.get("/register");var response=b.post("/register",Map.of("email",email,"password",PASSWORD,"repeat",PASSWORD,"role","ADMIN"));assertThat(response.statusCode()).isEqualTo(200);long id=accounts.find(email).orElseThrow();assertThat(accounts.user(id).general()).isFalse();assertThat(accounts.user(id).verified()).isFalse();String t=token();assertThat(jdbc.queryForObject("select token_hash from account_tokens where account_id=?",String.class,id)).isNotEqualTo(t).hasSize(64);assertThat(b.post("/login",Map.of("email",email,"password",PASSWORD)).headers().firstValue("Location").orElse("")).contains("error");try(var missing=new TestBrowser(port)){assertThat(missing.post("/account/verify",Map.of("token",t,"password",PASSWORD)).statusCode()).isEqualTo(403);}b.get("/account/verify?token="+t);assertThat(b.post("/account/verify",Map.of("token",t,"password",PASSWORD)).statusCode()).isEqualTo(302);assertThat(accounts.user(id).verified()).isTrue();b.get("/account/verify?token="+t);assertThat(b.post("/account/verify",Map.of("token",t,"password",PASSWORD)).body()).contains("ha caducado");}}
+ @Test void registrationVerificationAndReplayRequireCsrfAndPersistOnlyTokenHashes()throws Exception{String email=address();try(var b=new TestBrowser(port)){b.get("/register");var response=b.post("/register",Map.of("email",email,"password",PASSWORD,"repeat",PASSWORD,"role","ADMIN"));assertThat(response.headers().firstValue("Location").orElse("")).endsWith("/register/check");long id=accounts.find(email).orElseThrow();assertThat(accounts.user(id).general()).isFalse();assertThat(accounts.user(id).verified()).isFalse();String t=token();assertThat(jdbc.queryForObject("select token_hash from account_tokens where account_id=?",String.class,id)).isNotEqualTo(t).hasSize(64);assertThat(b.post("/login",Map.of("email",email,"password",PASSWORD)).headers().firstValue("Location").orElse("")).contains("error");try(var missing=new TestBrowser(port)){assertThat(missing.post("/account/verify",Map.of("token",t,"password",PASSWORD)).statusCode()).isEqualTo(403);}b.get("/account/verify?token="+t);assertThat(b.post("/account/verify",Map.of("token",t,"password",PASSWORD)).statusCode()).isEqualTo(302);assertThat(accounts.user(id).verified()).isTrue();b.get("/account/verify?token="+t);assertThat(b.post("/account/verify",Map.of("token",t,"password",PASSWORD)).body()).contains("ha caducado");}}
  @Test void participantCannotEscalateRolesOrAdoptAnotherIdentity()throws Exception{String email=address();long account=account(email);long e=event("Privado");var f=new ParticipantForm();f.setAlias("Mi alias persistente");f.setEventId(e);long own=participants.create(f).id();accounts.bind(account,own,e);f.setAlias("Alias ajeno");long other=participants.create(f).id();try(var b=new TestBrowser(port)){login(b,email);assertThat(b.get("/me").body()).contains("Mi alias persistente").doesNotContain("Alias ajeno");assertThat(b.get("/participants/"+other+"/interests").statusCode()).isEqualTo(403);assertThat(b.get("/events/"+e+"/edit").statusCode()).isEqualTo(403);assertThat(b.get("/%65vents/"+e+"/edit").statusCode()).isEqualTo(403);assertThat(b.post("/organizer/access",Map.of("email",email,"eventId",""+e,"grant","true")).statusCode()).isEqualTo(403);assertThat(b.post("/demo",Map.of("participantId",""+other)).statusCode()).isEqualTo(403);}}
  @Test void eventAdministratorIsLimitedToAssignedEventEvenForDirectPost()throws Exception{long general=general();String email=address();long id=account(email),allowed=event("Asignado"),foreign=event("AJENO");accounts.assign(general,id,allowed,true);try(var b=new TestBrowser(port)){login(b,email);assertThat(b.get("/events/"+allowed+"/edit").statusCode()).isEqualTo(200);assertThat(b.get("/events/"+foreign+"/edit").statusCode()).isEqualTo(403);assertThat(b.get("/admin?eventId="+foreign).statusCode()).isEqualTo(403);assertThat(b.get("/events").body()).doesNotContain(events.get(foreign).getName());assertThat(b.post("/events/"+foreign+"/close",Map.of()).statusCode()).isEqualTo(403);accounts.assign(general,id,allowed,false);assertThat(b.get("/events/"+allowed+"/edit").statusCode()).isEqualTo(403);}}
  @Test void accountEventBindingIsUniqueAndNeverMergesPoints(){long a=account(address()),b=account(address()),e=event("Identidad");var f=new ParticipantForm();f.setAlias("Anterior");f.setEventId(e);long p=participants.create(f).id();accounts.bind(a,p,e);assertThatThrownBy(()->accounts.bind(b,p,e)).isInstanceOf(BusinessRuleException.class);long q=participants.create(f).id();assertThatThrownBy(()->accounts.bind(a,q,e)).isInstanceOf(BusinessRuleException.class);assertThat(participants.get(p).points()).isZero();}
  @Test void recoveryIsGenericAndResetInvalidatesOldSessionsAndCannotReplay()throws Exception{String email=address();account(email);try(var b=new TestBrowser(port);var recover=new TestBrowser(port)){login(b,email);recover.get("/account/recover");var absent=recover.post("/account/recover",Map.of("email",address()));var present=recover.post("/account/recover",Map.of("email",email));for(var result:List.of(absent,present))assertThat(result.body()).contains("Si existe una cuenta que pueda recuperarse");String t=token();accounts.consume(t,"RESET","Otra contraseña de prueba2026");assertThatThrownBy(()->accounts.consume(t,"RESET",PASSWORD)).isInstanceOf(BusinessRuleException.class);assertThat(b.get("/account").headers().firstValue("Location").orElse("")).contains("/login");}}
  @Test void expiredOrWrongPurposeTokensDoNotChangeAccounts(){String email=address();accounts.register(email,PASSWORD);String t=token();assertThatThrownBy(()->accounts.consume(t,"RESET",PASSWORD)).isInstanceOf(BusinessRuleException.class);jdbc.update("update account_tokens set expires_at=? where token_hash=?",java.sql.Timestamp.from(java.time.Instant.now().minusSeconds(60)),AccountService.hash(t));assertThatThrownBy(()->accounts.consume(t,"VERIFY","")).isInstanceOf(BusinessRuleException.class);assertThat(accounts.user(accounts.find(email).orElseThrow()).verified()).isFalse();}
  @Test void oauthNeverAutomaticallyLinksMatchingEmailsAndProviderIdentityIsUnique(){String email=address();long a=account(email),b=account(address());assertThatThrownBy(()->accounts.external("google","subject-"+UUID.randomUUID(),email,true,null)).isInstanceOf(BusinessRuleException.class);String subject="subject-"+UUID.randomUUID();assertThat(accounts.external("google",subject,email,true,a)).isEqualTo(a);assertThatThrownBy(()->accounts.external("google",subject,email,true,b)).isInstanceOf(BusinessRuleException.class);}
- @Test void missingProvidersHaveNoActiveButtonsAndReturnDestinationCannotBeExternal()throws Exception{String email=address();account(email);try(var b=new TestBrowser(port)){var page=b.get("/login?next=https://evil.example");assertThat(page.body()).doesNotContain("Continuar con Google","Continuar con Facebook");var result=b.post("/login",Map.of("email",email,"password",PASSWORD));var destination=java.net.URI.create(result.headers().firstValue("Location").orElseThrow());assertThat(destination.getPath()).isEqualTo("/me");assertThat(destination.getHost()).isIn(null,"127.0.0.1");}}
+ @Test void missingProvidersHaveNoActiveButtonsAndReturnDestinationCannotBeExternal()throws Exception{String email=address();account(email);try(var b=new TestBrowser(port)){var page=b.get("/login?next=https://evil.example");assertThat(page.body()).doesNotContain("Continuar con Google","Continuar con Facebook");var result=b.post("/login",Map.of("email",email,"password",PASSWORD));var destination=java.net.URI.create(result.headers().firstValue("Location").orElseThrow());assertThat(destination.getPath()).isEqualTo("/join");assertThat(destination.getHost()).isIn(null,"127.0.0.1");}}
  @Test void repeatedAttemptsHaveRecoverableRateLimit(){String key=UUID.randomUUID().toString();throttle.check("test",key,1,1);assertThatThrownBy(()->throttle.check("test",key,1,1)).isInstanceOf(BusinessRuleException.class).hasMessageContaining("Espera");}
  @Test void liveStateAndHtmlStayPrivateAcrossConcurrentAccountsAndFreshRevocation()throws Exception{
   String first=address(),second=address();long a=account(first),b=account(second),e=event("Privado A"),f=event("Privado B");
@@ -96,7 +96,7 @@ class AccountSecurityTests {
   try(var b=new TestBrowser(port)){b.get("/account/recover");b.post("/account/recover",Map.of("email",email));}
   assertThat(mail.getLast().getSubject()).isEqualTo("Activa tu cuenta de PING");String activation=token();
   assertThatThrownBy(()->accounts.consume(stale,"RESET",owner)).isInstanceOf(BusinessRuleException.class);
-  try(var b=new TestBrowser(port)){b.get("/account/reset?token="+activation);assertThat(b.post("/account/reset",Map.of("token",activation,"password",owner,"repeat",owner)).headers().firstValue("Location").orElse("")).contains("verified=true");}
+  try(var b=new TestBrowser(port)){b.get("/account/reset?token="+activation);assertThat(b.post("/account/reset",Map.of("token",activation,"password",owner,"repeat",owner)).headers().firstValue("Location").orElse("")).endsWith("/join");assertThat(b.get("/account").body()).contains(email);}
   var user=accounts.user(id);assertThat(user.verified()).isTrue();assertThat(user.epoch()).isGreaterThan(epoch);assertThat(user.general()).isFalse();assertThat(accounts.managed(id)).isEmpty();
   // Every earlier link is void and single use: the squatter's registration link, the activation link itself.
   assertThatThrownBy(()->accounts.consume(registration,"VERIFY",squatter)).isInstanceOf(BusinessRuleException.class);assertThatThrownBy(()->accounts.consume(activation,"RESET",squatter)).isInstanceOf(BusinessRuleException.class);
@@ -109,8 +109,64 @@ class AccountSecurityTests {
  }
  @Test void legitimateRegistrationStillActivatesWithItsOwnPasswordAndVerifiedRecoveryEndsSessions()throws Exception{
   String email=address();accounts.register(email,PASSWORD);assertThat(mail.getLast().getSubject()).isEqualTo("Verifica tu cuenta de PING");String t=token();long id=accounts.find(email).orElseThrow();
-  try(var b=new TestBrowser(port)){assertThat(b.get("/account/verify?token="+t).body()).contains("name=\"password\"");var wrong=b.post("/account/verify",Map.of("token",t,"password","otra contraseña cualquiera"));assertThat(wrong.body()).contains("Esa no es la contraseña");assertThat(b.post("/account/verify",Map.of("token",t,"password",PASSWORD)).headers().firstValue("Location").orElse("")).contains("verified=true");login(b,email);assertThat(b.get("/account").statusCode()).isEqualTo(200);
+  try(var b=new TestBrowser(port)){assertThat(b.get("/account/verify?token="+t).body()).contains("name=\"password\"");var wrong=b.post("/account/verify",Map.of("token",t,"password","otra contraseña cualquiera"));assertThat(wrong.body()).contains("Esa no es la contraseña");assertThat(b.post("/account/verify",Map.of("token",t,"password",PASSWORD)).headers().firstValue("Location").orElse("")).endsWith("/join");assertThat(b.get("/account").statusCode()).isEqualTo(200);
    accounts.recover(email);assertThat(mail.getLast().getSubject()).isEqualTo("Recupera tu acceso a PING");accounts.consume(token(),"RESET","Otra contraseña de prueba2026");assertThat(b.get("/account").statusCode()).isEqualTo(302);}
   assertThat(accounts.user(id).verified()).isTrue();
+ }
+
+ String location(java.net.http.HttpResponse<?> r){var uri=java.net.URI.create(r.headers().firstValue("Location").orElse(""));return uri.getRawPath()+(uri.getRawQuery()==null?"":"?"+uri.getRawQuery());}
+ Map<String,String> draft(String html){var data=new HashMap<String,String>();for(String name:List.of("draftKey","revision")){var m=Pattern.compile("name=\""+name+"\"[^>]*value=\"([^\"]*)\"").matcher(html);assertThat(m.find()).isTrue();data.put(name,m.group(1));}return data;}
+ @Test void registrationFromAnEventContinuesSignedInWhereTheLinkIsOpenedWithoutAnotherLogin()throws Exception{
+  String email=address();long e=event("Registro continuo");String code=events.get(e).getEntryCode();
+  try(var b=new TestBrowser(port)){
+   assertThat(location(b.get("/join?code="+code))).isEqualTo("/login");b.get("/register");
+   assertThat(location(b.post("/register",Map.of("email",email,"password",PASSWORD,"repeat",PASSWORD)))).isEqualTo("/register/check");
+   var check=b.get("/register/check");assertThat(check.body()).contains("Revisa tu correo",email,events.get(e).getName()).doesNotContain(PASSWORD);
+   int sent=mail.size();assertThat(b.get("/register/check").statusCode()).isEqualTo(200);assertThat(mail).hasSize(sent);
+   assertThat(b.get("/account").statusCode()).isEqualTo(302);
+   String t=token();b.get("/account/verify?token="+t);
+   assertThat(location(b.post("/account/verify",Map.of("token",t,"password",PASSWORD)))).isEqualTo("/join");
+   var details=b.get("/join");assertThat(details.statusCode()).isEqualTo(200);assertThat(details.body()).contains(events.get(e).getName());
+   var f=draft(details.body());f.put("alias","Recién registrada");f.put("eventId",""+e);assertThat(location(b.post("/join",f))).isEqualTo("/join/interests");
+   f=draft(b.get("/join/interests").body());f.put("interestIds",""+interests.catalog().getFirst().getId());assertThat(location(b.post("/join/interests",f))).isEqualTo("/me");
+  }
+  long id=accounts.find(email).orElseThrow();assertThat(accounts.user(id).verified()).isTrue();assertThat(accounts.user(id).general()).isFalse();assertThat(accounts.participant(id,e)).isPresent();
+ }
+ @Test void verifyingInAnotherBrowserSignsInThereButNeverTheRegisteringBrowser()throws Exception{
+  String email=address();
+  try(var registering=new TestBrowser(port);var mailbox=new TestBrowser(port)){
+   registering.get("/register");registering.post("/register",Map.of("email",email,"password",PASSWORD,"repeat",PASSWORD));String t=token();
+   mailbox.get("/account/verify?token="+t);assertThat(location(mailbox.post("/account/verify",Map.of("token",t,"password",PASSWORD)))).isEqualTo("/join");assertThat(mailbox.get("/account").statusCode()).isEqualTo(200);
+   assertThat(registering.get("/account").statusCode()).isEqualTo(302);assertThat(registering.get("/register/check").body()).contains("Entra con este correo");
+  }
+ }
+ @Test void registeringAnExistingAddressNeitherDuplicatesNorChangesItAndHelpsTheOwnerIn()throws Exception{
+  String email=address();long id=account(email);String hash=accounts.user(id).passwordHash();long epoch=accounts.user(id).epoch();
+  try(var b=new TestBrowser(port)){
+   b.get("/register");assertThat(location(b.post("/register",Map.of("email",email,"password","Otra contraseña distinta2026","repeat","Otra contraseña distinta2026")))).isEqualTo("/register/check");
+   assertThat(b.get("/register/check").body()).contains("Revisa tu correo");assertThat(mail.getLast().getSubject()).isEqualTo("Ya tienes una cuenta de PING");
+   assertThat(b.get("/login").body()).contains("value=\""+email+"\"");
+  }
+  assertThat(jdbc.queryForObject("select count(*) from ping_accounts where email=?",Integer.class,email)).isOne();var user=accounts.user(id);assertThat(user.passwordHash()).isEqualTo(hash);assertThat(user.epoch()).isEqualTo(epoch);assertThat(user.verified()).isTrue();
+ }
+ @Test void resendReplacesThePreviousLinkAndAddressCanBeCorrected()throws Exception{
+  String email=address();
+  try(var b=new TestBrowser(port)){
+   b.get("/register");b.post("/register",Map.of("email",email,"password",PASSWORD,"repeat",PASSWORD));String first=token();
+   b.get("/register/check");assertThat(location(b.post("/register/resend",Map.of()))).isEqualTo("/register/check?resent=true");String second=token();assertThat(second).isNotEqualTo(first);
+   assertThatThrownBy(()->accounts.consume(first,"VERIFY",PASSWORD)).isInstanceOf(BusinessRuleException.class);
+   assertThat(b.get("/register").body()).contains("value=\""+email+"\"");
+   accounts.consume(second,"VERIFY",PASSWORD);
+  }
+  assertThat(accounts.user(accounts.find(email).orElseThrow()).verified()).isTrue();
+ }
+ @Test void failedLoginKeepsTheTypedEmailAndOffersSignUpWithoutCreatingAnything()throws Exception{
+  String email=address();int before=jdbc.queryForObject("select count(*) from ping_accounts",Integer.class);
+  try(var b=new TestBrowser(port)){
+   b.get("/login");assertThat(location(b.post("/login",Map.of("email",email,"password",PASSWORD)))).isEqualTo("/login?error=true");
+   var page=b.get("/login?error=true").body();assertThat(page).contains("Créala con este correo","value=\""+email+"\"").doesNotContain(PASSWORD);
+   assertThat(b.get("/register").body()).contains("value=\""+email+"\"");
+  }
+  assertThat(jdbc.queryForObject("select count(*) from ping_accounts",Integer.class)).isEqualTo(before);assertThat(accounts.find(email)).isEmpty();
  }
 }

@@ -7,8 +7,8 @@ Preparado el 28 de octubre de 2026 a petición de Samuel. Rama `feature/google-l
 La pantalla «Entra a tu cuenta» y la de «Crea tu cuenta» muestran «Continuar con Google» cuando está configurado.
 
 - **Identidad ya vinculada:** entra en la misma cuenta PING, identificada por `google` y el `sub` estable de Google. No se usa el correo ni el nombre.
-- **Persona nueva:** se crea una cuenta PING básica, sin administración, con el correo que Google marca como verificado (`email_verified=true`). Después elige alias, avatar e intereses en el flujo de entrada habitual. El nombre y la foto de Google no se guardan ni sobrescriben nada.
-- **Mismo correo que una cuenta PING sin vincular:** no se fusionan. La persona entra con correo y contraseña, o recupera el acceso. Mi cuenta le ofrece entonces «Vincular Google», que repite el paso por Google.
+- **Persona nueva:** se crea una cuenta PING básica, sin administración, con el correo que Google marca como verificado (`email_verified=true`), sin pedir otra verificación de PING. La sesión queda iniciada y la persona continúa al evento elegido para completar alias, avatar e intereses. El nombre y la foto de Google no se guardan ni sobrescriben nada.
+- **Mismo correo que una cuenta PING sin vincular (DEC-061):** no se fusionan. La identidad de Google queda guardada en el servidor, ligada a la sesión, durante 10 minutos. La página «Confirma que es tu cuenta» (`/login/link`) pide la contraseña de PING y ofrece «Vincular Google y continuar» o «Entrar sin vincular». Solo un POST con CSRF, la contraseña correcta de esa cuenta activa y la intención vigente completan la vinculación; un GET, un parámetro o un acceso con otra cuenta no lo hacen. Si la persona recupera el acceso desde ahí en el mismo navegador, vuelve a esa página y vincula sin repetir Google. Después continúa al evento. Mi cuenta sigue permitiendo vincular más tarde.
 - **Evento por código o QR:** el evento elegido se conserva en la sesión durante la ida y la vuelta a Google. Nunca se recupera una participación de otro evento.
 - **Cancelación, caducidad, error del proveedor o reintento del callback:** se vuelve a la pantalla de acceso con un mensaje propio y sin crear nada. Si se estaba vinculando desde Mi cuenta, la sesión local se conserva.
 - **Sin configuración, o con configuración incompleta:** el botón no aparece y el acceso por correo sigue igual. PING arranca de todos modos y deja un aviso en el registro.
@@ -22,6 +22,28 @@ Seguridad, todo con Spring Security 7.1.1, sin bibliotecas nuevas:
 - Alcances: `openid email profile`, nada más.
 - No se guardan los tokens de acceso de Google.
 - El secreto solo viaja del servidor a Google.
+
+## Recorrido continuo (DEC-061)
+
+Una única política (`AccessContinuation`) decide el destino después de cualquier acceso: contraseña, Google, confirmación de cuenta o enlace del correo.
+
+- **Evento elegido por código o QR:** si ya hay participación en ese evento, se entra en ella; si no, se va al formulario del evento para completar solo lo que falta.
+- **Sin evento elegido:** se entra en la participación más reciente; si no hay ninguna, se va a introducir el código del evento.
+- **Nunca** se recupera la participación de otro evento. Los destinos son rutas internas permitidas.
+
+Registro con correo:
+- Tras crear la cuenta se muestra «Revisa tu correo», con «Reenviar enlace» y «Cambiar correo». El aviso dice «enlace», porque es lo que se envía.
+- El enlace pide la contraseña del registro e **inicia la sesión en el navegador donde se abre**. Si se abre en otro dispositivo, el navegador que solo registró no queda autenticado.
+- Registrar un correo que ya existe da la misma respuesta pública, no crea otra cuenta ni cambia la existente. El dueño recibe un enlace para entrar o elegir contraseña.
+- Si el acceso falla, el correo escrito se conserva en la sesión (nunca la contraseña) y se ofrece «Créala con este correo». No se crea nada por un intento fallido.
+
+Capturas reales de la revisión local (datos de ensayo, `docs/screenshots/continuous-access/`):
+- Login fallido que ofrece crear la cuenta: [390 oscuro](screenshots/continuous-access/01-login-fallido-390-oscuro.png).
+- «Revisa tu correo»: [390 oscuro](screenshots/continuous-access/02-revisa-correo-390-oscuro.png) y [360 claro](screenshots/continuous-access/03-revisa-correo-360-claro.png).
+- Enlace del correo: [verificar](screenshots/continuous-access/04-verificar-correo-390-oscuro.png) y [continuación al evento](screenshots/continuous-access/05-continua-al-evento-390-oscuro.png).
+- «Confirma que es tu cuenta»: [390 oscuro](screenshots/continuous-access/06-confirmar-cuenta-390-oscuro.png), [con error](screenshots/continuous-access/07-confirmar-cuenta-error-390-oscuro.png), [360 claro](screenshots/continuous-access/08-confirmar-cuenta-360-claro.png) y [escritorio](screenshots/continuous-access/09-confirmar-cuenta-1440-oscuro.png).
+
+**Correo real:** registrar, reenviar y recuperar requieren el transporte configurado (Brevo en Render). Sin él, el registro con correo se muestra como no disponible y Google sigue funcionando. La entrega real no está probada.
 
 ## Cuentas sin verificar
 

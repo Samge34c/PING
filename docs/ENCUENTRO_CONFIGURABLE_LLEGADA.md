@@ -1,5 +1,16 @@
 # Continuidad PING — configuración, llegada y recompensas
 
+**Acceso y registro continuos, 28 de octubre de 2026 (DEC-061 propuesta).** Rama `feature/continuous-access` desde `deploy/render-demo` @ `99d757b`; sin despliegue.
+- **Qué cambió:**
+  - Nueva `AccessContinuation`, que fija el destino tras cualquier acceso.
+  - Página `/login/link` para confirmar la cuenta y vincular Google en el mismo recorrido.
+  - Página `/register/check` («Revisa tu correo», con reenvío).
+  - El enlace de verificación o recuperación inicia la sesión donde se abre.
+  - El login fallido conserva el correo y ofrece crear la cuenta.
+  - Se retira la oferta de vincular en Mi cuenta tras el login, que queda sustituida.
+- **Evidencia:** ver el resumen de la entrega y el PR. Las pruebas automatizadas usan un proveedor OIDC local y un transporte de correo simulado. Capturas en `docs/screenshots/continuous-access/`, hechas en local con un arnés temporal (Google y correo simulados) que no se versiona.
+- **Pendiente:** Google real, correo real (Brevo) e iPhone.
+
 **Acceso con Google, 28 de octubre de 2026 (DEC-060 propuesta). Rama `feature/google-login`, PR en borrador hacia `deploy/render-demo`; sin merge ni despliegue.**
 - **Base:** copia `C:\Users\river\PING-movil`, rama `deploy/render-demo` @ `40f2247`, árbol inicial limpio.
 - **Qué se reutilizó:** el `oauth2Login` OIDC de DEC-049, `external_identities` y la vinculación desde Mi cuenta. No hay migración ni dependencias nuevas.

@@ -23,15 +23,25 @@ public class AccountService implements UserDetailsService {
  public PingUser user(long id){return jdbc.queryForObject("select a.*,exists(select 1 from event_administrators e where e.account_id=a.id) organizer from ping_accounts a where a.id=?",(r,n)->new PingUser(r.getLong("id"),r.getString("email"),r.getString("password_hash"),r.getBoolean("email_verified"),r.getBoolean("general_admin"),r.getBoolean("organizer"),r.getLong("auth_epoch")),id);}
  @Override public UserDetails loadUserByUsername(String name){try{return user(find(email(name)).orElseThrow(()->new UsernameNotFoundException("Acceso no válido")));}catch(BusinessRuleException ex){throw new UsernameNotFoundException("Acceso no válido");}}
  private long create(String email,String password,boolean verified){jdbc.update("insert into ping_accounts(email,password_hash,email_verified) values(?,?,?)",email,encoder.encode(password),verified);return find(email).orElseThrow();}
- private void token(long id,String purpose){String value=secret();var u=user(id);jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=? and consumed=false",id,purpose);jdbc.update("insert into account_tokens(token_hash,account_id,purpose,expires_at) values(?,?,?,?)",hash(value),id,purpose,Timestamp.from(Instant.now().plusSeconds(purpose.equals("RESET")?1800:86400)));mail.send(u.email(),purpose.equals("RESET")&&!u.verified()?"ACTIVATE":purpose,value);}
+ private void token(long id,String purpose){var u=user(id);token(id,purpose,purpose.equals("RESET")&&!u.verified()?"ACTIVATE":purpose);}
+ private void token(long id,String purpose,String label){String value=secret();var u=user(id);jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=? and consumed=false",id,purpose);jdbc.update("insert into account_tokens(token_hash,account_id,purpose,expires_at) values(?,?,?,?)",hash(value),id,purpose,Timestamp.from(Instant.now().plusSeconds(purpose.equals("RESET")?1800:86400)));mail.send(u.email(),label,value);}
  // An unverified account may have been registered by someone else with this address: whoever reaches it from the
  // mailbox later (re-registering, recovering, external sign-in) must choose a new password, which replaces the old one.
  @Transactional(isolation=Isolation.READ_COMMITTED)
- public void register(String value,String password){String e=email(value);password(password);if(!mail.available())throw new BusinessRuleException("El registro por correo requiere que la organización configure el envío.");var old=find(e);if(old.isPresent()){if(!user(old.get()).verified())token(old.get(),"RESET");return;}try{long id=create(e,password,false);token(id,"VERIFY");audit(id,"REGISTER",id,null);}catch(org.springframework.dao.DuplicateKeyException race){/* Same public response; retry through recovery. */}}
+ public boolean register(String value,String password){String e=email(value);password(password);if(!mail.available())throw new BusinessRuleException("El registro por correo requiere que la organización configure el envío.");var old=find(e);
+  // Existing address: same public response, never a second account or a changed password. The mailbox owner gets a way in.
+  if(old.isPresent()){existing(old.get());return false;}
+  try{long id=create(e,password,false);token(id,"VERIFY");audit(id,"REGISTER",id,null);return true;}catch(org.springframework.dao.DuplicateKeyException race){return false;}}
+ private void existing(long id){token(id,"RESET",user(id).verified()?"EXISTS":"ACTIVATE");}
+ /** Resend from the session that registered: the registrant's own verification link, or the owner's way in for an existing address. */
+ @Transactional(isolation=Isolation.READ_COMMITTED)
+ public void resend(String value,boolean created){String e=email(value);var id=find(e);if(id.isEmpty()||!mail.available())return;if(created&&!user(id.get()).verified())token(id.get(),"VERIFY");else existing(id.get());}
+ /** Proof of ownership for a pending provider link: the account's own password, only once the account is active. */
+ public PingUser owner(long account,String password){var u=user(account);if(!u.verified())throw new ExternalAccessException("inactive","Esta cuenta aún no está activada. Recupera el acceso para elegir una contraseña y vuelve a intentarlo.");if(password==null||password.isEmpty()||!encoder.matches(password,u.passwordHash()))throw new ExternalAccessException("password","La contraseña no es correcta.");return u;}
  @Transactional(isolation=Isolation.READ_COMMITTED)
  public void recover(String value){String e=email(value);var id=find(e);if(id.isPresent()&&mail.available())token(id.get(),"RESET");}
  @Transactional(isolation=Isolation.READ_COMMITTED)
- public void consume(String value,String purpose,String password){
+ public long consume(String value,String purpose,String password){
   if(value==null||!value.matches("[A-Za-z0-9_-]{43}"))throw new BusinessRuleException("El enlace no es válido o ha caducado. Solicita otro.");
   var rows=jdbc.queryForList("select * from account_tokens where token_hash=? for update",hash(value));
   if(rows.isEmpty()||!purpose.equals(rows.getFirst().get("purpose"))||Boolean.TRUE.equals(rows.getFirst().get("consumed"))||((Timestamp)rows.getFirst().get("expires_at")).toInstant().isBefore(Instant.now()))throw new BusinessRuleException("El enlace no es válido o ha caducado. Solicita otro.");
@@ -47,7 +57,7 @@ public class AccountService implements UserDetailsService {
    jdbc.update("update ping_accounts set email_verified=true where id=?",id);
    jdbc.update("update account_tokens set consumed=true where account_id=? and purpose=?",id,purpose);
   }
-  audit(id,purpose,id,null);
+  audit(id,purpose,id,null);return id;
  }
  @Transactional(isolation=Isolation.READ_COMMITTED)
  public void bootstrap(String value,String password){if(value.isBlank()&&password.isBlank())return;if(value.isBlank()||password.isBlank())throw new IllegalStateException("Both PING_BOOTSTRAP_EMAIL and PING_BOOTSTRAP_PASSWORD are required for first setup");boolean used=Boolean.TRUE.equals(jdbc.queryForObject("select used from auth_setup_state where id=1 for update",Boolean.class));if(used)return;String e=email(value);password(password);if(find(e).isPresent())throw new IllegalStateException("Bootstrap requires a new dedicated account; no existing account is promoted");long id=create(e,password,true);jdbc.update("update ping_accounts set general_admin=true where id=?",id);jdbc.update("update auth_setup_state set used=true where id=1");audit(id,"BOOTSTRAP_GENERAL",id,null);}
