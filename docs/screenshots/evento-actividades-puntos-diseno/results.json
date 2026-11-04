@@ -1,0 +1,217 @@
+[
+ {
+  "name": "01-evento-390-oscuro",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "Festival de prueba · Actividades",
+  "summary": "3 actividades · de +15 a +40 puntos",
+  "cards": 3,
+  "assigned": 0,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "03-encuentro-390-oscuro",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "Tu punto de encuentro",
+  "summary": "Tu actividad y 2 más · de +15 a +40 puntos",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "04-encuentro-390-oscuro-actividades",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "Tu punto de encuentro",
+  "summary": "Tu actividad y 2 más · de +15 a +40 puntos",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "05-evento-390-claro-actividades",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "light",
+  "h1": "Festival de prueba · Actividades",
+  "summary": "3 actividades · de +15 a +40 puntos",
+  "cards": 3,
+  "assigned": 0,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "06-evento-360-claro-largos",
+  "url": "/me/event",
+  "width": 360,
+  "theme": "light",
+  "h1": "Semana de Bienvenida USTA · Facultad de Ingeniería de Sistemas",
+  "summary": "3 actividades · de +25 a +100 puntos",
+  "cards": 3,
+  "assigned": 0,
+  "points": [
+   "+100 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "07-encuentro-360-oscuro-largos",
+  "url": "/me/event",
+  "width": 360,
+  "theme": "dark",
+  "h1": "Tu punto de encuentro",
+  "summary": "Tu actividad y 2 más · de +25 a +100 puntos",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+100 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "08-vacio-390-oscuro-completo",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "Evento sin actividades",
+  "summary": null,
+  "cards": 0,
+  "assigned": 0,
+  "points": [],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": "Aún no hay actividades disponibles para este evento.",
+  "jsErrors": []
+ },
+ {
+  "name": "09-evento-escritorio-oscuro",
+  "url": "/me/event",
+  "width": 1366,
+  "theme": "dark",
+  "h1": "Festival de prueba · Actividades",
+  "summary": "3 actividades · de +15 a +40 puntos",
+  "cards": 3,
+  "assigned": 0,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": false,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "10-encuentro-escritorio-claro",
+  "url": "/me/event",
+  "width": 1366,
+  "theme": "light",
+  "h1": "Tu punto de encuentro",
+  "summary": "Tu actividad y 2 más · de +15 a +40 puntos",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": false,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "11-hub-sofa-390-oscuro-misma-cifra",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "SOFA 2026",
+  "summary": "2 actividades · +20 puntos cada una",
+  "cards": 2,
+  "assigned": 0,
+  "points": [
+   "+20 puntos",
+   "+20 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "12-encuentro-360-claro-actividades",
+  "url": "/me/event",
+  "width": 360,
+  "theme": "light",
+  "h1": "Tu punto de encuentro",
+  "summary": "Tu actividad y 2 más · de +15 a +40 puntos",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "cutPoints": false,
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ }
+]

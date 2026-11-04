@@ -15,6 +15,7 @@ class EventActivityGuideTests {
     long activity(long event,long point,String title,String instructions,int reward){var a=new ActivityForm();a.setTitle(title);a.setInstructions(instructions);a.setRewardPoints(reward);a.setPointIds(Set.of(point));return encounters.saveActivity(event,null,a);}
     long person(long event,String alias){var f=new ParticipantForm();f.setAlias(alias);f.setEventId(event);f.setAvailable(true);return people.create(f).id();}
     void enter(TestBrowser browser,long person)throws Exception{browser.get("/demo");assertThat(browser.post("/demo",Map.of("participantId",""+person)).statusCode()).isEqualTo(302);}
+    static String pts(int points){return "<strong>+"+points+"</strong>";}
     static int count(String body,String text){return body.split(java.util.regex.Pattern.quote(text),-1).length-1;}
     @BeforeEach void setup(){
         event=open("Feria USTA de prueba");long p=point(event,"Plazoleta");
@@ -30,9 +31,10 @@ class EventActivityGuideTests {
         try(var b=new TestBrowser(port)){
             enter(b,me);assertThat(b.get("/me/event").headers().firstValue("Location").orElseThrow()).endsWith("/events/"+event+"/plan");
             String body=b.get("/events/"+event+"/plan").body();
-            assertThat(body).contains("Actividades y puntos","Recomienden un libro","Cada persona recomienda un libro y explica por qué.","+15 puntos","Pregunta rápida","+25 puntos","Mapa de intereses","+40 puntos","Cada actividad indica los puntos","Se acreditan una sola vez, cuando ambos confirman la actividad.","se verifica y confirma desde tu encuentro","Plazoleta","Junto al letrero de Plazoleta")
-                .doesNotContain("Actividad pausada","Actividad archivada","Actividad de otro evento","+70 puntos","Tu actividad asignada","+10 puntos","Aún no hay actividades");
+            assertThat(body).contains("Actividades y puntos","3 actividades · de +15 a +40 puntos","Recomienden un libro","Cada persona recomienda un libro y explica por qué.",pts(15),"Pregunta rápida",pts(25),"Mapa de intereses",pts(40),"Cada actividad suma sus puntos a cada persona, una sola vez, cuando ambos confirman la actividad.","se verifica y confirma desde tu encuentro","Ir al plano del evento","Plazoleta","Junto al letrero de Plazoleta")
+                .doesNotContain("Actividad pausada","Actividad archivada","Actividad de otro evento",pts(70),"Tu actividad asignada",pts(10),"Aún no hay actividades");
             assertThat(body.indexOf("Actividades y puntos")).isLessThan(body.indexOf("id=\"plano\""));
+            assertThat(body.indexOf("Mapa de intereses")).isLessThan(body.indexOf("Cada actividad suma sus puntos"));
             assertThat(body).doesNotContainPattern("<form[^>]*/(matches|activities)[^>]*>");
         }
     }
@@ -41,9 +43,9 @@ class EventActivityGuideTests {
         var view=matches.get(match,a);assertThat(view.activityTitle()).isEqualTo("Recomienden un libro");
         try(var b=new TestBrowser(port)){
             enter(b,a);String body=b.get("/events/"+event+"/plan").body();
-            assertThat(body).contains("Tu punto de encuentro","Ver todas las actividades","href=\"#actividades\"","Tu actividad asignada","Otras actividades del evento","Pregunta rápida","Mapa de intereses","Volver al encuentro","/matches/"+match,"Junto al letrero de Plazoleta")
+            assertThat(body).contains("Tu punto de encuentro","Ver todas las actividades · 3","href=\"#actividades\"","Tu actividad y 2 más · de +15 a +40 puntos","Tu actividad asignada","Se verifica y confirma desde tu encuentro","Otras actividades del evento","Pregunta rápida","Mapa de intereses","Volver al encuentro","/matches/"+match,"Junto al letrero de Plazoleta")
                 .doesNotContain("Actividad de otro evento","Actividad pausada");
-            assertThat(count(body,"Recomienden un libro")).isEqualTo(1);assertThat(count(body,"+15 puntos")).isEqualTo(1);
+            assertThat(count(body,"Recomienden un libro")).isEqualTo(1);assertThat(count(body,pts(15))).isEqualTo(1);
             assertThat(body.indexOf("Ver todas las actividades")).isLessThan(body.indexOf("Junto al letrero de Plazoleta"));
             assertThat(body.indexOf("Junto al letrero de Plazoleta")).isLessThan(body.indexOf("Tu actividad asignada"));
             assertThat(b.get("/matches/"+match+"/plan").body()).contains("Tu actividad asignada","Volver al encuentro");
@@ -58,8 +60,8 @@ class EventActivityGuideTests {
         var f=new EventForm();f.setName("Evento con catálogo anterior");f.setMeetingPoints("Patio");f.setEncounterActivities("Compartan una recomendación.\nElijan una pregunta para conversar.");long legacy=events.create(f).getId();events.transition(legacy,EventStatus.OPEN);long me2=person(legacy,"Anterior");
         try(var b=new TestBrowser(port)){
             enter(b,me2);String body=b.get("/events/"+legacy+"/plan").body();
-            assertThat(body).contains("Todas las actividades de este evento suman +"+EncounterService.LEGACY_REWARD_POINTS+" puntos","Compartan una recomendación.","Elijan una pregunta para conversar.").doesNotContain("Recomienden un libro","Zona Gamer");
-            assertThat(count(body,"+"+EncounterService.LEGACY_REWARD_POINTS+" puntos</span>")).isEqualTo(2);
+            assertThat(body).contains("2 actividades · +"+EncounterService.LEGACY_REWARD_POINTS+" puntos cada una","Todas las actividades de este evento suman +"+EncounterService.LEGACY_REWARD_POINTS+" puntos","Compartan una recomendación.","Elijan una pregunta para conversar.").doesNotContain("Recomienden un libro","Zona Gamer");
+            assertThat(count(body,pts(EncounterService.LEGACY_REWARD_POINTS))).isEqualTo(2);
         }
     }
 }

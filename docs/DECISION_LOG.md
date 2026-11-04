@@ -609,3 +609,20 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - Solo lectura: sin cambios de asignación, puntos, Saga, códigos, privacidad, planos guardados, migraciones ni dependencias.
 
 **Detalle y evidencia:** [EVENTO_ACTIVIDADES_PUNTOS.md](EVENTO_ACTIVIDADES_PUNTOS.md).
+
+## DEC-065 — Diseño de «Actividades y puntos» (aprobado por Samuel)
+
+**Estado: diseño aprobado por Samuel el 4 de noviembre de 2026** en la sesión de Claude Code («Apruebo la propuesta "Actividades y puntos". Impleméntala en PING»). No se atribuye aprobación a Julián. Implementado sobre el catálogo (`068ae7e`) en `fix/evento-actividades-puntos`, como commit separado (`426a5c9`). Integrado después, junto con el catálogo (DEC-064), sobre el SHA Live `191522f` en `fix/evento-actividades-live`; renumerado de DEC-064 a DEC-065. Sin push, merge ni despliegue.
+
+**Fuente:** Figma `WCrjKj5eGOZQ8wUaxsEqfc`, página «PING · Actividades y puntos · Propuesta (4 nov 2026)»: Evento `182:262`, Encuentro activo `182:380`, especificación `184:628`, componente local `Actividades · Tarjeta` `181:288`.
+
+**Alcance (solo la sección «Actividades y puntos»):**
+- Puntos en una columna fija de 64 px (cifra + «puntos»), alineada en todas las tarjetas.
+- Resumen calculado con los datos mostrados: «3 actividades · de +15 a +40 puntos». Si todas valen lo mismo, una sola cifra («+20 puntos cada una»). Durante un encuentro: «Tu actividad y N más · …».
+- Actividad asignada una sola vez: etiqueta con ✓ y texto, borde de 2 px y fondo elevado (no depende solo del color), con el enlace «Se verifica y confirma desde tu encuentro».
+- Regla de acreditación debajo del catálogo; con la política 2 se muestra en tres pasos (Llegada · Códigos · Confirmación).
+- «Ver todas las actividades · N» con flecha hacia abajo (símbolo `arrow-down` añadido al sprite).
+
+**Se conserva:** «Ir al plano del evento», indicaciones, plano guardado, «Volver al encuentro», estado vacío, Hub, permisos y datos. Sin cambios en cómo se ganan puntos, la asignación, la Saga, el encuentro, migraciones ni dependencias.
+
+**Detalle y evidencia:** [EVENTO_ACTIVIDADES_PUNTOS.md](EVENTO_ACTIVIDADES_PUNTOS.md).

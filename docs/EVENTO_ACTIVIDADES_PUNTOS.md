@@ -73,3 +73,30 @@ Chrome headless por CDP, con datos aislados en H2 y política 2. Las capturas se
 En las capturas de página completa, la barra inferior fija (en móvil) y la barra lateral (en escritorio) quedan a la altura del viewport inicial. Es un efecto de la captura, no de la página. Ninguna captura tiene desborde horizontal ni errores JS. El arnés de captura y las cookies quedaron fuera de Git.
 
 **Límites:** Chromium emulado no sustituye a un iPhone físico (Safari, áreas seguras, desplazamiento real).
+
+## Diseño aprobado (DEC-065)
+
+Implementación de los frames de Figma `182:262` (Evento) y `182:380` (Encuentro activo), con la ficha `184:628`. El diseño lo aprobó Samuel el 4 de noviembre de 2026; no se atribuye aprobación a Julián. Es un commit separado sobre `068ae7e` (`426a5c9`). Se integró después sobre el SHA Live `191522f` en `fix/evento-actividades-live`.
+
+**Qué cambia:**
+- Columna de puntos alineada.
+- Resumen calculado (`ActivityGuide.summary()`). Si todas las actividades valen lo mismo, muestra una sola cifra.
+- Tarjeta asignada con etiqueta, icono, borde de 2 px y enlace al encuentro.
+- Regla de puntos en pasos, debajo del catálogo.
+- «Ver todas las actividades · N» con la flecha `arrow-down`.
+
+La lógica del servicio, la asignación y la acreditación no cambian.
+
+**Pruebas:** `EventActivityGuideTests` (3/3) y `FloorplanViewTests` (3/3). También pasa `EventExperienceTests` (28/28), que cubre el Hub, donde se reutiliza el fragmento.
+
+**Capturas:** [`screenshots/evento-actividades-puntos-diseno/`](screenshots/evento-actividades-puntos-diseno/), con `results.json`. Se tomaron con Chrome headless por CDP, datos aislados en H2 y política 2. Se revisaron:
+- 390 px, oscuro: `01`, `03` y `04`.
+- 390 px, claro: `05`.
+- 360 px, claro con títulos largos y «+100»: `06`.
+- 360 px, oscuro con títulos largos: `07`.
+- 360 px, claro: `12`.
+- Estado vacío: `08`.
+- Escritorio: `09` y `10`.
+- Hub SOFA con la misma cifra en todas las actividades: `11`.
+
+Ninguna captura tiene desborde horizontal, puntos recortados ni errores JS.

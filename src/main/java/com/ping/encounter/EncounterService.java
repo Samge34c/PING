@@ -69,7 +69,19 @@ public class EncounterService {
     /** Reward of every activity in events that still use the text catalog (no per-activity points). */
     public static final int LEGACY_REWARD_POINTS=10;
     public record GuideActivity(String title,String description,int rewardPoints){}
-    public record ActivityGuide(GuideActivity assigned,List<GuideActivity> activities,Integer commonRewardPoints,int policy,Long matchId){}
+    public record ActivityGuide(GuideActivity assigned,List<GuideActivity> activities,Integer commonRewardPoints,int policy,Long matchId){
+        public int total(){return activities.size()+(assigned==null?0:1);}
+        /** Count and point range of what the page shows, e.g. «3 actividades · de +15 a +40 puntos»; one figure when all match. */
+        public String summary(){
+            if(total()==0)return null;
+            var points=new ArrayList<Integer>();if(assigned!=null)points.add(assigned.rewardPoints());activities.forEach(a->points.add(a.rewardPoints()));
+            int min=Collections.min(points),max=Collections.max(points);
+            String range=min==max?label(min)+(min==1?" punto":" puntos")+(total()>1?" cada una":""):"de "+label(min)+" a "+label(max)+" puntos";
+            String count=assigned==null?total()+(total()==1?" actividad":" actividades"):"Tu actividad"+(activities.isEmpty()?"":" y "+activities.size()+" más");
+            return count+" · "+range;
+        }
+        private static String label(int points){return points==0?"0":"+"+points;}
+    }
     /** Read-only catalog for the participant's Evento tab: the same rows assign() draws from, never another event's or SOFA's fixed texts. */
     public ActivityGuide guide(Event event,com.ping.match.MatchView active,int newPolicy){
         List<GuideActivity> rows;Integer common=null;

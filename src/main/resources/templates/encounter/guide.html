@@ -1,19 +1,26 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
-<!-- Catálogo de solo lectura del evento (Evento): no asigna ni acredita; la recompensa sigue en el encuentro y la Saga. -->
-<section th:fragment="guide" id="actividades" class="pa-guide" aria-labelledby="pa-title" tabindex="-1" th:with="g=${activityGuide}, credit=${g.policy >= 2 ? 'cuando ambos registran su llegada, verifican sus códigos y confirman la actividad' : 'cuando ambos confirman la actividad'}">
-  <h2 id="pa-title">Actividades y puntos</h2>
-  <p class="pa-rule" th:if="${g.assigned != null or !#lists.isEmpty(g.activities)}" th:text="${(g.commonRewardPoints != null ? 'Todas las actividades de este evento suman +' + g.commonRewardPoints + ' puntos' : 'Cada actividad indica los puntos que suma') + ' a cada persona al completar el encuentro. Se acreditan una sola vez, ' + credit + '.'}"></p>
+<!-- Catálogo de solo lectura del evento (Evento): no asigna ni acredita; la recompensa sigue en el encuentro y la Saga. Diseño DEC-065 (Figma 182:262 / 182:380). -->
+<section th:fragment="guide" id="actividades" class="pa-guide" aria-labelledby="pa-title" tabindex="-1" th:with="g=${activityGuide}">
+  <div class="pa-head"><h2 id="pa-title">Actividades y puntos</h2><p class="pa-summary" th:if="${g.summary() != null}" th:text="${g.summary()}"></p></div>
   <article th:if="${g.assigned != null}" class="pa-card pa-assigned" aria-labelledby="pa-assigned-title">
-    <span class="pa-tag">Tu actividad asignada</span>
-    <div class="pa-row"><h3 id="pa-assigned-title" th:text="${g.assigned.title}"></h3><span class="pa-points" th:text="${g.assigned.rewardPoints == 0 ? 'Sin puntos' : '+' + g.assigned.rewardPoints + (g.assigned.rewardPoints == 1 ? ' punto' : ' puntos')}"></span></div>
-    <p th:if="${g.assigned.description != null}" th:text="${g.assigned.description}"></p>
-    <a class="pa-link" th:href="@{/matches/{id}(id=${g.matchId})}">La actividad se verifica y confirma desde tu encuentro <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+    <span class="pa-tag"><svg th:replace="~{fragments/layout :: icon('check')}"></svg>Tu actividad asignada</span>
+    <div th:replace="~{encounter/guide :: row(${g.assigned}, 'pa-assigned-title')}"></div>
+    <a class="pa-link" th:href="@{/matches/{id}(id=${g.matchId})}">Se verifica y confirma desde tu encuentro <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
   </article>
   <p th:if="${g.assigned != null and !#lists.isEmpty(g.activities)}" class="pa-sub">Otras actividades del evento</p>
   <ul class="pa-list" th:unless="${#lists.isEmpty(g.activities)}">
-    <li class="pa-card" th:each="a : ${g.activities}"><div class="pa-row"><h3 class="pa-title" th:text="${a.title}"></h3><span class="pa-points" th:text="${a.rewardPoints == 0 ? 'Sin puntos' : '+' + a.rewardPoints + (a.rewardPoints == 1 ? ' punto' : ' puntos')}"></span></div><p th:if="${a.description != null}" th:text="${a.description}"></p></li>
+    <li class="pa-card" th:each="a : ${g.activities}"><div th:replace="~{encounter/guide :: row(${a}, null)}"></div></li>
   </ul>
-  <p th:if="${g.assigned == null and #lists.isEmpty(g.activities)}" class="pa-empty">Aún no hay actividades disponibles para este evento.</p>
+  <p th:if="${g.total() == 0}" class="pa-empty">Aún no hay actividades disponibles para este evento.</p>
+  <div th:if="${g.total() > 0}" class="pa-rule">
+    <p th:text="${(g.commonRewardPoints != null ? 'Todas las actividades de este evento suman +' + g.commonRewardPoints + ' puntos' : 'Cada actividad suma sus puntos') + ' a cada persona, una sola vez, ' + (g.policy >= 2 ? 'cuando ambos completan el encuentro:' : 'cuando ambos confirman la actividad.')}"></p>
+    <ol th:if="${g.policy >= 2}" class="pa-steps"><li><span>1 ·</span> Llegada</li><li><span>2 ·</span> Códigos</li><li><span>3 ·</span> Confirmación</li></ol>
+  </div>
   <p th:if="${g.assigned == null}" class="pa-how">La actividad se asigna cuando ambos aceptan una conexión, y se verifica y confirma desde tu encuentro.</p>
 </section>
+<!-- Título, descripción opcional y puntos en una columna fija para compararlos de un vistazo. -->
+<div th:fragment="row(a, titleId)" class="pa-row">
+  <div class="pa-text"><h3 th:id="${titleId}" th:text="${a.title}"></h3><p th:if="${a.description != null}" th:text="${a.description}"></p></div>
+  <p class="pa-points"><strong th:text="${a.rewardPoints == 0 ? 'Sin' : '+' + a.rewardPoints}"></strong> <span th:text="${a.rewardPoints == 1 ? 'punto' : 'puntos'}"></span></p>
+</div>
 </body></html>
