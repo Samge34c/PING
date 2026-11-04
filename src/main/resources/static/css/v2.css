@@ -461,3 +461,28 @@
 @media (max-width:1023px){
  body.participant-entry-page:has(:is(input:not([type="checkbox"],[type="radio"],[type="hidden"],[type="submit"],[type="button"]),textarea,select):focus) .ping-bottom-nav {visibility:hidden}
 }
+
+/* Evento · Actividades y puntos: catálogo de solo lectura en el plano y el Hub. */
+.pa-guide {margin:20px 0 8px;scroll-margin-top:16px}
+.pa-guide:focus {outline:none}
+.pa-guide h2 {font-size:var(--ping-type-section);font-weight:800;letter-spacing:-.02em;margin:0 0 6px}
+.pa-rule,.pa-how,.pa-empty {font-size:var(--ping-type-help);line-height:1.5;color:var(--ping-muted);margin:0 0 12px}
+.pa-empty {padding:14px 16px;border:1px dashed var(--ping-border);border-radius:var(--ping-radius);color:var(--ping-text)}
+.pa-how {margin:12px 0 0}
+.pa-list {list-style:none;display:grid;gap:8px;margin:0;padding:0}
+.pa-card {padding:12px 14px;border:1px solid var(--ping-border);border-radius:var(--ping-radius);background:var(--ping-surface);min-width:0}
+.pa-card p {margin:6px 0 0;font-size:var(--ping-type-help);line-height:1.45;color:var(--ping-muted);overflow-wrap:anywhere}
+.pa-row {display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.pa-row h3 {font-size:16px;font-weight:800;line-height:1.3;margin:0;min-width:0;overflow-wrap:anywhere}
+.pa-points {flex:0 0 auto;padding:3px 9px;border-radius:999px;background:var(--ping-accent);color:var(--ping-accent-text);font-size:var(--ping-type-label);font-weight:800;white-space:nowrap}
+.pa-assigned {border:2px solid var(--ping-primary);background:var(--ping-surface-alt)}
+.pa-tag {display:inline-block;margin-bottom:6px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ping-highlight-text)}
+.pa-link,.pa-jump {display:inline-flex;align-items:center;gap:6px;min-height:var(--ping-tap);font-size:var(--ping-type-help);font-weight:800;color:var(--ping-link);text-decoration:none}
+.pa-link {margin-top:4px}
+.pa-link:hover,.pa-jump:hover {color:var(--ping-link-hover);text-decoration:underline}
+.pa-link .ping-icon,.pa-jump .ping-icon {width:16px;height:16px;flex-shrink:0}
+.pa-sub {margin:14px 0 8px;font-size:var(--ping-type-label);font-weight:800;color:var(--ping-muted)}
+.pa-plan-title {font-size:var(--ping-type-section);font-weight:800;margin:24px 0 0;scroll-margin-top:16px}
+.pa-plan-title:focus {outline:none}
+.sofa-hub-page .pa-guide {margin:28px 0 0}
+@media (min-width:768px){.pa-list{grid-template-columns:repeat(2,minmax(0,1fr))}.sofa-hub-page .pa-list{grid-template-columns:repeat(3,minmax(0,1fr))}}

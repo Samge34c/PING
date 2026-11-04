@@ -66,10 +66,29 @@ public class EncounterService {
     private void requireLegacyImport(Event e){if(!e.isStructuredEncounter()&&(!EncounterOptions.unique(e.getMeetingPoints()).isEmpty()||!EncounterOptions.unique(e.getEncounterActivities()).isEmpty()))throw new BusinessRuleException("Importa primero el catálogo anterior. Puedes reducir sus listas sin borrar encuentros activos.");}
     @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public void legacy(long event,String names,String tasks,long version){var e=events.lock(event);revision(version,e.getVersion());if(e.isStructuredEncounter())throw new BusinessRuleException("El catálogo ya se importó. Usa las filas editables.");if(names.length()>4000||tasks.length()>12000)throw new BusinessRuleException("Las listas superan el tamaño permitido.");EncounterOptions.checkGrowth(names,e.getMeetingPoints(),3,"Puntos");EncounterOptions.checkGrowth(tasks,e.getEncounterActivities(),10,"Actividades");var f=EventForm.from(e);f.setMeetingPoints(EncounterOptions.normalize(names,160,"Puntos"));f.setEncounterActivities(EncounterOptions.normalize(tasks,500,"Actividades"));events.update(event,f);}
+    /** Reward of every activity in events that still use the text catalog (no per-activity points). */
+    public static final int LEGACY_REWARD_POINTS=10;
+    public record GuideActivity(String title,String description,int rewardPoints){}
+    public record ActivityGuide(GuideActivity assigned,List<GuideActivity> activities,Integer commonRewardPoints,int policy,Long matchId){}
+    /** Read-only catalog for the participant's Evento tab: the same rows assign() draws from, never another event's or SOFA's fixed texts. */
+    public ActivityGuide guide(Event event,com.ping.match.MatchView active,int newPolicy){
+        List<GuideActivity> rows;Integer common=null;
+        if(event.isStructuredEncounter())rows=activities(event.getId()).stream().filter(a->a.isActive()&&!a.isArchived()).map(a->guideRow(a.getTitle(),a.getInstructions(),a.getRewardPoints())).toList();
+        else{rows=EncounterOptions.unique(event.getEncounterActivities()).stream().map(t->guideRow(t.length()>120?t.substring(0,120):t,t,LEGACY_REWARD_POINTS)).toList();common=LEGACY_REWARD_POINTS;}
+        if(active==null||active.activity()==null)return new ActivityGuide(null,rows,common,newPolicy,null);
+        String title=active.activityTitle()==null||active.activityTitle().isBlank()?active.activity():active.activityTitle();
+        var assigned=guideRow(title.length()>120?title.substring(0,120):title,active.activity(),active.rewardPoints());
+        String key=assigned.title()+"\n"+Objects.toString(assigned.description(),"");
+        return new ActivityGuide(assigned,rows.stream().filter(r->!key.equals(r.title()+"\n"+Objects.toString(r.description(),""))).toList(),common,active.verificationPolicy(),active.id());
+    }
+    private static GuideActivity guideRow(String title,String text,int points){
+        String t=title.strip().replaceAll("\\s+"," "),d=text==null?"":text.strip().replaceAll("\\s+"," ");
+        return new GuideActivity(t,d.isEmpty()||d.equals(t)?null:d,points);
+    }
     public record Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints,Long pointId){}
     public Assignment assign(Event event,String common,long matchId){
         if((!event.isStructuredEncounter() && (EncounterOptions.unique(event.getMeetingPoints()).size()>3 || EncounterOptions.unique(event.getEncounterActivities()).size()>10)) || EncounterOptions.unique(event.getEncounterWords()).size()>100 || (event.isStructuredEncounter() && (points(event.getId()).stream().filter(p->!p.isArchived()).count()>3 || activities(event.getId()).stream().filter(a->!a.isArchived()).count()>10)))throw new EncounterUnavailableException("La configuración anterior supera los límites. Pide al organizador reducirla; la propuesta y los encuentros anteriores se conservan.");
-        if(!event.isStructuredEncounter())return new Assignment(ActivityCatalog.encounter(common,matchId,event),"","",10,null);
+        if(!event.isStructuredEncounter())return new Assignment(ActivityCatalog.encounter(common,matchId,event),"","",LEGACY_REWARD_POINTS,null);
         var available=points(event.getId()).stream().filter(p->p.isActive()&&!p.isArchived()).toList();
         var names=new HashSet<>(Arrays.asList(common.split(" · ")));
         var interestNames=new HashMap<Long,String>();interests.findAll().forEach(i->interestNames.put(i.getId(),i.getName()));

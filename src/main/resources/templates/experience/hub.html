@@ -44,6 +44,8 @@
       <div class="h-festival-foot"><span class="h-event-status" th:attr="data-status=${event.status.name()}"><i></i><span th:text="${'Evento ' + #strings.toLowerCase(event.status.label)}"></span></span><span>SIMULACIÓN ACADÉMICA · No oficial</span><span class="h-motto">CONECTA POR LO QUE TE MUEVE <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></span></div>
     </section>
 
+    <section th:replace="~{encounter/guide :: guide}"></section>
+
     <section class="h-worlds" aria-labelledby="h-worlds-title">
       <div class="h-section-head"><div><h2 id="h-worlds-title">Encuentra tu mundo<span>.</span></h2><p>Seis zonas. Intereses que abren conversaciones.</p></div><a class="h-text-link" th:href="@{/events/{id}/map(id=${event.id})}">Ver mapa del evento <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
       <div class="h-zones">

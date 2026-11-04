@@ -2,7 +2,9 @@
 <link rel="stylesheet" th:href="@{/css/floorplan.css}"><nav th:replace="~{fragments/layout :: nav}"></nav>
 <main id="main-content" class="container ping-form-layout fp-page">
   <a class="fp-back" th:href="${backUrl}" th:text="${'← ' + backLabel}"></a>
-  <h1 th:text="${assignment ? 'Tu punto de encuentro' : 'Plano del evento'}"></h1><p th:text="${event.name}"></p>
+  <h1 th:text="${assignment ? 'Tu punto de encuentro' : event.name}"></h1><p th:text="${assignment ? event.name : 'Actividades, puntos y plano del evento.'}"></p>
+  <a th:if="${assignment}" class="pa-jump" href="#actividades">Ver todas las actividades <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+  <th:block th:unless="${assignment}"><a class="pa-jump" href="#plano">Ir al plano del evento <svg th:replace="~{fragments/layout :: icon('pin')}"></svg></a><section th:replace="~{encounter/guide :: guide}"></section><h2 id="plano" class="pa-plan-title" tabindex="-1">Plano del evento</h2></th:block>
   <p class="fp-help" th:if="${assignment and plan != null}">Plano guardado al activar tu encuentro. Los cambios posteriores no trasladan este punto.</p>
   <form th:if="${!assignment and !#lists.isEmpty(planPoints)}" method="get" th:action="@{/events/{id}/plan(id=${event.id})}" class="fp-browse">
     <label class="form-label" for="browse-point">Punto del evento</label><select class="form-select" id="browse-point" name="pointId"><option th:each="p : ${planPoints}" th:value="${p.id}" th:selected="${selectedPointId == p.id}" th:text="${p.name + (p.active ? '' : ' · Inactivo')}"></option></select><button class="btn btn-outline-primary" th:text="${plan == null ? 'Ver indicaciones' : 'Ver punto'}"></button>
@@ -13,5 +15,6 @@
     <p class="ping-notice" th:if="${fpX == null or fpY == null}" role="status">El punto no está ubicado en esta versión del plano. Sigue sus indicaciones o consulta al organizador; no mostramos una posición aproximada.</p>
     <div th:replace="~{floorplan/viewer :: viewer}"></div>
   </div>
+  <th:block th:if="${assignment}"><section th:replace="~{encounter/guide :: guide}"></section></th:block>
   <a class="btn btn-primary fp-back" th:href="${backUrl}" th:text="${backLabel}"></a>
 </main><footer th:replace="~{fragments/layout :: footer}"></footer><script th:src="@{/js/floorplan.js}" defer></script></body></html>

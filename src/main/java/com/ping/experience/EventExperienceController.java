@@ -1,5 +1,6 @@
 package com.ping.experience;
 
+import com.ping.encounter.EncounterService;
 import com.ping.event.EventService;
 import com.ping.match.*;
 import com.ping.participant.ParticipantService;
@@ -15,8 +16,10 @@ public class EventExperienceController {
     private final EventService events;
     private final ParticipantService participants;
     private final MatchService matches;
-    public EventExperienceController(EventService events, ParticipantService participants, MatchService matches) {
-        this.events = events; this.participants = participants; this.matches = matches;
+    private final EncounterService encounters;
+    private final JourneyPolicy policy;
+    public EventExperienceController(EventService events, ParticipantService participants, MatchService matches, EncounterService encounters, JourneyPolicy policy) {
+        this.events = events; this.participants = participants; this.matches = matches; this.encounters = encounters; this.policy = policy;
     }
     private EventExperienceCatalog.Experience experience(long id, Model model) {
         var event = events.get(id); var experience = EventExperienceCatalog.forEvent(event.getName());
@@ -30,15 +33,19 @@ public class EventExperienceController {
     }
     @GetMapping("/events/{id}/hub") public String hub(@PathVariable long id, HttpSession session, Model model) {
         experience(id, model);
+        MatchView active = null;
         if (session.getAttribute("pingDemoParticipantId") instanceof Long self) {
             var participant = participants.get(self);
             if (participant.eventId() == id) {
                 model.addAttribute("participant", participant);
                 var history = matches.list(self);
-                model.addAttribute("currentMatch", history.stream().filter(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE).findFirst().orElse(null));
+                var current = history.stream().filter(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE).findFirst().orElse(null);
+                model.addAttribute("currentMatch", current);
                 model.addAttribute("badges", EventExperienceCatalog.badges(history));
+                if (current != null && current.status() == MatchStatus.ACTIVE) active = current;
             }
         }
+        model.addAttribute("activityGuide", encounters.guide(events.get(id), active, policy.version()));
         return "experience/hub";
     }
     @GetMapping("/events/{id}/map") public String map(@PathVariable long id, @RequestParam(required = false) String zone,

@@ -1,0 +1,159 @@
+[
+ {
+  "name": "01-evento-390-oscuro",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "Festival de prueba · Actividades",
+  "cards": 3,
+  "assigned": 0,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "03-encuentro-390-oscuro",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "Tu punto de encuentro",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "04-encuentro-390-oscuro-actividades",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "Tu punto de encuentro",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "06-evento-360-claro-completo",
+  "url": "/me/event",
+  "width": 360,
+  "theme": "light",
+  "h1": "Festival de prueba · Actividades",
+  "cards": 3,
+  "assigned": 0,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "07-encuentro-360-claro-actividades",
+  "url": "/me/event",
+  "width": 360,
+  "theme": "light",
+  "h1": "Tu punto de encuentro",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "08-vacio-390-oscuro-completo",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "Evento sin actividades",
+  "cards": 0,
+  "assigned": 0,
+  "points": [],
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": "Aún no hay actividades disponibles para este evento.",
+  "jsErrors": []
+ },
+ {
+  "name": "09-evento-escritorio-oscuro",
+  "url": "/me/event",
+  "width": 1366,
+  "theme": "dark",
+  "h1": "Festival de prueba · Actividades",
+  "cards": 3,
+  "assigned": 0,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "overflowX": false,
+  "bottomNav": false,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "10-encuentro-escritorio-claro",
+  "url": "/me/event",
+  "width": 1366,
+  "theme": "light",
+  "h1": "Tu punto de encuentro",
+  "cards": 3,
+  "assigned": 1,
+  "points": [
+   "+15 puntos",
+   "+25 puntos",
+   "+40 puntos"
+  ],
+  "overflowX": false,
+  "bottomNav": false,
+  "empty": null,
+  "jsErrors": []
+ },
+ {
+  "name": "11-hub-sofa-390-oscuro-actividades",
+  "url": "/me/event",
+  "width": 390,
+  "theme": "dark",
+  "h1": "SOFA 2026",
+  "cards": 2,
+  "assigned": 0,
+  "points": [
+   "+20 puntos",
+   "+30 puntos"
+  ],
+  "overflowX": false,
+  "bottomNav": true,
+  "empty": null,
+  "jsErrors": []
+ }
+]

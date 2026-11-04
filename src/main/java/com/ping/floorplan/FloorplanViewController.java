@@ -17,7 +17,9 @@ public class FloorplanViewController {
     private final EventService events;
     private final ParticipantService people;
     private final MatchService matches;
-    public FloorplanViewController(FloorplanService plans,EventService events,ParticipantService people,MatchService matches){this.plans=plans;this.events=events;this.people=people;this.matches=matches;}
+    private final com.ping.encounter.EncounterService encounters;
+    private final JourneyPolicy policy;
+    public FloorplanViewController(FloorplanService plans,EventService events,ParticipantService people,MatchService matches,com.ping.encounter.EncounterService encounters,JourneyPolicy policy){this.plans=plans;this.events=events;this.people=people;this.matches=matches;this.encounters=encounters;this.policy=policy;}
 
     @GetMapping("/events/{id}/plan")
     public String event(@PathVariable long id,@RequestParam(required=false) Long pointId,HttpSession session,Model model){
@@ -36,6 +38,7 @@ public class FloorplanViewController {
         model.addAttribute("fpX",selected==null?null:selected.x());model.addAttribute("fpY",selected==null?null:selected.y());model.addAttribute("fpLabel","1 · Punto seleccionado");
         model.addAttribute("backUrl",session.getAttribute("pingDemoParticipantId") instanceof Long?"/me":"/events/"+id);
         model.addAttribute("backLabel",session.getAttribute("pingDemoParticipantId") instanceof Long?"Volver a Mi Ping":"Volver al evento");
+        model.addAttribute("activityGuide",encounters.guide(event,null,policy.version()));
         return "floorplan/participant";
     }
     @GetMapping("/matches/{id}/plan")
@@ -55,6 +58,7 @@ public class FloorplanViewController {
         model.addAttribute("pointName",match.meetingPoint());model.addAttribute("directions",match.meetingDirections()==null||match.meetingDirections().isBlank()?"Busca el punto público indicado. Si no lo identificas, consulta al organizador.":match.meetingDirections());
         model.addAttribute("fpX",match.floorplanX());model.addAttribute("fpY",match.floorplanY());model.addAttribute("fpLabel","1 · Tu punto de encuentro");
         model.addAttribute("backUrl","/matches/"+match.id());model.addAttribute("backLabel","Volver al encuentro");
+        model.addAttribute("activityGuide",encounters.guide(event,match,policy.version()));
         return "floorplan/participant";
     }
 }

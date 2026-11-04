@@ -593,3 +593,19 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - La barra de visitante (Inicio · Unirme · Entrar) continúa en `/join/event`, `/login` y `/register`, como en el diseño seleccionado (Figma `133:1572` y variantes del componente). Se oculta sin cambiar su altura mientras un campo de texto tiene foco. Los pasos 2–3 del alta e Intereses conservan su flujo sin otra barra fija.
 
 **Sin cambios** en autenticación, rutas, permisos, reglas, puntos, canjes, Saga, base de datos, proveedores, planos, Hub ni ACTIVE. Figma: página `156:317`. Cierre: `docs/handoffs/CIERRE_RENDIMIENTO.md`, sección «Integración visual DEC-063».
+
+## DEC-064 — Actividades y puntos en la pestaña Evento (propuesta)
+
+**Estado: propuesta, pendiente de aceptación.** Solicitud de Samuel el 4 de noviembre de 2026 en la sesión de Claude Code. No se atribuye aprobación a Julián. Rama `fix/evento-actividades-puntos` desde el commit publicado en Render (`5b11db1`); sin push, merge ni despliegue. Integrado después sobre el SHA Live `191522f` en `fix/evento-actividades-live`; renumerado a DEC-064 porque DEC-063 ya corresponde a «Entrada editorial» en esa base.
+
+**Decisiones:**
+- Evento (`/events/{id}/plan` y Hub SOFA) muestra «Actividades y puntos» antes del plano. Durante un encuentro, «Tu punto de encuentro» añade arriba «Ver todas las actividades» sin mover las indicaciones de llegada.
+- **Fuentes del catálogo:**
+  - Evento estructurado: actividades activas y no archivadas del evento.
+  - Evento con lista anterior: sus líneas, con la recompensa común efectiva (`LEGACY_REWARD_POINTS`, la misma que aplica la asignación).
+  - Nunca se usan datos de otro evento ni los textos fijos de SOFA.
+- La actividad asignada sale del snapshot del encuentro. Se destaca una sola vez, con el importe que se acreditará.
+- **Regla de acreditación** según la política del encuentro. La comprobación ocurre en el encuentro (verificación y confirmación bilateral).
+- Solo lectura: sin cambios de asignación, puntos, Saga, códigos, privacidad, planos guardados, migraciones ni dependencias.
+
+**Detalle y evidencia:** [EVENTO_ACTIVIDADES_PUNTOS.md](EVENTO_ACTIVIDADES_PUNTOS.md).
