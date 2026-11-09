@@ -12,6 +12,9 @@ public class Benefit {
     @Column(nullable=false,length=500) private String claimInstructions="";
     @Column(nullable=false) private boolean defaultDelivery;
     public boolean isDefaultDelivery(){return defaultDelivery;}
+    /** DEC-066: null = no own image. Written only by BenefitImageService; lists never load the bytes. */
+    @Column(name="image_revision",insertable=false,updatable=false) private Long imageRevision;
+    public Long getImageRevision(){return imageRevision;} public boolean hasImage(){return imageRevision!=null;}
     @Version private long version;
     protected Benefit() { }
     Benefit(long event){eventId=event;}

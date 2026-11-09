@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360" role="img" aria-label="Imagen genérica de PING para recompensas">
+  <!-- DEC-066: fallback when a reward has no own image. Generic on purpose: it does not depict any product. -->
+  <rect width="640" height="360" fill="#5B2A86"/>
+  <g fill="#7A3FB0" opacity=".55"><circle cx="40" cy="40" r="90"/><circle cx="610" cy="330" r="120"/></g>
+  <g transform="translate(180 92)">
+    <path d="M0 24a24 24 0 0 1 24-24h232a24 24 0 0 1 24 24v40a24 24 0 0 0 0 48v40a24 24 0 0 1-24 24H24A24 24 0 0 1 0 152v-40a24 24 0 0 0 0-48z" fill="#F5E63C"/>
+    <path d="M196 18v140" stroke="#1B1530" stroke-width="4" stroke-dasharray="10 10" opacity=".55"/>
+    <g fill="none" stroke="#1B1530" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="44" y="70" width="104" height="70" rx="10"/><path d="M96 70v70M36 70h120M96 70c-12-30-40-30-40-12 0 12 22 12 40 12 18 0 40 0 40-12 0-18-28-18-40 12"/>
+    </g>
+    <circle cx="238" cy="88" r="16" fill="#1B1530"/>
+  </g>
+  <text x="320" y="318" text-anchor="middle" font-family="Manrope, system-ui, sans-serif" font-size="22" font-weight="800" fill="#F7F4EF" letter-spacing="4">PING</text>
+</svg>

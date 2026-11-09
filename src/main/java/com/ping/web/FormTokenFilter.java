@@ -14,7 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class FormTokenFilter extends OncePerRequestFilter {
     @Override protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         if (!request.getMethod().equals("GET") && !request.getMethod().equals("HEAD") && !request.getMethod().equals("OPTIONS")) {
-            boolean floorplanUpload = request.getRequestURI().matches("/events/[0-9]+/floorplan/image")
+            boolean floorplanUpload = request.getRequestURI().matches("/events/[0-9]+/(floorplan|rewards/[0-9]+)/image")
                     && request.getContentType() != null && request.getContentType().startsWith("multipart/form-data");
             // Rejection only, before multipart parsing can close the connection. No mutation bypasses CSRF.
             if (floorplanUpload && request.getContentLengthLong() > 9L * 1024 * 1024) {
@@ -36,7 +36,8 @@ public class FormTokenFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
     private void uploadTooLarge(HttpServletRequest request,HttpServletResponse response) throws ServletException,IOException {
-        request.setAttribute("floorplanBackUrl",request.getRequestURI().replaceFirst("/image$",""));
+        String back=request.getRequestURI().replaceFirst("/image$","");
+        request.setAttribute("floorplanBackUrl",back.contains("/rewards/")?back+"/edit":back);
         request.getRequestDispatcher("/errors/floorplan-size").forward(request,response);
     }
 }

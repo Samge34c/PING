@@ -95,3 +95,14 @@
 .qr-advanced summary {min-height:var(--ping-tap);display:flex;align-items:center;cursor:pointer;color:var(--ping-link);font-weight:700}
 @media (prefers-reduced-motion:no-preference){.qr-stage:not([hidden]){animation:qr-in .18s ease-out}@keyframes qr-in{from{opacity:.4}to{opacity:1}}}
 .fe-scan .qr-scanner :is(.qr-stage,.qr-controls,.qr-advanced) {order:3}
+
+/* Reward images (Figma 189:419): consistent 16:9, never stretched */
+.bf-media {margin:0;aspect-ratio:16/9;overflow:hidden;background:var(--ping-purple);border-radius:var(--ping-radius) var(--ping-radius) 0 0;position:relative}
+.bf-media img {display:block;width:100%;height:100%;object-fit:cover}
+.bf-media-note {position:absolute;right:8px;bottom:8px;padding:2px 8px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;font-weight:700}
+.rw-preview {max-width:420px;border-radius:var(--ping-radius)}
+.rw-preview figcaption {position:static;margin-top:6px;color:var(--ping-muted);background:none}
+.rw-admin-list {list-style:none;padding:0;display:grid;gap:12px}
+.rw-admin-list li {display:flex;gap:12px;align-items:flex-start;padding:12px;border:1px solid var(--ping-border);border-radius:var(--ping-radius);background:var(--ping-surface)}
+.rw-thumb {width:96px;height:54px;object-fit:cover;border-radius:8px;flex-shrink:0;background:var(--ping-purple)}
+.rw-admin-list h2 {margin:0}
