@@ -644,3 +644,11 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 **Diseño:** Figma `WCrjKj5eGOZQ8wUaxsEqfc`, página «PING · Cierre de usabilidad · Propuesta (8 nov 2026)» `188:262`.
 
 **Detalle, evidencia y continuidad:** [handoffs/CIERRE_USABILIDAD_PING.md](handoffs/CIERRE_USABILIDAD_PING.md).
+
+## DEC-067 — Auditoría de recorridos: salidas visibles, nombres coherentes y contexto de organización (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Samuel y Julián.** Encargo de Samuel del 8 de noviembre de 2026 (sesión de Claude Code): auditar la facilidad de uso de todos los recorridos y corregir localmente lo claro y verificable. No se atribuye aprobación a Julián. Rama `feature/auditoria-recorridos` desde `4c0f0a6`; sin push, merge ni despliegue.
+
+**Decisiones:** salida «Cancelar conexión» enlazada desde la espera en el encuentro; ayuda alineada con la revisión del personal; en organización «lugares» para los puntos de encuentro y «elementos de la agenda» para la agenda; un único «← Organización»; el tablero recuerda el evento administrado; Mi Ping no enlaza a páginas de organización. Sin cambios de reglas, permisos, datos ni migraciones.
+
+**Detalle:** [handoffs/AUDITORIA_RECORRIDOS_PING.md](handoffs/AUDITORIA_RECORRIDOS_PING.md).
