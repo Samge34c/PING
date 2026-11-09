@@ -626,3 +626,21 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 **Se conserva:** «Ir al plano del evento», indicaciones, plano guardado, «Volver al encuentro», estado vacío, Hub, permisos y datos. Sin cambios en cómo se ganan puntos, la asignación, la Saga, el encuentro, migraciones ni dependencias.
 
 **Detalle y evidencia:** [EVENTO_ACTIVIDADES_PUNTOS.md](EVENTO_ACTIVIDADES_PUNTOS.md).
+
+## DEC-066 — Cierre funcional y de usabilidad: siguiente paso, revisión del personal, imágenes de recompensas, escáner y organización (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Samuel y Julián.** Encargo explícito de Samuel del 8 de noviembre de 2026 en la sesión de Claude Code («Trabaja como responsable del cierre funcional, visual y de facilidad de uso de PING»), que autoriza corregir e implementar estas mejoras con migraciones aditivas y commits locales. No se atribuye aprobación a Julián. Rama `feature/cierre-usabilidad` desde `7f20b49` (`fix/evento-actividades-live`); sin push, merge ni despliegue. No se verificó el SHA desplegado en Render.
+
+**Decisiones de producto:**
+- **Método de comprobación por actividad.** «Confirmación de ambos» (predeterminado, comportamiento anterior) o «Revisión del personal»: la pareja envía una nota o respuesta (obligatoria solo si la organización escribe una pregunta) y una persona autorizada del mismo evento la aprueba o pide corrección con comentario. Sin fotos, geolocalización, reconocimiento facial ni IA.
+- **Separación A/B/C.** Llegadas y códigos (A) no cambian. La revisión (B) no acredita: la aprobación solo permite que la Saga existente (C) empiece cuando ambos confirmaron. Guardar ≠ aprobar ≠ acreditar. Aprobaciones o confirmaciones repetidas no duplican puntos.
+- **Compatibilidad.** El método se congela en el encuentro al activarse (V25); los encuentros anteriores y los activados con confirmación de ambos no se bloquean retrospectivamente. Política de llegada/verificación sin cambios; nunca se salta.
+- **Siguiente paso.** El encuentro muestra un paso real (Llegar, Verificar, Actividad, [Revisión], Confirmar) con una acción principal; la pestaña Evento muestra saldo, ganados y pendientes desde registros propios, actividades completadas reales y qué hacer si no hay asignación. El catálogo nunca se suma como saldo.
+- **Recompensas con imagen opcional** en MySQL (no disco de Render), validada y normalizada en servidor; reserva: imagen genérica de PING etiquetada como tal. No se usa portada de evento porque el producto no tiene ese concepto configurable (el arte del Hub SOFA es ilustración de la simulación). El snack DEMO global solo se ofrece en el escenario demo o la simulación SOFA.
+- **Escáner.** Trasera por defecto; alternancia Trasera/Frontal solo si se identifican; si no, «Cambiar cámara» recorre los dispositivos reales; lista solo con 3+ cámaras; se decodifica exactamente el área visible.
+- **Organización** centrada en el evento seleccionado (tareas primero). «Imprescindible» solo repite lo que ya exige un encuentro nuevo; no se añaden requisitos de apertura.
+- **Fuera:** tareas independientes de un encuentro u otras formas de ganar puntos (propuesta en el handoff), cambios de matching, nuevas economías.
+
+**Diseño:** Figma `WCrjKj5eGOZQ8wUaxsEqfc`, página «PING · Cierre de usabilidad · Propuesta (8 nov 2026)» `188:262`.
+
+**Detalle, evidencia y continuidad:** [handoffs/CIERRE_USABILIDAD_PING.md](handoffs/CIERRE_USABILIDAD_PING.md).

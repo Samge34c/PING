@@ -71,3 +71,5 @@ DEC-045: categorías de intereses y selección móvil desde552906a en feature/in
 
 
 DEC-046 autoriza el plano de imagen configurable por evento, puntos existentes y snapshots al activar; persiste en MySQL separado de metadatos, sin GPS ni localización de personas. Sustituye la exclusión temporal de mapas configurables. Autorización explícita de Samuel18 octubre2026, sin atribuir aprobación a Julián.
+
+DEC-066 (propuesta, encargo de Samuel 8 noviembre 2026, sin aprobación atribuida a Julián): `feature/cierre-usabilidad` desde `7f20b49`. Siguiente paso del encuentro, método de comprobación por actividad con revisión del personal (no acredita; solo deja empezar la Saga existente), imágenes opcionales de recompensas en MySQL, escáner con trasera por defecto y organización por evento. V25 aditiva. Continuidad única: handoffs/CIERRE_USABILIDAD_PING.md.
