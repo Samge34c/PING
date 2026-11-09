@@ -25,7 +25,9 @@ public class ActivityReviewService {
         Status(String label) { this.label = label; }
         public String getLabel() { return label; }
     }
-    public record Review(long matchId, Status status, String response, String comment, Instant submittedAt, Instant reviewedAt, long revision) { }
+    public record Review(long matchId, Status status, String response, String comment, Instant submittedAt, Instant reviewedAt, long revision, long submittedBy) { }
+    /** Outcome shown to staff after an approval: what really happened, read after the completion attempt. */
+    public record Outcome(boolean completed, int confirmations, int rewardPoints) { }
     public record Item(long matchId, String firstAlias, String secondAlias, String activityTitle, String checkInstructions,
                        String responsePrompt, String response, Status status, String comment, Instant submittedAt,
                        boolean ownEncounter, int rewardPoints, int confirmations, String matchStatus) {
@@ -43,9 +45,9 @@ public class ActivityReviewService {
     }
 
     public Review get(long matchId) {
-        return jdbc.query("select match_id,status,response,reviewer_comment,submitted_at,reviewed_at,revision from activity_reviews where match_id=?",
+        return jdbc.query("select match_id,status,response,reviewer_comment,submitted_at,reviewed_at,revision,submitted_by from activity_reviews where match_id=?",
                 (r, n) -> new Review(r.getLong(1), Status.valueOf(r.getString(2)), r.getString(3), r.getString(4),
-                        r.getTimestamp(5).toInstant(), r.getTimestamp(6) == null ? null : r.getTimestamp(6).toInstant(), r.getLong(7)), matchId)
+                        r.getTimestamp(5).toInstant(), r.getTimestamp(6) == null ? null : r.getTimestamp(6).toInstant(), r.getLong(7), r.getLong(8)), matchId)
             .stream().findFirst().orElse(null);
     }
 
@@ -74,6 +76,12 @@ public class ActivityReviewService {
                 Status.PENDING.name(), text, self, now, matchId);
     }
 
+    public Outcome outcome(long event, long matchId) {
+        auth.manage(event);
+        return jdbc.query("select status,first_confirmed,second_confirmed,reward_points from ping_matches where id=? and event_id=?",
+            (r, n) -> new Outcome("COMPLETED".equals(r.getString(1)), (r.getBoolean(2) ? 1 : 0) + (r.getBoolean(3) ? 1 : 0), r.getInt(4)), matchId, event)
+            .stream().findFirst().orElseThrow(() -> new NotFoundException("No encontramos ese encuentro."));
+    }
     public long open(long event) {
         return jdbc.queryForObject("select count(*) from activity_reviews r join ping_matches m on m.id=r.match_id where r.event_id=? and r.status='PENDING' and m.status='ACTIVE'", Long.class, event);
     }

@@ -82,6 +82,7 @@
       <h2 id="am-review-title" tabindex="-1" th:text="${match.verificationPolicy >= 2 ? '4 · Envíenla al personal' : 'Envíenla al personal'}"></h2>
       <p class="am-review-status" th:if="${review != null}" role="status" th:attr="data-review=${review.status().name()}"><strong th:text="${review.status().label}"></strong>
         <span th:if="${review.status().name() == 'PENDING'}"> · El personal aún no la ha revisado. Pueden corregir el envío mientras tanto.</span>
+        <span class="am-review-by" th:text="${'Enviado por ' + (review.submittedBy() == participant.id ? 'ti' : match.otherAlias) + ' · ' + #temporals.format(review.submittedAt(),'HH:mm','America/Bogota')}"></span>
         <span th:if="${review.status().name() == 'APPROVED'}" th:text="${match.confirmed and match.otherConfirmed ? ' · Los puntos se están acreditando.' : ' · Falta que ambos confirmen para recibir los puntos.'}"></span></p>
       <div class="ping-notice" th:if="${review != null and review.status().name() == 'CHANGES'}" role="alert"><strong>El personal pidió una corrección:</strong> <span th:text="${review.comment()}"></span></div>
       <p th:unless="${match.canConfirm()}" th:text="${match.verificationPolicy >= 2 ? 'Primero registren ambas llegadas y verifiquen sus códigos. Después podrán enviarla.' : 'Podrán enviarla cuando estén juntos.'}"></p>
@@ -92,7 +93,7 @@
           <label class="form-label" for="am-review-response" th:text="${#strings.isEmpty(match.responsePrompt) ? 'Nota para el personal (opcional)' : match.responsePrompt}"></label>
           <textarea class="form-control" id="am-review-response" name="response" maxlength="1000" rows="3" th:required="${!#strings.isEmpty(match.responsePrompt)}" th:text="${reviewDraft != null ? reviewDraft : (review != null ? review.response() : '')}" aria-describedby="am-review-help"></textarea>
           <p id="am-review-help" class="small text-secondary">Basta con que una persona lo envíe. Enviar no es aprobar ni suma puntos.</p>
-          <button id="am-review-action" class="btn btn-primary" th:text="${review == null ? 'Enviar a revisión' : 'Actualizar envío'}"></button>
+          <button id="am-review-action" class="btn" th:classappend="${review != null and review.status().name() == 'PENDING'} ? 'btn-outline-primary' : 'btn-primary'" th:text="${review == null ? 'Enviar a revisión' : (review.status().name() == 'CHANGES' ? 'Reenviar corregida' : 'Actualizar envío')}"></button>
         </form>
       </th:block>
       <p th:if="${review != null and review.status().name() == 'APPROVED' and !#strings.isEmpty(review.response())}" class="small"><span>Enviado: </span><span th:text="${review.response()}"></span></p>

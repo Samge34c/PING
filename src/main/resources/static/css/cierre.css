@@ -146,3 +146,4 @@
 @media (max-width:991.98px){.participant-interests-page:not(.participant-entry-page) .ic-actions{position:sticky;z-index:5;bottom:calc(var(--ping-nav-h,80px) + env(safe-area-inset-bottom))}}
 /* Beneficios en móvil: imagen más baja para que coste y acción aparezcan antes */
 @media (max-width:420px){.bf-coupon .bf-media{aspect-ratio:2/1}}
+.am-review-by {display:block;margin-top:4px;color:var(--ping-muted);font-size:13px}

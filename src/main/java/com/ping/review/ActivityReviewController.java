@@ -47,7 +47,10 @@ public class ActivityReviewController {
             if (reviews.decide(event, matchId, approve, comment)) {
                 try {
                     matches.completeAfterReview(matchId);
-                    flash.addFlashAttribute("message", "Actividad aprobada. Si ambos ya confirmaron, sus puntos se acreditaron una sola vez; si no, llegarán cuando confirmen.");
+                    var outcome = reviews.outcome(event, matchId);
+                    flash.addFlashAttribute("message", outcome.completed()
+                        ? "Actividad aprobada. Se acreditaron +" + outcome.rewardPoints() + " puntos a cada persona, una sola vez."
+                        : "Actividad aprobada. Confirmaciones: " + outcome.confirmations() + " de 2. Los puntos llegarán cuando ambas personas confirmen.");
                 } catch (BusinessRuleException completion) {
                     flash.addFlashAttribute("message", "Actividad aprobada. La acreditación no terminó: " + completion.getMessage() + " Puedes volver a pulsar Aprobar; no duplica puntos.");
                 }

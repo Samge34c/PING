@@ -134,6 +134,8 @@ class ActivityReviewTests {
             assertThat(page).contains("Hagan la actividad y envíenla", "Revisión del personal", "¿Qué canciones eligieron?", "Que nombren ambas canciones.");
             aa.post("/matches/" + match + "/review", Map.of("response", "Clocks y Yellow"));
             assertThat(reviews.get(match).response()).isEqualTo("Clocks y Yellow");
+            assertThat(aa.get("/matches/" + match).body()).contains("Pendiente de revisión", "Enviado por ti");
+            bb.get("/me"); assertThat(bb.get("/matches/" + match).body()).contains("Enviado por Persona A");
             assertThat(stranger.get("/events/" + event + "/reviews").statusCode()).isEqualTo(403);
             bb.get("/me"); assertThat(bb.get("/events/" + event + "/reviews").statusCode()).isEqualTo(403);
             String list = staffer.get("/events/" + event + "/reviews").body();
