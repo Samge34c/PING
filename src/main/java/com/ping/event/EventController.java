@@ -42,12 +42,14 @@ public class EventController {
         service.update(id, eventForm); flash.addFlashAttribute("message", "Datos del evento actualizados.");
         return "redirect:/events/" + id;
     }
-    @PostMapping("/{id}/open") public String open(@PathVariable long id, RedirectAttributes flash) { return change(id, EventStatus.OPEN, flash); }
-    @PostMapping("/{id}/pause") public String pause(@PathVariable long id, RedirectAttributes flash) { return change(id, EventStatus.PAUSED, flash); }
-    @PostMapping("/{id}/resume") public String resume(@PathVariable long id, RedirectAttributes flash) { return change(id, EventStatus.OPEN, flash); }
-    @PostMapping("/{id}/close") public String close(@PathVariable long id, RedirectAttributes flash) { return change(id, EventStatus.CLOSED, flash); }
-    private String change(long id, EventStatus target, RedirectAttributes flash) {
-        service.transition(id, target); flash.addFlashAttribute("message", "Estado del evento actualizado."); return "redirect:/events/" + id;
+    @PostMapping("/{id}/open") public String open(@PathVariable long id, @RequestParam(required = false) String returnTo, RedirectAttributes flash) { return change(id, EventStatus.OPEN, flash, returnTo); }
+    @PostMapping("/{id}/pause") public String pause(@PathVariable long id, @RequestParam(required = false) String returnTo, RedirectAttributes flash) { return change(id, EventStatus.PAUSED, flash, returnTo); }
+    @PostMapping("/{id}/resume") public String resume(@PathVariable long id, @RequestParam(required = false) String returnTo, RedirectAttributes flash) { return change(id, EventStatus.OPEN, flash, returnTo); }
+    @PostMapping("/{id}/close") public String close(@PathVariable long id, @RequestParam(required = false) String returnTo, RedirectAttributes flash) { return change(id, EventStatus.CLOSED, flash, returnTo); }
+    private String change(long id, EventStatus target, RedirectAttributes flash, String returnTo) {
+        service.transition(id, target); flash.addFlashAttribute("message", "Estado del evento actualizado: " + target.getLabel() + ".");
+        // Only a fixed internal destination; never an arbitrary URL.
+        return "organizer".equals(returnTo) ? "redirect:/organizer?event=" + id : "redirect:/events/" + id;
     }
     private void editing(Model model, long id) { model.addAttribute("editing", true); model.addAttribute("eventId", id); }
 }

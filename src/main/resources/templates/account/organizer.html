@@ -1,1 +1,75 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Tu cuenta PING')}"></head><body class="participant-entry-page"><header th:replace="~{entry/interests :: topbar}"></header><main id="main-content" class="container pe-page account-page"><a class="pi-back" th:href="@{/account}">← Mi cuenta</a><p class="eyebrow">ORGANIZACIÓN</p><h1>Tus eventos.</h1><a class="btn btn-outline-primary my-3" th:href="@{/organizer/redemptions}">Validar y entregar un canje</a><a th:if="${general}" class="btn btn-primary my-3" th:href="@{/events/new}">Crear evento</a><a th:if="${general}" class="btn btn-outline-primary my-3" th:href="@{/organizer/access}">Administrar permisos</a><ul class="editor-rows"><li th:each="e:${events}"><div><strong th:text="${e.name}"></strong><p th:text="${e.status.label}"></p><div class="organizer-event-actions"><a th:href="@{/events/{id}/preparation(id=${e.id})}">Preparación del evento</a><a th:href="@{/events/{id}/agenda(id=${e.id})}">Agenda</a><a th:href="@{/events/{id}(id=${e.id})} + '#entry-share-title'">Código y QR</a><a th:href="@{/events/{id}/encounters(id=${e.id})}">Editar configuración</a><a th:href="@{/events/{id}/rewards(id=${e.id})}">Recompensas</a><a th:href="@{/events/{id}/floorplan(id=${e.id})}">Plano</a></div></div><a th:href="@{/events/{id}(id=${e.id})}">Detalle del evento</a></li></ul><p th:if="${#lists.isEmpty(events)}">Todavía no tienes eventos asignados. El acceso de organización no concede permisos por sí solo.</p><a th:if="${general}" class="btn btn-outline-primary my-3" th:href="@{/interests/taxonomy}">Jerarquía de gustos</a></main><footer th:replace="~{fragments/layout :: footer}"></footer><script th:src="@{/js/account.js}" defer></script></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Organización')}"></head>
+<body class="participant-entry-page">
+<header th:replace="~{entry/interests :: topbar}"></header>
+<!-- DEC-066 (Figma 189:340): one selected event, tasks first. Same routes and permissions as before; no new opening requirement. -->
+<main id="main-content" class="container pe-page account-page og-page">
+  <a class="pi-back" th:href="@{/account}">← Mi cuenta</a>
+  <p class="eyebrow">ORGANIZACIÓN</p>
+  <div th:replace="~{fragments/layout :: message}"></div>
+  <p th:if="${#lists.isEmpty(events)}" class="og-empty">Todavía no tienes eventos asignados. Pide a administración general que te asigne uno; tener cuenta de organización no concede permisos por sí solo.</p>
+  <th:block th:if="${board != null}" th:with="e=${board.event()}">
+    <section class="og-event" aria-labelledby="og-event-title">
+      <div>
+        <p class="og-label">Evento que administras</p>
+        <h1 id="og-event-title" th:text="${e.name}"></h1>
+        <p class="og-status"><span class="ping-status" th:attr="data-status=${e.status.name()}" th:text="${e.status.label}"></span> <span th:text="${'Código ' + e.entryCode}"></span></p>
+      </div>
+      <form th:if="${#lists.size(events) > 1}" method="get" th:action="@{/organizer}" class="og-switch">
+        <label for="og-event-select" class="form-label">Cambiar de evento</label>
+        <div class="og-switch-row"><select id="og-event-select" name="event" class="form-select"><option th:each="x : ${events}" th:value="${x.id}" th:selected="${x.id == e.id}" th:text="${x.name + ' · ' + x.status.label}"></option></select><button class="btn btn-outline-primary">Ver</button></div>
+      </form>
+    </section>
+
+    <section class="og-card og-tasks" aria-labelledby="og-tasks-title">
+      <h2 id="og-tasks-title">Validaciones y entregas</h2>
+      <a class="btn" th:classappend="${board.pendingReviews() > 0} ? 'btn-primary' : 'btn-outline-primary'" th:href="@{/events/{id}/reviews(id=${e.id})}" th:text="${board.pendingReviews() == 0 ? 'Revisar tareas · ninguna pendiente' : 'Revisar tareas · ' + board.pendingReviews() + (board.pendingReviews() == 1 ? ' pendiente' : ' pendientes')}"></a>
+      <a class="btn btn-outline-primary" th:href="@{/organizer/redemptions}" th:text="${board.pendingClaims() == 0 ? 'Entregar un canje' : 'Entregar un canje · ' + board.pendingClaims() + ' por entregar'}"></a>
+      <p class="og-help">Escanea o escribe el código del recibo. Solo puedes entregar canjes de eventos autorizados.</p>
+    </section>
+
+    <section class="og-card" aria-labelledby="og-live-title">
+      <h2 id="og-live-title">Durante el evento</h2>
+      <div class="og-row">
+        <div><strong>Entrada de participantes</strong><p th:text="${e.status.name() == 'OPEN' ? 'Comparte el código o el QR para que entren.' : 'El código funciona cuando el evento está abierto.'}"></p></div>
+        <a th:href="@{/events/{id}(id=${e.id})} + '#entry-share-title'">Código y QR</a>
+      </div>
+      <div class="og-row">
+        <div><strong>Estado</strong><p th:text="${e.status.name() == 'OPEN' ? 'Abierto · se aceptan conexiones nuevas.' : (e.status.name() == 'PAUSED' ? 'Pausado · no hay conexiones nuevas; las activas pueden terminar.' : (e.status.name() == 'DRAFT' ? 'Borrador · aún no entra nadie.' : 'Cerrado · solo consulta.'))}"></p></div>
+        <form th:if="${e.status.name() == 'DRAFT'}" method="post" th:action="@{/events/{id}/open(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-primary btn-sm">Abrir evento</button></form>
+        <form th:if="${e.status.name() == 'OPEN'}" method="post" th:action="@{/events/{id}/pause(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-outline-primary btn-sm">Pausar</button></form>
+        <form th:if="${e.status.name() == 'PAUSED'}" method="post" th:action="@{/events/{id}/resume(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-primary btn-sm">Reanudar</button></form>
+      </div>
+      <p th:if="${e.status.name() == 'DRAFT' and !board.ready()}" class="og-help" role="note">Puedes abrirlo, pero los encuentros nuevos no empezarán hasta completar lo marcado como «Falta» en Preparar evento.</p>
+      <div class="og-row"><div><strong>Resultados</strong><p>Conexiones, puntos y canjes del evento.</p></div><a th:href="@{/admin(eventId=${e.id})}">Ver resultados</a></div>
+    </section>
+
+    <section class="og-card" aria-labelledby="og-prepare-title">
+      <h2 id="og-prepare-title">Preparar evento</h2>
+      <p class="og-help">Lo marcado como imprescindible es lo que ya necesita un encuentro nuevo; lo opcional no bloquea nada.</p>
+      <ul class="og-list">
+        <li th:each="r : ${board.prepare()}" class="og-row" th:attr="data-tone=${r.tone().name()}">
+          <div><strong th:text="${r.title()}"></strong> <span th:if="${r.required()}" class="og-req">Imprescindible</span>
+            <p><span class="og-mark" aria-hidden="true" th:text="${r.tone().name() == 'OK' ? '✓' : (r.tone().name() == 'TODO' ? '!' : '○')}"></span> <span class="visually-hidden" th:text="${r.tone().name() == 'OK' ? 'Listo:' : (r.tone().name() == 'TODO' ? 'Falta:' : 'Opcional:')}"></span><span th:text="${r.state()}"></span></p></div>
+          <a th:href="${r.href()}" th:text="${r.action()}"></a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="og-card" aria-labelledby="og-team-title">
+      <h2 id="og-team-title">Equipo</h2>
+      <div class="og-row" th:if="${general}"><div><strong>Permisos por evento</strong><p>Asigna o retira administradores de una cuenta ya registrada.</p></div><a th:href="@{/organizer/access}">Gestionar</a></div>
+      <p th:unless="${general}" class="og-help">Solo administración general asigna permisos. Puedes revisar tareas y entregar canjes de este evento.</p>
+    </section>
+  </th:block>
+  <section th:if="${general}" class="og-card" aria-labelledby="og-admin-title">
+    <h2 id="og-admin-title">Administración general</h2>
+    <div class="og-row"><div><strong>Nuevo evento</strong><p>Empieza en borrador; ábrelo cuando esté listo.</p></div><a th:href="@{/events/new}">Crear evento</a></div>
+    <div class="og-row"><div><strong>Jerarquía de gustos</strong><p>Categorías e intereses de todos los eventos.</p></div><a th:href="@{/interests/taxonomy}">Editar</a></div>
+  </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/account.js}" defer></script>
+</body>
+</html>
