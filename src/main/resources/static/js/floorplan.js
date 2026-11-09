@@ -52,7 +52,7 @@
     if (form) {
       const describe = () => {
         const option = select.selectedOptions[0];
-        form.querySelector('[data-fp-description]').textContent = option?.dataset.name ? `${option.dataset.name} · ${option.dataset.active === 'true' ? 'Activo' : 'Inactivo'}. ${option.dataset.directions}` : 'Selecciona un punto existente para colocarlo.';
+        form.querySelector('[data-fp-description]').textContent = option?.dataset.name ? `${option.dataset.name} · ${option.dataset.active === 'true' ? 'Activo' : 'Inactivo'}. ${option.dataset.directions}` : 'Selecciona un lugar existente para colocarlo.';
         marker.setAttribute('aria-label', option?.dataset.name ? `1 · ${option.dataset.name} · Punto seleccionado` : 'Punto seleccionado');
       };
       select.addEventListener('change', () => { const option = select.selectedOptions[0]; fieldX.value = option.dataset.x || ''; fieldY.value = option.dataset.y || ''; describe(); draft(); });

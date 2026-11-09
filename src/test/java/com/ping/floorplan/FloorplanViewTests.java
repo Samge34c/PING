@@ -35,6 +35,6 @@ class FloorplanViewTests {
     }
     @Test void previewWorksWithAnImageAndNoMeetingPoints()throws Exception{
         var e=new EventForm();e.setName("Solo imagen");long empty=events.create(e).getId();String id=plans.upload(empty,null,false,FloorplanTests.image("png",400,300));
-        try(var b=new TestBrowser(port)){assertThat(b.get("/events/"+empty+"/floorplan").body()).contains("/floorplan/images/"+id,"Crea primero un punto");}
+        try(var b=new TestBrowser(port)){assertThat(b.get("/events/"+empty+"/floorplan").body()).contains("/floorplan/images/"+id,"Crea primero un lugar");}
     }
 }

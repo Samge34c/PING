@@ -138,3 +138,11 @@
 .am-step-label {overflow-wrap:normal;word-break:keep-all;hyphens:none}
 @media (max-width:389.98px){.am-steps li{font-size:11px;letter-spacing:-.01em}.am-now{padding:14px 12px}}
 .pa-assigned .pa-method {display:none}
+
+/* Auditoría de recorridos: separador que no queda colgado al partir la línea */
+.mp3-meta {display:flex;flex-direction:column;align-items:flex-start;gap:4px}
+.am-now-help {display:inline-flex;align-items:center;min-height:var(--ping-tap);font-size:var(--ping-type-help);font-weight:700;justify-self:start}
+/* Editar intereses: «Guardar» siempre a mano sobre la barra inferior (como en la entrada) */
+@media (max-width:991.98px){.participant-interests-page:not(.participant-entry-page) .ic-actions{position:sticky;z-index:5;bottom:calc(var(--ping-nav-h,80px) + env(safe-area-inset-bottom))}}
+/* Beneficios en móvil: imagen más baja para que coste y acción aparezcan antes */
+@media (max-width:420px){.bf-coupon .bf-media{aspect-ratio:2/1}}

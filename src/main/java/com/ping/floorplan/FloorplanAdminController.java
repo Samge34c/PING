@@ -20,7 +20,7 @@ public class FloorplanAdminController {
     public FloorplanAdminController(FloorplanService plans,EventService events){this.plans=plans;this.events=events;}
     private String page(long id,Model model){
         var plan=plans.current(id);model.addAttribute("event",events.get(id));model.addAttribute("plan",plan);
-        var points=plans.points(id);model.addAttribute("planPoints",points);
+        var points=plans.points(id).stream().filter(p->!p.archived()).toList();model.addAttribute("planPoints",points); // archived places are history, not places to position
         model.addAttribute("missingPoints",points.stream().filter(p->!p.placed()).count());
         if(!model.containsAttribute("positionForm")){
             var form=new FloorplanPositionForm();if(plan!=null){form.setPlanId(plan.id());form.setRevision(plan.revision());}model.addAttribute("positionForm",form);

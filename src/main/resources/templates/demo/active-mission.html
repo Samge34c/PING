@@ -13,6 +13,7 @@
     <p class="am-now-detail" th:text="${progress.detail()}"></p>
     <form th:if="${progress.arriveForm()}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-arrive-action" class="btn btn-primary am-now-action">Ya llegué</button></form>
     <a th:if="${!progress.arriveForm() and progress.action() != null}" class="btn am-now-action" th:classappend="${progress.waiting()} ? 'btn-outline-primary' : 'btn-primary'" th:href="${progress.target()}" th:text="${progress.action()}"></a>
+    <a th:if="${progress.waiting()}" class="am-now-help" href="#connection-safety">¿No llega o hay un problema? Ver opciones</a>
   </section>
   <div class="am-grid" th:classappend="${(match.verificationPolicy>=2 ? 'am-policy2' : '') + (match.staffReview() ? ' am-has-review' : '')}">
     <section class="am-recognition" aria-labelledby="am-word-title">

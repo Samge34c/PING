@@ -4,9 +4,9 @@
 <!-- DEC-058 · D09-1: Mi Ping V3 (Figma 103:23602). Identidad con avatar grande, estado real, resumen del avatar, gustos y acción.
      La propuesta o el encuentro en curso conservan su tarjeta y su prioridad; el historial vive en /me/connections (D12-1). -->
 <header class="mp3-hero" th:with="state=${currentMatch != null ? currentMatch.status.label : (event.status.name() != 'OPEN' ? event.status.label : (participant.available ? 'Disponible' : 'No disponible'))}">
-  <a class="mp3-avatar" th:href="@{/me/avatar}" aria-label="Editar mi avatar"><span th:replace="~{entry/avatar :: portrait(${participant.avatar})}"></span><span class="mp3-you" aria-hidden="true">Tú</span></a>
+  <a class="mp3-avatar" th:href="@{/me/avatar}"><span th:replace="~{entry/avatar :: portrait(${participant.avatar})}"></span><span class="mp3-you" aria-hidden="true">Tú</span><span class="visually-hidden">Editar mi avatar</span></a>
   <div class="mp3-who"><h1><span class="visually-hidden">Mi Ping de </span><span th:text="${participant.alias}"></span></h1>
-    <p class="mp3-meta"><a th:href="${experience != null ? '/events/' + event.id + '/hub' : '/events/' + event.id}" th:text="${participant.eventName}"></a> · <a class="mp-balance" th:href="@{/me/benefits}" aria-label="Ver mis puntos y beneficios"><strong th:text="${participant.points}"></strong> puntos</a></p>
+    <p class="mp3-meta"><a th:href="${experience != null ? '/events/' + event.id + '/hub' : '/me/event'}" th:text="${participant.eventName}"></a><a class="mp-balance" th:href="@{/me/benefits}"><strong th:text="${participant.points}"></strong> puntos<span class="visually-hidden"> · ver beneficios</span></a></p>
     <span class="mp-state mp3-state" th:attr="data-tone=${currentMatch != null ? 'match' : (event.status.name() != 'OPEN' ? 'closed' : (participant.available ? 'on' : 'off'))}"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg><span th:text="${state}"></span></span></div>
 </header>
 <section th:if="${currentMatch != null}" class="mp-next mp-connect-summary" aria-labelledby="next-step">

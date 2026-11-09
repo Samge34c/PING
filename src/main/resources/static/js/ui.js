@@ -103,3 +103,5 @@
   }).catch(() => { /* Se conserva el acceso a participantes sin inventar cifras. */ });
 })();
 document.querySelectorAll('[data-admin-time]').forEach(el => { el.textContent = new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit'}); });
+// Auditoría de recorridos: a link to a closed <details> (e.g. #connection-safety) opens it instead of landing on a hidden section.
+(() => { const open = () => { const id = location.hash && decodeURIComponent(location.hash.slice(1)); const t = id && document.getElementById(id); const d = t && (t.tagName === 'DETAILS' ? t : t.closest('details')); if (d && !d.open) { d.open = true; d.scrollIntoView({block: 'start'}); } }; window.addEventListener('hashchange', open); open(); })();
