@@ -1,1 +1,20 @@
-<!doctype html><html xmlns:th="http://www.thymeleaf.org"><body><div th:fragment="scanner(purpose,target)" class="qr-scanner my-3" data-scanner th:attr="data-purpose=${purpose},data-target=${target},data-join-path=@{/join},data-allowed-origin=${scannerBase}"><div class="action-row"><button type="button" class="btn btn-outline-primary" data-scan-start>Escanear QR</button><button type="button" class="btn btn-outline-secondary" data-scan-stop hidden>Cancelar cámara</button></div><p class="small mt-2" data-scan-status role="status" aria-live="polite">También puedes introducir el código. La cámara se abre solo cuando la solicitas.</p><label data-scan-camera-label hidden class="form-label mt-2">Cámara<select class="form-select" data-scan-camera aria-label="Elegir cámara"></select></label><video hidden data-scan-video playsinline muted aria-label="Vista de cámara para leer un QR"></video><script th:src="@{/js/qr-scanner.js}" defer></script></div></body></html>
+<!doctype html><html xmlns:th="http://www.thymeleaf.org"><body>
+<!-- DEC-066 (Figma 189:453): rear camera first, one switch control, decoded area = visible frame. Manual code stays the alternative. -->
+<div th:fragment="scanner(purpose,target)" class="qr-scanner my-3" data-scanner th:attr="data-purpose=${purpose},data-target=${target},data-join-path=@{/join},data-allowed-origin=${scannerBase}">
+  <div class="action-row"><button type="button" class="btn btn-outline-primary" data-scan-start>Escanear QR</button></div>
+  <div class="qr-stage" data-scan-stage hidden>
+    <video data-scan-video playsinline muted disablepictureinpicture aria-label="Vista de cámara para leer un QR"></video>
+    <span class="qr-frame" aria-hidden="true"></span>
+    <span class="qr-camera-name" data-scan-camera-name aria-hidden="true"></span>
+  </div>
+  <div class="qr-controls" data-scan-controls hidden>
+    <button type="button" class="btn btn-outline-primary" data-scan-switch hidden>Cambiar cámara</button>
+    <button type="button" class="btn btn-outline-secondary" data-scan-stop>Cerrar cámara</button>
+  </div>
+  <details class="qr-advanced" data-scan-advanced hidden><summary>Elegir otra cámara</summary>
+    <label class="form-label mt-2">Cámara<select class="form-select" data-scan-camera aria-label="Elegir cámara"></select></label>
+  </details>
+  <p class="small mt-2" data-scan-status role="status" aria-live="polite">También puedes escribir el código. La cámara solo se abre cuando la pides.</p>
+  <script th:src="@{/js/qr-scanner.js}" defer></script>
+</div>
+</body></html>
