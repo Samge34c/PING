@@ -2,12 +2,31 @@
 <!-- Catálogo de solo lectura del evento (Evento): no asigna ni acredita; la recompensa sigue en el encuentro y la Saga. Diseño DEC-065 (Figma 182:262 / 182:380). -->
 <section th:fragment="guide" id="actividades" class="pa-guide" aria-labelledby="pa-title" tabindex="-1" th:with="g=${activityGuide}">
   <div class="pa-head"><h2 id="pa-title">Actividades y puntos</h2><p class="pa-summary" th:if="${g.summary() != null}" th:text="${g.summary()}"></p></div>
+  <!-- DEC-066: el estado propio sale de los registros reales de la persona; el catálogo nunca se suma como saldo. -->
+  <div th:if="${activityProgress != null}" class="pa-mine" th:with="ap=${activityProgress}">
+    <dl class="pa-balance">
+      <div><dt>Tu saldo</dt><dd th:text="${ap.balance()}"></dd></div>
+      <div><dt>Ganados en encuentros</dt><dd th:text="${ap.earned()}"></dd></div>
+      <div><dt>Pendientes</dt><dd th:text="${ap.pending() == 0 ? '0' : '+' + ap.pending()}"></dd></div>
+    </dl>
+    <div th:if="${ap.active() == null and g.assigned == null}" class="pa-next">
+      <p><strong>¿Qué me toca?</strong> Aún no tienes actividad. Se asigna sola cuando tú y otra persona aceptan una conexión.</p>
+      <a class="btn btn-primary" th:href="@{/connect}">Buscar una conexión</a>
+    </div>
+    <p th:if="${ap.pending() > 0}" class="pa-pending-note" th:text="${'Recibirás +' + ap.pending() + ' puntos cuando completen el encuentro actual.'}"></p>
+  </div>
   <article th:if="${g.assigned != null}" class="pa-card pa-assigned" aria-labelledby="pa-assigned-title">
     <span class="pa-tag"><svg th:replace="~{fragments/layout :: icon('check')}"></svg>Tu actividad asignada</span>
     <div th:replace="~{encounter/guide :: row(${g.assigned}, 'pa-assigned-title')}"></div>
-    <a class="pa-link" th:href="@{/matches/{id}(id=${g.matchId})}">Se verifica y confirma desde tu encuentro <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
+    <p class="pa-check"><span>Se verifica y confirma desde tu encuentro</span> · <span th:text="${'Cómo se comprueba: ' + g.assigned.check().label}"></span></p>
+    <a class="btn btn-primary pa-continue" th:href="@{/matches/{id}(id=${g.matchId})}">Continuar mi encuentro <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
   </article>
-  <p th:if="${g.assigned != null and !#lists.isEmpty(g.activities)}" class="pa-sub">Otras actividades del evento</p>
+  <section th:if="${activityProgress != null and !#lists.isEmpty(activityProgress.completed())}" class="pa-done" aria-labelledby="pa-done-title">
+    <h3 id="pa-done-title" class="pa-sub">Completadas por ti</h3>
+    <ul class="pa-list"><li class="pa-card pa-completed" th:each="d : ${activityProgress.completed()}"><div class="pa-row"><div class="pa-text"><h4 th:text="${d.title()}"></h4><p>Completada · puntos recibidos</p></div><p class="pa-points"><strong th:text="${d.points() == 0 ? 'Sin' : '+' + d.points()}"></strong> <span>recibidos</span></p></div></li></ul>
+  </section>
+  <p th:if="${!#lists.isEmpty(g.activities)}" class="pa-sub" th:text="${g.assigned != null ? 'Otras actividades del evento' : 'Actividades de este evento'}"></p>
+  <p th:if="${!#lists.isEmpty(g.activities)}" class="pa-how-pick">No se eligen ni se reclaman aquí: a cada pareja se le asigna una al aceptar, según sus intereses y el punto disponible.</p>
   <ul class="pa-list" th:unless="${#lists.isEmpty(g.activities)}">
     <li class="pa-card" th:each="a : ${g.activities}"><div th:replace="~{encounter/guide :: row(${a}, null)}"></div></li>
   </ul>
@@ -20,7 +39,7 @@
 </section>
 <!-- Título, descripción opcional y puntos en una columna fija para compararlos de un vistazo. -->
 <div th:fragment="row(a, titleId)" class="pa-row">
-  <div class="pa-text"><h3 th:id="${titleId}" th:text="${a.title}"></h3><p th:if="${a.description != null}" th:text="${a.description}"></p></div>
+  <div class="pa-text"><h3 th:id="${titleId}" th:text="${a.title}"></h3><p th:if="${a.description != null}" th:text="${a.description}"></p><p class="pa-method" th:if="${a.check != null and a.check.name() == 'STAFF_REVIEW'}">Con revisión del personal</p></div>
   <p class="pa-points"><strong th:text="${a.rewardPoints == 0 ? 'Sin' : '+' + a.rewardPoints}"></strong> <span th:text="${a.rewardPoints == 1 ? 'punto' : 'puntos'}"></span></p>
 </div>
 </body></html>

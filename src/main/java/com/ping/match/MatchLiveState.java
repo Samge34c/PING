@@ -24,7 +24,10 @@ public class MatchLiveState {
                        case when m.status='ACTIVE' and m.verification_policy>=2 then
                          (select count(*) from purpose_credentials c
                           where c.purpose='ENCOUNTER' and c.context_id=m.id and c.issuer_id=p.id)
-                         else 0 end code_revision
+                         else 0 end code_revision,
+                       case when m.status='ACTIVE' then
+                         (select coalesce(max(rv.revision)+1,0) from activity_reviews rv where rv.match_id=m.id)
+                         else 0 end review_revision
                 from participants p join events e on e.id=p.event_id
                 left join ping_matches m on m.id=(
                     select max(recent.id) from ping_matches recent
@@ -47,7 +50,7 @@ public class MatchLiveState {
                                 + r.getBoolean(other + "confirmed") + ":" + r.getBoolean("completion_pending") + ":"
                                 + r.getBoolean(own + "arrived") + ":" + r.getBoolean(other + "arrived") + ":"
                                 + r.getBoolean(own + "verified") + ":" + r.getBoolean(other + "verified") + ":"
-                                + r.getLong("code_revision");
+                                + r.getLong("code_revision") + ":" + r.getLong("review_revision");
                         if (status.equals("ACTIVE") && r.getBoolean("first_accepted") && r.getBoolean("second_accepted"))
                             state.put("recognitionRevision", matchId + ":" + r.getLong("other_version"));
                     }

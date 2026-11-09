@@ -68,7 +68,9 @@ public class EncounterService {
     public void legacy(long event,String names,String tasks,long version){var e=events.lock(event);revision(version,e.getVersion());if(e.isStructuredEncounter())throw new BusinessRuleException("El catálogo ya se importó. Usa las filas editables.");if(names.length()>4000||tasks.length()>12000)throw new BusinessRuleException("Las listas superan el tamaño permitido.");EncounterOptions.checkGrowth(names,e.getMeetingPoints(),3,"Puntos");EncounterOptions.checkGrowth(tasks,e.getEncounterActivities(),10,"Actividades");var f=EventForm.from(e);f.setMeetingPoints(EncounterOptions.normalize(names,160,"Puntos"));f.setEncounterActivities(EncounterOptions.normalize(tasks,500,"Actividades"));events.update(event,f);}
     /** Reward of every activity in events that still use the text catalog (no per-activity points). */
     public static final int LEGACY_REWARD_POINTS=10;
-    public record GuideActivity(String title,String description,int rewardPoints){}
+    public record GuideActivity(String title,String description,int rewardPoints,CheckMethod check){
+        GuideActivity(String title,String description,int rewardPoints){this(title,description,rewardPoints,CheckMethod.BILATERAL);}
+    }
     public record ActivityGuide(GuideActivity assigned,List<GuideActivity> activities,Integer commonRewardPoints,int policy,Long matchId){
         public int total(){return activities.size()+(assigned==null?0:1);}
         /** Count and point range of what the page shows, e.g. «3 actividades · de +15 a +40 puntos»; one figure when all match. */
@@ -85,19 +87,22 @@ public class EncounterService {
     /** Read-only catalog for the participant's Evento tab: the same rows assign() draws from, never another event's or SOFA's fixed texts. */
     public ActivityGuide guide(Event event,com.ping.match.MatchView active,int newPolicy){
         List<GuideActivity> rows;Integer common=null;
-        if(event.isStructuredEncounter())rows=activities(event.getId()).stream().filter(a->a.isActive()&&!a.isArchived()).map(a->guideRow(a.getTitle(),a.getInstructions(),a.getRewardPoints())).toList();
+        if(event.isStructuredEncounter())rows=activities(event.getId()).stream().filter(a->a.isActive()&&!a.isArchived()).map(a->guideRow(a.getTitle(),a.getInstructions(),a.getRewardPoints(),a.getVerificationMethod())).toList();
         else{rows=EncounterOptions.unique(event.getEncounterActivities()).stream().map(t->guideRow(t.length()>120?t.substring(0,120):t,t,LEGACY_REWARD_POINTS)).toList();common=LEGACY_REWARD_POINTS;}
         if(active==null||active.activity()==null)return new ActivityGuide(null,rows,common,newPolicy,null);
         String title=active.activityTitle()==null||active.activityTitle().isBlank()?active.activity():active.activityTitle();
-        var assigned=guideRow(title.length()>120?title.substring(0,120):title,active.activity(),active.rewardPoints());
+        var assigned=guideRow(title.length()>120?title.substring(0,120):title,active.activity(),active.rewardPoints(),active.activityCheck());
         String key=assigned.title()+"\n"+Objects.toString(assigned.description(),"");
         return new ActivityGuide(assigned,rows.stream().filter(r->!key.equals(r.title()+"\n"+Objects.toString(r.description(),""))).toList(),common,active.verificationPolicy(),active.id());
     }
-    private static GuideActivity guideRow(String title,String text,int points){
+    private static GuideActivity guideRow(String title,String text,int points){return guideRow(title,text,points,CheckMethod.BILATERAL);}
+    private static GuideActivity guideRow(String title,String text,int points,CheckMethod check){
         String t=title.strip().replaceAll("\\s+"," "),d=text==null?"":text.strip().replaceAll("\\s+"," ");
-        return new GuideActivity(t,d.isEmpty()||d.equals(t)?null:d,points);
+        return new GuideActivity(t,d.isEmpty()||d.equals(t)?null:d,points,check==null?CheckMethod.BILATERAL:check);
     }
-    public record Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints,Long pointId){}
+    public record Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints,Long pointId,CheckMethod check,String checkInstructions,String responsePrompt){
+        Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints,Long pointId){this(encounter,directions,title,rewardPoints,pointId,CheckMethod.BILATERAL,"","");}
+    }
     public Assignment assign(Event event,String common,long matchId){
         if((!event.isStructuredEncounter() && (EncounterOptions.unique(event.getMeetingPoints()).size()>3 || EncounterOptions.unique(event.getEncounterActivities()).size()>10)) || EncounterOptions.unique(event.getEncounterWords()).size()>100 || (event.isStructuredEncounter() && (points(event.getId()).stream().filter(p->!p.isArchived()).count()>3 || activities(event.getId()).stream().filter(a->!a.isArchived()).count()>10)))throw new EncounterUnavailableException("La configuración anterior supera los límites. Pide al organizador reducirla; la propuesta y los encuentros anteriores se conservan.");
         if(!event.isStructuredEncounter())return new Assignment(ActivityCatalog.encounter(common,matchId,event),"","",LEGACY_REWARD_POINTS,null);
@@ -113,6 +118,6 @@ public class EncounterService {
         var p=compatible.get((int)Math.floorMod(matchId-1,compatible.size()));
         String fallback=ActivityCatalog.word(common,matchId);
         String base=EncounterOptions.select(event.getEncounterWords(),matchId,null);
-        return new Assignment(new ActivityCatalog.Encounter(p.getName(),base==null?fallback:base+"-"+Long.toString(matchId,36).toUpperCase(Locale.ROOT),a.getInstructions()),p.getDirections(),a.getTitle(),a.getRewardPoints(),p.getId());
+        return new Assignment(new ActivityCatalog.Encounter(p.getName(),base==null?fallback:base+"-"+Long.toString(matchId,36).toUpperCase(Locale.ROOT),a.getInstructions()),p.getDirections(),a.getTitle(),a.getRewardPoints(),p.getId(),a.getVerificationMethod(),a.getCheckInstructions(),a.getResponsePrompt());
     }
 }

@@ -17,6 +17,10 @@ public class MatchCompletionSaga {
     public synchronized void confirm(long matchId, long participantId) {
         if (steps.begin(matchId, participantId)) resume(matchId);
     }
+    /** DEC-066: called after a staff approval commits; idempotent like confirm. */
+    public synchronized void afterReview(long matchId) {
+        if (steps.beginReviewed(matchId)) resume(matchId);
+    }
     public synchronized void resume(long id) {
         SagaStatus status = steps.state(id);
         if (status == SagaStatus.COMPLETED || status == SagaStatus.COMPENSATED) return;

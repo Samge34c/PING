@@ -25,7 +25,8 @@ public class FloorplanViewController {
     public String event(@PathVariable long id,@RequestParam(required=false) Long pointId,HttpSession session,Model model){
         // Mi evento resolves an ongoing mission through its snapshot, including after replacement.
         if(session.getAttribute("pingDemoParticipantId") instanceof Long self && people.get(self).eventId()==id){
-            var active=matches.list(self).stream().filter(m->m.status()==MatchStatus.ACTIVE).findFirst().orElse(null);
+            var history=matches.list(self);model.addAttribute("activityProgress",ActivityProgress.of(people.get(self),history));
+            var active=history.stream().filter(m->m.status()==MatchStatus.ACTIVE).findFirst().orElse(null);
             if(active!=null)return renderMatch(active,events.get(id),model);
         }
         var event=events.get(id);var plan=plans.current(id);var points=plans.points(id);
@@ -44,6 +45,7 @@ public class FloorplanViewController {
     @GetMapping("/matches/{id}/plan")
     public String match(@PathVariable long id,HttpSession session,Model model){
         long self=DemoSession.participantId(session);var match=matches.get(id,self);
+        model.addAttribute("activityProgress",ActivityProgress.of(people.get(self),matches.list(self)));
         return renderMatch(match,events.get(people.get(self).eventId()),model);
     }
     private String renderMatch(MatchView match,Event event,Model model){

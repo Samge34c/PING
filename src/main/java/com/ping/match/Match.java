@@ -28,6 +28,14 @@ public class Match {
     public String getMeetingDirections(){return meetingDirections;}
     public String getActivityTitle(){return activityTitle;}
     void describeEncounter(String directions,String title,int points){rewardPoints=points;meetingDirections=directions;activityTitle=title;}
+    /** DEC-066 snapshot: the check method stays as it was when the encounter became ACTIVE. */
+    @Column(nullable=false,length=16) private String activityCheck="BILATERAL";
+    @Column(nullable=false,length=500) private String checkInstructions="";
+    @Column(nullable=false,length=200) private String responsePrompt="";
+    public com.ping.encounter.CheckMethod getActivityCheck(){return com.ping.encounter.CheckMethod.of(activityCheck);}
+    public String getCheckInstructions(){return checkInstructions;} public String getResponsePrompt(){return responsePrompt;}
+    public boolean staffReview(){return getActivityCheck()==com.ping.encounter.CheckMethod.STAFF_REVIEW;}
+    void describeCheck(com.ping.encounter.CheckMethod method,String instructions,String prompt){activityCheck=method.name();checkInstructions=instructions==null?"":instructions;responsePrompt=prompt==null?"":prompt;}
     @Column(length = 80, unique = true) private String word;
     @Column(length = 500) private String activity;
     @Column(nullable = false, updatable = false) private Instant createdAt;

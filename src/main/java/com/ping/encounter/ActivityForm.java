@@ -13,7 +13,15 @@ public class ActivityForm {
  public java.util.Set<Long> getInterestIds(){return interestIds;} public void setInterestIds(java.util.Set<Long> value){interestIds=value;}
   private boolean active=true;
  public boolean isActive(){return active;} public void setActive(boolean value){active=value;}
+ @NotNull private CheckMethod verificationMethod=CheckMethod.BILATERAL;
+ public CheckMethod getVerificationMethod(){return verificationMethod;} public void setVerificationMethod(CheckMethod value){verificationMethod=value;}
+ @Size(max=500) private String checkInstructions="";
+ public String getCheckInstructions(){return checkInstructions;} public void setCheckInstructions(String value){checkInstructions=value==null?"":value;}
+ @Size(max=200) private String responsePrompt="";
+ public String getResponsePrompt(){return responsePrompt;} public void setResponsePrompt(String value){responsePrompt=value==null?"":value;}
+ @AssertTrue(message="Explica qué revisará el personal para aprobar la actividad.")
+ public boolean isCheckDescribed(){return verificationMethod!=CheckMethod.STAFF_REVIEW||!checkInstructions.isBlank();}
  @PositiveOrZero private Long version=null;
  public Long getVersion(){return version;} public void setVersion(Long value){version=value;}
- public static ActivityForm from(EventActivity e){var f=new ActivityForm();f.setRewardPoints(e.getRewardPoints());f.setTitle(e.getTitle());f.setInstructions(e.getInstructions());f.setPointIds(e.getPointIds());f.setInterestIds(e.getInterestIds());f.setActive(e.isActive());f.setVersion(e.getVersion());return f;}
+ public static ActivityForm from(EventActivity e){var f=new ActivityForm();f.setRewardPoints(e.getRewardPoints());f.setTitle(e.getTitle());f.setInstructions(e.getInstructions());f.setPointIds(e.getPointIds());f.setInterestIds(e.getInterestIds());f.setActive(e.isActive());f.setVerificationMethod(e.getVerificationMethod());f.setCheckInstructions(e.getCheckInstructions());f.setResponsePrompt(e.getResponsePrompt());f.setVersion(e.getVersion());return f;}
 }

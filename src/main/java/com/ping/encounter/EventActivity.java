@@ -19,5 +19,10 @@ public class EventActivity {
  @ElementCollection(fetch=FetchType.EAGER) @CollectionTable(name="event_activity_interests",joinColumns=@JoinColumn(name="activity_id")) @Column(name="interest_id") private java.util.Set<Long> interestIds=new java.util.LinkedHashSet<>();
  public String getTitle(){return title;} public String getInstructions(){return instructions;}
  public java.util.Set<Long> getPointIds(){return java.util.Set.copyOf(pointIds);} public java.util.Set<Long> getInterestIds(){return java.util.Set.copyOf(interestIds);}
- void change(ActivityForm f){rewardPoints=f.getRewardPoints();title=f.getTitle().strip();instructions=f.getInstructions().strip();active=f.isActive();pointIds=new java.util.LinkedHashSet<>(f.getPointIds());interestIds=new java.util.LinkedHashSet<>(f.getInterestIds());}
+ /** DEC-066: how the task is checked. BILATERAL = both confirm (previous behaviour); STAFF_REVIEW = authorised event staff review it. */
+ @Column(nullable=false,length=16) private String verificationMethod=CheckMethod.BILATERAL.name();
+ @Column(nullable=false,length=500) private String checkInstructions="";
+ @Column(nullable=false,length=200) private String responsePrompt="";
+ public CheckMethod getVerificationMethod(){return CheckMethod.of(verificationMethod);} public String getCheckInstructions(){return checkInstructions;} public String getResponsePrompt(){return responsePrompt;}
+ void change(ActivityForm f){verificationMethod=f.getVerificationMethod().name();checkInstructions=f.getVerificationMethod()==CheckMethod.STAFF_REVIEW?f.getCheckInstructions().strip():"";responsePrompt=f.getVerificationMethod()==CheckMethod.STAFF_REVIEW?f.getResponsePrompt().strip():"";rewardPoints=f.getRewardPoints();title=f.getTitle().strip();instructions=f.getInstructions().strip();active=f.isActive();pointIds=new java.util.LinkedHashSet<>(f.getPointIds());interestIds=new java.util.LinkedHashSet<>(f.getInterestIds());}
 }

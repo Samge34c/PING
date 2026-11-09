@@ -117,7 +117,8 @@ class MatchLiveStateTests {
                 values(?,?,'ENCOUNTER',?,?,?,?,?,CURRENT_TIMESTAMP)
                 """, UUID.randomUUID().toString(), UUID.randomUUID().toString(), id,
                 participants.get(p[0]).eventId(), p[0], "a".repeat(64), "b".repeat(64));
-        assertThat(live.forParticipant(p[0]).get("signature")).isNotEqualTo(before).endsWith(":1");
+        // DEC-066 appends the staff-review revision (0 = nothing sent) after the own code revision.
+        assertThat(live.forParticipant(p[0]).get("signature")).isNotEqualTo(before).endsWith(":1:0");
         assertThat(live.forParticipant(p[1]).get("signature")).isEqualTo(otherBefore);
         for (long self : p) agreesWithHtml(self, "/matches/" + id);
         jdbc.update("update ping_matches set verification_policy=1 where id=?", id);

@@ -57,7 +57,7 @@ public class MatchService {
         match.accept(participantId);
         if (match.bothAccepted()) {
             var selected=encounters.assign(match.getEvent(),match.getCommonInterests(),match.getId());
-            match.activate(selected.encounter()); match.policy(policy.version()); match.describeEncounter(selected.directions(),selected.title(),selected.rewardPoints());
+            match.activate(selected.encounter()); match.policy(policy.version()); match.describeEncounter(selected.directions(),selected.title(),selected.rewardPoints());match.describeCheck(selected.check(),selected.checkInstructions(),selected.responsePrompt());
             match.freezeFloorplan(floorplans.snapshot(match.getEvent(),selected.pointId()));
         }
     }
@@ -75,6 +75,9 @@ public class MatchService {
     }
     @Transactional(propagation = org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
     public void confirm(long id, long participantId) { completion.confirm(id, participantId); }
+    /** After an approval has committed (never inside its transaction): same idempotent completion. */
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
+    public void completeAfterReview(long id) { completion.afterReview(id); }
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public void giveFeedback(long id, long participantId, Feedback.Rating rating) {
         Match match = locked(id, participantId);
         if (match.getStatus() != MatchStatus.COMPLETED) throw new BusinessRuleException("El feedback está disponible después de completar la conexión.");
@@ -92,6 +95,6 @@ public class MatchService {
             match.getCommonInterests(), first ? match.getSecondInterests() : match.getFirstInterests(),
             match.accepted(self), match.accepted(other), match.confirmed(self), match.confirmed(other),
             active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active || match.getStatus() == MatchStatus.COMPLETED ? match.getActivity() : null,
-            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null, match.getRewardPoints(), active ? match.getFloorplanId() : null, active ? match.getFloorplanX() : null, active ? match.getFloorplanY() : null,match.getVerificationPolicy(),match.verified(self),match.verified(other),(first?match.getSecond():match.getFirst()).getAvatar());
+            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null, match.getRewardPoints(), active ? match.getFloorplanId() : null, active ? match.getFloorplanX() : null, active ? match.getFloorplanY() : null,match.getVerificationPolicy(),match.verified(self),match.verified(other),(first?match.getSecond():match.getFirst()).getAvatar(),match.getActivityCheck(),match.getCheckInstructions(),match.getResponsePrompt());
     }
 }

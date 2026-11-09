@@ -9,8 +9,9 @@
   scope.querySelectorAll('[data-edit-point],[data-edit-activity]').forEach(link=>link.addEventListener('click',event=>{
    if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey)return;const section=link.closest('section'),details=section.querySelector(':scope>details'),form=details?.querySelector('form');if(!form)return;
    event.preventDefault();form.reset();form.action=link.dataset.saveUrl;
-   for(const name of ['name','directions','title','instructions','rewardPoints','version']){const input=form.elements.namedItem(name);if(input&&link.dataset[name]!=null)input.value=link.dataset[name];}
+   for(const name of ['name','directions','title','instructions','rewardPoints','checkInstructions','responsePrompt','version']){const input=form.elements.namedItem(name);if(input&&link.dataset[name]!=null)input.value=link.dataset[name];}
    form.querySelector('input[name=active]').checked=link.dataset.active==='true';
+   if(link.dataset.verificationMethod){form.querySelectorAll('input[name=verificationMethod]').forEach(i=>{i.checked=i.value===link.dataset.verificationMethod;});form.querySelector('[data-check-details]')?.toggleAttribute('hidden',link.dataset.verificationMethod!=='STAFF_REVIEW');}
    for(const name of ['pointIds','interestIds']){const selected=(link.dataset[name]||'').split(',');form.querySelectorAll(`input[name=${name}]`).forEach(i=>i.checked=selected.includes(i.value));}
    details.querySelector('summary').hidden=false;details.querySelector('summary').textContent=link.hasAttribute('data-edit-point')?'Editar punto':'Editar actividad';details.open=true;changed(section);form.querySelector('input:not([type=hidden])').focus();
   }));
@@ -46,3 +47,5 @@
  });
  window.addEventListener('beforeunload',event=>{if(root.querySelector('[data-dirty=true]')){event.preventDefault();event.returnValue='';}});
 })();
+// DEC-066: show the review details only for «Revisión del personal». Without JS the fields stay visible-on-error and server-validated.
+document.querySelectorAll('[data-check-method]').forEach(set=>{const sync=()=>{const value=set.querySelector('input[name=verificationMethod]:checked')?.value;set.querySelector('[data-check-details]')?.toggleAttribute('hidden',value!=='STAFF_REVIEW');};set.addEventListener('change',sync);sync();});

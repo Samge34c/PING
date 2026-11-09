@@ -34,12 +34,30 @@ public class MatchCompletionSagaSteps {
         if (match.getStatus() != MatchStatus.ACTIVE) throw new BusinessRuleException("Primero ambos deben aceptar la propuesta.");
         if (match.isCompletionPending()) return true;
         match.confirm(participantId);
-        if (!match.bothConfirmed()) return false;
+        if (!match.bothConfirmed() || awaitingReview(match)) return false;
+        return prepare(match, participantId);
+    }
+    /** DEC-066: staff approval of a reviewed task. Starts the same completion only when both already confirmed. */
+    public boolean beginReviewed(long id) {
+        Match match = lock(id);
+        if (match.getStatus() != MatchStatus.ACTIVE) return false;
+        if (match.isCompletionPending()) return true;
+        if (!match.bothConfirmed() || awaitingReview(match)) return false;
+        return prepare(match, match.getFirst().getId());
+    }
+    /** A staff-reviewed task delays the start of the Saga; confirmation and approval never grant points themselves. */
+    private boolean awaitingReview(Match match) {
+        if (!match.staffReview()) return false;
+        var status = jdbc.queryForList("select status from activity_reviews where match_id=?", String.class, match.getId());
+        return status.isEmpty() || !"APPROVED".equals(status.getFirst());
+    }
+    private boolean prepare(Match match, long trigger) {
+        long id = match.getId();
         MatchCompletion saga = sagas.findById(id).orElse(null);
-        if (saga == null) saga = sagas.saveAndFlush(new MatchCompletion(id, participantId, match.getRewardPoints()));
+        if (saga == null) saga = sagas.saveAndFlush(new MatchCompletion(id, trigger, match.getRewardPoints()));
         else {
             if (saga.getStatus() != SagaStatus.COMPENSATED) throw new BusinessRuleException("La finalización requiere recuperación antes de reintentar.");
-            saga.restart(participantId);
+            saga.restart(trigger);
         }
         match.prepareCompletion(); record(saga, "PREPARE_MATCH"); return true;
     }

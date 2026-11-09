@@ -1,0 +1,78 @@
+/* DEC-066 · Cierre de usabilidad. Figma «PING · Cierre de usabilidad · Propuesta» (188:262).
+   Only existing tokens; mobile first (390 / 360), desktop adapts. */
+.form-text {margin:6px 0 0;font-size:var(--ping-type-help);line-height:20px;color:var(--ping-muted)}
+.py-1 {padding-top:.25rem!important;padding-bottom:.25rem!important}
+
+/* Encounter · «Ahora» card with the real step (Figma 188:276) */
+.am-now {margin:4px 0 24px;padding:16px;border:2px solid var(--ping-accent);border-radius:var(--ping-radius);background:var(--ping-surface-alt);display:grid;gap:8px;scroll-margin-top:16px}
+.am-now[data-waiting="true"] {border-color:var(--ping-border)}
+.am-now h2 {margin:0;font-size:var(--ping-type-section);font-weight:800;line-height:26px;letter-spacing:-.015em;overflow-wrap:anywhere}
+.am-now h2:focus {outline:none}
+.am-now-kicker {margin:0;font-size:var(--ping-type-label);font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ping-primary)}
+.am-now-detail {margin:0;font-size:var(--ping-type-help);line-height:20px;color:var(--ping-muted);overflow-wrap:anywhere}
+.am-now form {margin:0}
+.am-now-action {width:100%;min-height:var(--ping-tap);margin-top:4px}
+.am-steps {display:flex;justify-content:space-between;gap:4px;margin:0 0 6px;padding:0;list-style:none}
+.am-steps li {flex:1 1 0;min-width:0;display:grid;justify-items:center;gap:4px;font-size:12px;font-weight:700;line-height:16px;color:var(--ping-muted);text-align:center}
+.am-step-label {max-width:100%;overflow-wrap:anywhere}
+.am-step-mark {display:grid;place-items:center;width:28px;height:28px;border-radius:50%;border:2px solid var(--ping-control-border);font-size:13px;font-weight:800;line-height:1}
+.am-steps li[data-state="done"] {color:var(--ping-text)}
+.am-steps li[data-state="done"] .am-step-mark {background:var(--ping-success);border-color:var(--ping-success);color:var(--ping-black)}
+.am-steps li[data-state="current"] {color:var(--ping-text)}
+.am-steps li[data-state="current"] .am-step-mark {background:var(--ping-accent);border-color:var(--ping-accent);color:var(--ping-accent-text)}
+
+/* Activity facts: reward, how it is checked and when points arrive */
+.am-activity-facts {display:grid;gap:8px;margin:14px 0 0;padding:12px;border-radius:12px;background:var(--ping-surface)}
+.am-activity-facts div {display:grid;gap:2px}
+.am-activity-facts dt {font-size:var(--ping-type-label);font-weight:700;letter-spacing:.02em;color:var(--ping-muted)}
+.am-activity-facts dd {margin:0;font-size:var(--ping-type-help);line-height:20px;overflow-wrap:anywhere}
+.am-activity-facts div:first-child dd {font-weight:800;color:var(--ping-primary)}
+.am-activity-catalog {display:inline-flex;align-items:center;min-height:var(--ping-tap);font-size:var(--ping-type-help);font-weight:700}
+
+/* Staff review step inside the encounter */
+.am-review {grid-area:review;min-width:0;padding-top:18px;border-top:1px solid var(--ping-border);scroll-margin-top:16px}
+.am-review h2 {font-size:21px;line-height:1.25;font-weight:800;letter-spacing:-.02em;margin:0 0 8px}
+.am-review h2:focus {outline:none}
+.am-review textarea {min-height:96px}
+.am-review .btn {min-height:var(--ping-tap);width:100%}
+.am-review-status {padding:10px 12px;border-radius:12px;background:var(--ping-surface);font-size:var(--ping-type-help);line-height:20px}
+.am-review-status[data-review="APPROVED"] strong {color:var(--ping-success)}
+.am-grid.am-has-review {grid-template-areas:"location word" "location arrival" "location verify" "location activity" "location review" "location confirm"}
+@media (max-width:991.98px){.am-grid.am-has-review{grid-template-areas:"word" "location" "arrival" "verify" "activity" "review" "confirm"}}
+.am-grid.am-has-review:not(.am-policy2) {grid-template-areas:"location word" "location arrival" "location activity" "location review" "location confirm"}
+@media (max-width:991.98px){.am-grid.am-has-review:not(.am-policy2){grid-template-areas:"word" "location" "arrival" "activity" "review" "confirm"}}
+
+/* Evento · own progress (never sums the catalog as balance) */
+.pa-mine {display:grid;gap:10px}
+.pa-balance {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0}
+.pa-balance div {padding:10px;border:1px solid var(--ping-border);border-radius:12px;background:var(--ping-surface);min-width:0}
+.pa-balance dt {font-size:12px;font-weight:700;line-height:16px;color:var(--ping-muted)}
+.pa-balance dd {margin:2px 0 0;font-size:22px;font-weight:800;line-height:28px}
+.pa-balance div:first-child dd {color:var(--ping-primary)}
+.pa-next {display:grid;gap:10px;padding:14px;border:2px solid var(--ping-accent);border-radius:var(--ping-radius);background:var(--ping-surface-alt)}
+.pa-next p {margin:0;font-size:var(--ping-type-help);line-height:20px}
+.pa-next .btn,.pa-continue {min-height:var(--ping-tap)}
+.pa-continue {display:flex;justify-content:center;align-items:center;gap:8px}
+.pa-continue .ping-icon {width:18px;height:18px}
+.pa-pending-note,.pa-how-pick,.pa-check,.pa-method {margin:0;font-size:var(--ping-type-help);line-height:20px;color:var(--ping-muted)}
+.pa-check {color:var(--ping-text);font-weight:700}
+.pa-method {font-size:12px;font-weight:700;color:var(--ping-primary)}
+.pa-done {display:grid;gap:8px}
+.pa-completed h4 {margin:0;font-size:16px;font-weight:700;line-height:24px;overflow-wrap:anywhere}
+.pa-completed .pa-points {background:var(--ping-surface-alt);color:var(--ping-success)}
+
+/* Staff review list */
+.rv-kicker {margin:12px 0 0;font-size:var(--ping-type-label);font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ping-muted)}
+.rv-list {list-style:none;margin:16px 0 0;padding:0;display:grid;gap:12px}
+.rv-item {padding:16px;border:1px solid var(--ping-border);border-radius:var(--ping-radius);background:var(--ping-surface);scroll-margin-top:16px;min-width:0}
+.rv-item[data-status="PENDING"] {border:2px solid var(--ping-accent)}
+.rv-head {display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.rv-status {padding:2px 10px;border-radius:999px;background:var(--ping-badge-bg);color:var(--ping-badge-text);font-size:var(--ping-type-label);font-weight:800}
+.rv-meta,.rv-pair {font-size:var(--ping-type-help);color:var(--ping-muted);margin:0}
+.rv-item h2 {margin:0;overflow-wrap:anywhere}
+.rv-facts {display:grid;gap:8px;margin:12px 0}
+.rv-facts dt {font-size:var(--ping-type-label);font-weight:700;color:var(--ping-muted)}
+.rv-facts dd {margin:0;overflow-wrap:anywhere}
+.rv-response {white-space:pre-wrap;padding:10px 12px;border-radius:12px;background:var(--ping-surface-alt)}
+.rv-form .btn {min-height:var(--ping-tap)}
+.rv-empty {padding:14px 16px;border:1px dashed var(--ping-border);border-radius:var(--ping-radius)}

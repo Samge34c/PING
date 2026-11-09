@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Revisar tareas')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+<!-- DEC-066: revisión por personal autorizado de ESTE evento. Aprobar no acredita por sí solo: la Saga existente acredita una vez cuando ambos confirmaron. -->
+<main id="main-content" class="container ping-form-layout rv-page">
+  <a th:href="@{/organizer(event=${event.id})}">← Organización</a>
+  <p class="rv-kicker" th:text="${event.name}"></p>
+  <h1>Revisar tareas</h1>
+  <p>Aprueba lo que la pareja envió o pide una corrección explicando qué falta. Aprobar no da puntos por sí solo: llegan una sola vez cuando la tarea está aprobada y ambas personas confirmaron.</p>
+  <p class="ping-notice" th:if="${message}" th:text="${message}" role="status"></p>
+  <p class="ping-notice" th:if="${reviewError}" th:text="${reviewError}" role="alert"></p>
+  <p th:if="${#lists.isEmpty(items)}" class="rv-empty">No hay tareas enviadas en este evento. Aparecerán aquí cuando una pareja con una actividad «Revisión del personal» las envíe.</p>
+  <ul class="rv-list" th:unless="${#lists.isEmpty(items)}">
+    <li th:each="it : ${items}" th:id="${'review-' + it.matchId()}" class="rv-item" th:attr="data-status=${it.status().name()}">
+      <div class="rv-head">
+        <span class="rv-status" th:text="${it.status().label}"></span>
+        <span class="rv-meta" th:text="${it.confirmations() + ' de 2 confirmaron · +' + it.rewardPoints() + ' puntos cada una'}"></span>
+      </div>
+      <h2 class="h5" th:text="${it.activityTitle()}"></h2>
+      <p class="rv-pair" th:text="${it.firstAlias() + ' y ' + it.secondAlias()}"></p>
+      <dl class="rv-facts">
+        <div th:unless="${#strings.isEmpty(it.checkInstructions())}"><dt>Qué revisar</dt><dd th:text="${it.checkInstructions()}"></dd></div>
+        <div th:unless="${#strings.isEmpty(it.responsePrompt())}"><dt>Pregunta</dt><dd th:text="${it.responsePrompt()}"></dd></div>
+        <div><dt>Respuesta enviada</dt><dd class="rv-response" th:text="${#strings.isEmpty(it.response()) ? 'Sin nota: pidieron revisión en persona.' : it.response()}"></dd></div>
+        <div th:if="${!#strings.isEmpty(it.comment())}"><dt>Tu último comentario</dt><dd th:text="${it.comment()}"></dd></div>
+        <div><dt>Enviada</dt><dd th:text="${#temporals.format(it.submittedAt(),'dd/MM HH:mm','America/Bogota') + ' · Bogotá'}"></dd></div>
+      </dl>
+      <p th:if="${it.ownEncounter()}" class="small">Participas en este encuentro: otra persona autorizada debe revisarlo.</p>
+      <p th:if="${!it.ownEncounter() and it.matchStatus() != 'ACTIVE'}" class="small" th:text="${it.matchStatus() == 'COMPLETED' ? 'Encuentro completado: los puntos ya se acreditaron.' : 'El encuentro ya no está activo.'}"></p>
+      <form th:if="${it.decidable()}" method="post" th:action="@{/events/{e}/reviews/{m}(e=${event.id},m=${it.matchId()})}" class="rv-form">
+        <input type="hidden" name="_csrf" th:value="${csrfToken}">
+        <label class="form-label" th:for="${'rv-comment-' + it.matchId()}">Comentario (obligatorio para pedir corrección)</label>
+        <textarea class="form-control" th:id="${'rv-comment-' + it.matchId()}" name="comment" maxlength="500" rows="2" th:text="${draftFor == it.matchId() ? draftComment : ''}"></textarea>
+        <div class="action-row mt-2">
+          <button class="btn btn-primary" name="decision" value="approve">Aprobar</button>
+          <button class="btn btn-outline-secondary" name="decision" value="changes">Pedir corrección</button>
+        </div>
+      </form>
+      <form th:if="${!it.ownEncounter() and it.status().name() == 'APPROVED' and it.matchStatus() == 'ACTIVE' and it.confirmations() == 2}" method="post" th:action="@{/events/{e}/reviews/{m}(e=${event.id},m=${it.matchId()})}">
+        <input type="hidden" name="_csrf" th:value="${csrfToken}">
+        <button class="btn btn-outline-primary" name="decision" value="approve">Reintentar acreditación</button>
+      </form>
+    </li>
+  </ul>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

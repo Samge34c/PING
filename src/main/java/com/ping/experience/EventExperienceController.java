@@ -42,6 +42,7 @@ public class EventExperienceController {
                 var current = history.stream().filter(m -> m.status() == MatchStatus.OFFERED || m.status() == MatchStatus.ACTIVE).findFirst().orElse(null);
                 model.addAttribute("currentMatch", current);
                 model.addAttribute("badges", EventExperienceCatalog.badges(history));
+                model.addAttribute("activityProgress", ActivityProgress.of(participant, history));
                 if (current != null && current.status() == MatchStatus.ACTIVE) active = current;
             }
         }
