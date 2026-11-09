@@ -1,7 +1,6 @@
 /* DEC-066 · Cierre de usabilidad. Figma «PING · Cierre de usabilidad · Propuesta» (188:262).
    Only existing tokens; mobile first (390 / 360), desktop adapts. */
-.form-text {margin:6px 0 0;font-size:var(--ping-type-help);line-height:20px;color:var(--ping-muted)}
-.py-1 {padding-top:.25rem!important;padding-bottom:.25rem!important}
+.ping-help {margin:6px 0 0;font-size:var(--ping-type-help);line-height:20px;color:var(--ping-muted)}
 
 /* Encounter · «Ahora» card with the real step (Figma 188:276) */
 .am-now {margin:4px 0 24px;padding:16px;border:2px solid var(--ping-accent);border-radius:var(--ping-radius);background:var(--ping-surface-alt);display:grid;gap:8px;scroll-margin-top:16px}

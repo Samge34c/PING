@@ -9,7 +9,7 @@
 <input type="hidden" name="_csrf" th:value="${csrfToken}">
 <label class="form-label" for="rw-image-file" th:text="${benefit.hasImage() ? 'Sustituir por otra imagen' : 'Elegir imagen'}"></label>
 <input class="form-control" type="file" id="rw-image-file" name="image" accept="image/png,image/jpeg,image/webp" required aria-describedby="rw-image-help">
-<p id="rw-image-help" class="form-text">PNG, JPEG o WebP hasta 8 MiB, mínimo 160 px. Se ajusta a 1200 px, se corrige la orientación y se quitan los metadatos (ubicación, cámara). Usa una foto del producto real; no subas fotos de personas.</p>
+<p id="rw-image-help" class="ping-help">PNG, JPEG o WebP hasta 8 MiB, mínimo 160 px. Se ajusta a 1200 px, se corrige la orientación y se quitan los metadatos (ubicación, cámara). Usa una foto del producto real; no subas fotos de personas.</p>
 <button class="btn btn-primary mt-2" th:text="${benefit.hasImage() ? 'Sustituir imagen' : 'Subir imagen'}"></button>
 </form>
 <form th:if="${benefit.hasImage()}" method="post" th:action="@{/events/{e}/rewards/{id}/image/remove(e=${event.id},id=${itemId})}" class="mt-2">
