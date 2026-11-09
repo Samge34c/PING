@@ -26,7 +26,10 @@ class OrganizerBoardTests {
         long mine = event("Feria propia " + UUID.randomUUID()), foreign = event("Feria ajena " + UUID.randomUUID());
         long staff = account(); accounts.assign(general(), staff, mine, true);
         try (var b = new TestBrowser(port)) {
-            b.get("/login"); assertThat(b.post("/login", Map.of("email", accounts.user(staff).email(), "password", PASSWORD)).statusCode()).isEqualTo(302);
+            b.get("/login");
+            var signedIn = b.post("/login", Map.of("email", accounts.user(staff).email(), "password", PASSWORD));
+            assertThat(signedIn.statusCode()).isEqualTo(302);
+            assertThat(signedIn.headers().firstValue("Location").orElse("")).as("organising-only account lands on its board").endsWith("/organizer");
             String page = b.get("/organizer").body();
             assertThat(page).contains("Evento que administras", "Validaciones y entregas", "Preparar evento", "Abrir evento", "/events/" + mine + "/reviews")
                 .doesNotContain("Feria ajena", "Cambiar de evento", "/organizer/access\"");

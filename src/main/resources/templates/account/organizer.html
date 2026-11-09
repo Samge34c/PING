@@ -8,7 +8,14 @@
   <a class="pi-back" th:href="@{/account}">← Mi cuenta</a>
   <p class="eyebrow">ORGANIZACIÓN</p>
   <div th:replace="~{fragments/layout :: message}"></div>
-  <p th:if="${#lists.isEmpty(events)}" class="og-empty">Todavía no tienes eventos asignados. Pide a administración general que te asigne uno; tener cuenta de organización no concede permisos por sí solo.</p>
+  <th:block th:if="${#lists.isEmpty(events)}">
+    <h1>Organización</h1>
+    <p th:unless="${general}" class="og-empty">Todavía no tienes eventos asignados. Pide a administración general que te asigne uno; tener cuenta de organización no concede permisos por sí solo.</p>
+    <th:block th:if="${general}">
+      <p class="og-empty">Aún no hay eventos. Crea el primero: empieza en borrador y lo abres cuando esté listo.</p>
+      <a class="btn btn-primary" th:href="@{/events/new}">Crear el primer evento</a>
+    </th:block>
+  </th:block>
   <th:block th:if="${board != null}" th:with="e=${board.event()}">
     <section class="og-event" aria-labelledby="og-event-title">
       <div>

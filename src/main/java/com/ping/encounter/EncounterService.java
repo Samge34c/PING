@@ -51,7 +51,7 @@ public class EncounterService {
         var names=EncounterOptions.lines(e.getMeetingPoints());if(names.isEmpty())names=List.of(e.getMeetingPoint());
         var rows=EncounterOptions.lines(e.getEncounterActivities());if(rows.isEmpty())rows=List.of(ActivityCatalog.activity(""));
         // Preflight before mutation: over-limit legacy data remains intact and editable.
-        if(new LinkedHashSet<>(names).size()>3 || new LinkedHashSet<>(rows).size()>10)throw new BusinessRuleException("El catálogo anterior supera3 puntos o10 actividades. Reduce las listas antes de importar; no se borró nada.");
+        if(new LinkedHashSet<>(names).size()>3 || new LinkedHashSet<>(rows).size()>10)throw new BusinessRuleException("El catálogo anterior supera 3 lugares o 10 actividades. Reduce las listas antes de importar; no se borró nada.");
         e.enableStructuredEncounter();
         Set<Long> ids=new LinkedHashSet<>();
         for(String name:new LinkedHashSet<>(names)){var f=new PointForm();f.setName(name);f.setDirections("Busca el punto público «"+name+"». Si no lo identificas, consulta al organizador.");ids.add(savePoint(event,null,f));}

@@ -18,6 +18,14 @@ public class OrganizerController {
   if(event!=null&&(selected==null||!selected.getId().equals(event)))throw new org.springframework.security.access.AccessDeniedException("No tienes permiso para administrar este evento.");
   if(selected!=null){session.setAttribute("pingOrganizerEvent",selected.getId());m.addAttribute("board",OrganizerBoard.of(selected,encounters,rewards,reviews,null));m.addAttribute("entryLink",links.link(selected));}
   return "account/organizer";}
- @GetMapping("/organizer/access") public String access(Model m){if(!auth.require().general())throw new org.springframework.security.access.AccessDeniedException("Solo administración general");m.addAttribute("events",events.list());return "account/access";}
- @PostMapping("/organizer/access") public String assign(@RequestParam String email,@RequestParam long eventId,@RequestParam(defaultValue="true") boolean grant){long actor=auth.require().id();if(!auth.require().general())throw new org.springframework.security.access.AccessDeniedException("Solo administración general");long target=accounts.find(AccountService.email(email)).orElseThrow(()->new com.ping.web.BusinessRuleException("No encontramos esa cuenta. Debe registrarse primero."));accounts.assign(actor,target,eventId,grant);return "redirect:/organizer/access?saved=true";}
+ @GetMapping("/organizer/access") public String access(Model m,jakarta.servlet.http.HttpSession session){if(!auth.require().general())throw new org.springframework.security.access.AccessDeniedException("Solo administración general");m.addAttribute("events",events.list());
+  // Arriving from an event board: that event is preselected (only its id is remembered in the session).
+  if(!m.containsAttribute("selectedEvent")&&session.getAttribute("pingOrganizerEvent") instanceof Long remembered)m.addAttribute("selectedEvent",remembered);return "account/access";}
+ @PostMapping("/organizer/access") public String assign(@RequestParam String email,@RequestParam long eventId,@RequestParam(defaultValue="true") boolean grant,org.springframework.web.servlet.mvc.support.RedirectAttributes flash){long actor=auth.require().id();if(!auth.require().general())throw new org.springframework.security.access.AccessDeniedException("Solo administración general");
+  flash.addFlashAttribute("selectedEvent",eventId);
+  var target=accounts.find(AccountService.email(email));
+  // Unknown account: stay on the form with the typed address and say what to do, instead of a generic error page.
+  if(target.isEmpty()){flash.addFlashAttribute("accessError","No encontramos una cuenta con ese correo. La persona debe crear su cuenta y verificarla primero.");flash.addFlashAttribute("accessEmail",email.strip());return "redirect:/organizer/access";}
+  accounts.assign(actor,target.get(),eventId,grant);
+  flash.addFlashAttribute("accessSaved",(grant?"Permiso asignado a ":"Permiso retirado a ")+AccountService.email(email)+" en «"+events.get(eventId).getName()+"».");return "redirect:/organizer/access";}
 }

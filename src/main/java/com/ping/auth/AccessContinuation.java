@@ -38,7 +38,8 @@ public class AccessContinuation {
    var own=accounts.participant(user.id(),event.get());own.ifPresent(id->support.entered(session,id));destination=own.isPresent()?"/me":"/join";
   }else{
    var existing=accounts.participations(user.id());if(!existing.isEmpty())support.entered(session,existing.getFirst().participantId());
-   destination=requested.equals("/me")&&existing.isEmpty()?"/join":requested;
+   // An account that only organises (no participation yet) lands on its board, not on the participant entry.
+   destination=requested.equals("/me")&&existing.isEmpty()?(user.organizer()||user.general()?"/organizer":"/join"):requested;
   }
   if(session.getAttribute("pingLegacyOwnedParticipant")!=null)destination="/account/link-session";
   accounts.audit(user.id(),"LOGIN",user.id(),null);return destination;

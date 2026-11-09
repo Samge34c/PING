@@ -31,8 +31,11 @@ public record OrganizerBoard(Event event, long pendingReviews, long pendingClaim
             rows.add(new Row("Actividades y puntos", compatible == 0 ? "Falta una actividad activa con un lugar activo" : tasks.size() + (tasks.size() == 1 ? " activa" : " activas") + range + (reviewed > 0 ? " · " + reviewed + " con revisión del personal" : ""),
                     compatible == 0 ? Tone.TODO : Tone.OK, compatible == 0 ? "Añadir actividad" : "Editar", base + "/encounters#activities", true));
         } else {
-            rows.add(new Row("Lugares de encuentro", "Lista anterior · " + (EncounterOptions.unique(e.getMeetingPoints()).isEmpty() ? e.getMeetingPoint() : String.join(" · ", EncounterOptions.unique(e.getMeetingPoints()))), Tone.OK, "Editar", base + "/encounters#points", true));
-            rows.add(new Row("Actividades y puntos", "Lista anterior · +" + EncounterService.LEGACY_REWARD_POINTS + " puntos cada una", Tone.OK, "Editar", base + "/encounters#activities", true));
+            // A new event still works with the basic place and activity; say so instead of "Lista anterior" (only events that really have old lists).
+            boolean oldLists = !EncounterOptions.unique(e.getMeetingPoints()).isEmpty() || !EncounterOptions.unique(e.getEncounterActivities()).isEmpty();
+            String origin = oldLists ? "Lista anterior · " : "Básico, ya funciona · ";
+            rows.add(new Row("Lugares de encuentro", origin + (EncounterOptions.unique(e.getMeetingPoints()).isEmpty() ? e.getMeetingPoint() : String.join(" · ", EncounterOptions.unique(e.getMeetingPoints()))) + (oldLists ? "" : ". Añade tus lugares para elegirlos"), Tone.OK, oldLists ? "Editar" : "Añadir lugar", base + "/encounters#points", true));
+            rows.add(new Row("Actividades y puntos", origin + "actividad general, +" + EncounterService.LEGACY_REWARD_POINTS + " puntos" + (oldLists ? "" : ". Añade las tuyas"), Tone.OK, oldLists ? "Editar" : "Añadir actividad", base + "/encounters#activities", true));
         }
         rows.add(new Row("Plano del evento", e.getFloorplanId() == null ? "Opcional · sin plano; se usan las indicaciones" : "Plano cargado", e.getFloorplanId() == null ? Tone.OPTIONAL : Tone.OK, e.getFloorplanId() == null ? "Cargar plano" : "Ubicar lugares", base + "/floorplan", false));
         var benefits = rewards.catalog(id).stream().filter(b -> b.getEventId() != null).toList();
