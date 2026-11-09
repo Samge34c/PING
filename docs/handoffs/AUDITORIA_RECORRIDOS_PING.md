@@ -6,7 +6,7 @@ Encargo de Samuel del 8 de noviembre de 2026 (sesión de Claude Code), continuac
 
 | Qué | Versión | Cómo se comprobó |
 |---|---|---|
-| Web pública `ping-b63o.onrender.com` | recursos de **`7f20b49`** (`fix/evento-actividades-live`) | Huellas de `v2.css` (`3e535fc8…`, solo coincide con `7f20b49`), `brand.css`, `ui.js`, `qr-scanner.js` antiguo y ausencia de `cierre.css`. El código Java no es observable desde fuera. |
+| Web pública `ping-b63o.onrender.com` | **SHA desplegado no verificado.** Sus CSS/JS públicos coinciden con los de `7f20b49` | Huellas de `v2.css` (`3e535fc8…`, de los commits revisados solo coincide con `7f20b49`), `brand.css`, `ui.js`, `qr-scanner.js` antiguo y ausencia de `cierre.css`. Esto solo prueba que los recursos estáticos son iguales: el código Java, la configuración y las migraciones aplicadas no son observables desde fuera. Para afirmar el SHA hace falta el panel de Render o un endpoint de versión. |
 | Rama de despliegue `origin/deploy/render-demo` | `3a528ca` | `git fetch`. No coincide con la web pública. |
 | `origin/main` | `97f9b43` | Muy anterior; no representa el producto. |
 | **Auditada (local)** | `4c0f0a6` (DEC-066, sin publicar) → correcciones en **`7b33430`** | Rama `feature/auditoria-recorridos` desde `feature/cierre-usabilidad`, worktree `C:\Users\river\PING-cierre`. MySQL 8.4 aislado (3317), buzón local (1027), app en 8091. |
@@ -92,3 +92,34 @@ Implementado en DEC-066 y revisado aquí: verificación del encuentro (llegadas 
 ## Siguiente acción para retomar
 
 `cd C:\Users\river\PING-cierre && git status --short --branch && git log --oneline -4` (rama `feature/auditoria-recorridos`). Revisar A13/A15/A18 con Samuel; con autorización, integrar sobre el SHA publicado (`7f20b49` según huellas), ejecutar `./mvnw clean verify` y las pruebas físicas y con personas.
+
+## Ronda 3 · Actividad asignada, envío, corrección, revisión, confirmaciones, puntos y canje
+
+Relación en Git: historia lineal `7f20b49` → DEC-066 (`cb90ecb`…`4c0f0a6`) → `7b33430` (auditoría) → `fd7cc71` (docs) → **`b841a67`** (esta ronda). No se repitieron los recorridos ya verificados (entrada, cuenta, organización, plano, beneficios con imagen). gstack sigue sin instalar: Smart App Control no se desactivó ni se instaló WSL; se usó el arnés CDP existente.
+
+**Recorridos comprobados en la app real (390 px, dos sesiones + personal, sin recargar salvo donde se indica):**
+
+| Paso | Quién | Resultado observado |
+|---|---|---|
+| Llegada de la otra persona | Dani (esperando) | La tarjeta pasa sola a «Verifica el código de Elí» en ~4 s (sondeo cada 5 s). |
+| Verificación cruzada | ambas | «Muestra tu código a…» → «Hagan la actividad y envíenla»; la otra persona se actualiza sola. |
+| Envío con pregunta | Dani envía | Dani: «Confirma que hicieron la actividad». Elí (no envió) se actualiza sola y ve «Pendiente de revisión» y el texto enviado. |
+| Corrección | personal | Pedir corrección sin comentario → error explicado; con comentario, ambas ven «Corrijan y vuelvan a enviar» con el motivo, sin recargar. |
+| Reenvío por la otra persona | Elí | Vuelve a «Pendiente»; las dos confirman → «Esperando la revisión del personal». Tablero: «Revisar tareas · 1 pendiente». |
+| Aprobación con ambas confirmaciones | personal | +15 a cada una una sola vez; la pantalla de Elí pasa sola a «Conexión completada». Evento: saldo 15, ganados 15, pendientes 0. |
+| Envío **sin** pregunta | Ana | Campo «Nota para el personal (opcional)», no obligatorio; el personal ve «Sin nota: pidieron revisión en persona». La actividad ya activa conservó su pregunta al quitarla en el editor (snapshot). |
+| Aprobación **sin** confirmaciones | personal | Mensaje con el resultado real (ver C3); al confirmar ambas, puntos una vez. |
+| Cancelar un encuentro activo | Ana desde «¿Algún problema?» | Carolina se entera sola; texto corregido (C5). |
+| Canje | (recorrido ya verificado en DEC-066 y ronda 2) | No repetido. |
+
+**Corregido en `b841a67`** (antes/después en `docs/screenshots/auditoria-recorridos/flujo/`; `01`–`05` son de la versión anterior a `b841a67`):
+- **C1** (R · P1) Quien no envió no sabía quién ni cuándo: el estado compartido dice «Enviado por ti / por Ana Lucía · 20:44». Evidencia `06`, prueba HTTP.
+- **C2** (R · P1) Con la revisión pendiente había dos botones amarillos («Actualizar envío» y «Confirmar»): ahora reenviar es secundario y la acción principal es confirmar; tras una corrección el botón dice «Reenviar corregida». Antes `02`, después `06`.
+- **C3** (R · P1) El mensaje al aprobar era condicional («si ambos ya confirmaron…»): ahora informa lo ocurrido: «Se acreditaron +15 puntos a cada persona, una sola vez» o «Confirmaciones: N de 2. Los puntos llegarán cuando ambas personas confirmen».
+- **C4** (R · P2) La pantalla final no decía qué se completó: nombra la actividad y, si hubo revisión, que el personal la aprobó. Antes `05`, después `07`.
+- **C5** (F · P2) Cancelar un encuentro ya aceptado decía «Propuesta cancelada»: ahora «Encuentro cancelado… conservas los que ya tenías». Después `08`.
+- Descartado: «Saltar al contenido» visible en capturas de página completa es un artefacto de la captura (enlace fijo fuera de pantalla, `top:-80`), no un defecto.
+
+**Pruebas:** suite completa `./mvnw -o clean verify` sobre el árbol de `b841a67`: **383 pruebas, 0 fallos, BUILD SUCCESS** (08/11/2026 20:49 Bogotá); `ActivityReviewTests` amplía la comprobación HTTP de «Enviado por ti / por Persona A».
+
+**Pendientes físicos (iPhone Safari y Android, HTTPS):** permiso de cámara la primera vez y tras denegarlo; trasera por defecto y «Usar cámara frontal»; lectura del QR personal de la otra persona a 30–50 cm con luz de interior; cámara cerrada al cambiar de app y volver; teclado sobre «Nota para el personal» y sobre el código manual sin tapar el botón; barra pegajosa de intereses con el área segura inferior; sondeo de estado con la pantalla bloqueada y al desbloquear; foto de recompensa tomada con el móvil (orientación). Con personas: guion de `auditoria-recorridos/PRUEBA_APRENDIZAJE.md`, sin resultados todavía.
