@@ -135,3 +135,7 @@
 .og-row[data-tone="TODO"] p {color:var(--ping-text)}
 .og-row[data-tone="TODO"] .og-mark {color:var(--ping-danger);font-weight:800}
 .og-req {display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--ping-badge-bg);color:var(--ping-badge-text);font-size:11px;font-weight:800;vertical-align:middle}
+/* 360 px: keep step labels whole; avoid repeating the check method on the assigned card */
+.am-step-label {overflow-wrap:normal;word-break:keep-all;hyphens:none}
+@media (max-width:389.98px){.am-steps li{font-size:11px;letter-spacing:-.01em}.am-now{padding:14px 12px}}
+.pa-assigned .pa-method {display:none}

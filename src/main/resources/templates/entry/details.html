@@ -14,4 +14,4 @@
 <fieldset th:replace="~{entry/avatar :: editor}"></fieldset>
 <div class="id2-actions"><button class="btn btn-primary pe-primary" name="action" value="interests" th:disabled="${!entryEventOpen}">Guardar y elegir gustos <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></button></div>
 <button class="btn btn-link pe-return" name="action" value="changeEvent" formnovalidate>Cambiar evento</button></form>
-<p class="pe-academic">Simulación académica. Sin vínculo oficial con SOFA.</p></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<p class="pe-academic" th:if="${experience != null}">Simulación académica. Sin vínculo oficial con SOFA.</p></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

@@ -6,7 +6,7 @@
   <div th:if="${activityProgress != null}" class="pa-mine" th:with="ap=${activityProgress}">
     <dl class="pa-balance">
       <div><dt>Tu saldo</dt><dd th:text="${ap.balance()}"></dd></div>
-      <div><dt>Ganados en encuentros</dt><dd th:text="${ap.earned()}"></dd></div>
+      <div><dt>Ganados</dt><dd th:text="${ap.earned()}"></dd></div>
       <div><dt>Pendientes</dt><dd th:text="${ap.pending() == 0 ? '0' : '+' + ap.pending()}"></dd></div>
     </dl>
     <div th:if="${ap.active() == null and g.assigned == null}" class="pa-next">

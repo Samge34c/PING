@@ -23,7 +23,8 @@ public class FloorplanService {
     }
     public record Plan(String id, long eventId, String filename, int width, int height, String contentType, int byteSize, Instant createdAt, long revision) { }
     public record Position(long pointId, double x, double y) { }
-    public record Point(long id, String name, String directions, boolean active, Double x, Double y) {
+    public record Point(long id, String name, String directions, boolean active, Double x, Double y, boolean archived) {
+        public Point(long id, String name, String directions, boolean active, Double x, Double y) { this(id, name, directions, active, x, y, false); }
         public boolean placed() { return x != null && y != null; }
     }
     public record Snapshot(String planId, Long pointId, Double x, Double y) { }
@@ -42,7 +43,7 @@ public class FloorplanService {
         var plan = current(eventId); var positions = plan == null ? List.<Position>of() : positions(plan.id());
         return points.findByEventIdOrderByIdAsc(eventId).stream().map(p -> {
             var position = positions.stream().filter(pos -> pos.pointId() == p.getId()).findFirst().orElse(null);
-            return new Point(p.getId(), p.getName(), p.getDirections(), p.isActive(), position == null ? null : position.x(), position == null ? null : position.y());
+            return new Point(p.getId(), p.getName(), p.getDirections(), p.isActive(), position == null ? null : position.x(), position == null ? null : position.y(), p.isArchived());
         }).toList();
     }
     public byte[] image(long eventId, String planId) {

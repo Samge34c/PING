@@ -29,7 +29,7 @@ public class FloorplanViewController {
             var active=history.stream().filter(m->m.status()==MatchStatus.ACTIVE).findFirst().orElse(null);
             if(active!=null)return renderMatch(active,events.get(id),model);
         }
-        var event=events.get(id);var plan=plans.current(id);var points=plans.points(id);
+        var event=events.get(id);var plan=plans.current(id);var points=plans.points(id).stream().filter(p->!p.archived()).toList(); // DEC-066: archived points are history, not places to go
         var selected=pointId==null ? points.stream().filter(FloorplanService.Point::active).findFirst().orElse(points.isEmpty()?null:points.getFirst()) :
             points.stream().filter(p->p.id()==pointId).findFirst().orElseThrow(()->new NotFoundException("No encontramos ese punto en este evento."));
         model.addAttribute("event",event);model.addAttribute("plan",plan);model.addAttribute("planPoints",points);model.addAttribute("selectedPointId",selected==null?null:selected.id());
