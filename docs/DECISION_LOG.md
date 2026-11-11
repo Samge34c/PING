@@ -652,3 +652,17 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 **Decisiones:** salida «Cancelar conexión» enlazada desde la espera en el encuentro; ayuda alineada con la revisión del personal; en organización «lugares» para los puntos de encuentro y «elementos de la agenda» para la agenda; un único «← Organización»; el tablero recuerda el evento administrado; Mi Ping no enlaza a páginas de organización. Sin cambios de reglas, permisos, datos ni migraciones.
 
 **Detalle:** [handoffs/AUDITORIA_RECORRIDOS_PING.md](handoffs/AUDITORIA_RECORRIDOS_PING.md).
+
+## DEC-068 — «Comprobar al entregar el beneficio» y retiro de participantes por evento (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Samuel y Julián.** Solicitud explícita de Samuel del 11 de noviembre de 2026 (sesión de Claude Code). No se atribuye aprobación a Julián. Rama local `feature/evidencia-retiro` desde `f9172f5`; sin push, merge ni despliegue.
+
+**Decisiones:**
+- Nueva modalidad por actividad `AT_DELIVERY` «Comprobar al entregar el beneficio». Reutiliza la confirmación bilateral existente como «Marcar actividad como hecha» (no hay una segunda confirmación). Cuando ambos marcan, la misma Saga abona los puntos una vez. Los puntos son del saldo único (`participants.points`): no hay otra billetera. `evidence_credits` registra qué parte sigue «por comprobar».
+- Un canje usa primero los puntos ya comprobados. La parte pagada con puntos por comprobar queda ligada al encuentro (`claim_evidence`), y ese recibo no puede entregarse hasta registrar una comprobación en persona (`evidence_validations`: quién y cuándo). La comprobación no suma puntos y cubre a las dos personas del encuentro. PING no pide ni guarda fotos.
+- Si falta la evidencia, el personal deja una indicación (`claim_evidence_notes`). El recibo sigue pendiente: no se entrega ni se cobra otra vez. La incidencia final que ya existía no cambia.
+- Rol por evento `admin_role` (`ORGANIZER`, el de todos los permisos anteriores, o `STAFF`). El personal solo revisa tareas y entrega canjes. La organización del evento y la administración general gestionan sus participantes. El servidor lo comprueba en la política de acceso y en el servicio.
+- Retirar a alguien de un evento marca esa participación como `withdrawn`. Su propuesta o encuentro abierto se cancela como una cancelación normal. La otra persona ve «La organización del evento canceló este encuentro», sin el motivo. Sus canjes sin entregar se anulan (`CANCELLED`), se revocan sus códigos y el coste vuelve una vez al saldo. Así no hay entregas indebidas ni puntos reservados. Se conservan la cuenta, el historial, los puntos y las entregas hechas, y los demás eventos no cambian. No puede volver con el código o el QR hasta que alguien autorizado la readmita. Motivo, autor y fecha quedan en `participant_withdrawals` y `auth_audit`.
+- Migración aditiva `V26`. Los encuentros, canjes y permisos anteriores conservan su comportamiento. Se probó en MySQL 8.4 aislado.
+
+**Detalle:** [handoffs/EVIDENCIA_Y_RETIRO.md](handoffs/EVIDENCIA_Y_RETIRO.md).

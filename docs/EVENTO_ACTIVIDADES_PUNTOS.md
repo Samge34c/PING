@@ -100,3 +100,7 @@ La lógica del servicio, la asignación y la acreditación no cambian.
 - Hub SOFA con la misma cifra en todas las actividades: `11`.
 
 Ninguna captura tiene desborde horizontal, puntos recortados ni errores JS.
+
+## DEC-068 · Comprobar al entregar el beneficio (propuesta)
+
+Tercera modalidad por actividad: ambos la marcan como hecha (la misma confirmación bilateral) y los puntos llegan al momento. Al recoger un premio pagado con esos puntos, el personal comprueba la evidencia en persona antes de entregar. Una comprobación sirve para los dos y no suma puntos. Detalle: [handoffs/EVIDENCIA_Y_RETIRO.md](handoffs/EVIDENCIA_Y_RETIRO.md).
