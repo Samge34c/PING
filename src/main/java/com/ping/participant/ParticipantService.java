@@ -28,12 +28,15 @@ public class ParticipantService {
     @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public ParticipantView setAvailability(long id, @Valid AvailabilityForm form) {
         events.lock(repository.eventId(id).orElseThrow(() -> new NotFoundException("No encontramos ese participante.")));
         Participant participant = require(id);
+        if (participant.isWithdrawn()) throw new BusinessRuleException("Ya no participas en este evento. Habla con la organización.");
         if (reservations.existsById(id)) throw new BusinessRuleException("Primero cancela o termina tu conexión antes de cambiar disponibilidad.");
         if (form.getVersion() != participant.getVersion()) throw new BusinessRuleException("La disponibilidad cambió. Recarga la página.");
         participant.changeAvailability(form.getAvailable());
         repository.flush();
         return view(participant);
     }
+    /** DEC-068: participation withdrawn from its event by the organisation. */
+    public boolean withdrawn(long id) { return require(id).isWithdrawn(); }
     public Avatar avatar(long id){return require(id).getAvatar();}
     @Transactional(isolation=org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     public void avatar(long id,Avatar value){events.lock(repository.eventId(id).orElseThrow());require(id).avatar(value);}

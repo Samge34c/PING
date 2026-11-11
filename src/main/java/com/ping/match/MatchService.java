@@ -73,6 +73,21 @@ public class MatchService {
         if (match.getStatus() == MatchStatus.COMPLETED) throw new BusinessRuleException("Una conexión completada no se puede cancelar.");
         match.cancel(); jdbc.update("update purpose_credentials set revoked=true where purpose='ENCOUNTER' and context_id=? and consumed=false",id);reservations.deleteByMatchId(id);
     }
+    /**
+     * DEC-068: the organisation withdrew this participant. Their open proposal or encounter is cancelled exactly like a
+     * normal cancellation (no points, codes revoked, reservations released); the partner only sees that the organisation cancelled it.
+     * Caller holds the event lock. Returns the cancelled encounters.
+     */
+    @Transactional(isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED) public int cancelForWithdrawal(long participantId) {
+        int cancelled = 0;
+        for (Match match : matches.forParticipant(participantId)) {
+            if (match.getStatus() != MatchStatus.OFFERED && match.getStatus() != MatchStatus.ACTIVE) continue;
+            if (match.isCompletionPending()) throw new BusinessRuleException("Esta persona está terminando un encuentro y se están acreditando sus puntos. Espera unos segundos y vuelve a intentarlo.");
+            match.cancelByOrganization(); jdbc.update("update purpose_credentials set revoked=true where purpose='ENCOUNTER' and context_id=? and consumed=false", match.getId()); reservations.deleteByMatchId(match.getId());
+            cancelled++;
+        }
+        return cancelled;
+    }
     @Transactional(propagation = org.springframework.transaction.annotation.Propagation.NOT_SUPPORTED)
     public void confirm(long id, long participantId) { completion.confirm(id, participantId); }
     /** After an approval has committed (never inside its transaction): same idempotent completion. */
@@ -95,6 +110,6 @@ public class MatchService {
             match.getCommonInterests(), first ? match.getSecondInterests() : match.getFirstInterests(),
             match.accepted(self), match.accepted(other), match.confirmed(self), match.confirmed(other),
             active ? match.getMeetingPoint() : null, active ? match.getWord() : null, active || match.getStatus() == MatchStatus.COMPLETED ? match.getActivity() : null,
-            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null, match.getRewardPoints(), active ? match.getFloorplanId() : null, active ? match.getFloorplanX() : null, active ? match.getFloorplanY() : null,match.getVerificationPolicy(),match.verified(self),match.verified(other),(first?match.getSecond():match.getFirst()).getAvatar(),match.getActivityCheck(),match.getCheckInstructions(),match.getResponsePrompt());
+            rating, match.isCompletionPending(), match.getCreatedAt(), match.isArrivalRequired(), match.arrived(self), match.arrived(other), active ? match.getMeetingDirections() : null, active || match.getStatus()==MatchStatus.COMPLETED ? match.getActivityTitle() : null, match.getRewardPoints(), active ? match.getFloorplanId() : null, active ? match.getFloorplanX() : null, active ? match.getFloorplanY() : null,match.getVerificationPolicy(),match.verified(self),match.verified(other),(first?match.getSecond():match.getFirst()).getAvatar(),match.getActivityCheck(),match.getCheckInstructions(),match.getResponsePrompt(),match.isCancelledByOrganization());
     }
 }

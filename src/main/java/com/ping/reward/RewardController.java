@@ -25,7 +25,7 @@ public class RewardController {
         if (experience != null) model.addAttribute("promoUnlocked", completion.completed());
         // DEC-066: the global academic DEMO snack is shown only in the demo scenario or the SOFA simulation, never as a real event's benefit.
         boolean demo = demoContext(session, experience); model.addAttribute("showDemoBenefits", demo);
-        model.addAttribute("benefits", rewards.catalog(participant.eventId()).stream().filter(b -> demo || b.getEventId() != null).toList()); model.addAttribute("claims", rewards.personal(self));
+        model.addAttribute("benefits", rewards.catalog(participant.eventId()).stream().filter(b -> demo || b.getEventId() != null).toList()); model.addAttribute("claims", rewards.personal(self)); model.addAttribute("uncheckedPoints", rewards.uncheckedPoints(self));
         model.addAttribute("completionPending", completion.pending()); model.addAttribute("requestKey", java.util.UUID.randomUUID().toString()); return "rewards/benefits";
     }
     @PostMapping("/me/benefits") public String request(@RequestParam long benefitId, @RequestParam String requestKey, HttpSession session, RedirectAttributes flash) {

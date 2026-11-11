@@ -18,6 +18,8 @@ public class MatchCompletionSagaSteps {
     private final MatchReservationRepository reservations;
     private final CompletionRewardService rewards;
     private final EventService events;
+    private com.ping.reward.EvidenceLedger evidence;
+    @org.springframework.beans.factory.annotation.Autowired void evidence(com.ping.reward.EvidenceLedger evidence) { this.evidence = evidence; }
     public MatchCompletionSagaSteps(MatchRepository matches, MatchCompletionRepository sagas, CompletionStepRepository history,
             MatchReservationRepository reservations, CompletionRewardService rewards, EventService events,org.springframework.jdbc.core.JdbcTemplate jdbc) {this.jdbc=jdbc;
         this.matches = matches; this.sagas = sagas; this.history = history; this.reservations = reservations; this.rewards = rewards; this.events = events;
@@ -65,12 +67,12 @@ public class MatchCompletionSagaSteps {
     public void grantFirst(long id) {
         Match match = lock(id); MatchCompletion saga = sagas.findById(id).orElseThrow();
         if (saga.getStatus() != SagaStatus.MATCH_PREPARED) return;
-        rewards.grant(match.getFirst().getId(),saga.getRewardPoints()); saga.firstGranted(); record(saga, "GRANT_FIRST");
+        rewards.grant(match.getFirst().getId(),saga.getRewardPoints()); if (match.atDelivery()) evidence.credit(id, match.getFirst().getId(), saga.getRewardPoints()); saga.firstGranted(); record(saga, "GRANT_FIRST");
     }
     public void grantSecond(long id) {
         Match match = lock(id); MatchCompletion saga = sagas.findById(id).orElseThrow();
         if (saga.getStatus() != SagaStatus.FIRST_REWARD_GRANTED) return;
-        rewards.grant(match.getSecond().getId(),saga.getRewardPoints()); saga.secondGranted(); record(saga, "GRANT_SECOND");
+        rewards.grant(match.getSecond().getId(),saga.getRewardPoints()); if (match.atDelivery()) evidence.credit(id, match.getSecond().getId(), saga.getRewardPoints()); saga.secondGranted(); record(saga, "GRANT_SECOND");
     }
     public void close(long id) {
         Match match = lock(id); MatchCompletion saga = sagas.findById(id).orElseThrow();
@@ -86,12 +88,12 @@ public class MatchCompletionSagaSteps {
     public void reverseSecond(long id) {
         Match match = lock(id); MatchCompletion saga = sagas.findById(id).orElseThrow();
         if (!compensating(saga) || !saga.isSecondGranted()) return;
-        rewards.reverse(match.getSecond().getId(),saga.getRewardPoints()); saga.reverseSecond(); record(saga, "REVERSE_SECOND");
+        rewards.reverse(match.getSecond().getId(),saga.getRewardPoints()); evidence.uncredit(id, match.getSecond().getId()); saga.reverseSecond(); record(saga, "REVERSE_SECOND");
     }
     public void reverseFirst(long id) {
         Match match = lock(id); MatchCompletion saga = sagas.findById(id).orElseThrow();
         if (!compensating(saga) || !saga.isFirstGranted()) return;
-        rewards.reverse(match.getFirst().getId(),saga.getRewardPoints()); saga.reverseFirst(); record(saga, "REVERSE_FIRST");
+        rewards.reverse(match.getFirst().getId(),saga.getRewardPoints()); evidence.uncredit(id, match.getFirst().getId()); saga.reverseFirst(); record(saga, "REVERSE_FIRST");
     }
     public void restore(long id) {
         Match match = lock(id); MatchCompletion saga = sagas.findById(id).orElseThrow();

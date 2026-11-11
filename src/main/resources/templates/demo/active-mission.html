@@ -12,7 +12,8 @@
     <h2 id="am-now-title" tabindex="-1" th:text="${progress.title()}"></h2>
     <p class="am-now-detail" th:text="${progress.detail()}"></p>
     <form th:if="${progress.arriveForm()}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-arrive-action" class="btn btn-primary am-now-action">Ya llegué</button></form>
-    <a th:if="${!progress.arriveForm() and progress.action() != null}" class="btn am-now-action" th:classappend="${progress.waiting()} ? 'btn-outline-primary' : 'btn-primary'" th:href="${progress.target()}" th:text="${progress.action()}"></a>
+    <form th:if="${progress.doneForm()}" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-done-action" class="btn btn-primary am-now-action" th:text="${progress.action()}"></button></form>
+    <a th:if="${!progress.arriveForm() and !progress.doneForm() and progress.action() != null}" class="btn am-now-action" th:classappend="${progress.waiting()} ? 'btn-outline-primary' : 'btn-primary'" th:href="${progress.target()}" th:text="${progress.action()}"></a>
     <a th:if="${progress.waiting()}" class="am-now-help" href="#connection-safety">¿No llega o hay un problema? Ver opciones</a>
   </section>
   <div class="am-grid" th:classappend="${(match.verificationPolicy>=2 ? 'am-policy2' : '') + (match.staffReview() ? ' am-has-review' : '')}">
@@ -73,9 +74,10 @@
     <section class="am-activity" aria-labelledby="am-activity-title"><h2 id="am-activity-title"><svg th:replace="~{fragments/layout :: icon('chat')}"></svg><span th:text="${match.verificationPolicy>=2 ? '3 · Hagan algo juntos' : 'Hagan algo juntos'}"></span></h2><h3 th:if="${!#strings.isEmpty(match.activityTitle)}" th:text="${match.activityTitle}" class="h5 mt-2"></h3><p class="mission-activity-text" th:text="${match.activity}"></p>
       <dl class="am-activity-facts">
         <div><dt>Recompensa</dt><dd th:text="${match.rewardPoints == 0 ? 'Sin puntos' : '+' + match.rewardPoints + ' puntos para cada persona, una sola vez'}"></dd></div>
-        <div><dt>Cómo se comprueba</dt><dd><strong th:text="${match.activityCheck.label}"></strong> · <span th:text="${match.staffReview() ? 'el personal del evento revisa lo que envíen y ambos confirman.' : (match.verificationPolicy >= 2 ? 'tras llegar y verificar sus códigos, ambos confirman.' : 'ambos confirman al terminar.')}"></span></dd></div>
+        <div><dt>Cómo se comprueba</dt><dd><strong th:text="${match.activityCheck.label}"></strong> · <span th:text="${match.staffReview() ? 'el personal del evento revisa lo que envíen y ambos confirman.' : (match.atDelivery() ? 'ambos la marcan como hecha; al recoger el premio muestran la evidencia en el punto de entrega.' : (match.verificationPolicy >= 2 ? 'tras llegar y verificar sus códigos, ambos confirman.' : 'ambos confirman al terminar.'))}"></span></dd></div>
         <div th:if="${match.staffReview() and !#strings.isEmpty(match.checkInstructions)}"><dt>Qué revisan</dt><dd th:text="${match.checkInstructions}"></dd></div>
-        <div><dt>Cuándo llegan los puntos</dt><dd th:text="${match.staffReview() ? 'Cuando el personal la aprueba y ambos han confirmado.' : 'Cuando ambos confirman.'}"></dd></div>
+        <div th:if="${match.atDelivery() and !#strings.isEmpty(match.checkInstructions)}"><dt>Qué mostrarán al recoger el premio</dt><dd th:text="${match.checkInstructions + '. Desde su celular: PING no pide subir ni guardar la foto.'}"></dd></div>
+        <div><dt>Cuándo llegan los puntos</dt><dd th:text="${match.staffReview() ? 'Cuando el personal la aprueba y ambos han confirmado.' : (match.atDelivery() ? 'Cuando ambos la marcan como hecha. Sirven para canjear y se comprueban al entregar el premio.' : 'Cuando ambos confirman.')}"></dd></div>
       </dl>
       <a class="am-activity-catalog" th:href="@{/matches/{id}/plan(id=${match.id})} + '#pa-title'">Ver todas las actividades del evento</a></section>
     <section class="am-review" id="am-review" aria-labelledby="am-review-title" th:if="${match.staffReview() and !match.completionPending}">
@@ -99,20 +101,20 @@
       <p th:if="${review != null and review.status().name() == 'APPROVED' and !#strings.isEmpty(review.response())}" class="small"><span>Enviado: </span><span th:text="${review.response()}"></span></p>
     </section>
     <section class="am-confirmation" aria-labelledby="am-confirm-title" th:if="${match.canConfirm() or match.completionPending}">
-      <h2 id="am-confirm-title" tabindex="-1" th:text="${match.completionPending ? 'Finalizando la conexión' : (match.confirmed ? 'Tu parte está confirmada' : '¿Terminaron la actividad?')}"></h2>
-      <p class="am-confirm-help" th:if="${!match.confirmed and !match.completionPending}">Confirma después del encuentro y de realizar la actividad.</p>
+      <h2 id="am-confirm-title" tabindex="-1" th:text="${match.completionPending ? 'Finalizando la conexión' : (match.confirmed ? (match.atDelivery() ? 'Marcaste la actividad como hecha' : 'Tu parte está confirmada') : (match.atDelivery() ? '¿Hicieron la actividad?' : '¿Terminaron la actividad?'))}"></h2>
+      <p class="am-confirm-help" th:if="${!match.confirmed and !match.completionPending}" th:text="${match.atDelivery() ? 'Márquenla cuando la hayan hecho. Cada persona la marca una vez desde su celular.' : 'Confirma después del encuentro y de realizar la actividad.'}"></p>
       <ul class="am-confirm-people" aria-label="Confirmaciones del encuentro">
-        <li th:attr="data-confirmed=${match.confirmed}"><svg th:replace="~{fragments/layout :: icon(${match.confirmed ? 'check' : 'clock'})}"></svg><span>Tú</span><strong th:text="${match.confirmed ? 'Confirmado' : 'Por confirmar'}"></strong></li>
-        <li th:attr="data-confirmed=${match.otherConfirmed}"><svg th:replace="~{fragments/layout :: icon(${match.otherConfirmed ? 'check' : 'clock'})}"></svg><span th:text="${match.otherAlias}"></span><strong th:text="${match.otherConfirmed ? 'Confirmado' : 'Por confirmar'}"></strong></li>
+        <li th:attr="data-confirmed=${match.confirmed}"><svg th:replace="~{fragments/layout :: icon(${match.confirmed ? 'check' : 'clock'})}"></svg><span>Tú</span><strong th:text="${match.confirmed ? (match.atDelivery() ? 'Marcada' : 'Confirmado') : (match.atDelivery() ? 'Por marcar' : 'Por confirmar')}"></strong></li>
+        <li th:attr="data-confirmed=${match.otherConfirmed}"><svg th:replace="~{fragments/layout :: icon(${match.otherConfirmed ? 'check' : 'clock'})}"></svg><span th:text="${match.otherAlias}"></span><strong th:text="${match.otherConfirmed ? (match.atDelivery() ? 'Marcada' : 'Confirmado') : (match.atDelivery() ? 'Por marcar' : 'Por confirmar')}"></strong></li>
       </ul>
       <p class="am-waiting" th:if="${match.completionPending}" role="status">Ambos confirmaron. La conexión está finalizando; si se interrumpió, puedes reintentar la finalización sin duplicar puntos.</p>
-      <p class="am-waiting" th:if="${match.confirmed and !match.completionPending}" role="status" th:text="${'Tú ya confirmaste. Esperando a ' + match.otherAlias + '…'}"></p>
-      <p class="am-waiting" th:if="${match.otherConfirmed and !match.confirmed}" th:text="${match.otherAlias + ' ya confirmó. Falta tu confirmación.'}"></p>
-      <form th:if="${!match.confirmed or match.completionPending or (match.staffReview() and match.otherConfirmed and review != null and review.status().name() == 'APPROVED')}" class="am-confirm-form" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}">
-        <input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-primary" th:text="${match.completionPending ? 'Reintentar finalización' : 'Confirmar encuentro y actividad'}"></button>
+      <p class="am-waiting" th:if="${match.confirmed and !match.completionPending}" role="status" th:text="${match.atDelivery() ? 'Esperando a tu compañero: falta que ' + match.otherAlias + ' la marque.' : 'Tú ya confirmaste. Esperando a ' + match.otherAlias + '…'}"></p>
+      <p class="am-waiting" th:if="${match.otherConfirmed and !match.confirmed}" th:text="${match.atDelivery() ? match.otherAlias + ' ya la marcó como hecha. Falta tu parte.' : match.otherAlias + ' ya confirmó. Falta tu confirmación.'}"></p>
+      <form th:if="${(!match.confirmed and !(progress != null and progress.doneForm())) or match.completionPending or (match.staffReview() and match.otherConfirmed and review != null and review.status().name() == 'APPROVED')}" class="am-confirm-form" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}">
+        <input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-primary" th:text="${match.completionPending ? 'Reintentar finalización' : (match.atDelivery() ? 'Marcar actividad como hecha' : 'Confirmar encuentro y actividad')}"></button>
       </form>
-      <p class="am-confirm-count" th:text="${'Confirmaciones: ' + ((match.confirmed ? 1 : 0) + (match.otherConfirmed ? 1 : 0)) + ' de 2'}"></p>
-      <p class="am-points-note"><span th:text="${match.staffReview() ? '+' + match.rewardPoints + ' puntos para cada persona cuando el personal apruebe la actividad y ambos confirmen.' : '+' + match.rewardPoints + ' puntos para cada persona al finalizar la confirmación de ambos.'}"></span></p>
+      <p class="am-confirm-count" th:text="${(match.atDelivery() ? 'Marcadas: ' : 'Confirmaciones: ') + ((match.confirmed ? 1 : 0) + (match.otherConfirmed ? 1 : 0)) + ' de 2'}"></p>
+      <p class="am-points-note"><span th:text="${match.staffReview() ? '+' + match.rewardPoints + ' puntos para cada persona cuando el personal apruebe la actividad y ambos confirmen.' : (match.atDelivery() ? '+' + match.rewardPoints + ' puntos para cada persona cuando ambos la marquen. Al recoger el premio mostrarán la evidencia.' : '+' + match.rewardPoints + ' puntos para cada persona al finalizar la confirmación de ambos.')}"></span></p>
     </section>
   </div>
   <p class="am-demo-notice" th:if="${experience != null}">Simulación académica inspirada en SOFA · Sin vínculo oficial con el evento.</p>

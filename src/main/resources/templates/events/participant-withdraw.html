@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Retirar del evento')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+<!-- DEC-068: confirm who is withdrawn and from which event; the reason is private to the organisation. -->
+<main id="main-content" class="container ping-form-layout rs-page">
+  <a th:href="@{/events/{id}/participants(id=${event.id},q=${person.alias()})}">← Participantes</a>
+  <p class="rv-kicker" th:text="${event.name}"></p>
+  <h1 th:text="${person.withdrawn() ? person.alias() + ' ya no participa en este evento' : 'Retirar a ' + person.alias()}"></h1>
+  <p class="ping-notice" th:if="${withdrawError}" th:text="${withdrawError}" role="alert"></p>
+  <section class="rs-confirm" aria-labelledby="rs-confirm-title" th:unless="${person.withdrawn()}">
+    <h2 id="rs-confirm-title" class="h5" th:text="${'Vas a retirar a «' + person.alias() + '» de «' + person.eventName() + '»'}"></h2>
+    <ul class="rs-effects">
+      <li>Deja de aparecer al buscar conexiones y no puede volver con el código o el QR del evento hasta que alguien autorizado vuelva a admitirle.</li>
+      <li th:if="${person.openEncounters() > 0}">Su encuentro abierto se cancela. La otra persona ve que la organización lo canceló, sin el motivo.</li>
+      <li th:if="${person.pendingClaims() > 0}" th:text="${(person.pendingClaims() == 1 ? 'Su canje sin entregar se anula' : 'Sus ' + person.pendingClaims() + ' canjes sin entregar se anulan') + ' y los puntos vuelven a su saldo, para que no se entregue a nadie fuera del evento.'}"></li>
+      <li>Conserva su cuenta, su historial, sus puntos y las entregas ya hechas. Sus otros eventos no cambian.</li>
+    </ul>
+    <form method="post" th:action="@{/events/{e}/participants/{p}/withdraw(e=${event.id},p=${person.id()})}">
+      <input type="hidden" name="_csrf" th:value="${csrfToken}">
+      <label class="form-label" for="rs-reason">Motivo (solo lo ve la organización)</label>
+      <textarea class="form-control" id="rs-reason" name="reason" rows="3" minlength="3" maxlength="300" required th:text="${reason}" placeholder="Ej.: comportamiento inadecuado reportado en la mesa de ayuda."></textarea>
+      <div class="action-row mt-3"><button class="btn btn-primary" id="rs-withdraw-action">Retirar del evento</button><a class="btn btn-outline-secondary" th:href="@{/events/{id}/participants(id=${event.id},q=${person.alias()})}">Cancelar</a></div>
+    </form>
+  </section>
+  <form th:if="${person.withdrawn()}" method="post" th:action="@{/events/{e}/participants/{p}/readmit(e=${event.id},p=${person.id()})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-primary">Readmitir</button></form>
+  <section th:unless="${#lists.isEmpty(person.history())}" class="rs-history" aria-labelledby="rs-history-title">
+    <h2 id="rs-history-title" class="h6">Historial en este evento</h2>
+    <ul><li th:each="h : ${person.history()}"><strong th:text="${h.withdrawal() ? 'Retiro' : 'Readmisión'}"></strong> · <span th:text="${#temporals.format(h.at(),'dd/MM HH:mm','America/Bogota') + ' · ' + h.actor()}"></span><span th:if="${!#strings.isEmpty(h.reason())}" th:text="${' · ' + h.reason()}"></span></li></ul>
+  </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

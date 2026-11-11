@@ -35,4 +35,5 @@ public class RewardClaim {
     public ClaimStatus getStatus() { return status; }
     public Instant getCreatedAt() { return createdAt; }
     void finish(ClaimStatus target) { status = target; }
+    void cancel() { status = ClaimStatus.CANCELLED; }
 }

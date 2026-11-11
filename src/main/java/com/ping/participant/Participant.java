@@ -28,6 +28,13 @@ public class Participant {
         if (cost <= 0 || points < cost) throw new com.ping.web.BusinessRuleException("No tienes puntos suficientes para este beneficio.");
         points -= cost;
     }
+    /** DEC-068: a paid receipt cancelled by a withdrawal returns its cost once. */
+    public void refundClaim(long cost) { if (cost <= 0) throw new IllegalArgumentException("Invalid refund"); points = Math.addExact(points, cost); }
+    /** DEC-068: withdrawn from this event by the organisation; the participation and its history are kept. */
+    @Column(nullable = false) private boolean withdrawn;
+    public boolean isWithdrawn() { return withdrawn; }
+    public void withdraw() { withdrawn = true; available = false; waitingSince = null; }
+    public void readmit() { withdrawn = false; }
     public void restartWaiting() { waitingSince = available ? Instant.now().truncatedTo(java.time.temporal.ChronoUnit.MICROS) : null; }
     @Column(name = "recognition_hint", length = 120) private String recognitionHint;
     public String getRecognitionHint() { return recognitionHint; }

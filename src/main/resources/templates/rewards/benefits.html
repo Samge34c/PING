@@ -4,7 +4,7 @@
 <div th:replace="~{fragments/layout :: message}"></div>
 <header class="bf-header">
   <div class="bf-context"><a th:href="@{/me}">← Mi Ping</a><span th:text="${participant.eventName}"></span></div>
-  <div class="bf-heading"><div><h1>Beneficios</h1><p class="bf3-balance"><strong th:text="${participant.points}"></strong> puntos disponibles</p></div><a class="bf-claims-link" href="#mis-canjes">Mis canjes <span th:text="${#lists.size(claims)}"></span><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
+  <div class="bf-heading"><div><h1>Beneficios</h1><p class="bf3-balance"><strong th:text="${participant.points}"></strong> puntos disponibles</p><p class="bf3-unchecked" th:if="${uncheckedPoints != null and uncheckedPoints > 0}" th:text="${uncheckedPoints + (uncheckedPoints == 1 ? ' punto se comprueba' : ' puntos se comprueban') + ' al entregar: si los usas, lleva la evidencia de la actividad al recoger el premio.'}"></p></div><a class="bf-claims-link" href="#mis-canjes">Mis canjes <span th:text="${#lists.size(claims)}"></span><svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a></div>
 </header>
 <div class="bf-layout">
 <section class="bf-catalog" aria-label="Beneficios por puntos">
@@ -14,7 +14,7 @@
     <header class="bf-coupon-head"><div><p><span th:text="${benefit.eventId == null ? 'Canje por puntos · DEMO' : 'Canje de este evento'}"></span></p><h2 th:id="${'bf-title-' + benefit.id}" th:text="${#strings.replace(benefit.name, ' · DEMO', '')}"></h2></div><svg th:replace="~{fragments/layout :: icon('snack')}"></svg><p class="bf3-cost"><strong th:text="${benefit.pointsCost}"></strong> puntos</p></header><div class="bf3-perf" aria-hidden="true"></div>
     <div class="bf-coupon-body">
       <p th:if="${!#strings.isEmpty(benefit.description)}" th:text="${benefit.description}"></p>
-      <p class="bf3-fit" th:with="fits=${participant.points >= benefit.pointsCost}"><strong th:classappend="${fits} ? 'is-ok' : 'is-short'" th:text="${fits ? 'Te alcanza' : 'Te faltan ' + (benefit.pointsCost - participant.points) + ' puntos'}"></strong><span th:text="${fits ? 'Quedarás con ' + (participant.points - benefit.pointsCost) : 'Tu saldo: ' + participant.points}"></span></p>
+      <p class="bf3-fit" th:with="fits=${participant.points >= benefit.pointsCost}"><strong th:classappend="${fits} ? 'is-ok' : 'is-short'" th:text="${fits ? 'Te alcanza' : 'Te faltan ' + (benefit.pointsCost - participant.points) + ' puntos'}"></strong><span th:text="${fits ? 'Quedarás con ' + (participant.points - benefit.pointsCost) : 'Tu saldo: ' + participant.points}"></span></p><p class="bf3-evidence" th:if="${uncheckedPoints != null and uncheckedPoints > 0 and participant.points >= benefit.pointsCost and benefit.pointsCost > participant.points - uncheckedPoints}">Usa puntos por comprobar: al recogerlo muestra la evidencia de la actividad. No necesitas aprobación previa.</p>
       <p class="bf-eligibility" th:classappend="${!completionPending and participant.points >= benefit.pointsCost} ? 'visually-hidden'" th:id="${'bf-eligibility-' + benefit.id}"><svg th:replace="~{fragments/layout :: icon('gift')}"></svg><span th:text="${completionPending ? 'Canje en espera: finalización pendiente.' : (participant.points >= benefit.pointsCost ? 'Saldo suficiente para solicitarlo.' : 'Completa conexiones para reunir los puntos.')}"></span></p>
       <form method="post" th:action="@{/me/benefits}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="benefitId" th:value="${benefit.id}"><input type="hidden" name="requestKey" th:value="${requestKey}"><button class="btn bf-primary" type="submit" th:disabled="${completionPending or participant.points < benefit.pointsCost or (benefit.defaultDelivery and (#strings.isEmpty(benefitEvent.deliveryName) or #strings.isEmpty(benefitEvent.deliveryDirections)))}" th:attr="aria-describedby=${'bf-eligibility-' + benefit.id + ' bf-help-' + benefit.id}">Solicitar canje <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></button></form>
       <a th:if="${participant.points < benefit.pointsCost and !completionPending}" class="bf-connect" th:href="@{/connect}">Seguir conectando <svg th:replace="~{fragments/layout :: icon('waves')}"></svg></a>
@@ -36,6 +36,7 @@
     <p class="description" th:if="${!#strings.isEmpty(c.claimInstructions)}" th:text="${c.claimInstructions}"></p>
     <p th:if="${c.status.name() == 'REQUESTED'}">El responsable del evento registra la entrega.</p>
     <p th:if="${c.status.name() == 'DELIVERED'}">Entrega registrada. No se descuentan puntos adicionales.</p>
+    <p th:if="${c.status.name() == 'CANCELLED'}">Canje anulado al retirarte del evento. Los puntos volvieron a tu saldo.</p>
     <p th:if="${c.status.name() == 'INCIDENT'}">Hay una incidencia de entrega. Consulta al responsable del evento; no se realiza una devolución automática.</p>
     <time th:text="${#temporals.format(c.createdAt,'dd/MM/yyyy HH:mm','America/Bogota') + ' · Bogotá'}"></time>
   </article>

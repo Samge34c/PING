@@ -54,6 +54,13 @@ public class ParticipantEntryController {
         model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision);
         return "entry/details";
     }
+    /** DEC-068: withdrawn participation. The same code or QR does not let the person back in until someone authorised readmits them. */
+    private String withdrawn(Draft d, Model model, HttpServletResponse response, String code) {
+        d.eventId = null; d.revision++; response.setStatus(403);
+        model.addAttribute("entryError", "La organización de ese evento te retiró. No puedes volver a entrar con su código o QR hasta que te readmitan. Si crees que es un error, habla con el personal del evento.");
+        if (code != null) model.addAttribute("code", code);
+        return eventCode(d, model);
+    }
     private String eventCode(Draft d, Model model) {
         model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision); model.addAttribute("hasEntryEvent", d.eventId != null);
         return "entry/event";
@@ -62,7 +69,7 @@ public class ParticipantEntryController {
         try {
             var event = events.entryEvent(code);
             if (!event.getId().equals(d.eventId)) { d.eventId = event.getId(); d.revision++; }
-            if(!needsLogin()&&!auth.legacyFixture()){var previous=auth.existing(event.getId());if(previous.isPresent()){auth.entered(session,previous.get());return "redirect:/me";}session.removeAttribute("pingDemoParticipantId");session.removeAttribute("pingEntryMode");}
+            if(!needsLogin()&&!auth.legacyFixture()){var previous=auth.existing(event.getId());if(previous.isPresent()&&participants.withdrawn(previous.get()))return withdrawn(d,model,response,code);if(previous.isPresent()){auth.entered(session,previous.get());return "redirect:/me";}session.removeAttribute("pingDemoParticipantId");session.removeAttribute("pingEntryMode");}
             return needsLogin()?login(session):"redirect:/join";
         } catch (BusinessRuleException | NotFoundException error) {
             response.setStatus(error instanceof NotFoundException ? 404 : 409);
@@ -77,13 +84,14 @@ public class ParticipantEntryController {
         model.addAttribute("draftKey", d.key); model.addAttribute("revision", d.revision); return "entry/interests";
     }
     private boolean current(Draft d, String key, long revision) { return d.key.equals(key) && d.revision == revision; }
-    @GetMapping public String start(@RequestParam(required=false) String code, HttpSession session, Model model, HttpServletResponse response) {
+    @GetMapping public String start(@RequestParam(required=false) String code, @RequestParam(required=false) String retirado, HttpSession session, Model model, HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-store, private");
         synchronized (session) {
             Draft d=draft(session);if(code!=null)return chooseEvent(d,code,model,response,session);
+            if(retirado!=null)return withdrawn(d,model,response,null);
             if(entered(session))return "redirect:/me";
             if(d.eventId!=null&&needsLogin())return login(session);
-            if(d.eventId!=null&&!auth.legacyFixture()){var previous=auth.existing(d.eventId);if(previous.isPresent()){auth.entered(session,previous.get());return "redirect:/me";}}
+            if(d.eventId!=null&&!auth.legacyFixture()){var previous=auth.existing(d.eventId);if(previous.isPresent()&&participants.withdrawn(previous.get()))return withdrawn(d,model,response,null);if(previous.isPresent()){auth.entered(session,previous.get());return "redirect:/me";}}
             return details(d,model);
         }
     }

@@ -68,8 +68,10 @@ public class EncounterService {
     public void legacy(long event,String names,String tasks,long version){var e=events.lock(event);revision(version,e.getVersion());if(e.isStructuredEncounter())throw new BusinessRuleException("El catálogo ya se importó. Usa las filas editables.");if(names.length()>4000||tasks.length()>12000)throw new BusinessRuleException("Las listas superan el tamaño permitido.");EncounterOptions.checkGrowth(names,e.getMeetingPoints(),3,"Puntos");EncounterOptions.checkGrowth(tasks,e.getEncounterActivities(),10,"Actividades");var f=EventForm.from(e);f.setMeetingPoints(EncounterOptions.normalize(names,160,"Puntos"));f.setEncounterActivities(EncounterOptions.normalize(tasks,500,"Actividades"));events.update(event,f);}
     /** Reward of every activity in events that still use the text catalog (no per-activity points). */
     public static final int LEGACY_REWARD_POINTS=10;
-    public record GuideActivity(String title,String description,int rewardPoints,CheckMethod check){
-        GuideActivity(String title,String description,int rewardPoints){this(title,description,rewardPoints,CheckMethod.BILATERAL);}
+    /** evidence: DEC-068, what the pair shows when collecting a reward (AT_DELIVERY only; empty otherwise). */
+    public record GuideActivity(String title,String description,int rewardPoints,CheckMethod check,String evidence){
+        GuideActivity(String title,String description,int rewardPoints){this(title,description,rewardPoints,CheckMethod.BILATERAL,"");}
+        GuideActivity(String title,String description,int rewardPoints,CheckMethod check){this(title,description,rewardPoints,check,"");}
     }
     public record ActivityGuide(GuideActivity assigned,List<GuideActivity> activities,Integer commonRewardPoints,int policy,Long matchId){
         public int total(){return activities.size()+(assigned==null?0:1);}
@@ -87,18 +89,20 @@ public class EncounterService {
     /** Read-only catalog for the participant's Evento tab: the same rows assign() draws from, never another event's or SOFA's fixed texts. */
     public ActivityGuide guide(Event event,com.ping.match.MatchView active,int newPolicy){
         List<GuideActivity> rows;Integer common=null;
-        if(event.isStructuredEncounter())rows=activities(event.getId()).stream().filter(a->a.isActive()&&!a.isArchived()).map(a->guideRow(a.getTitle(),a.getInstructions(),a.getRewardPoints(),a.getVerificationMethod())).toList();
+        if(event.isStructuredEncounter())rows=activities(event.getId()).stream().filter(a->a.isActive()&&!a.isArchived()).map(a->guideRow(a.getTitle(),a.getInstructions(),a.getRewardPoints(),a.getVerificationMethod(),a.getCheckInstructions())).toList();
         else{rows=EncounterOptions.unique(event.getEncounterActivities()).stream().map(t->guideRow(t.length()>120?t.substring(0,120):t,t,LEGACY_REWARD_POINTS)).toList();common=LEGACY_REWARD_POINTS;}
         if(active==null||active.activity()==null)return new ActivityGuide(null,rows,common,newPolicy,null);
         String title=active.activityTitle()==null||active.activityTitle().isBlank()?active.activity():active.activityTitle();
-        var assigned=guideRow(title.length()>120?title.substring(0,120):title,active.activity(),active.rewardPoints(),active.activityCheck());
+        var assigned=guideRow(title.length()>120?title.substring(0,120):title,active.activity(),active.rewardPoints(),active.activityCheck(),active.checkInstructions());
         String key=assigned.title()+"\n"+Objects.toString(assigned.description(),"");
         return new ActivityGuide(assigned,rows.stream().filter(r->!key.equals(r.title()+"\n"+Objects.toString(r.description(),""))).toList(),common,active.verificationPolicy(),active.id());
     }
     private static GuideActivity guideRow(String title,String text,int points){return guideRow(title,text,points,CheckMethod.BILATERAL);}
-    private static GuideActivity guideRow(String title,String text,int points,CheckMethod check){
+    private static GuideActivity guideRow(String title,String text,int points,CheckMethod check){return guideRow(title,text,points,check,"");}
+    private static GuideActivity guideRow(String title,String text,int points,CheckMethod check,String evidence){
         String t=title.strip().replaceAll("\\s+"," "),d=text==null?"":text.strip().replaceAll("\\s+"," ");
-        return new GuideActivity(t,d.isEmpty()||d.equals(t)?null:d,points,check==null?CheckMethod.BILATERAL:check);
+        CheckMethod method=check==null?CheckMethod.BILATERAL:check;
+        return new GuideActivity(t,d.isEmpty()||d.equals(t)?null:d,points,method,method==CheckMethod.AT_DELIVERY&&evidence!=null?evidence.strip():"");
     }
     public record Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints,Long pointId,CheckMethod check,String checkInstructions,String responsePrompt){
         Assignment(ActivityCatalog.Encounter encounter,String directions,String title,int rewardPoints,Long pointId){this(encounter,directions,title,rewardPoints,pointId,CheckMethod.BILATERAL,"","");}

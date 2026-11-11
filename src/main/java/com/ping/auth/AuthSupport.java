@@ -36,6 +36,9 @@ public class AuthSupport{
  public boolean demo(){if(!env.getProperty("ping.demo.enabled",Boolean.class,false))return false;var user=current();return user!=null&&user.general();}
  public boolean canManage(long event){var a=current();return a!=null&&(a.general()||accounts.managed(a.id()).contains(event));}
  public void manage(long event){if(!canManage(event))throw new org.springframework.security.access.AccessDeniedException("No tienes permiso para administrar este evento.");}
+ /** DEC-068: general administration, or the event's ORGANIZER role (not STAFF), may manage its participants. */
+ public boolean canOrganize(long event){var a=current();return a!=null&&(a.general()||accounts.organizes(a.id(),event));}
+ public void organize(long event){if(!canOrganize(event))throw new org.springframework.security.access.AccessDeniedException("Solo la organización de este evento o administración general pueden gestionar sus participantes.");}
  public String next(String value){return value!=null&&Set.of("/join","/me","/connect","/organizer","/account").contains(value)?value:"/me";}
  public Optional<Long> existing(long event){var a=current();return a==null?Optional.empty():accounts.participant(a.id(),event);}
  public boolean owned(long id){var a=current();return a!=null&&accounts.owns(a.id(),id);}

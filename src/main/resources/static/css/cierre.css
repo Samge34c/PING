@@ -137,7 +137,7 @@
 /* 360 px: keep step labels whole; avoid repeating the check method on the assigned card */
 .am-step-label {overflow-wrap:normal;word-break:keep-all;hyphens:none}
 @media (max-width:389.98px){.am-steps li{font-size:11px;letter-spacing:-.01em}.am-now{padding:14px 12px}}
-.pa-assigned .pa-method {display:none}
+.pa-assigned .pa-method:not(.pa-evidence) {display:none}
 
 /* Auditoría de recorridos: separador que no queda colgado al partir la línea */
 .mp3-meta {display:flex;flex-direction:column;align-items:flex-start;gap:4px}
@@ -147,3 +147,57 @@
 /* Beneficios en móvil: imagen más baja para que coste y acción aparezcan antes */
 @media (max-width:420px){.bf-coupon .bf-media{aspect-ratio:2/1}}
 .am-review-by {display:block;margin-top:4px;color:var(--ping-muted);font-size:13px}
+
+/* DEC-068 · Comprobar al entregar: recibo, entrega y beneficios */
+.bf3-unchecked {margin:6px 0 0;font-size:var(--ping-type-help);color:var(--ping-muted);max-width:44ch}
+.bf3-evidence {margin:8px 0 0;padding:8px 12px;border-left:3px solid var(--ping-accent);border-radius:8px;background:var(--ping-surface-alt);font-size:var(--ping-type-help)}
+.rc3-evidence {margin:0;padding:14px 16px;border-bottom:1px solid var(--ping-border);background:var(--ping-surface-alt)}
+.rc3-evidence h3 {margin:0 0 8px;font-size:var(--ping-type-section);font-weight:800}
+.rc3-evidence ul {list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.rc3-evidence li {display:grid;gap:2px;overflow-wrap:anywhere}
+.rc3-evidence li span {font-size:var(--ping-type-help)}
+.rc3-evidence li[data-validated="true"] span {color:var(--ping-success)}
+.rc3-evidence-where {margin:10px 0 0;font-size:var(--ping-type-help);font-weight:700}
+.rc3-evidence-alert {margin:0 0 10px;padding:8px 12px;border-radius:8px;border:1px solid var(--ping-danger);font-size:var(--ping-type-help)}
+.dv-receipt {margin:16px 0 24px;padding:16px;border:2px solid var(--ping-accent);border-radius:var(--ping-radius);background:var(--ping-surface);display:grid;gap:10px;min-width:0}
+.dv-receipt h2 {margin:0;overflow-wrap:anywhere}
+.dv-kicker {margin:0;font-size:var(--ping-type-label);font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ping-muted)}
+.dv-state {margin:0;font-weight:800}
+.dv-state[data-status="CANCELLED"],.dv-state[data-status="INCIDENT"] {color:var(--ping-danger)}
+.dv-meta {margin:0;display:grid;gap:2px;font-size:var(--ping-type-help);color:var(--ping-muted)}
+.dv-help {margin:0;font-size:var(--ping-type-help);color:var(--ping-muted)}
+.dv-evidence {display:grid;gap:10px;padding:12px;border-radius:12px;background:var(--ping-surface-alt)}
+.dv-evidence h3 {margin:0;font-size:var(--ping-type-section);font-weight:800}
+.dv-item {display:grid;gap:8px;padding:12px;border:1px solid var(--ping-border);border-radius:12px;background:var(--ping-surface)}
+.dv-item[data-validated="true"] {border-color:var(--ping-success)}
+.dv-activity {margin:0;font-weight:800;overflow-wrap:anywhere}
+.dv-facts {display:grid;gap:6px;margin:0}
+.dv-facts dt {font-size:var(--ping-type-label);font-weight:700;color:var(--ping-muted)}
+.dv-facts dd {margin:0;overflow-wrap:anywhere}
+.dv-done {margin:0;color:var(--ping-success);font-weight:700;font-size:var(--ping-type-help)}
+.dv-form .btn,.dv-receipt .btn {min-height:var(--ping-tap)}
+.dv-note {margin:0;padding:8px 12px;border-left:3px solid var(--ping-danger);font-size:var(--ping-type-help)}
+.dv-missing summary {min-height:var(--ping-tap);display:flex;align-items:center;font-weight:700;color:var(--ping-link);cursor:pointer}
+.dv-missing form {display:grid;gap:8px;margin-top:8px}
+.dv-next {justify-self:start}
+.dv-lookup-again {margin-top:8px;padding-top:16px;border-top:1px solid var(--ping-border)}
+.completion-evidence {text-align:left}
+/* DEC-068 · Participantes del evento */
+.rs-search {margin:12px 0 4px}
+.rs-search-row {display:flex;gap:8px}
+.rs-search-row .form-control {flex:1;min-width:0}
+.rs-search-row .btn,.rs-action {min-height:var(--ping-tap)}
+.rs-count {margin:8px 0 0;font-size:var(--ping-type-help);color:var(--ping-muted)}
+.rs-help {font-size:var(--ping-type-help);color:var(--ping-muted)}
+.rs-list {list-style:none;margin:12px 0;padding:0;display:grid;gap:10px}
+.rs-item {display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid var(--ping-border);border-radius:var(--ping-radius);background:var(--ping-surface);min-width:0}
+.rs-item[data-withdrawn="true"] {border-style:dashed}
+.rs-who {min-width:0;flex:1 1 160px}
+.rs-who strong {overflow-wrap:anywhere}
+.rs-meta {margin:2px 0 0;font-size:var(--ping-type-help);color:var(--ping-muted)}
+.rs-item[data-withdrawn="true"] .rs-state {color:var(--ping-danger);font-weight:800}
+.rs-detail {display:inline-block;font-size:var(--ping-type-help)}
+.rs-confirm {margin:12px 0;padding:16px;border:2px solid var(--ping-accent);border-radius:var(--ping-radius);background:var(--ping-surface)}
+.rs-confirm h2 {margin:0 0 8px;overflow-wrap:anywhere}
+.rs-effects {margin:0 0 12px;padding-left:20px;display:grid;gap:6px;font-size:var(--ping-type-help)}
+.rs-history ul {padding-left:20px;font-size:var(--ping-type-help);overflow-wrap:anywhere}

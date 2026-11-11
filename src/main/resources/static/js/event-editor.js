@@ -11,7 +11,7 @@
    event.preventDefault();form.reset();form.action=link.dataset.saveUrl;
    for(const name of ['name','directions','title','instructions','rewardPoints','checkInstructions','responsePrompt','version']){const input=form.elements.namedItem(name);if(input&&link.dataset[name]!=null)input.value=link.dataset[name];}
    form.querySelector('input[name=active]').checked=link.dataset.active==='true';
-   if(link.dataset.verificationMethod){form.querySelectorAll('input[name=verificationMethod]').forEach(i=>{i.checked=i.value===link.dataset.verificationMethod;});form.querySelector('[data-check-details]')?.toggleAttribute('hidden',link.dataset.verificationMethod!=='STAFF_REVIEW');}
+   if(link.dataset.verificationMethod){form.querySelectorAll('input[name=verificationMethod]').forEach(i=>{i.checked=i.value===link.dataset.verificationMethod;});syncCheck(form,link.dataset.verificationMethod);}
    for(const name of ['pointIds','interestIds']){const selected=(link.dataset[name]||'').split(',');form.querySelectorAll(`input[name=${name}]`).forEach(i=>i.checked=selected.includes(i.value));}
    details.querySelector('summary').hidden=false;details.querySelector('summary').textContent=link.hasAttribute('data-edit-point')?'Editar punto':'Editar actividad';details.open=true;changed(section);form.querySelector('input:not([type=hidden])').focus();
   }));
@@ -48,4 +48,6 @@
  window.addEventListener('beforeunload',event=>{if(root.querySelector('[data-dirty=true]')){event.preventDefault();event.returnValue='';}});
 })();
 // DEC-066: show the review details only for «Revisión del personal». Without JS the fields stay visible-on-error and server-validated.
-document.querySelectorAll('[data-check-method]').forEach(set=>{const sync=()=>{const value=set.querySelector('input[name=verificationMethod]:checked')?.value;set.querySelector('[data-check-details]')?.toggleAttribute('hidden',value!=='STAFF_REVIEW');};set.addEventListener('change',sync);sync();});
+// DEC-068: the organiser text is shown for every method except the bilateral one; its label and the question follow the method.
+const syncCheck=(root,value)=>{root.querySelector('[data-check-details]')?.toggleAttribute('hidden',!value||value==='BILATERAL');root.querySelectorAll('[data-check-label]').forEach(l=>l.toggleAttribute('hidden',l.dataset.checkLabel!==value));root.querySelector('[data-review-only]')?.toggleAttribute('hidden',value!=='STAFF_REVIEW');};
+document.querySelectorAll('[data-check-method]').forEach(set=>{const sync=()=>syncCheck(set,set.querySelector('input[name=verificationMethod]:checked')?.value);set.addEventListener('change',sync);sync();});

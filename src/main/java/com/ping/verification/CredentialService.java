@@ -53,14 +53,40 @@ public class CredentialService {
   if(flag(row,"consumed")&&m.verified(self)&&(m.getStatus()==MatchStatus.ACTIVE||m.getStatus()==MatchStatus.COMPLETED))return;
   if(m.getVerificationPolicy()<2||m.getStatus()!=MatchStatus.ACTIVE||!m.bothArrived())throw new BusinessRuleException("Ambos deben registrar su llegada antes de verificar.");pending(row);m.verifiedBy(self);jdbc.update("update purpose_credentials set consumed=true where id=?",row.get("id"));
  }
- public record Delivery(long claim,String benefit,long cost,String status,String location,String directions){}
+ public record Delivery(long claim,String benefit,long cost,String status,String location,String directions,String alias,java.util.List<EvidenceLedger.Requirement> evidence,EvidenceLedger.Note note){
+  /** DEC-068: the receipt used points still to check; delivery stays blocked until every linked encounter is validated. */
+  public boolean evidenceMissing(){return evidence.stream().anyMatch(r->!r.validated());}
+ }
+ private EvidenceLedger ledger;
+ @org.springframework.beans.factory.annotation.Autowired void ledger(EvidenceLedger ledger){this.ledger=ledger;}
+ private Delivery delivery(RewardClaim c){return new Delivery(c.getId(),c.getBenefitName(),c.getCost(),c.getStatus().name(),c.getClaimLocation(),c.getClaimInstructions(),c.getParticipant().getAlias(),ledger.requirements(c.getId()),ledger.lastNote(c.getId()).orElse(null));}
  private void staff(RewardClaim claim){long event=claim.getParticipant().getEvent().getId();auth.manage(event);if(accounts.owns(auth.require().id(),claim.getParticipant().getId()))throw new org.springframework.security.access.AccessDeniedException("Otra persona autorizada debe registrar la entrega.");}
- public Delivery lookup(String submitted,String ip){throttle.check("delivery-account",Long.toString(auth.require().id()),30,5);throttle.check("delivery-ip",ip,60,5);var row=credential("REDEMPTION",submitted);var c=claims.findById(number(row,"context_id")).orElseThrow(this::invalid);staff(c);if(c.getStatus()==ClaimStatus.REQUESTED)pending(row);return new Delivery(c.getId(),c.getBenefitName(),c.getCost(),c.getStatus().name(),c.getClaimLocation(),c.getClaimInstructions());}
+ public Delivery lookup(String submitted,String ip){throttle.check("delivery-account",Long.toString(auth.require().id()),30,5);throttle.check("delivery-ip",ip,60,5);var row=credential("REDEMPTION",submitted);var c=claims.findById(number(row,"context_id")).orElseThrow(this::invalid);staff(c);if(c.getStatus()==ClaimStatus.REQUESTED)pending(row);return delivery(c);}
  @Transactional(isolation=Isolation.READ_COMMITTED)
  public long deliver(String submitted,ClaimStatus target,String ip){
   throttle.check("delivery-account",Long.toString(auth.require().id()),30,5);var row=credential("REDEMPTION",submitted);var c=lockedClaim(number(row,"context_id"));row=jdbc.queryForMap("select * from purpose_credentials where id=? for update",row.get("id"));staff(c);
   if(target==null||target==ClaimStatus.REQUESTED)throw invalid();if(flag(row,"consumed")&&c.getStatus()==target)return c.getId();
-  if(c.getStatus()!=ClaimStatus.REQUESTED)throw new BusinessRuleException("Este recibo ya tiene un resultado registrado. No se modificaron puntos.");pending(row);c.finishVerified(target);jdbc.update("update purpose_credentials set consumed=true where id=?",row.get("id"));accounts.audit(auth.require().id(),target==ClaimStatus.DELIVERED?"DELIVER_CLAIM":"INCIDENT_CLAIM",c.getId(),c.getParticipant().getEvent().getId());return c.getId();
+  if(c.getStatus()!=ClaimStatus.REQUESTED)throw new BusinessRuleException("Este recibo ya tiene un resultado registrado. No se modificaron puntos.");pending(row);
+  if(target==ClaimStatus.DELIVERED&&ledger.missing(c.getId()))throw new BusinessRuleException("Comprueba primero la evidencia de la actividad. No se registró la entrega ni se cobraron puntos.");
+  c.finishVerified(target);jdbc.update("update purpose_credentials set consumed=true where id=?",row.get("id"));accounts.audit(auth.require().id(),target==ClaimStatus.DELIVERED?"DELIVER_CLAIM":"INCIDENT_CLAIM",c.getId(),c.getParticipant().getEvent().getId());return c.getId();
+ }
+ /** DEC-068: the staff member checked the evidence in person. One validation covers both participants of that encounter; it grants no points. */
+ @Transactional(isolation=Isolation.READ_COMMITTED)
+ public boolean validateEvidence(String submitted,long match,String ip){
+  throttle.check("delivery-account",Long.toString(auth.require().id()),30,5);var row=credential("REDEMPTION",submitted);var c=lockedClaim(number(row,"context_id"));staff(c);
+  if(c.getStatus()!=ClaimStatus.REQUESTED)throw new BusinessRuleException("Este recibo ya tiene un resultado registrado.");pending(row);
+  var m=matches.findById(match).orElseThrow(this::invalid);long staffId=auth.require().id();
+  if(accounts.owns(staffId,m.getFirst().getId())||accounts.owns(staffId,m.getSecond().getId()))throw new org.springframework.security.access.AccessDeniedException("Otra persona autorizada debe comprobar la evidencia de un encuentro tuyo.");
+  boolean created=ledger.validate(c.getId(),match,c.getParticipant().getEvent().getId(),staffId);if(created)accounts.audit(staffId,"VALIDATE_EVIDENCE",match,c.getParticipant().getEvent().getId());return created;
+ }
+ /** DEC-068: evidence missing or not matching. The receipt stays pending: nothing is delivered and nothing is charged again. */
+ @Transactional(isolation=Isolation.READ_COMMITTED)
+ public void evidenceMissing(String submitted,String note,String ip){
+  throttle.check("delivery-account",Long.toString(auth.require().id()),30,5);var row=credential("REDEMPTION",submitted);var c=lockedClaim(number(row,"context_id"));staff(c);
+  if(c.getStatus()!=ClaimStatus.REQUESTED)throw new BusinessRuleException("Este recibo ya tiene un resultado registrado.");pending(row);
+  if(!ledger.missing(c.getId()))throw new BusinessRuleException("Este recibo no tiene evidencia pendiente.");
+  String text=note==null?"":note.strip();if(text.isEmpty())text="Vuelve con la foto de la actividad en tu celular.";if(text.length()>300)throw new BusinessRuleException("La indicación admite hasta 300 caracteres.");
+  long staffId=auth.require().id();ledger.note(c.getId(),staffId,text);accounts.audit(staffId,"EVIDENCE_MISSING",c.getId(),c.getParticipant().getEvent().getId());
  }
  public RewardService.ClaimView personal(long claim,long self){return claims.findByParticipantIdOrderByIdDesc(self).stream().filter(c->c.getId()==claim).findFirst().map(c->new RewardService.ClaimView(c.getId(),c.getParticipant().getAlias(),c.getBenefitName(),c.getCost(),c.getStatus(),c.getCreatedAt(),c.getBenefitDescription(),c.getClaimLocation(),c.getClaimInstructions())).orElseThrow(this::invalid);}
 }

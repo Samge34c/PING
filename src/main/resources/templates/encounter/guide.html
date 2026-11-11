@@ -39,7 +39,7 @@
 </section>
 <!-- Título, descripción opcional y puntos en una columna fija para compararlos de un vistazo. -->
 <div th:fragment="row(a, titleId)" class="pa-row">
-  <div class="pa-text"><h3 th:id="${titleId}" th:text="${a.title}"></h3><p th:if="${a.description != null}" th:text="${a.description}"></p><p class="pa-method" th:if="${a.check != null and a.check.name() == 'STAFF_REVIEW'}">Con revisión del personal</p></div>
+  <div class="pa-text"><h3 th:id="${titleId}" th:text="${a.title}"></h3><p th:if="${a.description != null}" th:text="${a.description}"></p><p class="pa-method" th:if="${a.check != null and a.check.name() == 'STAFF_REVIEW'}">Con revisión del personal</p><p class="pa-method pa-evidence" th:if="${a.check != null and a.check.name() == 'AT_DELIVERY'}" th:text="${'Se comprueba al recoger el premio. Mostrarán en el punto de entrega: ' + (#strings.isEmpty(a.evidence) ? 'la evidencia de la actividad' : a.evidence)}"></p></div>
   <p class="pa-points"><strong th:text="${a.rewardPoints == 0 ? 'Sin' : '+' + a.rewardPoints}"></strong> <span th:text="${a.rewardPoints == 1 ? 'punto' : 'puntos'}"></span></p>
 </div>
 </body></html>

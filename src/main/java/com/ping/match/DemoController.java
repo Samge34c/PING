@@ -22,6 +22,8 @@ public class DemoController {
     private final com.ping.verification.CredentialService credentials;
     private final com.ping.auth.AuthSupport auth;
     private final org.springframework.jdbc.core.JdbcTemplate jdbc;
+    private com.ping.reward.EvidenceLedger evidence;
+    @org.springframework.beans.factory.annotation.Autowired void evidence(com.ping.reward.EvidenceLedger evidence) { this.evidence = evidence; }
     private com.ping.review.ActivityReviewService reviews;
     @org.springframework.beans.factory.annotation.Autowired void reviews(com.ping.review.ActivityReviewService reviews){this.reviews=reviews;}
     public DemoController(ParticipantService participants, MatchingService matching, MatchService matches, com.ping.event.EventService events, com.ping.moderation.ModerationService moderation, RecognitionHintService hints,com.ping.auth.AuthSupport auth,org.springframework.jdbc.core.JdbcTemplate jdbc,com.ping.verification.CredentialService credentials, MatchLiveState liveState) { this.liveState=liveState;this.credentials=credentials;this.auth=auth;this.jdbc=jdbc;
@@ -98,6 +100,7 @@ public class DemoController {
         model.addAttribute("reportReasons", com.ping.moderation.ReportReason.values());
         var match = matches.get(id, selected); model.addAttribute("match", match);
         var review = match.staffReview() ? reviews.get(id) : null; model.addAttribute("review", review);
+        if (match.atDelivery() && match.status() == MatchStatus.COMPLETED) model.addAttribute("evidenceValidated", evidence.matchValidated(id));
         if (match.status() == MatchStatus.ACTIVE) model.addAttribute("progress", EncounterProgress.of(match, review));
         model.addAttribute("credentialRequestKey",java.util.UUID.randomUUID().toString());
         var personalCode=com.ping.verification.CredentialSession.get(session,"ENCOUNTER",id,selected);

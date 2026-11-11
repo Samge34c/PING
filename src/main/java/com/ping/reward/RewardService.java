@@ -19,6 +19,9 @@ public class RewardService {
     private final ParticipantRepository participants;
     private final MatchRepository matches;
     private final EventService events;
+    private EvidenceLedger evidence;
+    private org.springframework.jdbc.core.JdbcTemplate jdbc;
+    @org.springframework.beans.factory.annotation.Autowired void evidence(EvidenceLedger evidence, org.springframework.jdbc.core.JdbcTemplate jdbc) { this.evidence = evidence; this.jdbc = jdbc; }
     public RewardService(BenefitRepository benefits, RewardClaimRepository claims, ParticipantRepository participants, MatchRepository matches, EventService events,com.ping.match.JourneyPolicy policy,com.ping.auth.AuthSupport auth) {this.policy=policy;this.auth=auth;
         this.benefits = benefits; this.claims = claims; this.participants = participants; this.matches = matches; this.events = events;
     }
@@ -47,8 +50,14 @@ public class RewardService {
         if (benefit.getEventId()!=null && !benefit.getEventId().equals(participants.eventId(self).orElseThrow())) throw new NotFoundException("Ese beneficio pertenece a otro evento.");
         if (!benefit.isActive()) throw new BusinessRuleException("Este beneficio ya no está disponible.");
         var participant = participants.findById(self).orElseThrow();
+        if (participant.isWithdrawn()) throw new BusinessRuleException("Ya no participas en este evento. Habla con la organización.");
+        long before = participant.getPoints();
         participant.spendPoints(benefit.getPointsCost());
-        var claim=new RewardClaim(participant,benefit,requestKey);claim.policy(policy.version());if(benefit.isDefaultDelivery())claim.defaultDelivery(participant.getEvent());return claims.save(claim).getId();
+        var claim=new RewardClaim(participant,benefit,requestKey);claim.policy(policy.version());if(benefit.isDefaultDelivery())claim.defaultDelivery(participant.getEvent());
+        long id = claims.save(claim).getId();
+        // DEC-068: link the part paid with points still to check at delivery to its encounter (checked points are used first).
+        evidence.allocate(id, self, before, benefit.getPointsCost());
+        return id;
     }
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public long finish(long id, ClaimStatus target) {
@@ -60,6 +69,24 @@ public class RewardService {
         if (target == null || target == ClaimStatus.REQUESTED) throw new BusinessRuleException("Selecciona entrega o incidencia.");
         if (claim.getStatus() == target) return eventId;
         if (claim.getStatus() != ClaimStatus.REQUESTED) throw new BusinessRuleException("Este canje ya tiene un resultado guardado. No se modificaron puntos.");
+        if (target == ClaimStatus.DELIVERED && evidence.missing(id)) throw new BusinessRuleException("Comprueba primero la evidencia de la actividad. No se registró la entrega.");
         claim.finish(target); return eventId;
+    }
+    /** DEC-068: unchecked part of the balance, shown in Beneficios. */
+    public long uncheckedPoints(long self) { return evidence.unchecked(self); }
+    /**
+     * DEC-068: a withdrawn participant's receipts still to deliver are cancelled, their codes revoked and the cost returned once,
+     * so nothing is delivered to someone outside the event and no points stay reserved. Delivered receipts are kept. Caller holds the event lock.
+     */
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public int cancelForWithdrawal(long participantId) {
+        var participant = participants.findById(participantId).orElseThrow(); int cancelled = 0;
+        for (var claim : claims.findByParticipantIdOrderByIdDesc(participantId)) {
+            if (claim.getStatus() != ClaimStatus.REQUESTED) continue;
+            claim.cancel(); participant.refundClaim(claim.getCost()); evidence.release(claim.getId(), participantId);
+            jdbc.update("update purpose_credentials set revoked=true where purpose='REDEMPTION' and context_id=? and consumed=false", claim.getId());
+            cancelled++;
+        }
+        return cancelled;
     }
 }

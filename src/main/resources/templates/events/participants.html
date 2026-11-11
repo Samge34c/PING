@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Participantes')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+<!-- DEC-068: participants of ONE event. Only the event's organisation or general administration (checked in the service). -->
+<main id="main-content" class="container ping-form-layout rs-page">
+  <a th:href="@{/organizer(event=${event.id})}">← Organización</a>
+  <p class="rv-kicker" th:text="${event.name}"></p>
+  <h1>Participantes</h1>
+  <p class="ping-notice" th:if="${rosterMessage}" th:text="${rosterMessage}" role="status"></p>
+  <form method="get" th:action="@{/events/{id}/participants(id=${event.id})}" class="rs-search" role="search">
+    <label class="form-label" for="rs-q">Buscar por alias</label>
+    <div class="rs-search-row"><input class="form-control" id="rs-q" name="q" type="search" maxlength="80" autocomplete="off" th:value="${q}" placeholder="Ej.: Ana"><button class="btn btn-primary">Buscar</button></div>
+  </form>
+  <p class="rs-count" th:text="${#strings.isEmpty(q) ? (total == 1 ? '1 persona en el evento' : total + ' personas en el evento') : (#lists.size(rows) == 1 ? '1 resultado para «' + q + '»' : #lists.size(rows) + ' resultados para «' + q + '»')}"></p>
+  <p th:if="${limited}" class="rs-help">Se muestran los primeros resultados. Escribe más letras del alias para encontrar a alguien.</p>
+  <p th:if="${#lists.isEmpty(rows)}" class="rv-empty" th:text="${#strings.isEmpty(q) ? 'Todavía no ha entrado nadie a este evento.' : 'Nadie con ese alias en este evento.'}"></p>
+  <ul class="rs-list" th:unless="${#lists.isEmpty(rows)}">
+    <li th:each="p : ${rows}" class="rs-item" th:attr="data-withdrawn=${p.withdrawn()}">
+      <div class="rs-who">
+        <strong th:text="${p.alias()}"></strong> <a th:if="${p.withdrawn()}" class="rs-detail" th:href="@{/events/{e}/participants/{p}/withdraw(e=${event.id},p=${p.id()})}">Ver motivo e historial</a>
+        <p class="rs-meta"><span class="rs-state" th:text="${p.withdrawn() ? 'Fuera del evento' : (p.inEncounter() ? 'En un encuentro' : (p.available() ? 'Disponible' : 'No disponible'))}"></span> · <span th:text="${p.points() + (p.points() == 1 ? ' punto' : ' puntos')}"></span></p>
+      </div>
+      <a th:unless="${p.withdrawn()}" class="btn btn-outline-primary rs-action" th:href="@{/events/{e}/participants/{p}/withdraw(e=${event.id},p=${p.id()})}" th:attr="aria-label=${'Retirar del evento: ' + p.alias()}">Retirar del evento</a>
+      <form th:if="${p.withdrawn()}" method="post" th:action="@{/events/{e}/participants/{p}/readmit(e=${event.id},p=${p.id()})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button class="btn btn-primary rs-action" th:attr="aria-label=${'Readmitir: ' + p.alias()}">Readmitir</button></form>
+    </li>
+  </ul>
+  <p class="rs-help">Retirar no borra la cuenta, el historial, los puntos ni las entregas. Solo afecta a este evento.</p>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

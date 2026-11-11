@@ -26,6 +26,7 @@ public class MatchingService {
         // A repeated search returns its existing offer rather than creating another one.
         var held = matches.forParticipant(participantId).stream().filter(m -> m.getStatus() == MatchStatus.OFFERED || m.getStatus() == MatchStatus.ACTIVE).findFirst();
         if (held.isPresent()) return held.get().getId();
+        if (self.isWithdrawn()) throw new BusinessRuleException("Ya no participas en este evento. Habla con la organización.");
         if (!event.canStartNewMatches()) throw new BusinessRuleException("El evento debe estar abierto para buscar una conexión.");
         if (!self.isAvailable()) throw new BusinessRuleException("Marca tu disponibilidad antes de buscar.");
         Set<Long> occupied = new HashSet<>(reservations.findAll().stream().map(MatchReservation::getParticipantId).toList());
@@ -33,7 +34,7 @@ public class MatchingService {
         Set<Long> completed=new HashSet<>(matches.successfulPartners(event.getId(),participantId));
         List<Match> rejected = matches.findByEventIdAndStatus(event.getId(), MatchStatus.CANCELLED);
         Participant candidate = participants.findByEventIdAndAvailableTrue(event.getId()).stream()
-            .filter(p -> !p.getId().equals(self.getId()) && !occupied.contains(p.getId()) && !blocked.contains(p.getId()) && !completed.contains(p.getId()))
+            .filter(p -> !p.getId().equals(self.getId()) && !p.isWithdrawn() && !occupied.contains(p.getId()) && !blocked.contains(p.getId()) && !completed.contains(p.getId()))
             .filter(p -> rejected.stream().noneMatch(m -> m.excludedPair(self, p)))
             .sorted(Comparator.<Participant>comparingInt(p -> common(self, p).size()).reversed()
                 .thenComparing(Participant::getWaitingSince).thenComparing(Participant::getId))

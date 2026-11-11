@@ -34,9 +34,10 @@
       <a class="btn" th:classappend="${board.pendingReviews() > 0} ? 'btn-primary' : 'btn-outline-primary'" th:href="@{/events/{id}/reviews(id=${e.id})}" th:text="${board.pendingReviews() == 0 ? 'Revisar tareas · ninguna pendiente' : 'Revisar tareas · ' + board.pendingReviews() + (board.pendingReviews() == 1 ? ' pendiente' : ' pendientes')}"></a>
       <a class="btn btn-outline-primary" th:href="@{/organizer/redemptions}" th:text="${board.pendingClaims() == 0 ? 'Entregar un canje' : 'Entregar un canje · ' + board.pendingClaims() + ' por entregar'}"></a>
       <p class="og-help">Escanea o escribe el código del recibo. Solo puedes entregar canjes de eventos autorizados.</p>
+      <p class="og-help" th:unless="${canOrganize}" role="note">Tu permiso en este evento es de personal: revisar tareas y entregar canjes. La preparación y los participantes los gestiona la organización.</p>
     </section>
 
-    <section class="og-card" aria-labelledby="og-live-title">
+    <section class="og-card" aria-labelledby="og-live-title" th:if="${canOrganize}">
       <h2 id="og-live-title">Durante el evento</h2>
       <div class="og-row">
         <div><strong>Entrada de participantes</strong><p th:text="${e.status.name() == 'OPEN' ? 'Comparte el código o el QR para que entren.' : 'El código funciona cuando el evento está abierto.'}"></p></div>
@@ -49,10 +50,11 @@
         <form th:if="${e.status.name() == 'PAUSED'}" method="post" th:action="@{/events/{id}/resume(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-primary btn-sm">Reanudar</button></form>
       </div>
       <p th:if="${e.status.name() == 'DRAFT' and !board.ready()}" class="og-help" role="note">Puedes abrirlo, pero los encuentros nuevos no empezarán hasta completar lo marcado como «Falta» en Preparar evento.</p>
+      <div class="og-row" th:if="${canOrganize}"><div><strong>Participantes</strong><p>Busca por alias, retira del evento o readmite.</p></div><a th:href="@{/events/{id}/participants(id=${e.id})}">Gestionar</a></div>
       <div class="og-row"><div><strong>Resultados</strong><p>Conexiones, puntos y canjes del evento.</p></div><a th:href="@{/admin(eventId=${e.id})}">Ver resultados</a></div>
     </section>
 
-    <section class="og-card" aria-labelledby="og-prepare-title">
+    <section class="og-card" aria-labelledby="og-prepare-title" th:if="${canOrganize}">
       <h2 id="og-prepare-title">Preparar evento</h2>
       <p class="og-help">Lo marcado como imprescindible es lo que ya necesita un encuentro nuevo; lo opcional no bloquea nada.</p>
       <ul class="og-list">
@@ -67,7 +69,7 @@
     <section class="og-card" aria-labelledby="og-team-title">
       <h2 id="og-team-title">Equipo</h2>
       <div class="og-row" th:if="${general}"><div><strong>Permisos por evento</strong><p>Asigna o retira administradores de una cuenta ya registrada.</p></div><a th:href="@{/organizer/access}">Gestionar</a></div>
-      <p th:unless="${general}" class="og-help">Solo administración general asigna permisos. Puedes revisar tareas y entregar canjes de este evento.</p>
+      <p th:unless="${general}" class="og-help" th:text="${canOrganize ? 'Solo administración general asigna permisos. Organizas este evento: prepararlo, gestionar participantes, revisar tareas y entregar canjes.' : 'Solo administración general asigna permisos.'}"></p>
     </section>
   </th:block>
   <section th:if="${general}" class="og-card" aria-labelledby="og-admin-title">
