@@ -5,7 +5,7 @@
 <header th:replace="~{entry/interests :: topbar}"></header>
 <!-- DEC-066 (Figma 189:340): one selected event, tasks first. Same routes and permissions as before; no new opening requirement. -->
 <main id="main-content" class="container pe-page account-page og-page">
-  <a class="pi-back" th:href="@{/account}">← Mi cuenta</a>
+  <p class="og-top-links"><a class="pi-back" th:href="@{/account}">← Mi cuenta</a><a class="pi-back" th:href="@{/organizer/help}">Ayuda para organizar</a></p>
   <p class="eyebrow">ORGANIZACIÓN</p>
   <div th:replace="~{fragments/layout :: message}"></div>
   <th:block th:if="${#lists.isEmpty(events)}">

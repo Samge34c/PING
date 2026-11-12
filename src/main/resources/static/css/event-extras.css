@@ -67,3 +67,17 @@ body:has(.help-sheet[open]) {overflow:hidden}
 .help-body section {margin:16px 0}
 [data-card-error] {background:var(--ping-danger-bg);border-radius:12px;padding:14px}
 @media(min-width:900px){.event-extras{padding:0 28px 40px}.event-extras .extra-row{padding:20px 0}}
+
+/* DEC-069: guide by tasks (participant /me/help and organization /organizer/help). */
+.help-guide .help-tasks {display:grid;gap:8px;padding:0;margin:8px 0 12px;list-style:none}
+.help-guide .help-tasks a {display:flex;align-items:center;min-height:44px;padding:8px 14px;border:1px solid var(--ping-border);border-radius:12px;color:var(--ping-text);font-weight:700;text-decoration:none}
+.help-guide .help-tasks a:hover,.help-guide .help-tasks a:focus-visible {border-color:var(--ping-primary)}
+.help-guide .help-codes {font-size:15px;line-height:1.5;color:var(--ping-muted)}
+.help-guide .help-task {scroll-margin-top:80px}
+.help-guide .help-task ol,.help-guide .help-task ul {padding-left:22px;margin:6px 0 10px}
+.help-guide .help-task li {margin-bottom:6px;line-height:1.5}
+.help-guide .help-ok {padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--ping-success) 12%,transparent);line-height:1.5}
+.help-guide .help-faq dt {margin-top:12px;font-weight:800}
+.help-guide .help-faq dd {margin:4px 0 0;line-height:1.5}
+.og-top-links {display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;margin:0}
+.og-top-links .pi-back {margin:0}

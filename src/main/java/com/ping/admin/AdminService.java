@@ -13,8 +13,9 @@ public class AdminService {
     private final ParticipantRepository participants;
     private final MatchRepository matches;
     private final FeedbackRepository feedback;
-    public AdminService(EventService events, ParticipantRepository participants, MatchRepository matches, FeedbackRepository feedback) {
-        this.events = events; this.participants = participants; this.matches = matches; this.feedback = feedback;
+    private final CompletionStepRepository credits;
+    public AdminService(EventService events, ParticipantRepository participants, MatchRepository matches, FeedbackRepository feedback, CompletionStepRepository credits) {
+        this.events = events; this.participants = participants; this.matches = matches; this.feedback = feedback; this.credits = credits;
     }
     public EventDetails details(long eventId) {
         var event = events.get(eventId);
@@ -40,12 +41,14 @@ public class AdminService {
         matches.eventTotals().forEach(t -> counts.computeIfAbsent(t.getEventId(), k -> new EnumMap<>(MatchStatus.class)).put(t.getStatus(), t.getTotal()));
         Map<Long, Map<Feedback.Rating, Long>> ratings = new HashMap<>();
         feedback.eventTotals().forEach(t -> ratings.computeIfAbsent(t.getEventId(), k -> new EnumMap<>(Feedback.Rating.class)).put(t.getRating(), t.getTotal()));
+        // Credit ledger, not balances: balances drop when points are spent on claims.
+        var credited = credits.creditedByEvent().stream().collect(Collectors.toMap(CompletionStepRepository.CreditTotal::getEventId, CompletionStepRepository.CreditTotal::getTotal));
         return events.list().stream().map(e -> {
             var p = people.get(e.getId()); var m = counts.getOrDefault(e.getId(), Map.of()); var f = ratings.getOrDefault(e.getId(), Map.of());
             long completed = m.getOrDefault(MatchStatus.COMPLETED, 0L);
             return new EventMetrics(e.getId(), e.getName(), e.getStatus(), p == null ? 0 : p.getTotal(), p == null ? 0 : p.getAvailable(),
                 e.canStartNewMatches() ? free.getOrDefault(e.getId(), 0L) : 0L, m.getOrDefault(MatchStatus.OFFERED, 0L), m.getOrDefault(MatchStatus.ACTIVE, 0L), completed,
-                m.getOrDefault(MatchStatus.CANCELLED, 0L), Math.multiplyExact(completed, 20), f.getOrDefault(Feedback.Rating.USEFUL, 0L),
+                m.getOrDefault(MatchStatus.CANCELLED, 0L), credited.getOrDefault(e.getId(), 0L), f.getOrDefault(Feedback.Rating.USEFUL, 0L),
                 f.getOrDefault(Feedback.Rating.NEUTRAL, 0L), f.getOrDefault(Feedback.Rating.NOT_USEFUL, 0L));
         }).toList();
     }

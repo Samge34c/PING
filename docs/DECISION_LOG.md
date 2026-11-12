@@ -666,3 +666,19 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - Migración aditiva `V26`. Los encuentros, canjes y permisos anteriores conservan su comportamiento. Se probó en MySQL 8.4 aislado.
 
 **Detalle:** [handoffs/EVIDENCIA_Y_RETIRO.md](handoffs/EVIDENCIA_Y_RETIRO.md).
+
+## DEC-069 — Integración del rediseño local sobre la versión publicada: «Puntos entregados», Mi Ping compacto y guía por tareas (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Samuel y Julián.** Encargo explícito de Samuel del 12 de noviembre de 2026 (sesión de Claude Code): integrar sobre el commit servido por Render (`00483fa`) las mejoras preparadas en `feature/redesign-admin-mi-ping-verification`, cuya base (`8c94cd7`) es anterior. No se atribuye aprobación a Julián. Rama local `feature/redesign-integrated-render` desde `00483fa`; la rama original se conserva intacta. Sin push, merge ni despliegue.
+
+**Qué se integra:**
+- **«Puntos entregados»** (Resultados) suma el registro de acreditaciones de la Saga (`match_completion_steps`): cada `GRANT_*` por el importe congelado de su Saga, menos cada `REVERSE_*`. Sustituye `completadas × 20`. No usa el saldo, que baja con los canjes, y no cambia con canjes, devoluciones por retiro ni comprobaciones de evidencia. Sin migración.
+- **Mi Ping compacto:** la siguiente acción («Ir a Conectar», «Ver propuesta», «Volver al encuentro») va antes del avatar y de la pista opcional. Así se ve sin desplazarse a 390 px. Se aparta a propósito del orden del diseño aprobado de DEC-058 (Figma `103:23602`), que dejaba la acción a unos 980 px. Además se quita «Consulta el estado y continúa con tu conexión.», que repetía el botón. No cambia ningún dato ni regla.
+- **Guía por tareas:** `/me/help` se reorganiza en tareas con los botones reales: entrar, encontrar a alguien, verificar con códigos personales, completar la actividad (confirmación, revisión del personal o comprobación al entregar), canjear y «Si algo falla». Conserva «Tu siguiente paso», el personal del evento y las salidas. Distingue los tres códigos: del evento, personal y de recibo. Se añade una guía de organización de solo lectura en `/organizer/help`, con los mismos permisos que Organización. Versión escrita en `docs/GUIA_USUARIO_PING.md`.
+
+**Qué no se integra, porque la versión publicada ya lo resuelve o porque chocaría con sus reglas:**
+- La navegación y las vistas de administración de la rama local. El tablero de Organización (DEC-066/067) ya responde qué evento, qué falta y qué hacer, con permisos por evento. La lista local de canjes con «Marcar entregado» saltaría el código de recibo y la comprobación de evidencia de DEC-068.
+- El límite de cuatro categorías con «Ver todas» y el selector compacto local. El selector publicado usa pestañas por familia (una a la vez), búsqueda y barra de acción fija.
+- La pantalla del encuentro por pasos de la rama local. La publicada ya tiene «Ahora · paso N de 4» con los códigos personales. La afirmación local «no existe código de verificación del encuentro» era cierta solo en `8c94cd7`: la verificación personal llegó en `bd92bf4` (V21), después de esa base.
+
+**Detalle y evidencia:** [handoffs/INTEGRACION_REDISENO_RENDER.md](handoffs/INTEGRACION_REDISENO_RENDER.md).

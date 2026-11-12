@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Ayuda para organizar')}"></head>
+<body class="participant-entry-page">
+<header th:replace="~{entry/interests :: topbar}"></header>
+<!-- DEC-069: read-only guide for organization and staff, by tasks, with the real buttons and the real roles. -->
+<main id="main-content" class="container pe-page account-page og-page event-extras help-guide">
+  <a class="pi-back" th:href="${helpEvent != null} ? @{/organizer(event=${helpEvent.id})} : @{/organizer}" th:text="${helpEvent != null ? '← Volver a ' + helpEvent.name : '← Organización'}"></a>
+  <p class="eyebrow">ORGANIZACIÓN</p>
+  <h1>Ayuda para organizar</h1>
+  <section class="extra-row help-index" aria-labelledby="og-help-index"><h2 id="og-help-index">¿Qué quieres hacer?</h2><ul class="help-tasks">
+    <li><a href="#evento">Encontrar y abrir tu evento</a></li><li><a href="#pendiente">Revisar lo pendiente</a></li><li><a href="#revisar">Revisar una tarea</a></li>
+    <li><a href="#canje">Entregar un canje</a></li><li><a href="#participantes">Retirar o readmitir a alguien</a></li><li><a href="#preparar">Preparar lugares y actividades</a></li><li><a href="#problemas">Si algo falla</a></li></ul>
+    <p class="help-codes"><strong>Roles reales:</strong> la administración general crea eventos y asigna permisos («Equipo» → «Permisos por evento»). En cada evento, <strong>Organización</strong> puede todo lo del evento y <strong>Personal</strong> solo revisa tareas y entrega canjes. Tener cuenta no concede permisos por sí solo, y nadie puede comprobar ni entregar algo de un encuentro propio.</p></section>
+  <section class="extra-row help-task" id="evento" aria-labelledby="og-evento"><h2 id="og-evento">Encontrar y abrir tu evento</h2><ol>
+    <li>Abre Organización. Arriba ves «Evento que administras», su estado y su código. Si administras varios, usa «Cambiar».</li>
+    <li>En «Durante el evento», «Código y QR» muestra el <strong>código del evento</strong> para compartirlo. Si está en borrador, pulsa «Abrir evento».</li></ol>
+    <p class="help-ok"><strong>Salió bien si</strong> el estado dice «Abierto» y una persona puede entrar con el código o el QR.</p></section>
+  <section class="extra-row help-task" id="pendiente" aria-labelledby="og-pendiente"><h2 id="og-pendiente">Revisar lo pendiente</h2>
+    <p>«Validaciones y entregas» va primero: «Revisar tareas» dice cuántas esperan revisión y «Entregar un canje» abre la entrega con código de recibo. En «Preparar evento», lo marcado como «Imprescindible» es lo que necesita un encuentro nuevo; lo opcional no bloquea nada.</p>
+    <p class="help-ok"><strong>Salió bien si</strong> «Revisar tareas» dice «ninguna pendiente» y lo imprescindible aparece con ✓.</p></section>
+  <section class="extra-row help-task" id="revisar" aria-labelledby="og-revisar"><h2 id="og-revisar">Revisar una tarea</h2><ol>
+    <li>Pulsa «Revisar tareas». Lee la pregunta y la respuesta enviada.</li>
+    <li>Pulsa «Aprobar», o escribe un comentario y pulsa «Pedir corrección». La pareja verá tu comentario y podrá reenviarla.</li></ol>
+    <p>Aprobar no da puntos por sí solo: los puntos llegan una vez cuando, además, las dos personas confirman.</p></section>
+  <section class="extra-row help-task" id="canje" aria-labelledby="og-canje"><h2 id="og-canje">Entregar un canje</h2><ol>
+    <li>Pulsa «Entregar un canje». Escanea el QR del recibo o escribe el <strong>código de recibo</strong> y pulsa «Consultar recibo».</li>
+    <li>Si pide evidencia de la actividad, revísala: «La vi y corresponde», o «No la tienen o no corresponde» con una indicación para la persona.</li>
+    <li>Entrega el beneficio y pulsa «Confirmar entrega». Si no se puede entregar, pulsa «Registrar incidencia».</li></ol>
+    <p>Los puntos se descontaron cuando la persona solicitó el canje: entregar no cobra otra vez, y una incidencia no los devuelve.</p>
+    <p class="help-ok"><strong>Salió bien si</strong> ves «Entrega confirmada. No se cobraron puntos adicionales.» y el recibo de la persona pasa a «Entregado».</p></section>
+  <section class="extra-row help-task" id="participantes" aria-labelledby="og-participantes"><h2 id="og-participantes">Retirar o readmitir a alguien</h2><ol>
+    <li>En «Participantes», pulsa «Gestionar», busca por alias y pulsa «Retirar del evento». Indica el motivo.</li>
+    <li>Para que vuelva, pulsa «Readmitir».</li></ol>
+    <p>Al retirar a alguien se cancela su propuesta o encuentro abierto y se anulan sus canjes sin entregar, y su coste se devuelve una vez. La cuenta, el historial y sus puntos se conservan. Mientras esté retirada no puede volver a entrar con el código o el QR.</p></section>
+  <section class="extra-row help-task" id="preparar" aria-labelledby="og-preparar"><h2 id="og-preparar">Preparar lugares y actividades</h2><ol>
+    <li>En «Lugares de encuentro», añade al menos un lugar activo con indicaciones claras.</li>
+    <li>En «Actividades y puntos», crea actividades con sus puntos (de 0 a 100) y elige cómo se comprueban: «Confirmación de ambos», «Revisión del personal» o «Comprobar al entregar el beneficio».</li>
+    <li>Opcional: «Recompensas» → «Crear recompensa», el plano y «Ayuda, agenda y reto», donde se publica dónde encontrar al personal.</li></ol></section>
+  <section class="extra-row help-task" id="problemas" aria-labelledby="og-problemas"><h2 id="og-problemas">Si algo falla</h2><dl class="help-faq">
+    <dt>Alguien no puede entrar</dt><dd>Comprueba que el evento esté «Abierto» y que comparte el código de «Evento que administras». Si la persona fue retirada, debes readmitirla.</dd>
+    <dt>Nadie consigue conectar</dt><dd>Revisa en «Preparar evento» que haya un lugar y una actividad activos, marcados con ✓.</dd>
+    <dt>Un código personal no funciona</dt><dd>Lo genera cada participante en su encuentro y solo sirve para ese encuentro. Pídeles que pulsen «Renovar mi código» y lo escriban de nuevo. No es el código del evento ni el de un recibo.</dd>
+    <dt>Necesito detener las conexiones</dt><dd>«Pausar» detiene las nuevas conexiones y permite reanudar después. Quienes ya tienen un encuentro activo pueden terminarlo.</dd>
+  </dl></section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

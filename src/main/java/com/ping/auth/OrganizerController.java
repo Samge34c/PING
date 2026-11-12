@@ -18,6 +18,10 @@ public class OrganizerController {
   if(event!=null&&(selected==null||!selected.getId().equals(event)))throw new org.springframework.security.access.AccessDeniedException("No tienes permiso para administrar este evento.");
   if(selected!=null){session.setAttribute("pingOrganizerEvent",selected.getId());m.addAttribute("board",OrganizerBoard.of(selected,encounters,rewards,reviews,null));m.addAttribute("canOrganize",auth.canOrganize(selected.getId()));m.addAttribute("entryLink",links.link(selected));}
   return "account/organizer";}
+ /** DEC-069: read-only guide for organization and staff; same access as /organizer. Keeps the remembered event for «Volver». */
+ @GetMapping("/organizer/help") public String help(jakarta.servlet.http.HttpSession session,Model m){auth.require();
+  if(session.getAttribute("pingOrganizerEvent") instanceof Long remembered&&auth.canManage(remembered))m.addAttribute("helpEvent",events.get(remembered));
+  return "account/organizer-help";}
  @GetMapping("/organizer/access") public String access(Model m,jakarta.servlet.http.HttpSession session){if(!auth.require().general())throw new org.springframework.security.access.AccessDeniedException("Solo administración general");m.addAttribute("events",events.list());
   // Arriving from an event board: that event is preselected (only its id is remembered in the session).
   if(!m.containsAttribute("selectedEvent")&&session.getAttribute("pingOrganizerEvent") instanceof Long remembered)m.addAttribute("selectedEvent",remembered);return "account/access";}
