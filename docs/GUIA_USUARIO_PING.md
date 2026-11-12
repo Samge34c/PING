@@ -34,20 +34,20 @@ La palabra compartida ayuda a reconocerse, pero no sustituye al código personal
 ### Verificar el encuentro
 
 1. Ve al punto de encuentro y pulsa «Ya llegué». La otra persona hace lo mismo. Llegar no da puntos.
-2. Pulsa «Generar mi código personal» y enséñaselo a la otra persona: puede escanear tu QR o escribir el código.
-3. Pídele el suyo. Escanéalo con «Escanear QR», o escríbelo en «Código que te muestra la otra persona» y pulsa «Verificar a la otra persona».
+2. Cuando ambos llegan aparece «Verificar». Para que te verifique, pulsa «Mostrar mi QR» y enséñaselo; si no puede escanearlo, que escriba el código que aparece debajo.
+3. Para verificarla tú, pulsa «Escanear su QR» (la cámara solo se abre entonces) o «Escribir su código», y pulsa «Verificar a …» con su nombre. Pueden elegir quién empieza.
 
 No publiques tu código personal: solo sirve para este encuentro. Los encuentros anteriores conservan la política que muestra su pantalla.
 
-**Salió bien si** el encuentro pasa al paso «Actividad». Si solo verificaste tú, la pantalla te dice que falta que la otra persona verifique tu código.
+**Salió bien si** el encuentro pasa al paso «Actividad». Si solo verificaste tú, la pantalla te pide «Mostrar mi QR». La actividad aparece cuando los dos se han verificado.
 
 ### Completar la actividad y ganar puntos
 
 Hagan juntos la actividad de «Hagan algo juntos». Ahí ven sus puntos y cómo se comprueba:
 
-- **Confirmación de ambos:** cada persona pulsa «Confirmar encuentro y actividad» en su celular.
+- **Confirmación de ambos:** cada persona pulsa «Confirmar actividad» en su celular.
 - **Revisión del personal:** una persona pulsa «Enviar a revisión». Si el personal pide una corrección, verán su comentario y «Reenviar corregida». Cuando se aprueba, confirman los dos.
-- **Comprobar al entregar el beneficio:** cada persona pulsa «Marcar actividad como hecha». Los puntos llegan, y la actividad se comprueba en persona al recoger un canje.
+- **Comprobar al entregar el beneficio:** cada persona pulsa «Marcar como hecha». Los puntos llegan, y la actividad se comprueba en persona al recoger un canje.
 
 **Salió bien si** ves «Conexión completada 🎉» y tu saldo sube. Los puntos llegan una sola vez, aunque se pulse dos veces.
 

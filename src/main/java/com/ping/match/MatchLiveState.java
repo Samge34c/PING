@@ -20,7 +20,7 @@ public class MatchLiveState {
                        m.id match_id, m.status match_status, m.first_id,
                        m.first_accepted, m.second_accepted, m.first_confirmed, m.second_confirmed,
                        m.completion_pending, m.first_arrived, m.second_arrived,
-                       m.first_verified, m.second_verified, other.version other_version,
+                       m.first_verified, m.second_verified, m.verification_policy, other.version other_version,
                        case when m.status='ACTIVE' and m.verification_policy>=2 then
                          (select count(*) from purpose_credentials c
                           where c.purpose='ENCOUNTER' and c.context_id=m.id and c.issuer_id=p.id)
@@ -51,9 +51,14 @@ public class MatchLiveState {
                                 + r.getBoolean(own + "arrived") + ":" + r.getBoolean(other + "arrived") + ":"
                                 + r.getBoolean(own + "verified") + ":" + r.getBoolean(other + "verified") + ":"
                                 + r.getLong("code_revision") + ":" + r.getLong("review_revision");
+                        // DEC-070: coarse step only (no private content), so a page can tell a new step from a same-step change.
+                        state.put("step", status.equals("ACTIVE") ? EncounterProgress.phase(r.getInt("verification_policy"), r.getBoolean("completion_pending"),
+                                r.getBoolean(own + "arrived"), r.getBoolean(other + "arrived"), r.getBoolean(own + "verified"), r.getBoolean(other + "verified")) : status);
                         if (status.equals("ACTIVE") && r.getBoolean("first_accepted") && r.getBoolean("second_accepted"))
                             state.put("recognitionRevision", matchId + ":" + r.getLong("other_version"));
                     }
+                    // No open encounter (none yet, cancelled or completed): its own step, so a page of a closed step withdraws codes.
+                    state.putIfAbsent("step", status);
                     state.put("signature", signature);
                     state.put("matchStatus", status);
                     return (Map<String, String>) state;

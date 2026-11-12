@@ -165,9 +165,9 @@ class DeliveryEvidenceTests {
             }
             aa.get("/me");
             String page = aa.get("/matches/" + match).body();
-            assertThat(page).contains("Marcar actividad como hecha", "Comprobar al entregar el beneficio", "Una foto de los dos con la mascota", "+20 puntos");
+            assertThat(page).contains("Marcar como hecha", "Comprobar al entregar el beneficio", "Una foto de los dos con la mascota", "+20 puntos");
             aa.post("/matches/" + match + "/confirm", Map.of());
-            assertThat(aa.get("/matches/" + match).body()).contains("Esperando a tu compañero").doesNotContain("Foto validada");
+            assertThat(aa.get("/matches/" + match).body()).contains("Marcaste la actividad como hecha").doesNotContain("Foto validada");
             assertThat(aa.get("/events/" + event + "/plan").body()).contains("Se comprueba al recoger el premio", "Una foto de los dos con la mascota");
             bb.get("/me"); bb.get("/matches/" + match); bb.post("/matches/" + match + "/confirm", Map.of());
             assertThat(people.get(a).points()).isEqualTo(20);

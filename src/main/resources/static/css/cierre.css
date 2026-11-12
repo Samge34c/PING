@@ -201,3 +201,97 @@
 .rs-confirm h2 {margin:0 0 8px;overflow-wrap:anywhere}
 .rs-effects {margin:0 0 12px;padding-left:20px;display:grid;gap:6px;font-size:var(--ping-type-help)}
 .rs-history ul {padding-left:20px;font-size:var(--ping-type-help);overflow-wrap:anywhere}
+
+/* DEC-070 · Conectar como recorrido por estados: una tarjeta operativa por paso. Mobile first (390/360); only existing tokens.
+   Yellow (accent) marks the card of the current step and its single main action; violet gives context. */
+.am-person .am-stepcount {margin:4px 0 0;font-size:var(--ping-type-label);font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ping-primary)}
+.am-flow .am-person {margin-bottom:8px}
+.am-flow .am-person h1 {font-size:28px}
+.am-flow .am-steps {margin:0 0 14px}
+.am-card {display:grid;gap:12px;margin:0 0 20px;padding:18px 16px;border:2px solid var(--ping-accent);border-radius:var(--ping-radius);background:var(--ping-surface-alt);min-width:0;scroll-margin-top:16px}
+.am-card[data-waiting="true"] {border-color:var(--ping-border)}
+.am-card:focus,.am-card h2:focus,.am-card h3:focus {outline:none}
+.am-card form {margin:0}
+.am-card h2 {margin:0;font-size:var(--ping-type-section);font-weight:800;line-height:1.25;letter-spacing:-.015em;overflow-wrap:anywhere}
+.am-card h3 {margin:0 0 4px;font-size:var(--ping-type-label);font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ping-muted)}
+.am-kicker {margin:0 0 -6px;font-size:var(--ping-type-label);font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ping-primary)}
+.am-card[data-waiting="true"] > .am-kicker {color:var(--ping-muted)}
+.am-detail {margin:0;font-size:var(--ping-type-help);line-height:20px;color:var(--ping-text);overflow-wrap:anywhere}
+.am-foot {margin:0;font-size:13px;line-height:18px;color:var(--ping-muted);overflow-wrap:anywhere}
+.am-main-action {width:100%;min-height:var(--ping-tap)}
+.am-aux {display:inline-flex;align-items:center;min-height:var(--ping-tap);padding:0;border:0;font-size:var(--ping-type-help);font-weight:700;justify-self:start;text-align:left}
+.am-card .btn-link.am-aux {color:var(--ping-link);text-decoration:underline;text-underline-offset:3px}
+/* Place, word and the other person's hint: context, not actions */
+.am-place,.am-word {display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start;padding:12px;border-radius:12px;background:var(--ping-surface)}
+.am-place {grid-template-columns:auto minmax(0,1fr) auto}
+.am-place>.ping-icon,.am-word>.ping-icon {width:20px;height:20px;margin-top:2px;color:var(--ping-primary)}
+.am-place span,.am-word span {display:block;font-size:12px;font-weight:700;color:var(--ping-muted)}
+.am-place strong {display:block;font-size:17px;line-height:1.3;overflow-wrap:anywhere}
+.am-place p,.am-word p {margin:4px 0 0;font-size:13px;line-height:18px;color:var(--ping-muted);overflow-wrap:anywhere}
+.am-croquis {align-self:center;display:inline-flex;align-items:center;min-height:var(--ping-tap);font-size:var(--ping-type-help);font-weight:700;white-space:nowrap}
+.am-card .ping-word {display:block;margin:2px 0 0;font-size:26px;line-height:1.15;letter-spacing:-.02em;color:var(--ping-primary)}
+.am-card .recognition-note {margin:0}
+.am-card .recognition-note p {font-size:16px;margin:4px 0 0}
+/* Two short status lines with icon + word */
+.am-checks {display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.am-checks li {display:flex;align-items:center;gap:8px;font-size:var(--ping-type-help);font-weight:700;line-height:20px;overflow-wrap:anywhere}
+.am-checks .ping-icon {width:18px;height:18px;flex:none}
+.am-checks li[data-done="true"] .ping-icon {color:var(--ping-success)}
+.am-checks li[data-done="false"] {color:var(--ping-muted)}
+/* Views of the Verify card: one at a time */
+.am-choose,.am-panel {display:grid;gap:10px}
+.am-panel {padding-top:12px;border-top:1px solid var(--ping-border)}
+.am-choose[hidden],.am-panel[hidden] {display:none}
+.am-panel .qr-scanner {margin:0!important}
+.am-mine .credential-qr {justify-self:center;width:min(100%,240px);height:auto;padding:8px;border-radius:8px;background:#fff}
+.am-manual {margin:0;font-size:var(--ping-type-help)}
+.am-manual code {font-size:17px;letter-spacing:.06em;word-break:break-all;color:var(--ping-text)}
+.am-row {display:flex;flex-wrap:wrap;align-items:center;gap:0 20px}
+/* Activity: short blocks, possible points distinct from credited ones */
+.am-reward {margin:-4px 0 0;font-size:var(--ping-type-help);font-weight:800;color:var(--ping-primary)}
+.am-block p {margin:0;font-size:16px;line-height:23px;overflow-wrap:anywhere}
+.am-block .mission-activity-text {font-size:16px}
+.am-more summary {display:inline-flex;align-items:center;min-height:var(--ping-tap);font-size:var(--ping-type-help);font-weight:700;color:var(--ping-link);cursor:pointer}
+.am-more p {margin:0 0 4px}
+.am-where {display:grid;gap:8px}
+.am-action {display:grid;gap:10px;padding-top:14px;border-top:1px solid var(--ping-border)}
+.am-action h3 {margin:0;font-size:17px;line-height:1.3;letter-spacing:-.01em;text-transform:none;color:var(--ping-text)}
+.am-action textarea {min-height:88px}
+.am-own-hint {margin:0 0 16px}
+.am-own-hint>summary {display:inline-flex;align-items:center;min-height:var(--ping-tap);font-size:var(--ping-type-help);font-weight:700;color:var(--ping-link);cursor:pointer}
+.am-own-hint .hint-editor {margin-top:8px}
+@media (max-width:389.98px){.am-card{padding:16px 12px}.am-flow .am-person h1{font-size:26px}.am-place{grid-template-columns:auto minmax(0,1fr)}.am-croquis{grid-column:2;justify-self:start}}
+@media (min-width:992px){.am-flow{max-width:640px}}
+/* Affinity chips: at most three, the rest on request */
+.am-chips {align-items:center}
+.chip-more {display:inline}
+.chip-more>summary {display:inline-flex;align-items:center;min-height:var(--ping-tap);padding:0 4px;font-size:var(--ping-type-help);font-weight:700;color:var(--ping-link);cursor:pointer;list-style:none}
+.chip-more>summary::-webkit-details-marker {display:none}
+.chip-more[open] {flex-basis:100%}
+.chip-more[open] .ping-chip {margin:0 8px 8px 0}
+.chip-more[open] .when-closed,.chip-more:not([open]) .when-open {display:none}
+.cn-interests>div {min-width:0;flex:1}
+.cn-interests>div>p {margin:0 0 6px}
+/* DEC-070 · Proposal on a phone: the pair, one affinity line and «Aceptar conexión» fit together at 390/360 */
+@media (max-width:575.98px){
+  .connection-page .match-header {margin:8px 0 12px}
+  .connection-page .match-header h1 {font-size:28px;line-height:1.15;margin:6px 0 4px}
+  .connection-page .match-pair {--pair-size:72px;margin:12px auto 8px}
+  .connection-page .match-pair .match-person h2 {margin-top:8px;font-size:18px}
+  .connection-page .match-affinity {margin:8px 0 12px;padding:12px 0}
+  .connection-page .match-affinity>p {margin:0 0 8px}
+  .offer-decision .match-actions {margin-top:4px}
+}
+.am-mine .credential-qr {width:min(100%,220px)}
+.am-action + .am-where {padding-top:12px;border-top:1px solid var(--ping-border)}
+/* DEC-070 · Compact encounter header on phones so the card's action stays in view */
+@media (max-width:575.98px){
+  .am-flow .am-context {margin-bottom:2px}
+  .am-flow .am-person {gap:12px;margin-bottom:6px}
+  .am-flow .am-person p {margin:0}
+  .am-flow .am-person h1 {font-size:24px}
+  .am-flow .am-steps {margin-bottom:10px}
+  .am-flow .am-step-mark {width:24px;height:24px;font-size:12px}
+  .am-flow .am-steps li {gap:2px}
+  .am-card {gap:10px;padding:16px 14px}
+}

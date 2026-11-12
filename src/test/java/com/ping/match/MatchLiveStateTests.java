@@ -42,6 +42,8 @@ class MatchLiveStateTests {
             browser.get("/demo"); browser.post("/demo", Map.of("participantId", Long.toString(self)));
             String html = browser.get(route).body();
             assertThat(html).contains("data-ping-live=\"" + live.forParticipant(self).get("signature") + "\"");
+            // DEC-070: the coarse step polled by live.js is the same step the page rendered for this participant.
+            if (route.startsWith("/matches/")) assertThat(html).contains("data-live-step=\"" + live.forParticipant(self).get("step") + "\"");
         }
     }
 
@@ -57,7 +59,7 @@ class MatchLiveStateTests {
         jdbc.update("update participants set recognition_hint='PISTA PRIVADA',version=version+1 where id=?", p[1]);
         for (long self : p) {
             agreesWithHtml(self, "/matches/" + id);
-            assertThat(live.forParticipant(self)).containsOnlyKeys("signature", "matchStatus", "recognitionRevision");
+            assertThat(live.forParticipant(self)).containsOnlyKeys("signature", "matchStatus", "recognitionRevision", "step");
             assertThat(live.forParticipant(self).toString()).doesNotContain("PISTA PRIVADA", "activity", "word", "floorplan");
         }
         events.transition(participants.get(p[0]).eventId(), EventStatus.PAUSED);

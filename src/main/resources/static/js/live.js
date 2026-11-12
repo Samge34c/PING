@@ -30,7 +30,15 @@
     clearTimeout(timer);
     if (!stopped && !submitting && document.visibilityState === 'visible') timer = setTimeout(check, 5000);
   };
-  const editorBusy = () => window.PingHintEditor?.isDirty() || window.PingHintEditor?.isSaving() || !!root.querySelector('[data-credential-dirty="true"],[data-scanner-running="true"]');
+  const hintBusy = () => window.PingHintEditor?.isDirty() || window.PingHintEditor?.isSaving();
+  const editorBusy = () => hintBusy() || !!root.querySelector('[data-credential-dirty="true"],[data-scanner-running="true"]');
+  // DEC-070: when the encounter moves to another step, a camera or typed code of the old step no longer applies.
+  // Close it and discard the code (private) instead of keeping a draft nobody can send; then show the new step.
+  const leaveStep = () => {
+    document.dispatchEvent(new Event('ping:step-changed'));
+    root.querySelectorAll('[data-credential-form]').forEach(form => { form.reset(); form.dataset.credentialDirty = 'false'; });
+    try { sessionStorage.setItem(focusKey, JSON.stringify({path:location.pathname, id:'am-step-title', fallback:'am-confirm-title', at:Date.now()})); } catch (_) { }
+  };
   // Avisos de recuperación: arriba del contenido de la pantalla (no al final de una página larga) y uno solo.
   const bannerId = 'ping-recovery';
   const banner = ({ tone, title, text, action }) => {
@@ -99,6 +107,8 @@
       else if (state.recognitionRevision !== lastRevision) await refreshHint(controller.signal);
       if (stopped) return;
       if (state.signature !== root.dataset.pingLive) {
+        const stepChanged = !!state.step && !!root.dataset.liveStep && state.step !== root.dataset.liveStep;
+        if (stepChanged && !hintBusy()) { leaveStep(); location.reload(); return; }
         if (editorBusy()) { pendingUpdate = true; banner({ tone: 'wait', title: 'El encuentro cambió', text: 'Tu borrador sigue intacto; guarda o cancela para actualizar la pantalla.' }); }
         else { rememberFocus(state.matchStatus); location.reload(); return; }
       } else {

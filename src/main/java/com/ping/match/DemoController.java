@@ -94,17 +94,27 @@ public class DemoController {
         try { return "redirect:/matches/" + matching.search(id); }
         catch (BusinessRuleException error) { flash.addFlashAttribute("message", error.getMessage()); flash.addFlashAttribute("messageTone", "notice"); return "connect".equals(returnTo) ? "redirect:/connect" : "redirect:/me"; }
     }
-    @GetMapping("/matches/{id}") public String match(@PathVariable long id, HttpSession session, Model model) {
+    @GetMapping("/matches/{id}") public String match(@PathVariable long id, @RequestParam(required = false) String view, HttpSession session, Model model) {
         long selected = self(session); var participant = participants.get(selected); model.addAttribute("participant", participant); var event = events.get(participant.eventId()); model.addAttribute("event", event);
         model.addAttribute("moderation", moderation.status(id, selected));
         model.addAttribute("reportReasons", com.ping.moderation.ReportReason.values());
         var match = matches.get(id, selected); model.addAttribute("match", match);
         var review = match.staffReview() ? reviews.get(id) : null; model.addAttribute("review", review);
         if (match.atDelivery() && match.status() == MatchStatus.COMPLETED) model.addAttribute("evidenceValidated", evidence.matchValidated(id));
-        if (match.status() == MatchStatus.ACTIVE) model.addAttribute("progress", EncounterProgress.of(match, review));
+        var progress = match.status() == MatchStatus.ACTIVE ? EncounterProgress.of(match, review) : null;
+        model.addAttribute("progress", progress);
         model.addAttribute("credentialRequestKey",java.util.UUID.randomUUID().toString());
         var personalCode=com.ping.verification.CredentialSession.get(session,"ENCOUNTER",id,selected);
-        model.addAttribute("myCredential",personalCode!=null&&credentials.valid(personalCode)&&!match.otherVerified()?personalCode:null);
+        var myCredential=personalCode!=null&&credentials.valid(personalCode)&&!match.otherVerified()?personalCode:null;
+        // DEC-070: one view of the Verify card at a time. «mine» renders the private code only on request and only while
+        // the other person still has to scan it; «theirs» only while this person still has to verify. Anything else: none.
+        String verifyView = null;
+        if (progress != null && progress.is("verify")) {
+            if ("mine".equals(view) && myCredential != null && !progress.sub().equals("scan")) verifyView = "mine";
+            else if ("theirs".equals(view) && !progress.sub().equals("show")) verifyView = "theirs";
+        }
+        model.addAttribute("verifyView", verifyView);
+        model.addAttribute("myCredential", "mine".equals(verifyView) ? myCredential : null);
         var ownHint = hints.ownForm(selected); model.addAttribute("recognitionHintForm", ownHint); model.addAttribute("persistedRecognitionHint", ownHint.getHint());
         // Text and revision come from the same fresh, ownership/state-checked read.
         var authorizedHint = hints.other(id, selected);
@@ -129,8 +139,8 @@ public class DemoController {
     }
     @PostMapping("/matches/{id}/reject") public String reject(@PathVariable long id, HttpSession session) { matches.cancel(id, self(session)); return "redirect:/matches/" + id; }
     @PostMapping("/matches/{id}/cancel") public String cancel(@PathVariable long id, HttpSession session) { matches.cancel(id, self(session)); return "redirect:/matches/" + id; }
-    @PostMapping("/matches/{id}/arrive") public String arrive(@PathVariable long id, HttpSession session) { matches.arrive(id, self(session)); return "redirect:/matches/" + id + "#am-arrival-title"; }
-    @PostMapping("/matches/{id}/confirm") public String confirm(@PathVariable long id, HttpSession session) { matches.confirm(id, self(session)); return "redirect:/matches/" + id + "#am-confirm-title"; }
+    @PostMapping("/matches/{id}/arrive") public String arrive(@PathVariable long id, HttpSession session) { matches.arrive(id, self(session)); return "redirect:/matches/" + id + "#am-step"; }
+    @PostMapping("/matches/{id}/confirm") public String confirm(@PathVariable long id, HttpSession session) { matches.confirm(id, self(session)); return "redirect:/matches/" + id + "#am-step"; }
     @PostMapping("/matches/{id}/block") public String block(@PathVariable long id, HttpSession session, RedirectAttributes flash) {
         moderation.block(id, self(session)); flash.addFlashAttribute("message", "Bloqueo guardado. No recibirán nuevas propuestas entre sí. La conexión actual conserva su estado."); return "redirect:/matches/" + id;
     }

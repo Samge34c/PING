@@ -62,7 +62,7 @@ class EventExperienceTests {
             for(String path:List.of("/matches/"+m,"/me")) assertThat(sam.get(path).body()).doesNotContain("Gorra roja","PISTA PARA ENCONTRARSE");
             matches.accept(m,a); assertThat(sam.get("/matches/"+m).body()).doesNotContain("Gorra roja");
             matches.accept(m,b);
-            assertThat(sam.get("/matches/"+m).body()).contains("Gorra roja","Cómo reconocer a Julián","Abrir mapa");
+            assertThat(sam.get("/matches/"+m).body()).contains("Gorra roja","Cómo reconocer a Julián","Ver croquis");
             assertThat(jul.get("/matches/"+m).body()).contains("Camiseta negra y morral");
             assertThat(sam.get("/me").body()).doesNotContain("Gorra roja");
             for(String path:List.of("/participants","/admin","/events/"+event+"/hub","/events/"+event+"/map"))
@@ -173,24 +173,24 @@ class EventExperienceTests {
         long m = matching.search(a); String path = "/matches/"+m;
         try(var sam = new TestBrowser(port); var jul = new TestBrowser(port)) {
             enter(sam,a); enter(jul,b);
-            assertThat(sam.get(path).body()).contains("Aceptar conexión").doesNotContain("am-grid", "Gorra roja", assetUrls.getForLookupPath("/js/active-map.js"));
+            assertThat(sam.get(path).body()).contains("Aceptar conexión").doesNotContain("id=\"am-step\"", "Gorra roja", assetUrls.getForLookupPath("/js/encounter-step.js"));
             assertThat(sam.post(path+"/accept",Map.of()).statusCode()).isEqualTo(302);
-            assertThat(sam.get(path).body()).doesNotContain("am-grid", "Gorra roja");
+            assertThat(sam.get(path).body()).doesNotContain("id=\"am-step\"", "Gorra roja");
             jul.get(path); assertThat(jul.post(path+"/accept",Map.of()).statusCode()).isEqualTo(302);
             sam.post(path+"/arrive",Map.of()); jul.post(path+"/arrive",Map.of());
             var active = matches.get(m,a);
-            assertThat(sam.get(path).body()).contains("class=\"am-grid\"", "Su palabra de encuentro", active.word(), active.meetingPoint(), active.activity(), "Gorra roja", "Confirmaciones: 0 de 2", assetUrls.getForLookupPath("/js/active-map.js"));
+            assertThat(sam.get(path).body()).contains("data-phase=\"activity\"", "Palabra de encuentro", active.word(), active.meetingPoint(), active.activity(), "Gorra roja", "Confirmar actividad", assetUrls.getForLookupPath("/js/encounter-step.js"));
             assertThat(sam.post(path+"/confirm",Map.of()).statusCode()).isEqualTo(302);
-            assertThat(sam.get(path).body()).contains("Tú ya confirmaste. Esperando a Julián", "Confirmaciones: 1 de 2")
+            assertThat(sam.get(path).body()).contains("Esperando a Julián", "Tu confirmación está guardada", "Tú · confirmado")
                 .doesNotContain("action=\""+path+"/confirm\"", "Conexión completada");
-            assertThat(jul.get(path).body()).contains("Samuel ya confirmó. Falta tu confirmación.", "Confirmar encuentro y actividad");
+            assertThat(jul.get(path).body()).contains("Samuel ya confirmó. Falta tu confirmación.", "Confirmar actividad");
             assertThat(participants.get(a).points()).isZero(); assertThat(participants.get(b).points()).isZero();
             assertThat(matches.get(m,b).word()).isEqualTo(active.word());
             assertThat(matches.get(m,b).meetingPoint()).isEqualTo(active.meetingPoint());
             jul.post(path+"/confirm",Map.of()); sam.post(path+"/confirm",Map.of()); jul.post(path+"/confirm",Map.of());
             assertThat(participants.get(a).points()).isEqualTo(10); assertThat(participants.get(b).points()).isEqualTo(10);
             assertThat(sam.get(path).body()).contains("Conexión completada", "Feedback opcional")
-                .doesNotContain("am-grid", assetUrls.getForLookupPath("/js/active-map.js"), "Gorra roja");
+                .doesNotContain("data-phase=", assetUrls.getForLookupPath("/js/encounter-step.js"), "Gorra roja");
         }
     }
     @Test void activeMissionRetainsDurablePendingSagaAndRetryWithoutPrematureCompletion() throws Exception {
@@ -199,7 +199,7 @@ class EventExperienceTests {
         completionSteps.begin(m,a); completionSteps.begin(m,b); // Durable state left before the reward steps.
         try(var browser = new TestBrowser(port)) {
             enter(browser,a); String path = "/matches/"+m;
-            assertThat(browser.get(path).body()).contains("Finalizando la conexión", "Reintentar finalización", "Confirmaciones: 2 de 2")
+            assertThat(browser.get(path).body()).contains("Finalizando tu encuentro", "Reintentar finalización", "Ambos confirmaron")
                 .doesNotContain("Conexión completada", "action=\""+path+"/cancel\"");
             assertThat(participants.get(a).points()).isZero(); assertThat(participants.get(b).points()).isZero();
             assertThat(browser.post(path+"/confirm",Map.of()).statusCode()).isEqualTo(302);
@@ -209,7 +209,7 @@ class EventExperienceTests {
         }
     }
     @ParameterizedTest @CsvSource({"Tecnología,technology", "Música,stage"})
-    void inlineEncounterMapKeepsTheAssignedZoneIdAndMatchReturn(String interest,String zone) throws Exception {
+    void croquisLinkKeepsTheAssignedZoneIdAndMatchReturn(String interest,String zone) throws Exception {
         for(long id : List.of(a,b)) {
             var form = interests.selection(id);
             form.setInterestIds(interests.catalog().stream().filter(i -> i.getName().equals(interest)).map(com.ping.interest.Interest::getId).toList()); interests.save(id,form);
@@ -217,9 +217,9 @@ class EventExperienceTests {
         long m = matching.search(a); matches.accept(m,a); matches.accept(m,b);
         try(var browser = new TestBrowser(port)) {
             enter(browser,a); String body = browser.get("/matches/"+m).body();
-            assertThat(body).contains("data-zone-id=\""+zone+"\"", "zone="+zone+"&amp;matchId="+m, "data-encounter-zoom=\"in\"", "data-encounter-center", "aria-current=\"location\"");
-            assertThat(body.split("data-assigned=\"true\"",-1)).hasSize(2);
-            assertThat(browser.get("/events/"+event+"/map?zone="+zone+"&matchId="+m).body()).contains("href=\"/matches/"+m+"\"", "Volver al encuentro");
+            // DEC-070: «Ver croquis» next to the place opens the assigned zone and returns to the encounter.
+            assertThat(body).contains("zone="+zone+"&amp;matchId="+m, "Ver croquis");
+            assertThat(browser.get("/events/"+event+"/map?zone="+zone+"&matchId="+m).body()).contains("href=\"/matches/"+m+"\"", "Volver al encuentro", "aria-current=\"location\"");
         }
     }
     @Test void fictionalPromotionAndDerivedBadgesNeverAffectTheRealSnackBalance() throws Exception {

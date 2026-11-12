@@ -28,7 +28,7 @@ public class ActivityReviewController {
             flash.addFlashAttribute("reviewError", error.getMessage());
             flash.addFlashAttribute("reviewDraft", response);
         }
-        return "redirect:/matches/" + id + "#am-review-title";
+        return "redirect:/matches/" + id + "#am-step";
     }
 
     @GetMapping("/events/{event}/reviews")

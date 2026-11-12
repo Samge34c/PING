@@ -1,122 +1,136 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><body>
-<section th:fragment="mission" th:if="${match.status.name() == 'ACTIVE'}" class="active-mission" th:with="meetingZone=${match.floorplanId == null and experience != null ? experience.atPoint(match.meetingPoint) : null}">
+<!-- DEC-070: one operational card per screen. The server (EncounterProgress) decides the phase from the real state; content of
+     a later phase (activity name, instructions, points, code forms) is not rendered at all before the server reaches it. -->
+<section th:fragment="mission" th:if="${match.status.name() == 'ACTIVE'}" class="active-mission am-flow" th:with="p=${progress},policy2=${match.verificationPolicy >= 2}">
   <div class="am-context"><a th:href="@{/me}">← Mi Ping</a><a th:if="${experience != null}" th:href="@{/events/{id}/hub(id=${event.id})}" th:text="${participant.eventName}"></a><span class="ping-status" data-status="ACTIVE" th:text="${match.status.label}"></span></div>
-  <header class="am-person"><span class="pair-avatar is-connected" data-connected-avatar><span class="pair-ring" aria-hidden="true"></span><span th:replace="~{entry/avatar :: portrait(${match.otherAvatar})}"></span><span class="pair-initial" aria-hidden="true" th:text="${#strings.substring(match.otherAlias,0,1)}"></span></span><div><p>Tu encuentro con</p><h1 th:text="${match.otherAlias}"></h1></div></header>
-  <div class="am-affinity"><span th:if="${!#strings.isEmpty(match.commonInterests)}" th:text="${match.commonPreview() + ' en común · '}"></span><span th:if="${#strings.isEmpty(match.commonInterests)}">Alternativa sin intereses compartidos · </span>Aceptaron ambos<details th:if="${match.commonTopics().size()>3}"><summary th:text="${'Ver los '+match.commonTopics().size()+' intereses compartidos'}"></summary><p th:text="${match.commonInterests}"></p></details></div>
+  <header class="am-person"><span class="pair-avatar is-connected" data-connected-avatar><span class="pair-ring" aria-hidden="true"></span><span th:replace="~{entry/avatar :: portrait(${match.otherAvatar})}"></span><span class="pair-initial" aria-hidden="true" th:text="${#strings.substring(match.otherAlias,0,1)}"></span></span>
+    <div><p>Tu encuentro con</p><h1 th:text="${match.otherAlias}"></h1><p class="am-stepcount" th:text="${'Paso ' + p.current() + ' de ' + p.steps().size() + ' · ' + p.currentLabel()}"></p></div></header>
+  <ol class="am-steps" aria-hidden="true"><li th:each="s,it : ${p.steps()}" th:attr="data-state=${s.state()}"><span class="am-step-mark" th:text="${s.state() == 'done' ? '✓' : it.count}"></span><span class="am-step-label" th:text="${s.label()}"></span></li></ol>
   <p class="ping-notice" th:if="${event.status.name() != 'OPEN'}">El evento no está abierto para nuevas propuestas. Puedes terminar esta conexión activa.</p>
-  <section class="am-now" th:if="${progress != null}" aria-labelledby="am-now-title" th:attr="data-waiting=${progress.waiting()}">
-    <ol class="am-steps" th:attr="aria-label=${'Recorrido del encuentro · paso ' + progress.current() + ' de ' + progress.steps().size()}">
-      <li th:each="s,it : ${progress.steps()}" th:attr="data-state=${s.state()},aria-current=${s.state() == 'current' ? 'step' : null}"><span class="am-step-mark" aria-hidden="true" th:text="${s.state() == 'done' ? '✓' : it.count}"></span><span class="am-step-label" th:text="${s.label()}"></span><span class="visually-hidden" th:text="${s.state() == 'done' ? ' · hecho' : (s.state() == 'current' ? ' · ahora' : '')}"></span></li>
-    </ol>
-    <p class="am-now-kicker" th:text="${progress.waiting() ? 'Esperando' : 'Ahora · paso ' + progress.current() + ' de ' + progress.steps().size()}"></p>
-    <h2 id="am-now-title" tabindex="-1" th:text="${progress.title()}"></h2>
-    <p class="am-now-detail" th:text="${progress.detail()}"></p>
-    <form th:if="${progress.arriveForm()}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-arrive-action" class="btn btn-primary am-now-action">Ya llegué</button></form>
-    <form th:if="${progress.doneForm()}" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-done-action" class="btn btn-primary am-now-action" th:text="${progress.action()}"></button></form>
-    <a th:if="${!progress.arriveForm() and !progress.doneForm() and progress.action() != null}" class="btn am-now-action" th:classappend="${progress.waiting()} ? 'btn-outline-primary' : 'btn-primary'" th:href="${progress.target()}" th:text="${progress.action()}"></a>
-    <a th:if="${progress.waiting()}" class="am-now-help" href="#connection-safety">¿No llega o hay un problema? Ver opciones</a>
-  </section>
-  <div class="am-grid" th:classappend="${(match.verificationPolicy>=2 ? 'am-policy2' : '') + (match.staffReview() ? ' am-has-review' : '')}">
-    <section class="am-recognition" aria-labelledby="am-word-title">
-      <h2 id="am-word-title"><svg th:replace="~{fragments/layout :: icon('key')}"></svg>Su palabra de encuentro</h2>
-      <p class="ping-word" th:text="${match.word}"></p>
-      <p class="am-word-help">Ambos ven esta misma palabra. Úsenla para reconocerse al llegar.</p>
+
+  <section id="am-step" class="am-card" aria-labelledby="am-step-title" th:attr="data-phase=${p.phase()},data-sub=${p.sub()},data-waiting=${p.waiting()},data-view=${verifyView}">
+
+    <!-- Llegar -->
+    <th:block th:if="${p.is('arrive')}">
+      <p class="am-kicker" th:text="${p.waiting() ? 'Esperando' : 'Ahora'}"></p>
+      <h2 id="am-step-title" tabindex="-1" th:text="${p.title()}"></h2>
+      <p class="am-detail" th:if="${p.detail() != null}" th:text="${p.detail()}" th:attr="role=${p.waiting() ? 'status' : null}"></p>
+      <div th:replace="~{demo/active-mission :: place}"></div>
+      <div class="am-word" th:if="${!#strings.isEmpty(match.word)}"><svg th:replace="~{fragments/layout :: icon('key')}"></svg><div><span>Palabra de encuentro</span><strong class="ping-word" th:text="${match.word}"></strong><p>Ambos ven la misma: úsenla para reconocerse.</p></div></div>
       <div th:replace="~{experience/fragments :: recognition(${match.otherAlias})}"></div>
-    </section>
-    <section class="am-location" aria-labelledby="am-location-title">
-      <div class="am-location-heading"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg><span>Punto de encuentro</span></div>
-      <h2 id="am-location-title" th:text="${match.meetingPoint}"></h2>
-      <p th:if="${!#strings.isEmpty(match.meetingDirections)}" th:text="${match.meetingDirections}" class="description"></p>
-      <p th:if="${meetingZone == null and #strings.isEmpty(match.meetingDirections)}" class="am-word-help">Busca el punto público indicado. Si no lo identificas, consulta al organizador.</p>
-      <div th:if="${meetingZone != null}" class="am-map" data-encounter-map th:attr="data-zone-id=${meetingZone.id}">
-        <div class="am-map-toolbar"><span>Tu punto en el plano</span><div role="group" aria-label="Controles del plano del encuentro">
-          <button type="button" data-encounter-zoom="out" aria-label="Reducir plano" disabled>−</button>
-          <button type="button" data-encounter-zoom="in" aria-label="Ampliar plano"><svg th:replace="~{fragments/layout :: icon('plus')}"></svg></button>
-          <button type="button" data-encounter-center aria-label="Centrar tu punto de encuentro"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg></button>
-        </div></div>
-        <div class="map-pan am-map-pan" tabindex="0" aria-label="Plano desplazable del encuentro. Usa las flechas para desplazarte y los enlaces de pabellón para abrir el mapa.">
-          <div class="map-canvas am-map-canvas">
-            <svg th:replace="~{experience/venue :: outline}"></svg>
-            <a th:each="z : ${experience.markers()}" class="am-map-marker" th:with="selected=${z.pavilion == meetingZone.pavilion}" th:attr="data-assigned=${selected},aria-current=${selected ? 'location' : null},aria-label=${(selected ? meetingZone.name : z.name) + ' · Pabellón ' + z.pavilion + (selected ? ' · Tu punto de encuentro' : '')}" th:style="|left:${z.x}%;top:${z.y}%;|" th:href="@{/events/{id}/map(id=${event.id},zone=${selected ? meetingZone.id : z.id},matchId=${match.id})}"><span th:text="${z.pavilion}"></span></a>
-          </div>
-        </div>
-        <p class="am-map-caption">Plano esquemático · sin escala ni ubicación en tiempo real.</p>
+      <form th:if="${p.sub() == 'go'}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-arrive-action" class="btn btn-primary am-main-action">Ya llegué</button></form>
+      <p class="am-foot" th:text="${p.sub() == 'go' ? 'Llegar no da puntos. Después verificarán sus códigos.' : 'Cuando ' + match.otherAlias + ' registre su llegada, verán aquí el siguiente paso.'}"></p>
+      <a th:if="${p.waiting()}" class="am-aux" href="#connection-safety">¿No llega o hay un problema? Ver opciones</a>
+    </th:block>
+
+    <!-- Verificar -->
+    <th:block th:if="${p.is('verify')}">
+      <p class="am-kicker">Ahora</p>
+      <h2 id="am-step-title" tabindex="-1" th:text="${p.title()}"></h2>
+      <p class="am-detail" th:if="${verifyView == null}" th:text="${p.detail()}"></p>
+      <ul class="am-checks" th:if="${verifyView == null}" aria-label="Verificaciones">
+        <li th:attr="data-done=${match.verified}"><svg th:replace="~{fragments/layout :: icon(${match.verified ? 'check' : 'clock'})}"></svg><span th:text="${match.verified ? 'Verificaste a ' + match.otherAlias : 'Aún no verificas a ' + match.otherAlias}"></span></li>
+        <li th:attr="data-done=${match.otherVerified}"><svg th:replace="~{fragments/layout :: icon(${match.otherVerified ? 'check' : 'clock'})}"></svg><span th:text="${match.otherVerified ? match.otherAlias + ' te verificó' : match.otherAlias + ' aún no te verifica'}"></span></li>
+      </ul>
+      <div class="am-choose" data-verify-choose th:hidden="${verifyView != null}">
+        <a th:if="${p.sub() != 'show'}" class="btn btn-primary am-main-action" data-verify-open="scan" th:href="@{/matches/{id}(id=${match.id},view='theirs')} + '#am-step'">Escanear su QR</a>
+        <form th:if="${p.sub() != 'scan'}" method="post" th:action="@{/matches/{id}/code(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="requestKey" th:value="${credentialRequestKey}"><input type="hidden" name="renew" value="false"><button id="am-code-generate" class="btn am-main-action" th:classappend="${p.sub() == 'show'} ? 'btn-primary' : 'btn-outline-primary'">Mostrar mi QR</button></form>
+        <a th:if="${p.sub() != 'show'}" class="am-aux" data-verify-open="type" th:href="@{/matches/{id}(id=${match.id},view='theirs')} + '#am-step'">Escribir su código</a>
       </div>
-      <a th:if="${meetingZone != null}" class="btn btn-outline-primary am-open-map" th:href="@{/events/{id}/map(id=${event.id},zone=${meetingZone.id},matchId=${match.id})}">Abrir mapa <svg th:replace="~{fragments/layout :: icon('arrow')}"></svg></a>
-      <a th:if="${match.floorplanId != null}" class="btn btn-outline-primary am-open-map" th:href="@{/matches/{id}/plan(id=${match.id})}" th:text="${match.floorplanX != null ? 'Ver mi punto en el plano' : 'Ver plano · Punto sin ubicar'}"></a>
-      <p th:if="${match.floorplanId == null and meetingZone == null}" class="am-word-help">Plano no disponible para este encuentro. Usa las indicaciones del punto.</p>
-    </section>
-    <section class="am-arrival" aria-labelledby="am-arrival-title" th:if="${!match.completionPending}">
-      <h2 id="am-arrival-title" tabindex="-1" th:text="${match.arrived and match.otherArrived ? 'Ambos llegaron' : (match.verificationPolicy>=2 ? '1 · ¿Ya estás en el punto?' : '¿Ya estás en el punto?')}"></h2>
-      <ul class="am-confirm-people" aria-label="Llegadas al punto de encuentro">
-        <li><span>Tú</span><strong th:text="${match.arrived ? 'Ya llegaste' : 'Sin registrar'}"></strong></li>
-        <li><span th:text="${match.otherAlias}"></span><strong th:text="${match.otherArrived ? 'Ya llegó' : 'Sin registrar'}"></strong></li>
-      </ul>
-      <form th:if="${!match.arrived and (progress == null or !progress.arriveForm())}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-arrive-action" class="btn btn-primary">Ya llegué</button></form>
-      <p role="status" th:if="${match.arrived and !match.otherArrived}" th:text="${'Tu llegada está guardada. ' + match.otherAlias + ' aún no registró la suya.'}"></p>
-      <p class="small text-secondary" th:text="${match.verificationPolicy >= 2 ? (match.arrived and match.otherArrived ? 'Ambas llegadas están guardadas. Llegar no da puntos.' : 'Cuando ambos lleguen, podrán verificar sus códigos personales. Llegar no da puntos.') : 'Política anterior: llegada opcional e informativa. No da puntos ni condiciona confirmar.'}"></p>
-    </section>
-    <section class="am-verification" aria-labelledby="am-verify-title" th:if="${match.verificationPolicy>=2 and !match.completionPending}">
-      <h2 id="am-verify-title" tabindex="-1">2 · Verifiquen sus códigos</h2>
-      <p th:unless="${match.arrived and match.otherArrived}" th:text="${!match.arrived?'Marca tu llegada al punto para continuar.':'Falta que '+match.otherAlias+' marque su llegada.'}"></p>
-      <th:block th:if="${match.arrived and match.otherArrived}">
-       <p class="ping-notice" th:if="${verificationError}" th:text="${verificationError}" role="alert"></p>
-       <ul class="am-confirm-people"><li><span>Tú verificaste a la otra persona</span><strong th:text="${match.verified?'Verificado':'Pendiente'}"></strong></li><li><span>La otra persona te verificó</span><strong th:text="${match.otherVerified?'Verificado':'Pendiente'}"></strong></li></ul>
-       <th:block th:unless="${match.otherVerified}">
-        <h3 class="h6 mt-3" th:text="${'Muestra tu código a '+match.otherAlias}"></h3><p class="small">La otra persona lo verifica en su celular. Es distinto de la palabra compartida y del código de canje.</p>
-        <details id="am-my-code" tabindex="-1" th:if="${myCredential != null}" th:open="${showPersonalCredential == true}" class="personal-code"><summary>Mostrar mi código personal / QR</summary><p><code data-private-credential th:text="${myCredential.manual}"></code></p><img data-private-credential class="credential-qr" th:src="@{/matches/{id}/my-code.png(id=${match.id})}" alt="Tu QR personal para este encuentro" loading="lazy"><p class="small">Válido 10 minutos. Renovar invalida únicamente tu código pendiente anterior.</p></details>
-        <form method="post" th:action="@{/matches/{id}/code(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="requestKey" th:value="${credentialRequestKey}"><input type="hidden" name="renew" th:value="${myCredential != null}"><button id="am-code-generate" class="btn btn-outline-primary my-2" th:text="${myCredential != null?'Renovar mi código':'Generar mi código personal'}"></button></form>
-       </th:block>
-       <h3 th:unless="${match.verified}" class="h6 mt-4" th:text="${'Verifica el código de '+match.otherAlias}"></h3><form th:unless="${match.verified}" method="post" th:action="@{/matches/{id}/verify(id=${match.id})}" data-credential-form><input type="hidden" name="_csrf" th:value="${csrfToken}"><label class="form-label" for="encounter-credential">Código que te muestra la otra persona</label><input class="form-control" name="credential" id="encounter-credential" maxlength="96" autocomplete="off" autocapitalize="characters" spellcheck="false" required><div th:replace="~{verification/scanner :: scanner('ENCOUNTER','encounter-credential')}"></div><div class="action-row my-3"><button id="am-verify-action" class="btn btn-primary">Verificar a la otra persona</button><button type="button" class="btn btn-outline-secondary" data-clear-credential>Limpiar</button></div></form>
-       <p th:if="${match.verified and !match.otherVerified}" role="status" th:text="${'Tu verificación está guardada. Falta que '+match.otherAlias+' verifique tu código.'}"></p>
-      </th:block>
-    </section>
-    <section class="am-activity" aria-labelledby="am-activity-title"><h2 id="am-activity-title"><svg th:replace="~{fragments/layout :: icon('chat')}"></svg><span th:text="${match.verificationPolicy>=2 ? '3 · Hagan algo juntos' : 'Hagan algo juntos'}"></span></h2><h3 th:if="${!#strings.isEmpty(match.activityTitle)}" th:text="${match.activityTitle}" class="h5 mt-2"></h3><p class="mission-activity-text" th:text="${match.activity}"></p>
-      <dl class="am-activity-facts">
-        <div><dt>Recompensa</dt><dd th:text="${match.rewardPoints == 0 ? 'Sin puntos' : '+' + match.rewardPoints + ' puntos para cada persona, una sola vez'}"></dd></div>
-        <div><dt>Cómo se comprueba</dt><dd><strong th:text="${match.activityCheck.label}"></strong> · <span th:text="${match.staffReview() ? 'el personal del evento revisa lo que envíen y ambos confirman.' : (match.atDelivery() ? 'ambos la marcan como hecha; al recoger el premio muestran la evidencia en el punto de entrega.' : (match.verificationPolicy >= 2 ? 'tras llegar y verificar sus códigos, ambos confirman.' : 'ambos confirman al terminar.'))}"></span></dd></div>
-        <div th:if="${match.staffReview() and !#strings.isEmpty(match.checkInstructions)}"><dt>Qué revisan</dt><dd th:text="${match.checkInstructions}"></dd></div>
-        <div th:if="${match.atDelivery() and !#strings.isEmpty(match.checkInstructions)}"><dt>Qué mostrarán al recoger el premio</dt><dd th:text="${match.checkInstructions + '. Desde su celular: PING no pide subir ni guardar la foto.'}"></dd></div>
-        <div><dt>Cuándo llegan los puntos</dt><dd th:text="${match.staffReview() ? 'Cuando el personal la aprueba y ambos han confirmado.' : (match.atDelivery() ? 'Cuando ambos la marcan como hecha. Sirven para canjear y se comprueban al entregar el premio.' : 'Cuando ambos confirman.')}"></dd></div>
-      </dl>
-      <a class="am-activity-catalog" th:href="@{/matches/{id}/plan(id=${match.id})} + '#pa-title'">Ver todas las actividades del evento</a></section>
-    <section class="am-review" id="am-review" aria-labelledby="am-review-title" th:if="${match.staffReview() and !match.completionPending}">
-      <h2 id="am-review-title" tabindex="-1" th:text="${match.verificationPolicy >= 2 ? '4 · Envíenla al personal' : 'Envíenla al personal'}"></h2>
-      <p class="am-review-status" th:if="${review != null}" role="status" th:attr="data-review=${review.status().name()}"><strong th:text="${review.status().label}"></strong>
-        <span th:if="${review.status().name() == 'PENDING'}"> · El personal aún no la ha revisado. Pueden corregir el envío mientras tanto.</span>
-        <span class="am-review-by" th:text="${'Enviado por ' + (review.submittedBy() == participant.id ? 'ti' : match.otherAlias) + ' · ' + #temporals.format(review.submittedAt(),'HH:mm','America/Bogota')}"></span>
-        <span th:if="${review.status().name() == 'APPROVED'}" th:text="${match.confirmed and match.otherConfirmed ? ' · Los puntos se están acreditando.' : ' · Falta que ambos confirmen para recibir los puntos.'}"></span></p>
-      <div class="ping-notice" th:if="${review != null and review.status().name() == 'CHANGES'}" role="alert"><strong>El personal pidió una corrección:</strong> <span th:text="${review.comment()}"></span></div>
-      <p th:unless="${match.canConfirm()}" th:text="${match.verificationPolicy >= 2 ? 'Primero registren ambas llegadas y verifiquen sus códigos. Después podrán enviarla.' : 'Podrán enviarla cuando estén juntos.'}"></p>
-      <th:block th:if="${match.canConfirm() and (review == null or review.status().name() != 'APPROVED')}">
-        <p class="ping-notice" th:if="${reviewError}" th:text="${reviewError}" role="alert"></p>
-        <form method="post" th:action="@{/matches/{id}/review(id=${match.id})}">
+      <!-- Their code: scan or type, in one form. The camera opens only on request. -->
+      <div th:if="${p.sub() != 'show'}" id="am-theirs" class="am-panel" data-verify-panel="theirs" th:hidden="${verifyView != 'theirs'}">
+        <h3 id="am-theirs-title" tabindex="-1" th:text="${'Código de ' + match.otherAlias}"></h3>
+        <p class="ping-notice" th:if="${verificationError}" th:text="${verificationError}" role="alert"></p>
+        <form method="post" th:action="@{/matches/{id}/verify(id=${match.id})}" data-credential-form>
           <input type="hidden" name="_csrf" th:value="${csrfToken}">
-          <label class="form-label" for="am-review-response" th:text="${#strings.isEmpty(match.responsePrompt) ? 'Nota para el personal (opcional)' : match.responsePrompt}"></label>
-          <textarea class="form-control" id="am-review-response" name="response" maxlength="1000" rows="3" th:required="${!#strings.isEmpty(match.responsePrompt)}" th:text="${reviewDraft != null ? reviewDraft : (review != null ? review.response() : '')}" aria-describedby="am-review-help"></textarea>
-          <p id="am-review-help" class="small text-secondary">Basta con que una persona lo envíe. Enviar no es aprobar ni suma puntos.</p>
-          <button id="am-review-action" class="btn" th:classappend="${review != null and review.status().name() == 'PENDING'} ? 'btn-outline-primary' : 'btn-primary'" th:text="${review == null ? 'Enviar a revisión' : (review.status().name() == 'CHANGES' ? 'Reenviar corregida' : 'Actualizar envío')}"></button>
+          <div th:replace="~{verification/scanner :: scanner('ENCOUNTER','encounter-credential')}"></div>
+          <label class="form-label" for="encounter-credential" th:text="${'O escribe el código que te muestra ' + match.otherAlias}"></label>
+          <input class="form-control" name="credential" id="encounter-credential" maxlength="96" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+          <button id="am-verify-action" class="btn btn-primary am-main-action" th:text="${'Verificar a ' + match.otherAlias}"></button>
         </form>
-      </th:block>
-      <p th:if="${review != null and review.status().name() == 'APPROVED' and !#strings.isEmpty(review.response())}" class="small"><span>Enviado: </span><span th:text="${review.response()}"></span></p>
-    </section>
-    <section class="am-confirmation" aria-labelledby="am-confirm-title" th:if="${match.canConfirm() or match.completionPending}">
-      <h2 id="am-confirm-title" tabindex="-1" th:text="${match.completionPending ? 'Finalizando la conexión' : (match.confirmed ? (match.atDelivery() ? 'Marcaste la actividad como hecha' : 'Tu parte está confirmada') : (match.atDelivery() ? '¿Hicieron la actividad?' : '¿Terminaron la actividad?'))}"></h2>
-      <p class="am-confirm-help" th:if="${!match.confirmed and !match.completionPending}" th:text="${match.atDelivery() ? 'Márquenla cuando la hayan hecho. Cada persona la marca una vez desde su celular.' : 'Confirma después del encuentro y de realizar la actividad.'}"></p>
-      <ul class="am-confirm-people" aria-label="Confirmaciones del encuentro">
-        <li th:attr="data-confirmed=${match.confirmed}"><svg th:replace="~{fragments/layout :: icon(${match.confirmed ? 'check' : 'clock'})}"></svg><span>Tú</span><strong th:text="${match.confirmed ? (match.atDelivery() ? 'Marcada' : 'Confirmado') : (match.atDelivery() ? 'Por marcar' : 'Por confirmar')}"></strong></li>
-        <li th:attr="data-confirmed=${match.otherConfirmed}"><svg th:replace="~{fragments/layout :: icon(${match.otherConfirmed ? 'check' : 'clock'})}"></svg><span th:text="${match.otherAlias}"></span><strong th:text="${match.otherConfirmed ? (match.atDelivery() ? 'Marcada' : 'Confirmado') : (match.atDelivery() ? 'Por marcar' : 'Por confirmar')}"></strong></li>
-      </ul>
-      <p class="am-waiting" th:if="${match.completionPending}" role="status">Ambos confirmaron. La conexión está finalizando; si se interrumpió, puedes reintentar la finalización sin duplicar puntos.</p>
-      <p class="am-waiting" th:if="${match.confirmed and !match.completionPending}" role="status" th:text="${match.atDelivery() ? 'Esperando a tu compañero: falta que ' + match.otherAlias + ' la marque.' : 'Tú ya confirmaste. Esperando a ' + match.otherAlias + '…'}"></p>
-      <p class="am-waiting" th:if="${match.otherConfirmed and !match.confirmed}" th:text="${match.atDelivery() ? match.otherAlias + ' ya la marcó como hecha. Falta tu parte.' : match.otherAlias + ' ya confirmó. Falta tu confirmación.'}"></p>
-      <form th:if="${(!match.confirmed and !(progress != null and progress.doneForm())) or match.completionPending or (match.staffReview() and match.otherConfirmed and review != null and review.status().name() == 'APPROVED')}" class="am-confirm-form" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}">
-        <input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-primary" th:text="${match.completionPending ? 'Reintentar finalización' : (match.atDelivery() ? 'Marcar actividad como hecha' : 'Confirmar encuentro y actividad')}"></button>
-      </form>
-      <p class="am-confirm-count" th:text="${(match.atDelivery() ? 'Marcadas: ' : 'Confirmaciones: ') + ((match.confirmed ? 1 : 0) + (match.otherConfirmed ? 1 : 0)) + ' de 2'}"></p>
-      <p class="am-points-note"><span th:text="${match.staffReview() ? '+' + match.rewardPoints + ' puntos para cada persona cuando el personal apruebe la actividad y ambos confirmen.' : (match.atDelivery() ? '+' + match.rewardPoints + ' puntos para cada persona cuando ambos la marquen. Al recoger el premio mostrarán la evidencia.' : '+' + match.rewardPoints + ' puntos para cada persona al finalizar la confirmación de ambos.')}"></span></p>
-    </section>
-  </div>
+        <a class="am-aux" data-verify-close th:href="@{/matches/{id}(id=${match.id})} + '#am-step'">Volver</a>
+      </div>
+      <!-- My code: rendered only on request and only while the other person still has to scan it. -->
+      <div th:if="${verifyView == 'mine' and myCredential != null}" id="am-mine" class="am-panel am-mine" data-verify-panel="mine">
+        <h3 id="am-mine-title" tabindex="-1" th:text="${'Tu QR para ' + match.otherAlias}"></h3>
+        <img data-private-credential class="credential-qr" th:src="@{/matches/{id}/my-code.png(id=${match.id})}" th:alt="${'Tu QR personal. ' + match.otherAlias + ' lo escanea desde su celular.'}">
+        <p class="am-manual">Si no puede escanearlo: <code data-private-credential th:text="${myCredential.manual}"></code></p>
+        <p class="am-foot">Válido 10 minutos y solo para este encuentro. No lo publiques.</p>
+        <a th:if="${p.sub() == 'both'}" class="btn btn-outline-primary am-main-action" data-verify-open="scan" th:href="@{/matches/{id}(id=${match.id},view='theirs')} + '#am-step'">Ahora escanea su QR</a>
+        <div class="am-row"><form method="post" th:action="@{/matches/{id}/code(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="requestKey" th:value="${credentialRequestKey}"><input type="hidden" name="renew" value="true"><button class="btn btn-link am-aux">Renovar mi código</button></form>
+          <a class="am-aux" th:href="@{/matches/{id}(id=${match.id})} + '#am-step'">Ocultar mi QR</a></div>
+      </div>
+      <p class="am-foot" th:if="${!#strings.isEmpty(match.word)}"><span th:text="${'Punto: ' + match.meetingPoint + ' · Palabra: '}"></span><strong th:text="${match.word}"></strong><span> · La palabra no sustituye el código.</span></p>
+    </th:block>
+
+    <!-- Actividad: only once every arrival and verification this encounter requires is recorded -->
+    <th:block th:if="${p.is('activity')}">
+      <h2 id="am-step-title" tabindex="-1" th:text="${#strings.isEmpty(match.activityTitle) ? 'Hagan algo juntos' : match.activityTitle}"></h2>
+      <p class="am-reward" th:text="${match.rewardPoints == 0 ? 'Sin puntos' : '+' + match.rewardPoints + ' puntos por persona al completarla'}"></p>
+      <div class="am-block" th:if="${p.lead() != null}"><h3>Qué hacer</h3><p class="mission-activity-text" th:text="${p.lead()}"></p>
+        <details th:if="${p.moreInstructions() != null}" class="am-more"><summary>Ver instrucciones completas</summary><p th:text="${p.moreInstructions()}"></p></details></div>
+      <div class="am-block" th:if="${match.staffReview()}"><h3>Cómo se comprueba</h3>
+        <p th:with="raw=${#strings.isEmpty(match.checkInstructions) ? '' : #strings.trim(match.checkInstructions)},ci=${#strings.endsWith(raw,'.') ? #strings.substring(raw,0,#strings.length(raw)-1) : raw}"><strong th:text="${match.activityCheck.label + '.'}"></strong> <span th:text="${match.staffReview() ? 'El personal del evento revisa lo que envíen' + (#strings.isEmpty(ci) ? '' : ': ' + ci) + '. Además, ambos confirman.' : 'Ambos la marcan como hecha y los puntos llegan entonces. Se comprueba en persona al recoger un premio.'}"></span></p></div>
+      <div class="am-block" th:if="${match.atDelivery()}"><h3>Qué mostrar al recoger el premio</h3>
+        <p th:with="ci=${#strings.isEmpty(match.checkInstructions) ? 'La evidencia de la actividad' : #strings.trim(match.checkInstructions)}"><strong th:text="${match.activityCheck.label + ':'}"></strong> <span th:text="${(#strings.endsWith(ci,'.') ? ci : ci + '.') + ' Desde su celular; PING no la pide ni la guarda.'}"></span></p></div>
+      <div class="am-action" role="group" aria-labelledby="am-action-title" th:attr="data-waiting=${p.waiting()}">
+        <h3 id="am-action-title" th:classappend="${p.sub() == 'confirm' or p.sub() == 'mark'} ? 'visually-hidden'" th:text="${p.title()}"></h3>
+        <p class="am-detail" th:text="${p.detail()}" th:attr="role=${p.waiting() ? 'status' : null}"></p>
+        <th:block th:if="${match.staffReview()}">
+          <div class="ping-notice" th:if="${review != null and review.status().name() == 'CHANGES'}" role="alert"><strong>Corrección pedida:</strong> <span th:text="${review.comment()}"></span></div>
+          <p class="ping-notice" th:if="${reviewError}" th:text="${reviewError}" role="alert"></p>
+          <p class="am-foot" th:if="${review != null and review.status().name() != 'CHANGES'}" th:text="${review.status().label + ' · Enviado por ' + (review.submittedBy() == participant.id ? 'ti' : match.otherAlias) + ' · ' + #temporals.format(review.submittedAt(),'HH:mm','America/Bogota')}"></p>
+          <th:block th:if="${p.sub() == 'submit' or p.sub() == 'fix'}"><form th:replace="~{demo/active-mission :: reviewForm}"></form></th:block>
+          <details th:if="${review != null and review.status().name() == 'PENDING'}" class="am-more"><summary>Ver o corregir lo enviado</summary>
+            <form th:replace="~{demo/active-mission :: reviewForm}"></form></details>
+        </th:block>
+        <ul class="am-checks" th:if="${match.confirmed or match.otherConfirmed}" aria-label="Confirmaciones">
+          <li th:attr="data-done=${match.confirmed}"><svg th:replace="~{fragments/layout :: icon(${match.confirmed ? 'check' : 'clock'})}"></svg><span th:text="${'Tú · ' + (match.confirmed ? (match.atDelivery() ? 'marcada' : 'confirmado') : (match.atDelivery() ? 'por marcar' : 'por confirmar'))}"></span></li>
+          <li th:attr="data-done=${match.otherConfirmed}"><svg th:replace="~{fragments/layout :: icon(${match.otherConfirmed ? 'check' : 'clock'})}"></svg><span th:text="${match.otherAlias + ' · ' + (match.otherConfirmed ? (match.atDelivery() ? 'marcada' : 'confirmado') : (match.atDelivery() ? 'por marcar' : 'por confirmar'))}"></span></li>
+        </ul>
+        <form th:if="${p.sub() == 'confirm' or p.sub() == 'mark' or p.sub() == 'retry'}" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-primary am-main-action" th:text="${p.sub() == 'retry' ? 'Reintentar finalización' : (p.sub() == 'mark' ? 'Marcar como hecha' : 'Confirmar actividad')}"></button></form>
+        <!-- Staff review: confirming before the task is sent stays possible (existing rule); it is secondary. -->
+        <form th:if="${(p.sub() == 'submit' or p.sub() == 'fix') and !match.confirmed}" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-link am-aux">Confirmar mi parte ahora</button></form>
+        <a th:if="${p.sub() == 'wait'}" class="am-aux" href="#connection-safety">¿Hay un problema? Ver opciones</a>
+      </div>
+      <!-- Legacy policy: the place is context, after the action. -->
+      <div class="am-where" th:if="${!policy2}"><div th:replace="~{demo/active-mission :: place}"></div>
+        <p class="am-foot" th:if="${!#strings.isEmpty(match.word)}"><span>Palabra de encuentro: </span><strong class="ping-word" th:text="${match.word}"></strong></p>
+        <div th:replace="~{experience/fragments :: recognition(${match.otherAlias})}"></div>
+        <p class="am-foot" th:if="${match.arrived and match.otherArrived}">Ambos llegaron.</p>
+        <form th:if="${!match.arrived}" method="post" th:action="@{/matches/{id}/arrive(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-arrive-action" class="btn btn-link am-aux">Ya llegué (opcional, no da puntos)</button></form></div>
+    </th:block>
+
+    <!-- Finalizando -->
+    <th:block th:if="${p.is('finishing')}">
+      <p class="am-kicker">Esperando</p>
+      <h2 id="am-step-title" tabindex="-1" th:text="${p.title()}"></h2>
+      <p class="am-detail" role="status" th:text="${p.detail()}"></p>
+      <form method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-outline-primary am-main-action">Reintentar finalización</button></form>
+      <p class="am-foot">Reintentar no duplica puntos.</p>
+    </th:block>
+  </section>
   <p class="am-demo-notice" th:if="${experience != null}">Simulación académica inspirada en SOFA · Sin vínculo oficial con el evento.</p>
 </section>
+
+<!-- Meeting place: name, croquis next to it, short directions inline and long ones on request. No invented point. -->
+<div th:fragment="place" class="am-place" th:with="zone=${match.floorplanId == null and experience != null ? experience.atPoint(match.meetingPoint) : null},dir=${match.meetingDirections}">
+  <svg th:replace="~{fragments/layout :: icon('pin')}"></svg>
+  <div><span>Punto de encuentro</span><strong th:text="${match.meetingPoint}"></strong>
+    <p th:if="${match.directionsLead() != null}" th:text="${match.directionsLead()}"></p>
+    <details th:if="${match.directionsMore() != null}" class="am-more"><summary>Ver indicaciones</summary><p th:text="${match.directionsMore()}"></p></details>
+    <p th:if="${#strings.isEmpty(dir) and zone == null and match.floorplanId == null}">Sin croquis. Busca el punto indicado o pregunta al personal del evento.</p></div>
+  <a th:if="${match.floorplanId != null}" class="am-croquis" th:href="@{/matches/{id}/plan(id=${match.id})}" th:text="${match.floorplanX != null ? 'Ver croquis' : 'Ver croquis · sin ubicar'}"></a>
+  <a th:if="${zone != null}" class="am-croquis" th:href="@{/events/{id}/map(id=${event.id},zone=${zone.id},matchId=${match.id})}">Ver croquis</a>
+</div>
+
+<form th:fragment="reviewForm" class="am-review-form" method="post" th:action="@{/matches/{id}/review(id=${match.id})}">
+  <input type="hidden" name="_csrf" th:value="${csrfToken}">
+  <label class="form-label" for="am-review-response" th:text="${#strings.isEmpty(match.responsePrompt) ? 'Nota para el personal (opcional)' : match.responsePrompt}"></label>
+  <textarea class="form-control" id="am-review-response" name="response" maxlength="1000" rows="3" th:required="${!#strings.isEmpty(match.responsePrompt)}" th:text="${reviewDraft != null ? reviewDraft : (review != null ? review.response() : '')}"></textarea>
+  <button id="am-review-action" class="btn am-main-action" th:classappend="${review != null and review.status().name() == 'PENDING'} ? 'btn-outline-primary' : 'btn-primary'" th:text="${review == null ? 'Enviar a revisión' : (review.status().name() == 'CHANGES' ? 'Reenviar corregida' : 'Actualizar envío')}"></button>
+</form>
+
+<!-- DEC-070: affinity summary. At most three chips; the rest on request, without moving the main action. -->
+<div th:fragment="chips(topics)" class="chip-list am-chips" th:unless="${#lists.isEmpty(topics)}"><span class="ping-chip" th:each="i,iter : ${topics}" th:if="${iter.index<3}" th:text="${#strings.trim(i)}"></span><details th:if="${topics.size()>3}" class="chip-more"><summary><span class="when-closed" th:text="${'Ver todos (' + topics.size() + ')'}"></span><span class="when-open">Ver menos</span></summary><span class="ping-chip" th:each="i,iter : ${topics}" th:if="${iter.index>=3}" th:text="${#strings.trim(i)}"></span></details></div>
 </body></html>

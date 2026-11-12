@@ -30,7 +30,7 @@ class FloorplanViewTests {
             String id=plans.upload(event,null,false,FloorplanTests.image("png",400,300));var noMarker=b.get("/events/"+event+"/plan");assertThat(noMarker.body()).contains(id,"El punto no está ubicado","Indicaciones originales");
             assertThat(b.get("/events/"+event+"/plan?pointId=999999").statusCode()).isEqualTo(404);
             long a=person("Sin marcador"),other=person("Conexión sin marcador"),match=matching.search(a);matches.accept(match,a);matches.accept(match,other);enter(b,a);
-            assertThat(b.get("/matches/"+match).body()).contains("Ver plano · Punto sin ubicar");assertThat(b.get("/matches/"+match+"/plan").body()).contains("El punto no está ubicado","Indicaciones originales");
+            assertThat(b.get("/matches/"+match).body()).contains("Ver croquis · sin ubicar");assertThat(b.get("/matches/"+match+"/plan").body()).contains("El punto no está ubicado","Indicaciones originales");
         }
     }
     @Test void previewWorksWithAnImageAndNoMeetingPoints()throws Exception{

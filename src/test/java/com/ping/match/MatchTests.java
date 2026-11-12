@@ -216,11 +216,11 @@ class MatchTests {
             samuel.post(path + "/arrive", Map.of()); julian.post(path + "/arrive", Map.of());
             var firstConfirmation = java.net.URI.create(samuel.post(path + "/confirm", Map.of()).headers().firstValue("Location").orElseThrow());
             assertThat(firstConfirmation.getPath()).isEqualTo(path);
-            assertThat(firstConfirmation.getFragment()).isEqualTo("am-confirm-title");
+            assertThat(firstConfirmation.getFragment()).isEqualTo("am-step");
             assertThat(julian.get(path).body()).contains("ACTIVE");
             var finalConfirmation = java.net.URI.create(julian.post(path + "/confirm", Map.of()).headers().firstValue("Location").orElseThrow());
             assertThat(finalConfirmation.getPath()).isEqualTo(path);
-            assertThat(finalConfirmation.getFragment()).isEqualTo("am-confirm-title");
+            assertThat(finalConfirmation.getFragment()).isEqualTo("am-step");
             samuel.post(path + "/confirm", Map.of());
             assertThat(samuel.get(path).body()).contains("COMPLETED", "+10", "Omitir");
             assertThat(samuel.post(path + "/feedback", Map.of("rating", "INVALID")).statusCode()).isEqualTo(409);

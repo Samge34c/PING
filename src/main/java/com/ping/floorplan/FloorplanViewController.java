@@ -60,7 +60,9 @@ public class FloorplanViewController {
         model.addAttribute("pointName",match.meetingPoint());model.addAttribute("directions",match.meetingDirections()==null||match.meetingDirections().isBlank()?"Busca el punto público indicado. Si no lo identificas, consulta al organizador.":match.meetingDirections());
         model.addAttribute("fpX",match.floorplanX());model.addAttribute("fpY",match.floorplanY());model.addAttribute("fpLabel","1 · Tu punto de encuentro");
         model.addAttribute("backUrl","/matches/"+match.id());model.addAttribute("backLabel","Volver al encuentro");
-        model.addAttribute("activityGuide",encounters.guide(event,match,policy.version()));
+        // DEC-070: the croquis of an encounter is a place to go. Before arrivals and verifications are complete it shows no
+        // activity (neither the assigned one nor its reward); afterwards it keeps the guide as before.
+        model.addAttribute("activityGuide",match.canConfirm()?encounters.guide(event,match,policy.version()):null);
         return "floorplan/participant";
     }
 }

@@ -682,3 +682,17 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - La pantalla del encuentro por pasos de la rama local. La publicada ya tiene «Ahora · paso N de 4» con los códigos personales. La afirmación local «no existe código de verificación del encuentro» era cierta solo en `8c94cd7`: la verificación personal llegó en `bd92bf4` (V21), después de esa base.
 
 **Detalle y evidencia:** [handoffs/INTEGRACION_REDISENO_RENDER.md](handoffs/INTEGRACION_REDISENO_RENDER.md).
+
+## DEC-070 — Conectar como recorrido por estados reales: una tarjeta operativa por paso (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Samuel y Julián.** Encargo explícito de Samuel del 12 de noviembre de 2026 (sesión de Claude Code): reconstruir Conectar → propuesta → encuentro activo → resultado. No se atribuye aprobación a Julián. Rama local `feature/connect-state-cards` desde `8d3e18f` (DEC-069, sobre `00483fa`); sin push, merge ni despliegue. `8d3e18f` es la base de código, no una afirmación sobre lo desplegado.
+
+**Decisiones:**
+- **Una tarjeta operativa por pantalla.** El encuentro activo deja de imprimir en pila llegada, códigos, actividad, revisión y confirmación. El servidor decide el paso desde la perspectiva de cada participante (`EncounterProgress`: fase, subestado y acción) y la plantilla solo renderiza esa tarjeta. El contenido de pasos futuros no está en la respuesta: ni oculto con CSS, ni en acordeones, ni en pestañas.
+- **Fases (política 2):** Llegar (falta alguna llegada) → Verificar (falta alguna verificación) → Actividad (llegadas y verificaciones completas, según `MatchView.canConfirm()`, la misma condición que ya valida `Match.confirm`) → Finalizando/Resultado (lo decide la Saga). El nombre, las instrucciones y los puntos de la actividad solo aparecen en Actividad, y el croquis del encuentro tampoco los muestra antes.
+- **Verificar** distingue «Escanear su QR», «Mostrar mi QR» y «Escribir su código» como vistas de la misma tarjeta, con la acción principal según quién falta. La cámara solo se abre al pedirla. El QR propio se genera con el mecanismo existente, solo a petición.
+- **Política 1 (encuentros anteriores):** no se añaden llegada ni códigos. La tarjeta es Actividad desde el inicio, con el lugar como contexto. La llegada informativa sigue disponible como opción secundaria.
+- **Conectar y propuesta:** como máximo tres chips de afinidad, con «Ver todos (N)». Si no hay afinidad, una frase. La acción principal no se desplaza.
+- **Sin cambios** de reglas de negocio, puntos, Saga, permisos, migraciones ni del algoritmo de búsqueda. `live.js` sigue recargando por firma. Si el paso cambia mientras la cámara está abierta o hay un código escrito, cierra la cámara y descarta el código (es privado) en lugar de conservar un borrador que ya no vale.
+
+**Detalle y evidencia:** [handoffs/CONECTAR_TARJETA_POR_ESTADO.md](handoffs/CONECTAR_TARJETA_POR_ESTADO.md).

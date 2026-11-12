@@ -101,7 +101,7 @@ class EncounterConfigurationTests {
         try(var self=new TestBrowser(port);var other=new TestBrowser(port);var anonymous=new TestBrowser(port)) {
             self.get("/demo");self.post("/demo",Map.of("participantId",""+a));other.get("/demo");other.post("/demo",Map.of("participantId",""+outsider));
             String path="/matches/"+id; var page=self.get(path);
-            assertThat(page.body()).contains("Ya llegué", "Confirmar encuentro y actividad");
+            assertThat(page.body()).contains("Ya llegué", "Confirmar actividad");
             assertThat(anonymous.post(path+"/arrive",Map.of()).statusCode()).isEqualTo(403);
             assertThat(other.post(path+"/arrive",Map.of("participantId",""+a)).statusCode()).isEqualTo(404);
             assertThat(self.get(path+"/arrive").statusCode()).isEqualTo(405);
@@ -110,7 +110,7 @@ class EncounterConfigurationTests {
             assertThat(matches.get(id,b).arrived()).isFalse();
             assertThat(self.get("/me/state").body()).isNotEqualTo(initial).doesNotContain(matches.get(id,a).word(),matches.get(id,a).meetingPoint(),matches.get(id,a).activity());
             self.post(path+"/arrive",Map.of()); assertThat(people.get(a).points()).isZero();
-            matches.arrive(id,b); assertThat(self.get(path).body()).contains("Ambos llegaron","Confirmar encuentro y actividad");
+            matches.arrive(id,b); assertThat(self.get(path).body()).contains("Ambos llegaron","Confirmar actividad");
             matches.cancel(id,a); assertThatThrownBy(()->matches.arrive(id,a)).isInstanceOf(BusinessRuleException.class);
         }
     }
