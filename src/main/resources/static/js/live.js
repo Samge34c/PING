@@ -30,7 +30,11 @@
   // so check every ~1.5 s (with jitter so screens do not synchronise). Elsewhere, and after a failed check, keep 5 s.
   const FAST_MS = 1500, SLOW_MS = 5000;
   const waitingStatus = status => status === 'OFFERED' || status === 'ACTIVE';
-  let waiting = waitingStatus(root.dataset.livePhase), failed = false;
+  // Experiment (proposal discovery): on Conectar, while the server says this person is available in an open event and has no
+  // proposal yet, check at the fast rhythm too — but only for the first 3 minutes after the page loaded, then back to 5 s.
+  const SEARCH_WINDOW_MS = 3 * 60 * 1000, loadedAt = Date.now();
+  const searching = () => root.dataset.liveSearching === 'true' && Date.now() - loadedAt < SEARCH_WINDOW_MS;
+  let waiting = waitingStatus(root.dataset.livePhase) || searching(), failed = false;
   const schedule = () => {
     clearTimeout(timer);
     const delay = (waiting && !failed) ? Math.round(FAST_MS * (0.85 + Math.random() * 0.3)) : SLOW_MS;
@@ -108,7 +112,7 @@
       const response = await fetch(root.dataset.stateUrl, {credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'},signal:controller.signal});
       if (response.status === 401) { sessionLost(); return; }
       if (!response.ok) throw new Error('state unavailable');
-      const state = await response.json(); failed = false; waiting = waitingStatus(state.matchStatus);
+      const state = await response.json(); failed = false; waiting = waitingStatus(state.matchStatus) || (state.matchStatus === 'NONE' && searching());
       if (submitting || document.visibilityState !== 'visible') return;
       if (state.matchStatus !== 'ACTIVE') withdrawHint();
       else if (state.recognitionRevision !== lastRevision) await refreshHint(controller.signal);

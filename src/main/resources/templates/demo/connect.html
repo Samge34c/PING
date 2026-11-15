@@ -1,5 +1,5 @@
 <!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Conectar')}"></head><body class="connect-page"><nav th:replace="~{fragments/layout :: nav}"></nav>
-<main id="main-content" class="container cn-page" th:attr="data-ping-live=${liveSignature},data-state-url=@{/me/state}"><div th:replace="~{fragments/layout :: message}"></div>
+<main id="main-content" class="container cn-page" th:attr="data-ping-live=${liveSignature},data-state-url=@{/me/state},data-live-searching=${participant.available and event.status.name() == 'OPEN'}"><div th:replace="~{fragments/layout :: message}"></div>
 <header class="cn-heading"><p class="eyebrow" th:text="${participant.eventName}"></p><h1>Conectar</h1><p th:text="${participant.alias}"></p></header>
 <section class="mp-next" aria-labelledby="next-step">  <div>
     <span class="mp-state"><svg th:replace="~{fragments/layout :: icon('waves')}"></svg><span th:text="${participant.available ? 'Disponible para conectar' : 'No disponible'}"></span></span>
