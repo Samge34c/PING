@@ -26,9 +26,15 @@
       });
     } catch (_) { /* Storage unavailable: native navigation remains usable. */ }
   });
+  // F3: while a proposal or encounter is open (server status OFFERED/ACTIVE) the other person can act at any moment,
+  // so check every ~1.5 s (with jitter so screens do not synchronise). Elsewhere, and after a failed check, keep 5 s.
+  const FAST_MS = 1500, SLOW_MS = 5000;
+  const waitingStatus = status => status === 'OFFERED' || status === 'ACTIVE';
+  let waiting = waitingStatus(root.dataset.livePhase), failed = false;
   const schedule = () => {
     clearTimeout(timer);
-    if (!stopped && !submitting && document.visibilityState === 'visible') timer = setTimeout(check, 5000);
+    const delay = (waiting && !failed) ? Math.round(FAST_MS * (0.85 + Math.random() * 0.3)) : SLOW_MS;
+    if (!stopped && !submitting && document.visibilityState === 'visible') timer = setTimeout(check, delay);
   };
   const hintBusy = () => window.PingHintEditor?.isDirty() || window.PingHintEditor?.isSaving();
   const editorBusy = () => hintBusy() || !!root.querySelector('[data-credential-dirty="true"],[data-scanner-running="true"]');
@@ -102,7 +108,8 @@
       const response = await fetch(root.dataset.stateUrl, {credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'},signal:controller.signal});
       if (response.status === 401) { sessionLost(); return; }
       if (!response.ok) throw new Error('state unavailable');
-      const state = await response.json(); if (submitting || document.visibilityState !== 'visible') return;
+      const state = await response.json(); failed = false; waiting = waitingStatus(state.matchStatus);
+      if (submitting || document.visibilityState !== 'visible') return;
       if (state.matchStatus !== 'ACTIVE') withdrawHint();
       else if (state.recognitionRevision !== lastRevision) await refreshHint(controller.signal);
       if (stopped) return;
@@ -116,6 +123,7 @@
         if (normalMessage && message) message.replaceChildren(...[...normalMessage.childNodes].map(node => node.cloneNode(true)));
       }
     } catch (_) {
+      failed = true;
       if (!submitting && !stopped && document.visibilityState === 'visible') banner({ tone: 'wait', title: 'Sin conexión',
         text: 'Mostramos el último estado y seguimos intentando. Lo que escribiste en esta pantalla se conserva.',
         action: { label: 'Reintentar ahora', run: () => { clearTimeout(timer); check(); } } });

@@ -9,7 +9,7 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
 | F0 Diagnóstico | Hecho | — (solo lectura) |
 | F1 Base de datos y alojamiento | Respaldo V26 **verificado**; cambio a Aiven Developer **pendiente (G2)** | — |
 | F2 Gustos compactos en Mi Ping | Aprobada por Samuel; commit local | `feature/cierre-gustos` desde `f5b5a9a` |
-| F3 Latencia A→B | En curso, en local | `feature/cierre-latencia` desde F2 |
+| F3 Latencia A→B | Aprobada por Samuel; commit local (contiene F2) | `feature/cierre-latencia` desde `6d4fcd1` |
 | F4–F7 | Sin empezar | — |
 
 ## F0 · Diagnóstico
@@ -51,3 +51,34 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
 - **Límite conocido:** al desplegar, «Ver menos» queda entre los 4 primeros y el resto, igual que en Conectar. Se mantiene por coherencia; cambiarlo afectaría a ambas pantallas.
 - **Nota de prueba:** tras 10 inicios de sesión en 30 min, el límite de PING bloqueó el siguiente. Es el comportamiento correcto. Solo en la base de prueba aislada se vaciaron las filas de `auth_throttle` para seguir.
 - **Estado:** Samuel aprobó F2 el 15 nov 2026 y autorizó un único commit local en `feature/cierre-gustos`. Sin push, PR, merge ni despliegue. DEC-071 sigue «propuesta» hasta que conste la aceptación de Julián.
+
+## F3 · Latencia: cuánto tarda la otra sesión en enterarse de «aceptar» (DEC-072)
+- **Rama:** `feature/cierre-latencia` desde `6d4fcd1` (F2). Sin commit.
+- **Causa medida** (14 nov, n=35 en todas las transiciones): casi todo el tiempo era la espera de la siguiente consulta de `live.js` (5 s después de cada respuesta). `/me/state` cuesta ~6 ms en el servidor (p95 8 ms, 68 bytes) y la recarga suma 0,1–0,3 s.
+- **Cambio:** solo `static/js/live.js`. Consulta cada ~1,5 s (±15 %) mientras el servidor indica `OFFERED` o `ACTIVE`, y cada 5 s en el resto y tras un error. Todo lo demás de `live.js` queda igual.
+- **Medición LOCAL, no de producción:** PING y una MySQL aislada en 127.0.0.1 en el PC de Samuel, con datos ficticios y dos sesiones Playwright en el mismo equipo. Sin red real, sin Render y sin teléfonos. Mismo arnés y misma base, 30 muestras por condición. La otra sesión, con la pantalla abierta, se considera enterada cuando termina la recarga que hace `live.js`.
+
+| | Antes (5 s) | Después (~1,5 s con encuentro abierto) |
+|---|---|---|
+| Mediana | 1,92 s | **0,82 s** |
+| Media | 2,21 s | 0,75 s |
+| p90 | 4,07 s | 1,28 s |
+| Máximo | 4,88 s | **1,46 s** |
+| Muestras por encima de 2 s | 15/30 | 0/30 |
+| Respuesta propia del que acepta (mediana) | 94 ms | 101 ms |
+
+- **Comportamiento comprobado:**
+  - Sin encuentro: una consulta cada 5,01 s.
+  - Con propuesta (`OFFERED`): una cada 1,55 s (de 1,31 a 1,68 s).
+  - Con la red cortada (consulta abortada): vuelve a 5 s y muestra «Sin conexión».
+  - Al reconectar: vuelve a 1,56 s y desaparece el aviso.
+  - Nunca hay más de una consulta en curso.
+  - La pausa en pestaña oculta y la sesión perdida (401) usan el mismo código de antes, sin cambios.
+- **Pruebas focalizadas:** `MatchLiveStateTests`, `VerificationTests`, `ConnectReadWorkTests`, `EncounterProgressTests`, `FrontendBundleTests` y `PublicResourceTests` → **32 pruebas, 0 fallos**.
+- **Carga estimada (no medida en Render):** solo consultan rápido las pantallas con un encuentro abierto. Ejemplo: 40 personas en 20 encuentros ≈ 27 consultas/s, frente a ≈ 8 consultas/s con 5 s. En local cada una cuesta ~6 ms; en Render Free (0,1 CPU, pool de 4) no está medido. Para la demo con dos teléfonos el impacto es despreciable. Antes de un evento con mucha gente, medir en Render (G3) o limitar el ritmo rápido a los pasos de espera.
+- **Lo que esto no resuelve:**
+  - El arranque en frío de Render Free (193 s) es una decisión de F1.
+  - La red real añadirá ~0,4–0,8 s por consulta y recarga; en Render caliente se estima una mediana de unos 1,5–2 s. Es una estimación; medirlo requiere G3.
+- **F2 y F3 juntas:** `git merge-base --is-ancestor 6d4fcd1 feature/cierre-latencia` → sí, así que la rama candidata contiene las dos mejoras. Las pruebas focalizadas de ambas sobre el mismo árbol dan **90 pruebas, 0 fallos** (incluida `DemoImprovementTests`, 14). El JAR usado para medir F3 se construyó desde ese árbol. La suite completa sigue pendiente para el candidato de F7.
+- **Estado:** Samuel aprobó F3 el 15 nov 2026 y autorizó un commit local. Sin push, PR, merge ni despliegue. DEC-072 sigue «propuesta» hasta que conste la aceptación de Julián.
+- **Evidencia privada:** `PING-evidencia\cierre-final\F3\` (`antes-aceptar.json`, `despues-aceptar.json`, `arnes-aceptar.js`, `limpiar-cancelados.sql` y logs). Para repetir parejas, la limpieza borra solo encuentros cancelados de la base de prueba aislada.

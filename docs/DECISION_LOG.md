@@ -709,3 +709,14 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - Solo cambia la presentación. No cambian el editor de gustos, el matching, los datos, las rutas, las reglas ni la acción principal de Mi Ping.
 
 **Detalle y continuidad:** [handoffs/CIERRE_FINAL_PING.md](handoffs/CIERRE_FINAL_PING.md).
+
+## DEC-072 — Consulta del estado más frecuente solo con un encuentro abierto (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Samuel y Julián.** Encargo de Samuel del 15 de noviembre de 2026 (fase F3 del cierre final): medir cuánto tarda la segunda sesión en enterarse de que la primera aceptó y reducirlo. No se atribuye aprobación a Julián. Rama local `feature/cierre-latencia` desde `6d4fcd1`; sin commit, push, merge ni despliegue.
+
+**Decisiones:**
+- `live.js` consulta `/me/state` cada ~1,5 s (±15 % de variación aleatoria) **solo** mientras el estado del servidor es `OFFERED` o `ACTIVE`, al cargar con `data-live-phase` o tras cada respuesta. En el resto sigue en 5 s, y tras un fallo vuelve a 5 s hasta la siguiente respuesta correcta.
+- Sin cambios en Java, datos, rutas, firma del estado, recarga, pausa en pestaña oculta, guarda contra consultas solapadas ni manejo de sesión perdida.
+- No hay SSE, WebSocket ni colas. La recarga completa se conserva: la medición muestra que la espera de la consulta dominaba y que la recarga suma solo 0,1–0,3 s.
+
+**Evidencia — MEDICIÓN LOCAL** (PING y MySQL aislada en 127.0.0.1, sin red real; no se midió en Render ni con teléfonos; 30 muestras de «aceptar» por condición, mismo arnés): mediana 1,92 s → 0,82 s; máximo 4,88 s → 1,46 s. Detalle, carga estimada y límites en [handoffs/CIERRE_FINAL_PING.md](handoffs/CIERRE_FINAL_PING.md).
