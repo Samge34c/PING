@@ -79,6 +79,20 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
 - **Lo que esto no resuelve:**
   - El arranque en frío de Render Free (193 s) es una decisión de F1.
   - La red real añadirá ~0,4–0,8 s por consulta y recarga; en Render caliente se estima una mediana de unos 1,5–2 s. Es una estimación; medirlo requiere G3.
+- **Cierre de F3** (15 nov, MEDICIÓN LOCAL con el mismo método; «antes» = F0 sobre `f5b5a9a`):
+
+| Transición | Antes: mediana / máx (n) | Después: mediana / p90 / máx (n) |
+|---|---|---|
+| Aceptar | 1,92 s / 4,88 s (30) | 0,82 s / 1,28 s / 1,46 s (30) |
+| Llegada | 2,27 s / 4,69 s (10) | **0,59 s** / 1,06 s / 1,32 s (20) |
+| Verificar (código manual) | 3,00 s / 4,73 s (10) | **0,56 s** / 1,40 s / 1,59 s (20) |
+
+- **Regresiones comprobadas con Playwright:**
+  - Pestaña oculta: 0 consultas en 8 s; al volver, la primera sale en 3 ms.
+  - Atrás (de Mi Ping al encuentro): sigue a ritmo rápido.
+  - Sesión perdida (cookies borradas): aviso «Tu sesión ya no está disponible», 3 botones desactivados y 0 consultas después.
+  - Ya comprobados antes: red cortada (vuelve a 5 s, «Sin conexión») y reconexión.
+- **Evidencia:** `F3\despues-llegada-verificar.json` y `.playwright-mcp/arnes-llegada-verificar.js` (ignorado por Git).
 - **F2 y F3 juntas:** `git merge-base --is-ancestor 6d4fcd1 feature/cierre-latencia` → sí, así que la rama candidata contiene las dos mejoras. Las pruebas focalizadas de ambas sobre el mismo árbol dan **90 pruebas, 0 fallos** (incluida `DemoImprovementTests`, 14). El JAR usado para medir F3 se construyó desde ese árbol. La suite completa sigue pendiente para el candidato de F7.
 - **Estado:** Samuel aprobó F3 el 15 nov 2026 y autorizó un commit local. Sin push, PR, merge ni despliegue. DEC-072 sigue «propuesta» hasta que conste la aceptación de Julián.
 - **Evidencia privada:** `PING-evidencia\cierre-final\F3\` (`antes-aceptar.json`, `despues-aceptar.json`, `arnes-aceptar.js`, `limpiar-cancelados.sql` y logs). Para repetir parejas, la limpieza borra solo encuentros cancelados de la base de prueba aislada.
