@@ -737,3 +737,18 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
   - Con un binario anterior, un encuentro de política 3 con una sola lectura vuelve al flujo de dos lecturas: la otra persona escanea y continúa. No hay que modificar datos.
 
 **Detalle y evidencia:** [handoffs/CIERRE_FINAL_PING.md](handoffs/CIERRE_FINAL_PING.md).
+
+## DEC-074 — La propuesta llega antes a quien espera en Conectar (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Samuel y Julián.** Encargo de Samuel del 15 de noviembre de 2026 (sesión de Claude Code): investigar una sola mejora adicional, medible, sin subir la frecuencia para todos ni cambiar el emparejamiento. No se atribuye aprobación a Julián. Rama local `feature/cierre-propuesta-rapida` (commit de código `e9f8e06`); sin push, merge ni despliegue.
+
+**Decisión:**
+- Conectar marca `data-live-searching` solo cuando el servidor sabe que la persona está **disponible**, en un evento **abierto** y **sin propuesta**.
+- En ese caso `live.js` consulta a ~1,5 s **solo durante los primeros 3 minutos** tras cargar la página. Después vuelve a 5 s.
+- Sin cambios en Java, datos, reglas de emparejamiento ni el resto de pantallas.
+
+**Evidencia — MEDICIÓN LOCAL** (127.0.0.1, datos ficticios, 18 propuestas por condición; desde la respuesta de «Buscar conexión» de A hasta que B ve la propuesta):
+- Mediana 2,76 s → 0,87 s; p90 4,88 s → 1,80 s; máximo 4,99 s → 3,01 s.
+- Coste: 0,20 → 0,63 consultas/s por pantalla de Conectar en espera, solo esos 3 minutos.
+- Comprobado: sin disponibilidad sigue a 5 s; tras 3 minutos vuelve a 5 s.
+- Suite completa sobre `e9f8e06`: 409 pruebas, 0 fallos.

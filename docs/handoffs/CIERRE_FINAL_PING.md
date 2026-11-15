@@ -14,6 +14,9 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
 | F5 Organización | Sin cambio de código: el objetivo ya se cumplía (medido) | `feature/cierre-organizacion` (= `facfbf8`, sin commits propios) |
 | F6 Avatares | Commit local | `feature/cierre-avatares` desde `facfbf8` |
 | F7 Candidato | **`ce1c2a3` congelado y probado en local** (suite completa y recorrido integral) | `feature/cierre-candidato` |
+| F8 Ensayo y publicación (15 nov, tarde) | Arranque reproducible, ensayo listo, procedimiento de publicación y vuelta atrás; mejora de propuesta probada | `feature/cierre-ensayo`, `feature/cierre-propuesta-rapida` |
+
+> **Actualización 15 nov, tarde:** ver la sección **F8** al final. Candidato **recomendado**: la punta de `feature/cierre-propuesta-rapida` (código = `e9f8e06`). Alternativa estable: la punta de `feature/cierre-ensayo` (código = `ce1c2a3`).
 
 **Candidato local recomendado: `ce1c2a3f45275908a2ad390ed696a7fb8b3760c5`** (`feature/cierre-candidato`). Contiene F2, F3, F4 (política 3 **desactivada**: con la configuración por defecto se aplica la regla actual) y F6. Sin push, PR, merge ni despliegue.
 
@@ -204,3 +207,96 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
 - **G4 en producción:** activar la política 3 en Render (variable de entorno). Antes falta probar la cámara real en un teléfono sobre HTTPS.
 - **G5:** push, PR, merge y despliegue de `ce1c2a3`.
 - **Aceptación de Julián:** DEC-071, 072 y 073 (y 066–070) siguen como «propuesta».
+
+## F8 · Ensayo reproducible, publicación y vuelta atrás (15 nov 2026, tarde)
+
+### Punto de partida verificado
+- `ce1c2a3` es el SHA que pasó las 409 pruebas (`F7\suite-completa.exit.txt`: `exit=0 sha=ce1c2a3…`).
+- `git diff ce1c2a3 b1ea9fa` solo toca `docs/handoffs/CIERRE_FINAL_PING.md`.
+- Tras el reinicio del PC no quedaba ningún proceso del día anterior; solo seguía el MySQL84 del usuario en 3306, que no se tocó.
+
+### Arranque reproducible (sin PID ni temporales)
+- `tools/windows/Start-PingEnsayo.ps1`:
+  - Compila el commit actual, o reutiliza su JAR si ya está compilado.
+  - Crea o reutiliza su propia MySQL en 127.0.0.1:3322, dentro de `%LOCALAPPDATA%\PING\ensayo`.
+  - Arranca PING con `-Policy 2` (por defecto) o `3`. Con `-Lan` escucha en la red local.
+  - Prepara el escenario demo (Samuel, Julián, Ana y Carlos) y la recompensa «Snack ficticio de ensayo» (10 puntos), sin duplicarla.
+  - Muestra la URL y la contraseña ficticia (formato `ensayo-xxxx-xxxx`, fácil de escribir en un celular).
+  - `-Stop` y `-Reset` reconocen los procesos por su línea de comandos.
+- **Comprobado desde cero** (sin la carpeta `ensayo`): listo en 25 s.
+  - Funcionan `-Stop`, el arranque que reutiliza datos y JAR, `-Policy 3` y la vuelta a 2.
+  - `-Reset` funciona dos veces seguidas, incluso reiniciando sobre una instancia viva. Se corrigió una carrera: el puerto se cerraba antes de que mysqld soltara sus archivos.
+  - La IP de la red local (http://192.168.1.4:8095) responde 200 y el login funciona.
+- **Firewall:** existe una regla de entrada que permite `java.exe` (Adoptium, el mismo del PATH) en el perfil Público. No se tocó el firewall.
+- **HTTPS de confianza: NO disponible hoy.** El lanzador del repo (`INICIAR-PING.cmd`, `ping_tls.py`) tiene una CA local, pero el iPhone debe instalarla y confiar en ella una vez, y el lanzador usa su propia configuración de base de datos. Se deja como decisión del usuario. Sin HTTPS, la cámara del navegador no se abre: se usa «Escribir su código».
+
+### Ensayo LOCAL de transiciones adversas (Playwright, dos sesiones móviles, datos ficticios)
+Ejecutado sobre `b1ea9fa` (código = `ce1c2a3`) y repetido sobre `e9f8e06`, con el mismo resultado y **0 respuestas 5xx**:
+- **Doble toque en «Aceptar»:** una sola aceptación.
+- **Volver de segundo plano:** el cambio del otro aparece en **78 ms** (86 ms en `e9f8e06`).
+- **«Atrás» tras llegar:** muestra el paso real (Verificar), no un formulario viejo.
+- **Sin red:** aparece «Sin conexión» y desaparece al reconectar.
+- **Doble toque en «Verificar»:** una sola lectura.
+- **Doble toque en «Confirmar» en ambos:** +10 por persona una sola vez.
+- **Canje con el personal sobre `e9f8e06`:** 10 → 0 puntos y recibo «Entregado».
+- **Política 3 con el script (`-Policy 3`):** ambos ven «Verifiquen el encuentro». Un código manual abre Actividad en las dos pantallas (A se entera en 0,93 s). Verificar da 0 puntos; confirmar da 10 y 10.
+- La activación en Render usa la variable **`PING_JOURNEY_ENCOUNTERPOLICY`**. Prueba: con el valor 4, PING se niega a arrancar («ping.journey.encounter-policy must be 2 or 3»).
+
+### Mejora adicional investigada: propuesta en Conectar (DEC-074)
+- **Medición LOCAL**, 18 propuestas por condición. Mide desde la respuesta de «Buscar conexión» de A hasta que B, esperando en Conectar, ve la propuesta. La espera era el primer chequeo de B, 5 s después de cargar Conectar.
+
+| | `b1ea9fa` (código `ce1c2a3`) | `e9f8e06` |
+|---|---|---|
+| Mediana | 2,76 s | **0,87 s** |
+| p90 | 4,88 s | 1,80 s |
+| Máximo | 4,99 s | 3,01 s |
+| Muestras > 2 s | 12/18 | 1/18 |
+| Consultas/s de una pantalla en espera | 0,20 | 0,63 (solo 3 min) |
+
+- **Control del coste:**
+  - Solo acelera quien está disponible, en evento abierto y sin propuesta.
+  - Medido en tiempo real: 8 consultas en 12 s al entrar y 3 en 15 s tras los 3 minutos.
+  - Sin disponibilidad: 2 consultas en 12 s.
+  - Ejemplo: 30 personas esperando a la vez añaden ~13 consultas/s durante 3 minutos (~6 ms cada una en local; en Render no está medido).
+- **Suite completa sobre `e9f8e06`: 409 pruebas, 0 fallos** (`F8\suite-completa-e9f8e06.exit.txt`). Respecto a `ce1c2a3` solo cambian `live.js` y `connect.html`.
+
+### Recomendación
+- **Recomendado para publicar:** la punta de `feature/cierre-propuesta-rapida` (código = `e9f8e06`: F2, F3, F4 desactivada, F6 y DEC-074).
+- **Alternativa estable:** la punta de `feature/cierre-ensayo` (código = `ce1c2a3`), sin DEC-074.
+- Ninguna de las dos añade migraciones desde `f5b5a9a`: el esquema sigue en V26.
+
+### Cómo comprobar qué quedó en Render (sin cuentas ni escritura)
+Render → servicio → Events muestra el commit del despliegue. Comprobación independiente comparando el `live.js` servido con el blob del repo:
+
+    curl.exe -s -o "$env:TEMP\ping_live.js" https://ping-b63o.onrender.com/js/live.js
+    git hash-object --no-filters "$env:TEMP\ping_live.js"
+    #  3c6710a9…  = f5b5a9a (lo publicado hoy)
+    #  5f8faea4…  = código ce1c2a3 (alternativa estable)
+    #  792f8af5…  = código e9f8e06 (recomendado)
+
+### Vuelta atrás
+- **Escaneo único activado (política 3) y hay que desactivarlo:** quitar `PING_JOURNEY_ENCOUNTERPOLICY` o ponerla en `2`. Afecta solo a los encuentros **nuevos**. Los ya creados con política 3 siguen con su regla (una lectura) en este binario; está probado en `VerificationTests`.
+- **Volver de `e9f8e06` a `ce1c2a3`:** solo cambia el ritmo de consulta en Conectar. No toca datos.
+- **Volver al binario anterior `f5b5a9a`:** mismo esquema V26, así que no hay que migrar. Los encuentros de política 3 con una sola lectura vuelven al flujo de dos lecturas: quien estaba en Actividad vuelve a Verificar hasta que el otro escanee. Probado el 15 nov con el encuentro 49. No hay que tocar datos.
+
+### Tres decisiones separadas
+1. **Publicar el candidato con política 2** (sin `PING_JOURNEY_ENCOUNTERPOLICY`). Requiere push, merge y despliegue manual en Render (G5).
+2. **Activar el escaneo único** (`PING_JOURNEY_ENCOUNTERPOLICY=3`) **después** del ensayo físico con cámara sobre HTTPS de confianza.
+3. **Alojamiento y continuidad de Aiven:** paso a Developer antes del 21 dic (G2) y arranque en frío de Render Free. Es independiente de 1 y 2.
+
+Siguen pendientes la fecha de la exposición (G0) y la aceptación de Julián (DEC-066 a DEC-074).
+
+### Guion del ensayo con dos celulares (mismo Wi-Fi o red del PC, HTTP local)
+1. En el PC, PowerShell en la carpeta del repo:
+   `git switch feature/cierre-propuesta-rapida; .\tools\windows\Start-PingEnsayo.ps1 -Reset -Lan`
+   Copia la URL (`http://<IP>:8095`) y la contraseña que muestra.
+2. **Celular 1 y celular 2:** abre la URL → entra con `ensayo-admin@ping.test` y la contraseña → `/demo` → el celular 1 elige **Samuel** y el celular 2, **Julián**. En ambos: Conectar → «Activar disponibilidad».
+3. **Celular 1:** «Buscar conexión». **Celular 2:** debe ver la propuesta sola en ~1 s.
+4. Ambos: «Aceptar conexión» → «Ya llegué». Verificar: uno pulsa «Mostrar mi QR» y el otro «Escribir su código» con el código que ve. Luego al revés (política 2 = dos lecturas).
+5. Ambos: «Confirmar actividad» → +10 puntos cada uno.
+6. **Celular 1:** Beneficios → «Solicitar canje» del Snack (10) → «Abrir mi recibo» → «Generar código de este recibo».
+7. **PC** (http://127.0.0.1:8095, misma cuenta): Organización → «Entregar un canje» → escribe el código → «Consultar recibo» → «Confirmar entrega». El celular 1 debe mostrar «Entregado».
+8. **Prueba corta de política 3:** `.\tools\windows\Start-PingEnsayo.ps1 -Reset -Lan -Policy 3` y repite los pasos 2 a 4. Tras **un solo** código, ambos celulares pasan a «Hagan algo juntos» con 0 puntos hasta confirmar.
+9. **Para probar mientras:** bloquear y desbloquear el celular, activar el modo avión 10 s y desactivarlo, y pulsar «Atrás».
+10. **Cámara física: PENDIENTE.** Por HTTP el navegador no abre la cámara. Hace falta HTTPS de confianza (decisión del usuario).
+11. Terminar: `.\tools\windows\Start-PingEnsayo.ps1 -Stop`.
