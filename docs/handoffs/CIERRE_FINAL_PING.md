@@ -11,7 +11,13 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
 | F2 Gustos compactos en Mi Ping | Aprobada por Samuel; commit local | `feature/cierre-gustos` desde `f5b5a9a` |
 | F3 Latencia A→B | Aprobada por Samuel; commit local (contiene F2) | `feature/cierre-latencia` desde `6d4fcd1` |
 | F4 Un escaneo (política 3) | Implementada y probada en local; commit local; **desactivada por defecto** | `feature/cierre-un-escaneo` desde `d573fd8` |
-| F5–F7 | Ver sus secciones | — |
+| F5 Organización | Sin cambio de código: el objetivo ya se cumplía (medido) | `feature/cierre-organizacion` (= `facfbf8`, sin commits propios) |
+| F6 Avatares | Commit local | `feature/cierre-avatares` desde `facfbf8` |
+| F7 Candidato | **`ce1c2a3` congelado y probado en local** (suite completa y recorrido integral) | `feature/cierre-candidato` |
+
+**Candidato local recomendado: `ce1c2a3f45275908a2ad390ed696a7fb8b3760c5`** (`feature/cierre-candidato`). Contiene F2, F3, F4 (política 3 **desactivada**: con la configuración por defecto se aplica la regla actual) y F6. Sin push, PR, merge ni despliegue.
+
+**Fecha de la exposición: PENDIENTE (G0).** Sin ella no se aplicó la regla de corte de 72 h. Se siguió en local y el pulido quedó en ramas separadas.
 
 ## F0 · Diagnóstico
 - **Base:** `f5b5a9a`, igual a `origin/feature/connect-state-cards`.
@@ -160,3 +166,41 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
   - Sin desplazamiento horizontal.
 - **Pruebas:** `AvatarV3Tests`, `ParticipantEntryTests`, `EventEntryFlowTests`, `FrontendBundleTests` y `PublicResourceTests` → **54 pruebas, 0 fallos**.
 - **Evidencia:** `PING-evidencia\cierre-final\F6\`.
+
+## F7 · Candidato congelado y ensayo integral (LOCAL)
+- **SHA congelado:** `ce1c2a3f45275908a2ad390ed696a7fb8b3760c5`, rama `feature/cierre-candidato` (`f5b5a9a` → F2 `6d4fcd1` → F3 `2130b36`/`d573fd8` → F4 `facfbf8` → F6 `ce1c2a3`).
+- **Suite completa sobre ese SHA:** `.\mvnw.cmd -B clean verify` → **409 pruebas, 0 fallos, 0 errores, 0 omitidas, BUILD SUCCESS** (1 min 39 s, 15 nov 00:35–00:37). Son las 398 de la base más 11 nuevas. `SingleScanMySqlCheck` queda fuera de la suite a propósito: es manual y exige una MySQL exclusiva.
+- **JAR del candidato:** el que generó esa misma ejecución, SHA-256 `f57f41293dcff02a5f8878e2c07108c841ee33f368d9b6027629335d2e597666`.
+- **Recorrido integral LOCAL** (Playwright, tres sesiones aisladas con emulación móvil de 390 px: personal = administración general ficticia, A = Samuel #1, B = Ana #3; política por defecto 2):
+  1. El personal crea en Organización la recompensa «Snack ficticio de ensayo» (15 puntos).
+  2. A busca. B, que espera en Conectar, recibe la propuesta sola a los 5,2 s.
+  3. Ambos aceptan, llegan y se verifican con dos lecturas (código manual). Pasan a Actividad.
+  4. Ambos confirman a los 14,4 s del inicio. A pasa de 10 a 20 puntos y B de 0 a 10, una sola vez.
+  5. A solicita el canje: −15 una vez, saldo 5. Abre el recibo y genera su código.
+  6. El personal consulta el recibo con el código y confirma la entrega. El recibo de A muestra «Entregado · cobrados una vez».
+  7. Resultados muestra «Puntos entregados 40» (dos encuentros completados en el evento de prueba). El editor de avatar carga.
+- **Revisión de la captura móvil** (`F7\f7-390-completada.png`):
+  - ¿Se entiende? Sí: «Conexión completada», «+10 una sola vez», saldo y una acción principal.
+  - ¿Algo desplaza lo importante? No.
+  - ¿La navegación tapa contenido? No.
+  - ¿Identidad Festival Social? Sí.
+- **Límites del ensayo:**
+  - Es local: sin red real, sin Render y sin teléfonos.
+  - La cámara real no se probó. La entrada por código o QR del evento con alta nueva (`/join`) no se recorrió aquí; la cubren `EventEntryFlowTests` y `ParticipantEntryTests`, que están en la suite.
+  - La propuesta tarda hasta 5 s en verse porque F3 solo acelera la consulta con un encuentro ya abierto. Mejora posible y aparte: consultar rápido mientras la persona está disponible en Conectar.
+- **Evidencia:** `PING-evidencia\cierre-final\F7\` (log de la suite y capturas `f7-*`).
+
+## Cómo probar el candidato en local
+1. `git switch feature/cierre-candidato` (o `git checkout ce1c2a3`).
+2. `.\mvnw.cmd -B clean verify`: 409 pruebas y el JAR en `target\`.
+3. Arranca el JAR contra una MySQL local de prueba (nunca Aiven), con `SPRING_PROFILES_ACTIVE=mysql`, `DB_*` y `PING_DEMO_ENABLED=true`. Para probar F4, añade `--ping.journey.encounter-policy=3`; sin ese argumento se aplica la regla actual.
+4. Con dos navegadores (uno normal y otro de incógnito), entra como participantes demo y recorre Conectar → aceptar → llegar → verificar → actividad → confirmar → canje con el personal.
+
+## Pendiente para publicar (decisiones humanas)
+- **G0:** fecha de la exposición y teléfonos disponibles.
+- **G2:** paso de Aiven a Developer (US$5/mes) **antes del 21 dic 2026**. Procedimiento listo en `F1\PASO_A_DEVELOPER.md`.
+- **Render:** el arranque en frío de Free (193 s medidos) se resuelve con cómputo de pago (desde US$7/mes) o con el protocolo de calentamiento. Es decisión de Samuel.
+- **G3:** permiso para medir y ensayar en la demo publicada con cuentas ficticias (red real y teléfonos).
+- **G4 en producción:** activar la política 3 en Render (variable de entorno). Antes falta probar la cámara real en un teléfono sobre HTTPS.
+- **G5:** push, PR, merge y despliegue de `ce1c2a3`.
+- **Aceptación de Julián:** DEC-071, 072 y 073 (y 066–070) siguen como «propuesta».
