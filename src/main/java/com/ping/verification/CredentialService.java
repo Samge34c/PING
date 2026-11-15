@@ -34,7 +34,7 @@ public class CredentialService {
   return new Issued(id,key,purpose,context,issuer,manual,token,expiry);
  }
  @Transactional(isolation=Isolation.READ_COMMITTED)
- public Issued encounter(long match,long self,String key){var m=lockedMatch(match,self);if(m.getVerificationPolicy()<2||m.getStatus()!=MatchStatus.ACTIVE||!m.bothArrived()||m.verified(other(m,self)))throw new BusinessRuleException("Primero deben llegar ambos. Si la otra persona ya te verificó, no necesitas otro código.");throttle.check("issue-encounter",self+":"+match,10,10);return issue("ENCOUNTER",match,m.getEvent().getId(),self,other(m,self),key,10);}
+ public Issued encounter(long match,long self,String key){var m=lockedMatch(match,self);if(m.getVerificationPolicy()<2||m.getStatus()!=MatchStatus.ACTIVE||!m.bothArrived()||m.verified(other(m,self))||m.encounterVerified())throw new BusinessRuleException(m.getVerificationPolicy()>=3?"Primero deben llegar ambos. Si el encuentro ya está verificado, no necesitas otro código.":"Primero deben llegar ambos. Si la otra persona ya te verificó, no necesitas otro código.");throttle.check("issue-encounter",self+":"+match,10,10);return issue("ENCOUNTER",match,m.getEvent().getId(),self,other(m,self),key,10);}
  @Transactional(isolation=Isolation.READ_COMMITTED)
  public Issued redemption(long claim,long self,String key){var c=lockedClaim(claim);if(c.getParticipant().getId()!=self||c.getStatus()!=ClaimStatus.REQUESTED)throw invalid();throttle.check("issue-redemption",self+":"+claim,10,10);return issue("REDEMPTION",claim,c.getParticipant().getEvent().getId(),self,null,key,1440);}
  private Map<String,Object> credential(String purpose,String submitted){
@@ -51,7 +51,12 @@ public class CredentialService {
   throttle.check("verify-account",self+":"+match,8,5);throttle.check("verify-ip",ip,40,5);var m=lockedMatch(match,self);var row=credential("ENCOUNTER",submitted);
   if(number(row,"context_id")!=match||number(row,"issuer_id")!=other(m,self)||row.get("recipient_id")==null||number(row,"recipient_id")!=self||number(row,"event_id")!=m.getEvent().getId())throw invalid();
   if(flag(row,"consumed")&&m.verified(self)&&(m.getStatus()==MatchStatus.ACTIVE||m.getStatus()==MatchStatus.COMPLETED))return;
+  // DEC-073 · policy 3: once one real scan verified the encounter, a repeated or simultaneous scan by this member gets the same
+  // result (already verified) with no further effect. Checked after identity/context, so a third party never reaches it.
+  if(m.getVerificationPolicy()>=3&&m.encounterVerified()&&(m.getStatus()==MatchStatus.ACTIVE||m.getStatus()==MatchStatus.COMPLETED))return;
   if(m.getVerificationPolicy()<2||m.getStatus()!=MatchStatus.ACTIVE||!m.bothArrived())throw new BusinessRuleException("Ambos deben registrar su llegada antes de verificar.");pending(row);m.verifiedBy(self);jdbc.update("update purpose_credentials set consumed=true where id=?",row.get("id"));
+  // Policy 3: the encounter is verified now, so no other pending code of this encounter may be used or shown again.
+  if(m.getVerificationPolicy()>=3)jdbc.update("update purpose_credentials set revoked=true where purpose='ENCOUNTER' and context_id=? and consumed=false",match);
  }
  public record Delivery(long claim,String benefit,long cost,String status,String location,String directions,String alias,java.util.List<EvidenceLedger.Requirement> evidence,EvidenceLedger.Note note){
   /** DEC-068: the receipt used points still to check; delivery stays blocked until every linked encounter is validated. */

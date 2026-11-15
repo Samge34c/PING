@@ -28,7 +28,7 @@
       <p class="am-kicker">Ahora</p>
       <h2 id="am-step-title" tabindex="-1" th:text="${p.title()}"></h2>
       <p class="am-detail" th:if="${verifyView == null}" th:text="${p.detail()}"></p>
-      <ul class="am-checks" th:if="${verifyView == null}" aria-label="Verificaciones">
+      <ul class="am-checks" th:if="${verifyView == null and !match.singleScan()}" aria-label="Verificaciones">
         <li th:attr="data-done=${match.verified}"><svg th:replace="~{fragments/layout :: icon(${match.verified ? 'check' : 'clock'})}"></svg><span th:text="${match.verified ? 'Verificaste a ' + match.otherAlias : 'Aún no verificas a ' + match.otherAlias}"></span></li>
         <li th:attr="data-done=${match.otherVerified}"><svg th:replace="~{fragments/layout :: icon(${match.otherVerified ? 'check' : 'clock'})}"></svg><span th:text="${match.otherVerified ? match.otherAlias + ' te verificó' : match.otherAlias + ' aún no te verifica'}"></span></li>
       </ul>

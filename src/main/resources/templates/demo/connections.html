@@ -14,7 +14,7 @@
     <span class="cx3-note" th:if="${m.activity != null}" th:text="${m.activity}"></span>
     <span class="cx3-note" th:if="${m.status.name() == 'COMPLETED'}" th:text="${m.feedback == null} ? 'Feedback opcional pendiente' : 'Feedback guardado'"></span>
     <span class="cx3-note" th:if="${m.status.name() == 'CANCELLED'}">Abre para ver detalles o reportar</span></span>
-  <span class="ping-status cx3-status" th:with="checked=${m.status.name() == 'COMPLETED' and m.verified and m.otherVerified}" th:attr="data-status=${m.status.name()},data-verified=${checked}"><th:block th:if="${checked}"><svg th:replace="~{fragments/layout :: icon('shield')}"></svg></th:block><span th:text="${checked ? 'Verificado' : m.status.label}"></span></span>
+  <span class="ping-status cx3-status" th:with="checked=${m.status.name() == 'COMPLETED' and m.verificationPolicy >= 2 and m.verificationComplete()}" th:attr="data-status=${m.status.name()},data-verified=${checked}"><th:block th:if="${checked}"><svg th:replace="~{fragments/layout :: icon('shield')}"></svg></th:block><span th:text="${checked ? 'Verificado' : m.status.label}"></span></span>
 </a></li>
 </ul>
 <div th:replace="~{experience/fragments :: badges}"></div>

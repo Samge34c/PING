@@ -57,7 +57,7 @@ public class MatchService {
         match.accept(participantId);
         if (match.bothAccepted()) {
             var selected=encounters.assign(match.getEvent(),match.getCommonInterests(),match.getId());
-            match.activate(selected.encounter()); match.policy(policy.version()); match.describeEncounter(selected.directions(),selected.title(),selected.rewardPoints());match.describeCheck(selected.check(),selected.checkInstructions(),selected.responsePrompt());
+            match.activate(selected.encounter()); match.policy(policy.encounterVersion()); match.describeEncounter(selected.directions(),selected.title(),selected.rewardPoints());match.describeCheck(selected.check(),selected.checkInstructions(),selected.responsePrompt());
             match.freezeFloorplan(floorplans.snapshot(match.getEvent(),selected.pointId()));
         }
     }

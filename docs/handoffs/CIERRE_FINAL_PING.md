@@ -10,7 +10,8 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
 | F1 Base de datos y alojamiento | Respaldo V26 **verificado**; cambio a Aiven Developer **pendiente (G2)** | — |
 | F2 Gustos compactos en Mi Ping | Aprobada por Samuel; commit local | `feature/cierre-gustos` desde `f5b5a9a` |
 | F3 Latencia A→B | Aprobada por Samuel; commit local (contiene F2) | `feature/cierre-latencia` desde `6d4fcd1` |
-| F4–F7 | Sin empezar | — |
+| F4 Un escaneo (política 3) | Implementada y probada en local; commit local; **desactivada por defecto** | `feature/cierre-un-escaneo` desde `d573fd8` |
+| F5–F7 | Ver sus secciones | — |
 
 ## F0 · Diagnóstico
 - **Base:** `f5b5a9a`, igual a `origin/feature/connect-state-cards`.
@@ -96,3 +97,40 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
 - **F2 y F3 juntas:** `git merge-base --is-ancestor 6d4fcd1 feature/cierre-latencia` → sí, así que la rama candidata contiene las dos mejoras. Las pruebas focalizadas de ambas sobre el mismo árbol dan **90 pruebas, 0 fallos** (incluida `DemoImprovementTests`, 14). El JAR usado para medir F3 se construyó desde ese árbol. La suite completa sigue pendiente para el candidato de F7.
 - **Estado:** Samuel aprobó F3 el 15 nov 2026 y autorizó un commit local. Sin push, PR, merge ni despliegue. DEC-072 sigue «propuesta» hasta que conste la aceptación de Julián.
 - **Evidencia privada:** `PING-evidencia\cierre-final\F3\` (`antes-aceptar.json`, `despues-aceptar.json`, `arnes-aceptar.js`, `limpiar-cancelados.sql` y logs). Para repetir parejas, la limpieza borra solo encuentros cancelados de la base de prueba aislada.
+
+## F4 · Un escaneo válido verifica el encuentro para ambos (DEC-073, política 3)
+- **Decisión:** Samuel confirmó la compuerta G4 el 15 nov 2026 para implementarla y probarla en local. No se atribuye aprobación a Julián. Publicarla o activarla en producción requiere otra decisión.
+- **Rama:** `feature/cierre-un-escaneo` desde `d573fd8` (contiene F2 y F3).
+- **Activación:** propiedad de servidor `ping.journey.encounter-policy` (**2 por defecto**; 3 = un escaneo). Si no se define, no cambia nada. Se congela en cada encuentro al activarse.
+- **Cambios:**
+  - `Match.verificationComplete` es la regla única. La usan `confirm`, `MatchView.canConfirm`, `EncounterProgress.phase` (y con ella el estado en vivo), la revisión del personal, `CredentialService` y la etiqueta «Verificado» del historial.
+  - `JourneyPolicy.encounterVersion()` separa la política del encuentro de la de los recibos (`version()` sigue en 2).
+  - En `CredentialService`, con política 3: una lectura repetida o simultánea devuelve «ya verificado» sin efectos, se revocan los demás códigos pendientes y no se emiten códigos nuevos.
+  - La tarjeta con política 3 muestra «Verifiquen el encuentro · Uno muestra su QR y el otro lo escanea. Con una lectura basta para los dos.», con «Escanear su QR» como acción principal, «Mostrar mi QR» y «Escribir su código». No muestra la lista bidireccional.
+  - Sin migración: V21 no tiene CHECK.
+- **Pruebas en H2:**
+  - `SingleScanVerificationTests` (6 pruebas):
+    - Las llegadas siguen siendo obligatorias.
+    - QR de A→B y código manual de B→A abren Actividad en ambos, con 0 puntos al verificar y 37 por persona una sola vez al confirmar.
+    - Rechaza código propio, palabra, propósito de canje, basura, código de otro encuentro, tercero y caducado.
+    - Repetido o segundo código: un solo consumo, el otro revocado y sin códigos nuevos.
+    - Recorrido HTTP con dos sesiones.
+  - `JourneyPolicyTests` (3 pruebas): 2 por defecto, solo admite 2 o 3, el fixture histórico mantiene la política 1, tabla de la regla y fases.
+  - `VerificationTests`, nueva prueba de reversión: con la propiedad en 2, un encuentro congelado en política 3 sigue funcionando.
+  - Batería focalizada junto con verificación, revisión, evidencia, Saga, encuentros y tablero: **94 pruebas, 0 fallos**.
+- **Concurrencia en MySQL 8.4 real** (`SingleScanMySqlCheck`, fuera de la suite por defecto, base nueva `ping_singlescan_exclusive` en 127.0.0.1:3321): **30 carreras, 0 fallos**.
+  - 15 rondas de ambos escaneando a la vez: 1 lectura registrada, 1 código consumido, 0 códigos utilizables y 0 puntos.
+  - 15 rondas del mismo código enviado dos veces a la vez: 1 efecto y sin código nuevo.
+  - Se ejecuta con `PING_MYSQL_EXCLUSIVE_URL=jdbc:mysql://…/<nombre>_exclusive?… mvnw -Dtest=SingleScanMySqlCheck test`.
+- **Recorrido LOCAL con dos sesiones** (Playwright, JAR de la rama con `--ping.journey.encounter-policy=3`, datos ficticios):
+  - Aceptar, llegar y llegar; A muestra su QR y B escribe el código. Ambas sesiones pasan a «Hagan algo juntos».
+  - A se entera en 0,51 s. El QR de A desaparece y los puntos siguen en 0.
+  - Al confirmar: 10 y 10 puntos, una sola vez.
+- **Reversión demostrada:**
+  - (a) Con la propiedad en 2 (prueba de `VerificationTests`), los encuentros nuevos usan política 2 y los ya congelados en 3 siguen funcionando.
+  - (b) Con el binario anterior `f5b5a9a` sobre la misma base, el encuentro 49 (política 3, una sola lectura) vuelve al flujo de dos lecturas. Ana ve «Carlos ya te verificó. Escanea su QR» y Carlos ve «Muéstrale tu QR a Ana». Tras la segunda lectura, ambos llegan a Actividad.
+  - **No hay que tocar datos.** Coste de esa reversión: quien ya estaba en Actividad vuelve a Verificar hasta la segunda lectura.
+- **No verificado:**
+  - **Cámara real en un teléfono.** La lectura se probó con el código manual y con la carga útil del QR enviada por HTTP. La emulación no cuenta como prueba en celular. En la LAN por HTTP el navegador no abre la cámara; hace falta HTTPS de confianza.
+  - Activación en Render (G5).
+- **Evidencia:** `PING-evidencia\cierre-final\F4\` (logs de pruebas, `mysql-concurrencia.log` y capturas `f4-390-*` y `reversion-binario-anterior-actividad.png`).

@@ -25,7 +25,7 @@ public record EncounterProgress(List<Step> steps, String phase, String sub, Stri
     public static String phase(int policy, boolean completionPending, boolean arrived, boolean otherArrived, boolean verified, boolean otherVerified) {
         if (completionPending) return "finishing";
         if (policy >= 2 && (!arrived || !otherArrived)) return "arrive";
-        if (policy >= 2 && (!verified || !otherVerified)) return "verify";
+        if (policy >= 2 && !Match.verificationComplete(policy, verified, otherVerified)) return "verify";
         return "activity";
     }
 
@@ -53,7 +53,10 @@ public record EncounterProgress(List<Step> steps, String phase, String sub, Stri
             }
             case "verify" -> {
                 index = 1;
-                if (!m.verified() && !m.otherVerified()) { sub = "both"; title = "Verifica a " + other;
+                // DEC-073 · policy 3: a single scan by either person verifies the encounter for both.
+                if (m.singleScan()) { sub = "one"; title = "Verifiquen el encuentro";
+                    detail = "Uno muestra su QR y el otro lo escanea. Con una lectura basta para los dos."; }
+                else if (!m.verified() && !m.otherVerified()) { sub = "both"; title = "Verifica a " + other;
                     detail = "Escanea su QR o muéstrale el tuyo; pueden elegir quién empieza."; }
                 else if (!m.verified()) { sub = "scan"; title = other + " ya te verificó. Escanea su QR";
                     detail = "Pídele su QR personal o escribe el código que te muestra."; }

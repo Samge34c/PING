@@ -10,5 +10,7 @@ public record MatchView(long id, MatchStatus status, String otherAlias, String c
     public String directionsLead(){return EncounterProgress.split(meetingDirections)[0];}
     public String directionsMore(){return EncounterProgress.split(meetingDirections)[1];}
     public String commonPreview(){return String.join(" · ",commonTopics().stream().limit(3).toList());}
-    public boolean canConfirm() { return verificationPolicy<2 || arrived&&otherArrived&&verified&&otherVerified; }
+    public boolean verificationComplete() { return Match.verificationComplete(verificationPolicy, verified, otherVerified); }
+    public boolean singleScan() { return verificationPolicy >= 3; }
+    public boolean canConfirm() { return verificationPolicy<2 || arrived&&otherArrived&&verificationComplete(); }
 }

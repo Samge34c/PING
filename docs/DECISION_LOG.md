@@ -720,3 +720,20 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - No hay SSE, WebSocket ni colas. La recarga completa se conserva: la medición muestra que la espera de la consulta dominaba y que la recarga suma solo 0,1–0,3 s.
 
 **Evidencia — MEDICIÓN LOCAL** (PING y MySQL aislada en 127.0.0.1, sin red real; no se midió en Render ni con teléfonos; 30 muestras de «aceptar» por condición, mismo arnés): mediana 1,92 s → 0,82 s; máximo 4,88 s → 1,46 s. Detalle, carga estimada y límites en [handoffs/CIERRE_FINAL_PING.md](handoffs/CIERRE_FINAL_PING.md).
+
+## DEC-073 — Un escaneo válido verifica el encuentro para ambos (política 3, desactivada por defecto) (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Julián.** Samuel confirmó la compuerta G4 el 15 de noviembre de 2026 (sesión de Claude Code): implementar y probar en local la regla de un solo escaneo. No se atribuye aprobación a Julián. Publicar o activar la regla en producción queda para una decisión posterior. Rama local `feature/cierre-un-escaneo`; sin push, merge ni despliegue.
+
+**Regla (política 3):** con ambas aceptaciones y ambas llegadas, y el encuentro ACTIVE, **una** lectura válida verifica el encuentro para los dos. Vale A escaneando el QR personal de B, B escaneando el de A o el código manual del compañero. Verificar no da puntos ni confirma la actividad. La palabra del encuentro, el QR del evento, los códigos de canje y el código propio siguen sin servir.
+
+**Decisiones técnicas:**
+- Las banderas `first_verified`/`second_verified` conservan su significado («esta persona escaneó»): no se marcan verificaciones que nadie hizo. Una única regla de dominio, `Match.verificationComplete(policy, a, b)`, devuelve `a || b` con política ≥ 3 y `a && b` en el resto. La usan `Match.confirm`, `MatchView.canConfirm()`, `EncounterProgress.phase` (y con ella el estado en vivo), la revisión del personal y `CredentialService`.
+- **Activación:** `JourneyPolicy.encounterVersion()` lee `ping.journey.encounter-policy`, con **2 por defecto**. Solo admite 2 o 3; otro valor impide arrancar. Se congela en cada encuentro al activarse; los de política 1 y 2 no se reinterpretan. `JourneyPolicy.version()` (recibos de canje y guías) sigue en 2.
+- **Sin migración:** V21 guarda `verification_policy` como entero sin CHECK.
+- **Seguridad:** se mantienen todos los controles de `CredentialService` (bloqueo del evento, contexto, emisor, destinatario, evento, propósito, hash, vigencia de 10 min, límites de intentos). Con política 3, al verificarse el encuentro se revocan los demás códigos pendientes de ese encuentro. Una segunda lectura (repetida o simultánea) devuelve el mismo resultado sin efectos, y no se emiten códigos nuevos.
+- **Reversión:**
+  - Con la propiedad en 2, los encuentros nuevos vuelven a política 2 y los de política 3 ya creados siguen funcionando con este binario.
+  - Con un binario anterior, un encuentro de política 3 con una sola lectura vuelve al flujo de dos lecturas: la otra persona escanea y continúa. No hay que modificar datos.
+
+**Detalle y evidencia:** [handoffs/CIERRE_FINAL_PING.md](handoffs/CIERRE_FINAL_PING.md).

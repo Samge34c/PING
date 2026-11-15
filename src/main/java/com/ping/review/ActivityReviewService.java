@@ -58,7 +58,7 @@ public class ActivityReviewService {
         Match m = matches.findById(matchId).orElseThrow(() -> new NotFoundException("No encontramos esa conexión."));
         if (!m.owns(self)) throw new NotFoundException("Esta conexión no pertenece al participante de tu sesión.");
         if (m.getStatus() != MatchStatus.ACTIVE || !m.staffReview()) throw new BusinessRuleException("Esta actividad no necesita revisión del personal.");
-        if (m.getVerificationPolicy() >= 2 && (!m.bothArrived() || !m.bothVerified()))
+        if (m.getVerificationPolicy() >= 2 && (!m.bothArrived() || !m.encounterVerified()))
             throw new BusinessRuleException("Primero registren ambas llegadas y verifiquen sus códigos personales.");
         String text = response == null ? "" : response.strip();
         if (text.length() > MAX_RESPONSE) throw new BusinessRuleException("La respuesta admite hasta " + MAX_RESPONSE + " caracteres.");
