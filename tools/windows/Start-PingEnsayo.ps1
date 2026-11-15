@@ -40,7 +40,11 @@ function Run([scriptblock]$b) { $ErrorActionPreference = 'Continue'; & $b }
 function Say([string]$t) { Write-Host "PING ensayo | $t" }
 function Secret([string]$name) {
   $f = Join-Path $State "$name.secret"
-  if (-not (Test-Path $f)) { $v = -join ((48..57)+(65..90)+(97..122) | Get-Random -Count 24 | ForEach-Object {[char]$_}); [IO.File]::WriteAllText($f, $v) }
+  if (-not (Test-Path $f)) {
+    if ($name -eq 'admin') { $abc = 'abcdefghjkmnpqrstuvwxyz23456789'.ToCharArray(); $v = 'ensayo-' + (-join (1..4 | ForEach-Object { $abc | Get-Random })) + '-' + (-join (1..4 | ForEach-Object { $abc | Get-Random })) }  # fácil de escribir en un celular; solo para datos ficticios
+    else { $v = -join ((48..57)+(65..90)+(97..122) | Get-Random -Count 24 | ForEach-Object {[char]$_}) }
+    [IO.File]::WriteAllText($f, $v)
+  }
   return [IO.File]::ReadAllText($f).Trim()
 }
 function Listening([int]$p) { return [bool](Get-NetTCPConnection -State Listen -LocalPort $p -ErrorAction SilentlyContinue) }
@@ -63,6 +67,8 @@ function StopAll {
     $env:MYSQL_PWD = Secret 'mysql-root'
     try { & $mysqladmin --no-defaults -h 127.0.0.1 -P $DbPort -u root shutdown 2>$null | Out-Null } finally { Remove-Item Env:MYSQL_PWD -ErrorAction SilentlyContinue }
     $t = [Diagnostics.Stopwatch]::StartNew(); while ((Listening $DbPort) -and $t.Elapsed.TotalSeconds -lt 30) { Start-Sleep -Milliseconds 500 }
+    # The port closes before mysqld releases its files: wait for the process itself to exit (then, as a last resort, stop it).
+    $t = [Diagnostics.Stopwatch]::StartNew(); while ((Procs 'mysqld.exe' $Ini).Count -gt 0 -and $t.Elapsed.TotalSeconds -lt 30) { Start-Sleep -Milliseconds 500 }
     foreach ($p in (Procs 'mysqld.exe' $Ini)) { Stop-Process -Id $p.ProcessId -Force }
     Say 'MySQL del ensayo detenida'
   }
@@ -79,7 +85,10 @@ New-Item -ItemType Directory -Force $State, $Logs | Out-Null
 
 # 1 · Siempre parte de un estado conocido: detiene lo que hubiera del ensayo (nunca otros procesos)
 StopAll
-if ($Reset -and (Test-Path $Data)) { Say 'borrando los datos FICTICIOS del ensayo (-Reset)'; Remove-Item -Recurse -Force $Data }
+if ($Reset -and (Test-Path $Data)) {
+  Say 'borrando los datos FICTICIOS del ensayo (-Reset)'
+  foreach ($i in 1..10) { try { Remove-Item -Recurse -Force $Data -ErrorAction Stop; break } catch { if ($i -eq 10) { throw }; Start-Sleep -Seconds 1 } }
+}
 if (Listening $Port) { throw "El puerto $Port está en uso por otro proceso. Libéralo o usa -Port." }
 
 # 2 · Compila el commit actual (o reutiliza el JAR ya compilado de ese mismo commit)
@@ -110,7 +119,7 @@ if ($fresh) {
   Say 'creando una MySQL nueva y vacía para el ensayo…'
   Run { & $mysqld "--defaults-file=$Ini" --initialize-insecure *> (Join-Path $Logs 'mysql-init.log') }
   if ($LASTEXITCODE -ne 0) { throw "No se pudo inicializar MySQL. Revisa $(Join-Path $Logs 'mysql-init.log')" }
-  Remove-Item (Join-Path $State 'mysql-root.secret'), (Join-Path $State 'app-db.secret') -ErrorAction SilentlyContinue
+  Remove-Item (Join-Path $State 'mysql-root.secret'), (Join-Path $State 'app-db.secret'), (Join-Path $State 'admin.secret') -ErrorAction SilentlyContinue
 }
 Start-Process -FilePath $mysqld -ArgumentList "--defaults-file=`"$Ini`"" -WindowStyle Hidden
 $t = [Diagnostics.Stopwatch]::StartNew(); while (-not (Listening $DbPort)) { if ($t.Elapsed.TotalSeconds -gt 60) { throw 'MySQL del ensayo no respondió en 60 s.' }; Start-Sleep -Milliseconds 500 }
@@ -169,7 +178,7 @@ $frozen = (Sql "SELECT verification_policy, COUNT(*) FROM ping_matches GROUP BY 
 Write-Host ''
 Say "LISTO · commit $sha · política $Policy para los encuentros NUEVOS"
 Say "URL: $origin   (este PC también: http://127.0.0.1:$Port)"
-Say "Cuenta ficticia: $AdminEmail · contraseña en $(Join-Path $State 'admin.secret')"
+Say "Cuenta ficticia: $AdminEmail · contraseña: $adminPw   (también en $(Join-Path $State 'admin.secret'))"
 Say "Evento demo: SOFA 2026 (id $event) · participantes Samuel, Julián, Ana, Carlos · recompensa de prueba: $rewards"
 if ($frozen) { Say "Encuentros ya existentes por política: $frozen (no se reinterpretan)" }
 Say "Registro: $log"
