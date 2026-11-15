@@ -134,3 +134,29 @@ Encargo de Samuel: `PING_CIERRE_FINAL_MEGA_PROMPT_V2.md` (fuera del repo, en Des
   - **Cámara real en un teléfono.** La lectura se probó con el código manual y con la carga útil del QR enviada por HTTP. La emulación no cuenta como prueba en celular. En la LAN por HTTP el navegador no abre la cámara; hace falta HTTPS de confianza.
   - Activación en Render (G5).
 - **Evidencia:** `PING-evidencia\cierre-final\F4\` (logs de pruebas, `mysql-concurrencia.log` y capturas `f4-390-*` y `reversion-binario-anterior-actividad.png`).
+
+## F5 · Organización por tareas: sin cambio de código (objetivo ya cumplido)
+- **Medición LOCAL a 390 px** (Playwright con emulación móvil, administración general, evento SOFA ficticio):
+  - El primer bloque bajo el evento es «Validaciones y entregas».
+  - «Revisar tareas» está en y=357 px y «Entregar un canje» en y=440 px, en una pantalla de 844 px. Ambas están en la primera pantalla y a **un toque**.
+  - Sin desplazamiento horizontal y con márgenes simétricos de 16 px.
+  - El personal solo ve el evento, las tareas y Equipo (`th:if="${canOrganize}"`). Sus permisos los cubre `OrganizerBoardTests`, que pasó en la batería de F4.
+- **Decisión:** no se toca el panel. El objetivo del V2 ya se cumple y AGENTS.md pide no dedicar iteraciones a embellecer la administración sin un defecto concreto.
+- **Margen derecho aparentemente pegado en una captura:** lo causaba la barra de desplazamiento de escritorio en Chromium sin emulación móvil. Con emulación móvil los márgenes son de 16 y 16 px. **Nota:** las alturas de F2 se midieron sin emulación móvil (ancho útil de 375 px); son ligeramente conservadoras.
+- **No se hizo:** crear un usuario de personal real para capturar su vista (requiere una cuenta verificada). Queda cubierto por pruebas.
+- **Evidencia:** `PING-evidencia\cierre-final\F5\` (capturas antes, de escritorio y móvil).
+
+## F6 · Avatares: confirmación breve al cambiar (sin cambiar arte, catálogo ni datos)
+- **Rama:** `feature/cierre-avatares` desde `facfbf8` (F4).
+- **Cambio:**
+  - En `avatar.js`, cada cambio o «Deshacer» marca la vista previa con `is-changed`.
+  - En `cierre.css`, la vista previa hace `av3-settle`: 200 ms, `scale(.94→1)`, curva `cubic-bezier(.23,1,.32,1)`. Solo `transform`, sin bucle ni desplazamiento del diseño, y solo con `prefers-reduced-motion: no-preference`.
+  - Duración y curva según la skill `emil-design-eng`: menos de 300 ms, ease-out y nunca desde 0.
+- **No se cambió:** SVG por capas, IDs, catálogo, persistencia ni avatares heredados. No se rehízo el arte (eso sería un rediseño).
+- **Comprobado en LOCAL** (Playwright, 390 px con emulación móvil):
+  - Con movimiento: `animationName=av3-settle` y 0,2 s. Con `reducedMotion=reduce`: `none` y 0 s.
+  - Cada cambio pide las mismas 2 SVG que antes.
+  - Guardar persiste el cambio (gato → conejo tras recargar) y «Deshacer» funciona.
+  - Sin desplazamiento horizontal.
+- **Pruebas:** `AvatarV3Tests`, `ParticipantEntryTests`, `EventEntryFlowTests`, `FrontendBundleTests` y `PublicResourceTests` → **54 pruebas, 0 fallos**.
+- **Evidencia:** `PING-evidencia\cierre-final\F6\`.

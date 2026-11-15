@@ -106,13 +106,15 @@ document.querySelectorAll('[data-avatar-v3]').forEach(root => {
     notice.textContent = `Quitamos «${removed}»: no combina con «${keep}» porque se cruzan. Puedes elegir otra pieza.`;
     notice.hidden = false;
   }
+  // F6 (cierre): a brief settle of the preview confirms each change. CSS-only motion, disabled with prefers-reduced-motion.
+  const settle = () => form.querySelectorAll('[data-avatar-preview]').forEach(p => { p.classList.remove('is-changed'); void p.offsetWidth; p.classList.add('is-changed'); });
   root.addEventListener('change', e => {
     const name = e.target.name;
     if (name === 'head' || name === 'audio') { notice.hidden = true; resolve(name); }
     if (name === 'animal' || name === 'palette') targets.forEach(t => { if (!t.hidden) paintTiles(t); });
-    refresh();
+    refresh(); settle();
   });
-  undo?.addEventListener('click', () => { radios().forEach(r => { r.checked = isSaved(r); }); notice.hidden = true; notice.textContent = ''; refresh(); undo.disabled = true; chip?.focus?.(); });
+  undo?.addEventListener('click', () => { radios().forEach(r => { r.checked = isSaved(r); }); notice.hidden = true; notice.textContent = ''; refresh(); settle(); undo.disabled = true; chip?.focus?.(); });
   if (targets.length) select(0, false);
   refresh();
 });

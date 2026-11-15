@@ -295,3 +295,9 @@
   .am-flow .am-steps li {gap:2px}
   .am-card {gap:10px;padding:16px 14px}
 }
+
+/* F6 (cierre): the avatar preview settles briefly after each change (transform only, no loop, no layout shift). */
+@media (prefers-reduced-motion: no-preference) {
+  .av3-preview.is-changed {animation:av3-settle 200ms cubic-bezier(.23,1,.32,1)}
+}
+@keyframes av3-settle {from {transform:scale(.94)} to {transform:scale(1)}}
