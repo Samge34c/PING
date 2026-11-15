@@ -121,6 +121,25 @@ class DemoImprovementTests {
             assertThat(browser.get("/admin").body()).contains("SOFA 2026", "Libres para conectar", "Puntos entregados");
         }
     }
+    @Autowired com.ping.interest.InterestService interestService;
+    static String html(String s) { return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\"","&quot;").replace("'","&#39;"); }
+    /** DEC-071: Mi Ping compacts long interest lists without dropping any name from the served HTML. */
+    @Test void miPingKeepsEveryInterestAndOffersSeeAllOnlyAboveFour() throws Exception {
+        var s = preparation.prepare(); long samuel = id(s,"Samuel"), julian = id(s,"Julián");
+        var ids = interestService.availableCatalog().stream().map(com.ping.interest.Interest::getId).toList();
+        assertThat(ids).hasSizeGreaterThan(4);
+        var selection = interestService.selection(samuel); selection.setInterestIds(ids); interestService.save(samuel, selection);
+        var names = participants.get(samuel).interests(); assertThat(names).hasSize(ids.size());
+        try(var browser = new TestBrowser(port)) {
+            browser.get("/demo"); browser.post("/demo",Map.of("participantId",""+samuel));
+            String page = browser.get("/me").body();
+            for (String name : names) assertThat(page).contains(html(name));
+            assertThat(page).contains("Ver todos (" + names.size() + ")", "Ver menos", "Tus gustos");
+            browser.post("/demo",Map.of("participantId",""+julian));
+            assertThat(browser.get("/me").body()).contains("Videojuegos", html("Tecnología")).doesNotContain("Ver todos (");
+        }
+        assertThat(participants.get(samuel).interests()).isEqualTo(names);
+    }
     @Test void preparationRequiresPostAndFormToken() throws Exception {
         try(var browser = new TestBrowser(port)) {
             assertThat(browser.post("/demo/prepare",Map.of()).statusCode()).isEqualTo(403);

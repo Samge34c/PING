@@ -696,3 +696,16 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - **Sin cambios** de reglas de negocio, puntos, Saga, permisos, migraciones ni del algoritmo de búsqueda. `live.js` sigue recargando por firma. Si el paso cambia mientras la cámara está abierta o hay un código escrito, cierra la cámara y descarta el código (es privado) en lugar de conservar un borrador que ya no vale.
 
 **Detalle y evidencia:** [handoffs/CONECTAR_TARJETA_POR_ESTADO.md](handoffs/CONECTAR_TARJETA_POR_ESTADO.md).
+
+**Nota de estado (15 de noviembre de 2026):** la rama `feature/connect-state-cards` está en `origin` y sus estáticos coinciden con los servidos por la demo publicada. Samuel informa que el historial de Render muestra `f5b5a9a` como Live. La frase «sin push ni despliegue» de arriba describía el momento de la entrega, no el estado actual. Sigue pendiente la aceptación de Julián.
+
+## DEC-071 — «Tus gustos» compacto en Mi Ping (propuesta)
+
+**Estado: propuesta, pendiente de aceptación de Samuel y Julián.** Encargo de Samuel del 15 de noviembre de 2026 (sesión de Claude Code, fase F2 del cierre final). No se atribuye aprobación a Julián. Rama local `feature/cierre-gustos` desde `f5b5a9a`; sin commit, push, merge ni despliegue.
+
+**Decisiones:**
+- Mi Ping muestra como máximo **cuatro gustos**, en el orden alfabético que ya tiene el perfil. Si hay más, el control «Ver todos (N)» (N = total) despliega el resto en la misma pantalla y pasa a «Ver menos». Con cuatro o menos se muestran todos, sin control. Al recargar, la sección vuelve a la vista compacta.
+- Reutiliza el patrón de Conectar (DEC-070): `details/summary` nativo, sin JavaScript. Todos los nombres están en el HTML servido aunque estén plegados.
+- Solo cambia la presentación. No cambian el editor de gustos, el matching, los datos, las rutas, las reglas ni la acción principal de Mi Ping.
+
+**Detalle y continuidad:** [handoffs/CIERRE_FINAL_PING.md](handoffs/CIERRE_FINAL_PING.md).
