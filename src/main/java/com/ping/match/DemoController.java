@@ -115,6 +115,9 @@ public class DemoController {
         }
         model.addAttribute("verifyView", verifyView);
         model.addAttribute("myCredential", "mine".equals(verifyView) ? myCredential : null);
+        // DEC-081: the activity QR is shown only to a person who already pressed «Completar actividad» on an ACTIVE QR encounter.
+        var activityCode = match.qrValidation() && match.status() == MatchStatus.ACTIVE && match.confirmed() ? com.ping.verification.CredentialSession.get(session, "ACTIVITY", id, selected) : null;
+        model.addAttribute("activityCredential", activityCode != null && credentials.valid(activityCode) ? activityCode : null);
         var ownHint = hints.ownForm(selected); model.addAttribute("recognitionHintForm", ownHint); model.addAttribute("persistedRecognitionHint", ownHint.getHint());
         // Text and revision come from the same fresh, ownership/state-checked read.
         var authorizedHint = hints.other(id, selected);

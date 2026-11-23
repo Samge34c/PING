@@ -28,7 +28,7 @@ public class CredentialService {
   if(jdbc.queryForObject("select count(*) from purpose_credentials where issue_key=?",Integer.class,key)>0)throw new BusinessRuleException("Esta emisión ya se procesó. Revisa tu código o renueva explícitamente.");
   jdbc.update("update purpose_credentials set revoked=true where purpose=? and context_id=? and issuer_id=? and consumed=false",purpose,context,issuer);
   String alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";var random=new SecureRandom();var suffix=new StringBuilder();for(int i=0;i<20;i++)suffix.append(alphabet.charAt(random.nextInt(alphabet.length())));
-  String manual=(purpose.equals("ENCOUNTER")?people.findById(issuer).orElseThrow().getAvatar().animal().toUpperCase(Locale.ROOT):"CANJE")+"-"+suffix;
+  String manual=(purpose.equals("ENCOUNTER")?people.findById(issuer).orElseThrow().getAvatar().animal().toUpperCase(Locale.ROOT):purpose.equals("ACTIVITY")?"ACTIVIDAD":"CANJE")+"-"+suffix;
   String token=AccountService.secret(),id=UUID.randomUUID().toString();Instant expiry=Instant.now().plusSeconds(minutes*60L);
   jdbc.update("insert into purpose_credentials(id,issue_key,purpose,context_id,event_id,issuer_id,recipient_id,token_hash,manual_hash,expires_at) values(?,?,?,?,?,?,?,?,?,?)",id,key,purpose,context,event,issuer,recipient,AccountService.hash(token),AccountService.hash(manual),Timestamp.from(expiry));
   return new Issued(id,key,purpose,context,issuer,manual,token,expiry);
@@ -40,7 +40,7 @@ public class CredentialService {
  private Map<String,Object> credential(String purpose,String submitted){
   String input=submitted==null?"":submitted.strip();if(input.length()>160)throw invalid();String digest,column;
   if(input.startsWith("PING:")){String prefix="PING:"+purpose+":";if(!input.startsWith(prefix)||!input.substring(prefix.length()).matches("[A-Za-z0-9_-]{43}"))throw invalid();digest=AccountService.hash(input.substring(prefix.length()));column="token_hash";}
-  else{input=input.replaceAll("\\s+","").toUpperCase(Locale.ROOT);if(!input.matches("[A-Z]{3,8}-[A-Z2-9]{20}"))throw invalid();digest=AccountService.hash(input);column="manual_hash";}
+  else{input=input.replaceAll("\\s+","").toUpperCase(Locale.ROOT);if(!input.matches("[A-Z]{3,9}-[A-Z2-9]{20}"))throw invalid();digest=AccountService.hash(input);column="manual_hash";}
   var rows=jdbc.queryForList("select * from purpose_credentials where "+column+"=? and purpose=?",digest,purpose);if(rows.isEmpty())throw invalid();return rows.getFirst();
  }
  private long number(Map<String,Object> row,String key){return ((Number)row.get(key)).longValue();}
@@ -58,6 +58,50 @@ public class CredentialService {
   // Policy 3: the encounter is verified now, so no other pending code of this encounter may be used or shown again.
   if(m.getVerificationPolicy()>=3)jdbc.update("update purpose_credentials set revoked=true where purpose='ENCOUNTER' and context_id=? and consumed=false",match);
  }
+ // ---- DEC-081 · Activity QR: shown by a participant after «Completar actividad», scanned by authorised staff of the event. ----
+ private static final int ACTIVITY_MINUTES=20;
+ /** Issues (or replaces) this participant's activity QR. Only for a QR-validated encounter this person already completed. */
+ @Transactional(isolation=Isolation.READ_COMMITTED)
+ public Issued activity(long match,long self,String key){var m=lockedMatch(match,self);
+  if(!m.qrValidation()||m.getStatus()!=MatchStatus.ACTIVE||m.isCompletionPending())throw new BusinessRuleException("Esta actividad no usa validación con QR o ya se está acreditando.");
+  if(!m.confirmed(self))throw new BusinessRuleException("Primero pulsa «Completar actividad».");
+  throttle.check("issue-activity",self+":"+match,10,10);return issue("ACTIVITY",match,m.getEvent().getId(),self,null,key,ACTIVITY_MINUTES);}
+ public enum ScanResult{CREDITED,WAITING,ALREADY}
+ /** missing: aliases that still have to press «Completar actividad» (only for WAITING). */
+ public record ActivityScan(ScanResult result,long match,String first,String second,int points,List<String> missing){}
+ /** A scanned code of another purpose gets a precise answer; anything else is the generic invalid code. */
+ private Map<String,Object> activityCredential(String submitted){
+  String input=submitted==null?"":submitted.strip(),upper=input.replaceAll("\\s+","").toUpperCase(Locale.ROOT);
+  if(input.startsWith("PING:REDEMPTION:")||upper.matches("CANJE-[A-Z2-9]{20}"))throw new BusinessRuleException("Ese es el QR de un recibo de canje. Para validar la actividad, escanea el QR que aparece al pulsar «Completar actividad».");
+  if(input.startsWith("PING:ENCOUNTER:")||(!upper.startsWith("ACTIVIDAD-")&&upper.matches("[A-Z]{3,8}-[A-Z2-9]{20}")))throw new BusinessRuleException("Ese es el QR personal del encuentro, no el de la actividad. Pide el QR que aparece al pulsar «Completar actividad».");
+  return credential("ACTIVITY",submitted);
+ }
+ /**
+  * One staff scan per encounter. With both confirmations it registers the validation (unique per encounter) and the caller
+  * starts the existing Saga; before that it only says who is missing and leaves the code usable. Never grants points itself.
+  */
+ @Transactional(isolation=Isolation.READ_COMMITTED)
+ public ActivityScan validateActivity(String submitted,String ip){
+  long staffId=auth.require().id();throttle.check("activity-scan-account",Long.toString(staffId),30,5);throttle.check("activity-scan-ip",ip,60,5);
+  var found=activityCredential(submitted);long matchId=number(found,"context_id"),event=number(found,"event_id");
+  events.lock(event);var m=matches.findById(matchId).orElseThrow(this::invalid);if(m.getEvent().getId()!=event||!m.qrValidation())throw invalid();
+  auth.manage(event);
+  if(accounts.owns(staffId,m.getFirst().getId())||accounts.owns(staffId,m.getSecond().getId()))throw new org.springframework.security.access.AccessDeniedException("Participas en este encuentro: otra persona autorizada del evento debe validar la actividad.");
+  long first=m.getFirst().getId(),second=m.getSecond().getId();String a=m.getFirst().getAlias(),b=m.getSecond().getAlias();
+  boolean validated=jdbc.queryForObject("select count(*) from activity_qr_validations where match_id=?",Integer.class,matchId)>0;
+  if(validated||m.getStatus()==MatchStatus.COMPLETED)return new ActivityScan(ScanResult.ALREADY,matchId,a,b,m.getRewardPoints(),List.of());
+  var row=jdbc.queryForMap("select * from purpose_credentials where id=? for update",found.get("id"));pending(row);
+  if(m.getStatus()!=MatchStatus.ACTIVE)throw new BusinessRuleException("Este encuentro ya no está activo. No se acreditaron puntos.");
+  var missing=new ArrayList<String>();if(!m.confirmed(first))missing.add(a);if(!m.confirmed(second))missing.add(b);
+  if(!missing.isEmpty())return new ActivityScan(ScanResult.WAITING,matchId,a,b,m.getRewardPoints(),List.copyOf(missing));
+  jdbc.update("insert into activity_qr_validations(match_id,event_id,validated_by,validated_at) values(?,?,?,?)",matchId,event,staffId,Timestamp.from(Instant.now()));
+  jdbc.update("update purpose_credentials set consumed=true where id=?",row.get("id"));
+  jdbc.update("update purpose_credentials set revoked=true where purpose='ACTIVITY' and context_id=? and consumed=false",matchId);
+  accounts.audit(staffId,"VALIDATE_ACTIVITY_QR",matchId,event);
+  return new ActivityScan(ScanResult.CREDITED,matchId,a,b,m.getRewardPoints(),List.of());
+ }
+ /** Organisation summary: QR encounters with both confirmations that still wait for a scan. */
+ public long awaitingActivityScan(long event){return jdbc.queryForObject("select count(*) from ping_matches m where m.event_id=? and m.status='ACTIVE' and m.activity_check='QR_VALIDATION' and m.first_confirmed=true and m.second_confirmed=true and not exists(select 1 from activity_qr_validations v where v.match_id=m.id)",Long.class,event);}
  public record Delivery(long claim,String benefit,long cost,String status,String location,String directions,String alias,java.util.List<EvidenceLedger.Requirement> evidence,EvidenceLedger.Note note){
   /** DEC-068: the receipt used points still to check; delivery stays blocked until every linked encounter is validated. */
   public boolean evidenceMissing(){return evidence.stream().anyMatch(r->!r.validated());}

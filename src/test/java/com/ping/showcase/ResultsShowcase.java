@@ -109,23 +109,43 @@ class ResultsShowcase {
         events.transition(paused, EventStatus.PAUSED);
         admin.recordDoor(paused, 30);
 
-        for (long e : List.of(main, draft, paused)) accounts.assign(general, organizer, e, true, AccountService.EventRole.ORGANIZER);
+        // Event 4 · DEC-081: an activity validated with the activity QR. Lina and Mario already arrived and verified each other.
+        long qrEvent = event("Validación QR (ficticio)", "Actividad con validación presencial por QR.");
+        events.transition(qrEvent, EventStatus.OPEN);
+        long mural = place(qrEvent, "Mural de la entrada");
+        activity(qrEvent, mural, "Foto en el mural", 20, CheckMethod.QR_VALIDATION);
+        long lina = person(qrEvent, "Lina", "lina@ping.test"), mario = person(qrEvent, "Mario", "mario@ping.test");
+        long qrMatch = active(lina, mario); verified(qrMatch, lina, mario);
+        long other = account("otro@ping.test");
+        // A second QR pair whose activity code already expired, to try an expired code in the browser.
+        long rita = person(qrEvent, "Rita", "rita@ping.test"), saul = person(qrEvent, "Saúl", "saul@ping.test");
+        long expiredMatch = active(rita, saul); verified(expiredMatch, rita, saul); matches.confirm(expiredMatch, rita); matches.confirm(expiredMatch, saul);
+        var expired = credentials.activity(expiredMatch, rita, key());
+        sql.update("update purpose_credentials set expires_at=? where id=?", java.sql.Timestamp.from(java.time.Instant.now().minusSeconds(60)), expired.id());
+
+        for (long e : List.of(main, draft, paused, qrEvent)) accounts.assign(general, organizer, e, true, AccountService.EventRole.ORGANIZER);
         accounts.assign(general, staff, main, true, AccountService.EventRole.STAFF);
+        accounts.assign(general, staff, qrEvent, true, AccountService.EventRole.STAFF);
+        accounts.assign(general, other, draft, true, AccountService.EventRole.STAFF);
 
         System.out.println("""
 
                 ============================================================
                 PING · candidato local con DATOS FICTICIOS (H2 en memoria)
-                Abre http://127.0.0.1:8096/login  · contraseña de las tres cuentas: %s
+                Abre http://127.0.0.1:8096/login  · contraseña de todas las cuentas: %s
                   admin@ping.test          Administración general (/organizer/events)
                   organizacion@ping.test   Organización de los tres eventos (/organizer, /admin)
                   personal@ping.test       Personal de «Bienvenida universitaria» (solo revisar y entregar)
                   participante@ping.test   Participante «Quique», sin match (/me, Actividades abiertas)
                   gabi@ping.test           Participante «Gabi», con un canje pendiente de entregar
-                Eventos: %d (abierto) · %d (borrador) · %d (pausado, puerta 30)
+                  lina@ping.test           «Lina», encuentro con actividad QR listo para «Completar actividad»
+                  mario@ping.test          «Mario», la otra persona de ese encuentro
+                  otro@ping.test           Personal de otro evento («Feria de clubes»)
+                Código de actividad VENCIDO (Rita y Saúl): %s
+                Eventos: %d (abierto) · %d (borrador) · %d (pausado, puerta 30) · %d (QR de actividad)
                 Se detiene solo a los %d minutos o con Ctrl+C.
                 ============================================================
-                """.formatted(PASSWORD, main, draft, paused, Long.getLong("ping.showcase.minutes", 120)));
+                """.formatted(PASSWORD, expired.manual(), main, draft, paused, qrEvent, Long.getLong("ping.showcase.minutes", 120)));
         Thread.sleep(Long.getLong("ping.showcase.minutes", 120) * 60_000);
     }
 }

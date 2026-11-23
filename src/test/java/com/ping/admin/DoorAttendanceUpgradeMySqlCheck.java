@@ -27,7 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.assertj.core.api.Assertions.*;
 
 /**
- * DEC-079 · manual MySQL check of the V26 → V27 upgrade (not part of the default suite: the class name does not end in
+ * DEC-079 + DEC-081 · manual MySQL check of the V26 → V27 → V27.1 upgrade (the service runs V26) (not part of the default suite: the class name does not end in
  * "Tests"). Run only against a NEW, EMPTY exclusive database on this computer, never Aiven or production:
  *   PING_MYSQL_EXCLUSIVE_URL=jdbc:mysql://127.0.0.1:3323/ping_v27_exclusive mvnw -Dtest=DoorAttendanceUpgradeMySqlCheck test
  *
@@ -35,8 +35,9 @@ import static org.assertj.core.api.Assertions.*;
  *    through the real services: completed encounters (Saga), a staff review, redemptions, opinions, an earlier
  *    «al entregar» activity and a paused event.
  * 2. Takes a fingerprint of every table (all rows, V26 columns only) and of the schema.
- * 3. Applies the pending migrations with Flyway, as a deployment would, and compares: only events.door_attendance is
- *    new, every row and balance is identical, V1–V26 history is untouched and old events have no door total.
+ * 3. Applies the pending migrations with Flyway, as a deployment would, and compares: only events.door_attendance,
+ *    the empty table activity_qr_validations and the widened purpose CHECK are new, every row and balance is identical,
+ *    V1–V26 history is untouched and old events have no door total. The widened CHECK accepts ACTIVITY only.
  * 4. Starts PING again on the upgraded schema (validate) and checks results, the door total and, for the pending DEC-079
  *    rule, that a NEW activity with points is still credited today by both confirmations alone.
  */
@@ -88,21 +89,30 @@ class DoorAttendanceUpgradeMySqlCheck {
         var result = Flyway.configure().dataSource(URL, USER, PASSWORD).load().migrate();
         long ms = (System.nanoTime() - t0) / 1_000_000;
         assertThat(result.success).isTrue();
-        assertThat(result.migrationsExecuted).isEqualTo(1);
-        assertThat(result.targetSchemaVersion).isEqualTo("27");
+        assertThat(result.migrationsExecuted).as("V27 and V27.1 (V28 stays reserved for the DEC-079 rule)").isEqualTo(2);
+        assertThat(result.targetSchemaVersion).isEqualTo("27.1");
 
         // 3 · comparison
         var after = snapshot(raw, schema, before);
         var added = new TreeSet<>(after.schema()); added.removeAll(before.schema());
         var removed = new TreeSet<>(before.schema()); removed.removeAll(after.schema());
-        assertThat(added).as("only one new column").containsExactly("column events.door_attendance int nullable=YES default=null collation=null extra= generated=");
-        assertThat(removed).as("no table, column, index or constraint changed or removed").isEmpty();
+        assertThat(added).as("V27: one new column").contains("column events.door_attendance int nullable=YES default=null collation=null extra= generated=");
+        assertThat(added).as("V27.1: only the new table and the widened purpose CHECK").allMatch(e -> e.startsWith("column events.door_attendance ")
+                || e.contains("activity_qr_validations") || e.startsWith("check chk_credential_purpose ") && e.contains("ACTIVITY"));
+        assertThat(added).anyMatch(e -> e.startsWith("table activity_qr_validations "));
+        assertThat(removed).as("only the previous purpose CHECK clause was replaced").singleElement().matches(e -> e.startsWith("check chk_credential_purpose ") && !e.contains("ACTIVITY"));
+        assertThat(raw.queryForObject("select count(*) from activity_qr_validations", Integer.class)).as("new table starts empty").isZero();
+        // The widened CHECK: ACTIVITY is accepted, anything else is still rejected.
+        var anyone = raw.queryForMap("select id, event_id from participants order by id limit 1");
+        raw.update("insert into purpose_credentials(id,issue_key,purpose,context_id,event_id,issuer_id,token_hash,manual_hash,expires_at) values('chk-activity','chk-activity','ACTIVITY',0,?,?,'chk-a','chk-a',now(6))", anyone.get("event_id"), anyone.get("id"));
+        assertThatThrownBy(() -> raw.update("insert into purpose_credentials(id,issue_key,purpose,context_id,event_id,issuer_id,token_hash,manual_hash,expires_at) values('chk-other','chk-other','OTHER',0,?,?,'chk-o','chk-o',now(6))", anyone.get("event_id"), anyone.get("id"))).isInstanceOf(org.springframework.dao.DataAccessException.class);
+        raw.update("delete from purpose_credentials where id='chk-activity'");
         assertThat(after.rows()).as("row counts per table (history counted up to V26)").isEqualTo(before.rows());
         assertThat(after.tables()).as("every row identical, column by column").isEqualTo(before.tables());
         assertThat(raw.queryForList("select id, alias, points from participants order by id")).as("balances").isEqualTo(balancesBefore);
         assertThat(raw.queryForList("select action, count(*) n from match_completion_steps group by action order by action")).as("Saga ledger").isEqualTo(ledgerBefore);
         assertThat(raw.queryForObject("select count(*) from events where door_attendance is not null", Integer.class)).as("no back-fill").isZero();
-        assertThat(raw.queryForObject("select count(*) from flyway_schema_history", Integer.class)).isEqualTo(historyRows + 1);
+        assertThat(raw.queryForObject("select count(*) from flyway_schema_history", Integer.class)).isEqualTo(historyRows + 2);
 
         // 4 · PING on the upgraded schema
         String rule;
@@ -121,13 +131,13 @@ class DoorAttendanceUpgradeMySqlCheck {
         }
         System.out.printf("""
 
-                ===== DEC-079 · V26 → V27 en MySQL aislada (%s) =====
-                Migración aplicada: %d (V27) en %d ms · esquema %s → %s
+                ===== DEC-079 + DEC-081 · V26 → V27 → V27.1 en MySQL aislada (%s) =====
+                Migraciones aplicadas: %d (V27 y V27.1) en %d ms · esquema %s → %s
                 Tablas comparadas: %d · filas: %d · idénticas columna a columna: sí · elementos de esquema comparados: %d
-                Columna nueva: %s
+                Elementos nuevos: %s
                 Saldos antes = después: %s
                 Registro de la Saga antes = después: %s
-                Historial Flyway V1–V26 intacto: sí (%d filas + 1 de V27)
+                Historial Flyway V1–V26 intacto: sí (%d filas + V27 + V27.1) · activity_qr_validations vacía · CHECK admite ACTIVITY y rechaza otros
                 Eventos anteriores con total de puerta: 0 (sin relleno)
                 Después: PING arranca con validate, Resultados lee el evento anterior («sin registrar») y guarda 70 → 10 %%
                 Regla pendiente: %s
@@ -157,6 +167,7 @@ class DoorAttendanceUpgradeMySqlCheck {
         var tables = new TreeMap<String, String>(); var rows = new TreeMap<String, Integer>();
         for (String table : raw.queryForList("select table_name from information_schema.tables where table_schema=? and table_type='BASE TABLE'", String.class, schema)) {
             var names = (reference == null ? columns : reference.columns()).get(table);
+            if (names == null && reference != null && table.equals("activity_qr_validations")) continue; // V27.1, checked empty separately
             if (names == null) throw new IllegalStateException("table not present at V26: " + table);
             String where = table.equals("flyway_schema_history") ? " where cast(version as unsigned) <= 26" : "";
             var lines = new ArrayList<String>();

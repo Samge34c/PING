@@ -1,0 +1,29 @@
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Escanear QR de actividad')}"></head><body><nav th:replace="~{fragments/layout :: nav}"></nav>
+<!-- DEC-081: authorised staff of the event scan the activity QR a participant shows after «Completar actividad».
+     One valid scan with both confirmations starts the existing Saga; a repeated scan never adds points. -->
+<main id="main-content" class="container ping-form-layout dv-page">
+  <a th:href="@{/organizer}">← Organización</a>
+  <h1>Escanear QR de actividad</h1>
+  <p th:unless="${scan}">Escanea el QR que la persona muestra al pulsar «Completar actividad», o escribe su código. Cuando ambos la hayan completado, un escaneo acredita los puntos a los dos, una sola vez.</p>
+
+  <section th:if="${scan}" class="dv-receipt" aria-labelledby="as-title" th:with="r=${scan.result().name()}">
+    <p class="dv-kicker" th:text="${'Encuentro de ' + scan.first() + ' y ' + scan.second()}"></p>
+    <h2 id="as-title" class="h4" th:text="${r == 'CREDITED' ? 'Actividad validada' : (r == 'ALREADY' ? 'Esta actividad ya estaba validada' : 'Falta completar la actividad')}"></h2>
+    <p class="dv-state" role="status" th:attr="data-status=${r == 'WAITING' ? 'REQUESTED' : 'DELIVERED'}"
+       th:text="${r == 'CREDITED' ? (scan.points() == 0 ? 'Encuentro completado. Esta actividad no da puntos.' : 'Se acreditaron ' + scan.points() + ' puntos a ' + scan.first() + ' y ' + scan.points() + ' a ' + scan.second() + ', una sola vez.')
+               : (r == 'ALREADY' ? 'No se sumaron puntos otra vez.' : 'Falta que ' + #strings.listJoin(scan.missing(),' y ') + ' pulse «Completar actividad». No se acreditó nada todavía.')}"></p>
+    <form th:if="${r == 'WAITING'}" method="post" th:action="@{/organizer/activity-scan}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="credential" th:value="${credential}">
+      <p class="dv-help">El mismo código sigue sirviendo mientras no venza. Cuando la otra persona la complete, vuelve a validarlo.</p>
+      <button id="as-retry" class="btn btn-primary">Validar de nuevo este código</button></form>
+  </section>
+  <p th:if="${scanError}" class="ping-notice" role="alert" th:text="${scanError}"></p>
+
+  <form method="post" th:action="@{/organizer/activity-scan}" th:classappend="${scan} ? 'dv-lookup-again'" data-credential-form>
+    <input type="hidden" name="_csrf" th:value="${csrfToken}">
+    <label class="form-label" for="activity-credential" th:text="${scan} ? 'Otro QR de actividad' : 'Código de la actividad'"></label>
+    <input class="form-control" name="credential" id="activity-credential" maxlength="96" autocomplete="off" autocapitalize="characters" spellcheck="false" required placeholder="ACTIVIDAD-…">
+    <div th:replace="~{verification/scanner :: scanner('ACTIVITY','activity-credential')}"></div>
+    <button id="as-submit" class="btn btn-primary">Validar actividad</button>
+  </form>
+  <p class="dv-help">Solo valida actividades de tus eventos. Si participas en ese encuentro, debe validarlo otra persona autorizada.</p>
+</main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>

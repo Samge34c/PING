@@ -69,6 +69,8 @@
       <p class="am-reward" th:text="${match.rewardPoints == 0 ? 'Sin puntos' : '+' + match.rewardPoints + ' puntos por persona al completarla'}"></p>
       <div class="am-block" th:if="${p.lead() != null}"><h3>Qué hacer</h3><p class="mission-activity-text" th:text="${p.lead()}"></p>
         <details th:if="${p.moreInstructions() != null}" class="am-more"><summary>Ver instrucciones completas</summary><p th:text="${p.moreInstructions()}"></p></details></div>
+      <div class="am-block" th:if="${match.qrValidation()}"><h3>Cómo se comprueba</h3>
+        <p><strong th:text="${match.activityCheck.label + '.'}"></strong> <span th:text="${#strings.isEmpty(match.checkInstructions) ? 'Al terminar, ambos la completan y una persona del evento escanea su QR.' : #strings.trim(match.checkInstructions)}"></span></p></div>
       <div class="am-block" th:if="${match.staffReview()}"><h3>Cómo se comprueba</h3>
         <p th:with="raw=${#strings.isEmpty(match.checkInstructions) ? '' : #strings.trim(match.checkInstructions)},ci=${#strings.endsWith(raw,'.') ? #strings.substring(raw,0,#strings.length(raw)-1) : raw}"><strong th:text="${match.activityCheck.label + '.'}"></strong> <span th:text="${match.staffReview() ? 'El personal del evento revisa lo que envíen' + (#strings.isEmpty(ci) ? '' : ': ' + ci) + '. Además, ambos confirman.' : 'Ambos la marcan como hecha y los puntos llegan entonces. Se comprueba en persona al recoger un premio.'}"></span></p></div>
       <div class="am-block" th:if="${match.atDelivery()}"><h3>Qué mostrar al recoger el premio</h3>
@@ -85,12 +87,23 @@
             <form th:replace="~{demo/active-mission :: reviewForm}"></form></details>
         </th:block>
         <ul class="am-checks" th:if="${match.confirmed or match.otherConfirmed}" aria-label="Confirmaciones">
-          <li th:attr="data-done=${match.confirmed}"><svg th:replace="~{fragments/layout :: icon(${match.confirmed ? 'check' : 'clock'})}"></svg><span th:text="${'Tú · ' + (match.confirmed ? (match.atDelivery() ? 'marcada' : 'confirmado') : (match.atDelivery() ? 'por marcar' : 'por confirmar'))}"></span></li>
-          <li th:attr="data-done=${match.otherConfirmed}"><svg th:replace="~{fragments/layout :: icon(${match.otherConfirmed ? 'check' : 'clock'})}"></svg><span th:text="${match.otherAlias + ' · ' + (match.otherConfirmed ? (match.atDelivery() ? 'marcada' : 'confirmado') : (match.atDelivery() ? 'por marcar' : 'por confirmar'))}"></span></li>
+          <li th:attr="data-done=${match.confirmed}"><svg th:replace="~{fragments/layout :: icon(${match.confirmed ? 'check' : 'clock'})}"></svg><span th:text="${'Tú · ' + (match.confirmed ? (match.atDelivery() ? 'marcada' : (match.qrValidation() ? 'completada' : 'confirmado')) : (match.atDelivery() ? 'por marcar' : (match.qrValidation() ? 'por completar' : 'por confirmar')))}"></span></li>
+          <li th:attr="data-done=${match.otherConfirmed}"><svg th:replace="~{fragments/layout :: icon(${match.otherConfirmed ? 'check' : 'clock'})}"></svg><span th:text="${match.otherAlias + ' · ' + (match.otherConfirmed ? (match.atDelivery() ? 'marcada' : (match.qrValidation() ? 'completada' : 'confirmado')) : (match.atDelivery() ? 'por marcar' : (match.qrValidation() ? 'por completar' : 'por confirmar')))}"></span></li>
         </ul>
         <form th:if="${p.sub() == 'confirm' or p.sub() == 'mark' or p.sub() == 'retry'}" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-primary am-main-action" th:text="${p.sub() == 'retry' ? 'Reintentar finalización' : (p.sub() == 'mark' ? 'Marcar como hecha' : 'Confirmar actividad')}"></button></form>
         <!-- Staff review: confirming before the task is sent stays possible (existing rule); it is secondary. -->
         <form th:if="${(p.sub() == 'submit' or p.sub() == 'fix') and !match.confirmed}" method="post" th:action="@{/matches/{id}/confirm(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><button id="am-confirm-action" class="btn btn-link am-aux">Confirmar mi parte ahora</button></form>
+        <!-- DEC-081: «Completar actividad» registers this person's confirmation and shows the activity QR for staff. -->
+        <form th:if="${p.sub() == 'complete'}" method="post" th:action="@{/matches/{id}/complete(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="requestKey" th:value="${credentialRequestKey}"><button id="am-complete-action" class="btn btn-primary am-main-action">Completar actividad</button></form>
+        <div th:if="${p.sub() == 'qr'}" id="am-activity-qr" class="am-panel am-mine">
+          <th:block th:if="${activityCredential != null}">
+            <img data-private-credential class="credential-qr" th:src="@{/matches/{id}/activity-code.png(id=${match.id})}" alt="QR de la actividad. Muéstralo a una persona autorizada del evento para que lo escanee.">
+            <p class="am-manual">Si no puede escanearlo: <code data-private-credential th:text="${activityCredential.manual}"></code></p>
+            <p class="am-foot" th:text="${'Vale hasta las ' + #temporals.format(activityCredential.expiresAt,'h:mm a','America/Bogota') + ' y solo para esta actividad. Sirve el tuyo o el de ' + match.otherAlias + '.'}"></p>
+            <form method="post" th:action="@{/matches/{id}/activity-code(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="requestKey" th:value="${credentialRequestKey}"><input type="hidden" name="renew" value="true"><button class="btn btn-link am-aux">Renovar QR</button></form>
+          </th:block>
+          <form th:if="${activityCredential == null}" method="post" th:action="@{/matches/{id}/activity-code(id=${match.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="requestKey" th:value="${credentialRequestKey}"><button id="am-activity-code" class="btn btn-primary am-main-action">Mostrar QR de la actividad</button></form>
+        </div>
         <a th:if="${p.sub() == 'wait'}" class="am-aux" href="#connection-safety">¿Hay un problema? Ver opciones</a>
       </div>
       <!-- Legacy policy: the place is context, after the action. -->

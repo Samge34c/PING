@@ -804,3 +804,16 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - **Hora legible:** se muestra en formato de 12 horas de Colombia («3:00 p. m.») con su zona IANA. Se guarda igual que antes (instante + zona).
 - **Relacionado, sin cambio de regla:** un encuentro completado con una actividad de 0 puntos muestra «Sin puntos» en lugar de «+0 puntos».
 - **Pendiente:** aceptación de Julián.
+
+## DEC-081 — Validación presencial de actividades con QR (pedida por Samuel; pendiente de Julián)
+
+**Estado: solicitada por Samuel el 23 de noviembre de 2026 en la sesión de Claude Code («Implementa ya en PING la validación de actividades por QR»); pendiente de aceptación de Julián.** No se atribuye aprobación a Julián. Rama `feature/validacion-qr-actividad` desde `0027df6` (DEC-079 y DEC-080, también pendientes de Julián). Sin merge ni despliegue.
+
+- **Nuevo método de comprobación «Validación presencial con QR»** (`QR_VALIDATION`), elegible al crear o editar una actividad. Como los demás, queda congelado en el encuentro al activarse: los encuentros y actividades que ya usan otro método no cambian.
+- **Participante:** con ambas llegadas y la verificación hechas, pulsa «Completar actividad». Eso registra su confirmación (la misma confirmación bilateral) y muestra en su celular el QR de la actividad. Cualquiera de los dos QR sirve.
+- **Personal:** «Escanear QR de actividad» en Organización (`/organizer/activity-scan`), para Organización y Personal del evento y para administración general. Reutiliza el escáner existente y admite escribir el código.
+- **Acreditación:** con las dos confirmaciones, un escaneo válido registra la validación (una por encuentro) y arranca la Saga existente, que acredita a cada persona los puntos configurados una sola vez. Si se escanea antes de la segunda confirmación, se indica quién falta y el código sigue sirviendo. Un escaneo repetido o simultáneo no suma más: la validación tiene clave única por encuentro y la Saga ya es idempotente.
+- **El QR:** credencial de propósito `ACTIVITY` (`PING:ACTIVITY:…`, código manual `ACTIVIDAD-…`), ligada al encuentro y al evento, con caducidad de 20 minutos y renovable. Es distinta de las de entrada, encuentro (`ENCOUNTER`) y canje (`REDEMPTION`). Se rechaza si viene de otro evento, si quien escanea participa en ese encuentro o si caducó.
+- **Migración `V27_1` (versión 27.1), aditiva:** amplía el CHECK de `purpose_credentials.purpose` con `ACTIVITY` y crea `activity_qr_validations`. Se numera entre V27 y V28 para que **V28 quede reservada a la regla de DEC-079** y pueda aplicarse después en orden, sin `outOfOrder`.
+- **Relación con DEC-079 (V28, pendiente):** este método es también una comprobación del personal antes de acreditar. Cuando se decida V28, habrá que decidir si cuenta como «revisión previa» en los eventos nuevos.
+- **Pendiente:** aceptación de Julián. Desplegar esta rama publica también DEC-079 y DEC-080, igualmente pendientes.

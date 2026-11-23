@@ -7,8 +7,8 @@ import com.ping.event.EventService;
 @Controller @Profile("!bootstrap")
 public class OrganizerController {
  private final AuthSupport auth;private final AccountService accounts;private final EventService events;
- private final com.ping.encounter.EncounterService encounters;private final com.ping.reward.RewardService rewards;private final com.ping.review.ActivityReviewService reviews;private final com.ping.event.EventEntryLinks links;private final com.ping.admin.AdminService results;private final com.ping.eventextras.EventExperienceService extras;
- public OrganizerController(AuthSupport a,AccountService s,EventService e,com.ping.encounter.EncounterService encounters,com.ping.reward.RewardService rewards,com.ping.review.ActivityReviewService reviews,com.ping.event.EventEntryLinks links,com.ping.admin.AdminService results,com.ping.eventextras.EventExperienceService extras){auth=a;accounts=s;events=e;this.encounters=encounters;this.rewards=rewards;this.reviews=reviews;this.links=links;this.results=results;this.extras=extras;}
+ private final com.ping.encounter.EncounterService encounters;private final com.ping.reward.RewardService rewards;private final com.ping.review.ActivityReviewService reviews;private final com.ping.event.EventEntryLinks links;private final com.ping.admin.AdminService results;private final com.ping.eventextras.EventExperienceService extras;private final com.ping.verification.CredentialService codes;
+ public OrganizerController(AuthSupport a,AccountService s,EventService e,com.ping.encounter.EncounterService encounters,com.ping.reward.RewardService rewards,com.ping.review.ActivityReviewService reviews,com.ping.event.EventEntryLinks links,com.ping.admin.AdminService results,com.ping.eventextras.EventExperienceService extras,com.ping.verification.CredentialService codes){auth=a;accounts=s;events=e;this.encounters=encounters;this.rewards=rewards;this.reviews=reviews;this.links=links;this.results=results;this.extras=extras;this.codes=codes;}
  /**
   * DEC-066/079: the page is organised around one selected event. Organisation sees Operación, Participantes and Configuración here
   * (Resultados is /admin?eventId=); STAFF only sees its two tasks (review and deliver), whatever tab is asked for.
@@ -21,6 +21,8 @@ public class OrganizerController {
   if(event!=null&&(selected==null||!selected.getId().equals(event)))throw new org.springframework.security.access.AccessDeniedException("No tienes permiso para administrar este evento.");
   if(selected!=null){session.setAttribute("pingOrganizerEvent",selected.getId());boolean organize=auth.canOrganize(selected.getId());
    m.addAttribute("board",OrganizerBoard.of(selected,encounters,rewards,reviews,null));m.addAttribute("canOrganize",organize);m.addAttribute("entryLink",links.link(selected));
+   // DEC-081: QR encounters with both confirmations still waiting for a staff scan (organisation and staff both scan).
+   m.addAttribute("qrWaiting",codes.awaitingActivityScan(selected.getId()));
    m.addAttribute("tab",!organize?"operacion":"participantes".equals(tab)||"configuracion".equals(tab)?tab:"operacion");
    // The summary repeats three figures of Resultados, so it follows the same rule: organisation and general administration only.
    // Open activities reuse the agenda (published items only): visible to every participant of the event, no match, no points.

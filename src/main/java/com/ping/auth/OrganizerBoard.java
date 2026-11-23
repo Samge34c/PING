@@ -30,7 +30,8 @@ public record OrganizerBoard(Event event, long pendingReviews, long pendingClaim
             long reviewed = tasks.stream().filter(a -> a.getVerificationMethod() == CheckMethod.STAFF_REVIEW).count();
             // DEC-079: activities that kept the earlier «Comprobar al entregar» method are named, so nobody confuses them with the new flow.
             long atDelivery = tasks.stream().filter(a -> a.getVerificationMethod() == CheckMethod.AT_DELIVERY).count();
-            rows.add(new Row("Actividades y puntos", compatible == 0 ? "Falta una actividad activa con un lugar activo" : tasks.size() + (tasks.size() == 1 ? " activa" : " activas") + range + (reviewed > 0 ? " · " + reviewed + " con revisión del personal" : "") + (atDelivery > 0 ? " · " + atDelivery + " con comprobación al entregar (método anterior)" : ""),
+            long qr = tasks.stream().filter(a -> a.getVerificationMethod() == CheckMethod.QR_VALIDATION).count();
+            rows.add(new Row("Actividades y puntos", compatible == 0 ? "Falta una actividad activa con un lugar activo" : tasks.size() + (tasks.size() == 1 ? " activa" : " activas") + range + (reviewed > 0 ? " · " + reviewed + " con revisión del personal" : "") + (qr > 0 ? " · " + qr + " con validación por QR" : "") + (atDelivery > 0 ? " · " + atDelivery + " con comprobación al entregar (método anterior)" : ""),
                     compatible == 0 ? Tone.TODO : Tone.OK, compatible == 0 ? "Añadir actividad" : "Editar", base + "/encounters#activities", true));
         } else {
             // A new event still works with the basic place and activity; say so instead of "Lista anterior" (only events that really have old lists).

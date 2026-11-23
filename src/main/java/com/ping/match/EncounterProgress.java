@@ -31,13 +31,14 @@ public record EncounterProgress(List<Step> steps, String phase, String sub, Stri
 
     public static EncounterProgress of(MatchView m, Review review) {
         String other = m.otherAlias();
-        boolean policy2 = m.verificationPolicy() >= 2, staff = m.staffReview(), delivery = m.atDelivery();
+        boolean policy2 = m.verificationPolicy() >= 2, staff = m.staffReview(), delivery = m.atDelivery(), qr = m.qrValidation();
         boolean sent = review != null && review.status() != Status.CHANGES, approved = review != null && review.status() == Status.APPROVED;
         var labels = new ArrayList<String>();
         if (policy2) { labels.add("Llegar"); labels.add("Verificar"); }
         labels.add("Actividad");
         if (staff) labels.add("Revisión");
-        labels.add(delivery ? "Marcar hecha" : "Confirmar");
+        labels.add(delivery ? "Marcar hecha" : qr ? "Completar" : "Confirmar");
+        if (qr) labels.add("Validar QR"); // DEC-081: staff scan of the activity QR, after both completed it
         int act = labels.indexOf("Actividad"), rev = labels.indexOf("Revisión"), conf = labels.size() - 1;
         String phase = phase(m.verificationPolicy(), m.completionPending(), m.arrived(), m.otherArrived(), m.verified(), m.otherVerified());
         int index; String sub, title, detail = null; boolean waiting = false;
@@ -65,7 +66,17 @@ public record EncounterProgress(List<Step> steps, String phase, String sub, Stri
             }
             default -> {
                 // Activity: the card shows the activity itself; title/detail describe only its action zone.
-                if (staff && review == null) { index = act; sub = "submit"; title = "Envíenla a revisión";
+                if (qr) {
+                    // DEC-081: «Completar actividad» is this person's confirmation; then the activity QR waits for one staff scan.
+                    if (!m.confirmed()) { index = act; sub = "complete"; title = "¿La terminaron? Complétala";
+                        detail = m.otherConfirmed() ? other + " ya la completó. Al completarla verás el QR para el personal."
+                                : "Al pulsar «Completar actividad» verás el QR de la actividad para que el personal lo escanee."; }
+                    else { index = labels.size() - 1; sub = "qr"; waiting = true;
+                        title = m.otherConfirmed() ? "Muestra el QR al personal" : "Esperando a " + other;
+                        detail = m.otherConfirmed() ? "Ambos completaron la actividad. Un escaneo del personal acredita los puntos a los dos, una sola vez."
+                                : "Tu parte está guardada. Ya puedes mostrar el QR; el personal podrá validarlo cuando " + other + " complete la actividad."; }
+                }
+                else if (staff && review == null) { index = act; sub = "submit"; title = "Envíenla a revisión";
                     detail = "Basta con que una persona la envíe. Enviar no es aprobar ni suma puntos."; }
                 else if (staff && !sent) { index = act; sub = "fix"; title = "Corrige y reenvía";
                     detail = "El personal pidió una corrección. Cualquiera de los dos puede reenviarla."; }

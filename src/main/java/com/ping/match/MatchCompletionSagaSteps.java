@@ -47,8 +47,10 @@ public class MatchCompletionSagaSteps {
         if (!match.bothConfirmed() || awaitingReview(match)) return false;
         return prepare(match, match.getFirst().getId());
     }
-    /** A staff-reviewed task delays the start of the Saga; confirmation and approval never grant points themselves. */
+    /** A staff-reviewed task delays the start of the Saga; confirmation and approval never grant points themselves.
+     *  DEC-081: a QR-validated task waits the same way until staff registered one valid scan of the activity QR. */
     private boolean awaitingReview(Match match) {
+        if (match.qrValidation()) return jdbc.queryForObject("select count(*) from activity_qr_validations where match_id=?", Integer.class, match.getId()) == 0;
         if (!match.staffReview()) return false;
         var status = jdbc.queryForList("select status from activity_reviews where match_id=?", String.class, match.getId());
         return status.isEmpty() || !"APPROVED".equals(status.getFirst());

@@ -35,6 +35,11 @@
           <p>Escanea o escribe el código del recibo y confirma la entrega.</p>
           <a class="btn btn-outline-primary" th:href="@{/organizer/redemptions}">Entregar un canje</a>
         </article>
+        <article class="og-job" th:attr="data-pending=${qrWaiting > 0}">
+          <h3 th:text="${qrWaiting == 0 ? 'Ninguna actividad esperando QR' : qrWaiting + (qrWaiting == 1 ? ' actividad espera su QR' : ' actividades esperan su QR')}"></h3>
+          <p>Escanea el QR que muestran al completar la actividad. Acredita los puntos una sola vez.</p>
+          <a class="btn btn-outline-primary" th:href="@{/organizer/activity-scan}">Escanear QR de actividad</a>
+        </article>
       </section>
       <p class="og-staff-foot"><a th:href="@{/organizer/help}">Ayuda para organizar →</a><span>La organización se encarga de los participantes, la configuración y los resultados del evento.</span></p>
     </th:block>
@@ -44,7 +49,7 @@
       <div class="og-ops-main">
         <section class="og-section" aria-labelledby="og-tasks-title">
           <h2 id="og-tasks-title">Tareas del equipo</h2>
-          <p class="og-help">Dos procesos distintos: uno antes de acreditar puntos y otro en el puesto de premios.</p>
+          <p class="og-help">Validar antes de acreditar puntos (revisión o QR de actividad) y entregar en el puesto de premios.</p>
           <div class="og-task">
             <div class="og-task-text"><strong>Validar actividades</strong><p>Apruebas o pides corrección antes de que se acrediten los puntos.</p></div>
             <span class="og-count" th:attr="data-pending=${reviewsLeft > 0}" th:text="${reviewsLeft == 0 ? 'Nada por revisar' : reviewsLeft + ' por revisar'}"></span>
@@ -54,6 +59,11 @@
             <div class="og-task-text"><strong>Entregar recompensas</strong><p>Consulta el código del recibo y confirma la entrega.</p></div>
             <span class="og-count" th:attr="data-pending=${claimsLeft > 0}" th:text="${claimsLeft == 0 ? 'Nada por entregar' : claimsLeft + ' por entregar'}"></span>
             <a class="og-go" th:href="@{/organizer/redemptions}">Entregar un canje <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="og-task">
+            <div class="og-task-text"><strong>Validar actividades con QR</strong><p>Escaneas el QR que muestra la pareja al completar la actividad; los puntos se acreditan una vez.</p></div>
+            <span class="og-count" th:attr="data-pending=${qrWaiting > 0}" th:text="${qrWaiting == 0 ? 'Nada por escanear' : qrWaiting + ' por escanear'}"></span>
+            <a class="og-go" th:href="@{/organizer/activity-scan}">Escanear QR de actividad <span aria-hidden="true">→</span></a>
           </div>
         </section>
         <section class="og-section" aria-labelledby="og-open-title">

@@ -37,6 +37,8 @@ public class Match {
     public boolean staffReview(){return getActivityCheck()==com.ping.encounter.CheckMethod.STAFF_REVIEW;}
     /** DEC-068: points of this encounter are checked in person when a reward paid with them is delivered. */
     public boolean atDelivery(){return getActivityCheck()==com.ping.encounter.CheckMethod.AT_DELIVERY;}
+    /** DEC-081: frozen at activation; one staff scan of the activity QR releases the Saga after both confirmations. */
+    public boolean qrValidation(){return getActivityCheck()==com.ping.encounter.CheckMethod.QR_VALIDATION;}
     @Column(nullable=false) private boolean cancelledByOrganization;
     public boolean isCancelledByOrganization(){return cancelledByOrganization;}
     void cancelByOrganization(){status=MatchStatus.CANCELLED;cancelledByOrganization=true;}
