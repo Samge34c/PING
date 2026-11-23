@@ -1,4 +1,4 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Entregar un beneficio')}"></head><body><nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container ping-form-layout dv-page"><a th:href="@{/organizer}">← Organización</a><h1>Entregar un beneficio</h1><p th:unless="${delivery}">Escanea o introduce el código del recibo. Solo puedes entregar beneficios de eventos autorizados.</p><p class="ping-notice" th:if="${deliveryMessage}" th:text="${deliveryMessage}" role="status"></p><p class="ping-notice" th:if="${deliveryError}" th:text="${deliveryError}" role="alert"></p>
+<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Entregar un beneficio')}"></head><body><nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container ping-form-layout dv-page"><a th:href="@{/organizer}">← Organización</a><h1>Entregar un beneficio</h1><p th:unless="${delivery}">Escanea o introduce el código del recibo. Solo puedes entregar beneficios de eventos autorizados. Al abrirlo verás si pide una comprobación (solo los recibos con el método anterior); si no, confirmas la entrega.</p><p class="ping-notice" th:if="${deliveryMessage}" th:text="${deliveryMessage}" role="status"></p><p class="ping-notice" th:if="${deliveryError}" th:text="${deliveryError}" role="alert"></p>
 <!-- DEC-068: an open receipt is shown first; scanning only identifies it. Evidence is checked in person and registered before delivery. -->
 <section th:if="${delivery}" class="dv-receipt" aria-labelledby="dv-title" th:with="open=${delivery.status=='REQUESTED'}">
   <p class="dv-kicker" th:text="${'Recibo #' + delivery.claim + ' · ' + delivery.alias}"></p>
@@ -7,7 +7,8 @@
   <p class="dv-meta"><span th:text="${'Cantidad: 1 · ' + delivery.cost + ' puntos ya descontados'}"></span><span th:text="${delivery.location}"></span></p>
   <section th:if="${!delivery.evidence.isEmpty()}" class="dv-evidence" aria-labelledby="dv-evidence-title">
     <h3 id="dv-evidence-title" th:text="${open and delivery.evidenceMissing() ? 'Antes de entregar: comprueba la evidencia' : 'Evidencia de la actividad'}"></h3>
-    <p class="dv-help" th:if="${open and delivery.evidenceMissing()}">Este canje usa puntos de una actividad que se comprueba al entregar. Escanear el recibo no basta: pide que te muestren la evidencia en su celular.</p>
+    <p class="dv-legacy" role="note"><strong>Recibo con comprobación anterior.</strong> Usa puntos de una actividad configurada con «Comprobar al entregar», un método que ya no se ofrece para actividades nuevas. Sus requisitos se mantienen.</p>
+    <p class="dv-help" th:if="${open and delivery.evidenceMissing()}">Escanear el recibo no basta: pide que te muestren la evidencia en su celular.</p>
     <article th:each="ev : ${delivery.evidence}" class="dv-item" th:attr="data-validated=${ev.validated()}">
       <p class="dv-activity" th:text="${ev.activityTitle()}"></p>
       <dl class="dv-facts">

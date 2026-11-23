@@ -36,8 +36,10 @@ class DeliveryEvidenceTests {
         var f = new EventForm(); f.setName("Evidencia ficticia " + UUID.randomUUID()); event = events.create(f).getId(); events.transition(event, EventStatus.OPEN);
         var p = new PointForm(); p.setName("Plazoleta"); p.setDirections("Junto a la fuente"); long point = config.savePoint(event, null, p);
         var act = new ActivityForm(); act.setTitle("Encuentra a la mascota de la U"); act.setInstructions("Búsquenla y tómense una foto juntos."); act.setRewardPoints(20); act.setPointIds(Set.of(point));
-        act.setVerificationMethod(CheckMethod.AT_DELIVERY); act.setCheckInstructions("Una foto de los dos con la mascota");
-        config.saveActivity(event, null, act);
+        act.setVerificationMethod(CheckMethod.STAFF_REVIEW); act.setCheckInstructions("Una foto de los dos con la mascota");
+        long activity = config.saveActivity(event, null, act);
+        // DEC-079: «Comprobar al entregar» can no longer be chosen for a new activity; this fixture is an activity configured before that change.
+        sql.update("update event_activities set verification_method='AT_DELIVERY' where id=?", activity);
         var bf = new BenefitForm(); bf.setName("Botella del evento"); bf.setDescription("Botella reutilizable"); bf.setPointsCost(10); bf.setClaimLocation("Mesa amarilla de entregas"); bf.setClaimInstructions("Junto a la entrada principal.");
         benefit = benefits.save(event, null, bf);
         accountA = account(); accountB = account(); a = person(accountA, event, "Persona A"); b = person(accountB, event, "Persona B");

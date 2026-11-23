@@ -1,7 +1,161 @@
-<!doctype html><html lang="es" xmlns:th="http://www.thymeleaf.org"><head th:replace="~{fragments/layout :: head('Panel de eventos')}"></head><body><nav th:replace="~{fragments/layout :: nav}"></nav><main id="main-content" class="container admin-page"><div th:replace="~{fragments/layout :: message}"></div><header class="page-heading"><div><span class="eyebrow">EL EVENTO / UNA VISTA COMPLETA</span><h1>Las conexiones, en perspectiva.</h1><p>Personas, encuentros y resultados de tu evento.</p></div><a class="btn btn-primary" th:href="@{/admin(eventId=${selectedEventId})}"><svg th:replace="~{fragments/layout :: icon('activity')}"></svg>Actualizar métricas</a></header><form th:unless="${#lists.isEmpty(allEvents)}" method="get" th:action="@{/admin}" class="admin-filter"><div><label for="metricEvent" class="form-label">Evento a mostrar</label><select id="metricEvent" name="eventId" class="form-select"><option value="">Todos los eventos</option><option th:each="e : ${allEvents}" th:value="${e.id}" th:selected="${selectedEventId != null and selectedEventId == e.id}" th:text="${e.name + ' (#' + e.id + ') · ' + e.status.label}"></option></select></div><button class="btn btn-outline-primary">Ver métricas del evento</button><span class="small text-secondary">Actualizado <time data-admin-time>ahora</time></span></form><th:block th:if="${#lists.isEmpty(events)}"><div th:replace="~{fragments/layout :: empty('grid','Tu evento aún no tiene escenario','Crea un evento o prepara la feria para empezar a ver conexiones reales.',@{/events/new},'Crear evento')}"></div></th:block>
-<section class="mb-5" th:each="e : ${events}" th:attr="data-event-id=${e.id}" th:with="d=${details[e.id]},total=${e.offered + e.active + e.completed + e.cancelled}"><div class="admin-event-header"><div><h2 th:text="${e.name}"></h2><p class="small text-secondary mb-0"><svg th:replace="~{fragments/layout :: icon('pin')}"></svg> <span th:text="${d.meetingPoint}"></span></p></div><span class="ping-status" th:attr="data-status=${e.status.name()}" th:text="${e.status.label}"></span></div><div class="admin-metrics"><article class="ping-metric "><div class="metric-top"><span>Participantes</span><svg th:replace="~{fragments/layout :: icon('users')}"></svg></div><strong th:text="${e.participants}" data-metric="participants"></strong><p>Dentro de este evento</p></article><article class="ping-metric "><div class="metric-top"><span>Disponibles declarados</span><svg th:replace="~{fragments/layout :: icon('waves')}"></svg></div><strong th:text="${e.available}" data-metric="available"></strong><p>Dentro de este evento</p></article><article class="ping-metric "><div class="metric-top"><span>Matches ofrecidos en total</span><svg th:replace="~{fragments/layout :: icon('link')}"></svg></div><strong th:text="${total}" data-metric="total"></strong><p>Dentro de este evento</p></article><article class="ping-metric highlight"><div class="metric-top"><span>Completadas</span><svg th:replace="~{fragments/layout :: icon('check')}"></svg></div><strong th:text="${e.completed}" data-metric="completed"></strong><p>Conexiones realizadas</p></article><article class="ping-metric "><div class="metric-top"><span>Puntos entregados</span><svg th:replace="~{fragments/layout :: icon('bolt')}"></svg></div><strong th:text="${e.points}" data-metric="points"></strong><p>PTS emitidos, antes de canjes</p></article></div><div class="admin-overview"><article class="ping-card"><div class="section-heading"><h3>El ritmo del evento</h3><span class="ping-status"><span th:text="${e.completionPercent() + '%'}"></span> completado</span></div><div class="distribution-row"><span>Ofrecidos</span><div class="visual-bar "><span th:style="|width:${total > 0 ? (100.0 * e.offered / total) : 0}%|"></span></div><strong th:text="${e.offered}" data-metric="offered"></strong></div><div class="distribution-row"><span>Activos</span><div class="visual-bar "><span th:style="|width:${total > 0 ? (100.0 * e.active / total) : 0}%|"></span></div><strong th:text="${e.active}" data-metric="active"></strong></div><div class="distribution-row"><span>Completados</span><div class="visual-bar success"><span th:style="|width:${total > 0 ? (100.0 * e.completed / total) : 0}%|"></span></div><strong th:text="${e.completed}" data-metric="completed-distribution"></strong></div><div class="distribution-row"><span>Cancelados</span><div class="visual-bar "><span th:style="|width:${total > 0 ? (100.0 * e.cancelled / total) : 0}%|"></span></div><strong th:text="${e.cancelled}" data-metric="cancelled"></strong></div><p class="small text-secondary mb-0">Completadas de todas las propuestas. Libres para conectar: <strong th:text="${e.free}" data-metric="free"></strong> · No disponibles: <strong th:text="${e.unavailable()}"></strong>.</p><p class="small text-secondary mt-2 mb-0">Libres requiere evento abierto y sin conexión pendiente.</p></article><article class="ping-card"><div class="section-heading"><h3>¿Cómo se sintió conectar?</h3><span class="ping-status" th:text="${e.feedbackCount() + ' opiniones'}"></span></div><div class="feedback-split"><div class="feedback-count"><svg th:replace="~{fragments/layout :: icon('smile')}"></svg><strong th:text="${e.useful}" data-metric="useful"></strong><span>Positivo</span></div><div class="feedback-count"><svg th:replace="~{fragments/layout :: icon('more')}"></svg><strong th:text="${e.neutral}"></strong><span>Neutral</span></div><div class="feedback-count"><svg th:replace="~{fragments/layout :: icon('close')}"></svg><strong th:text="${e.notUseful}"></strong><span>Negativo</span></div></div><p class="small text-secondary mb-0">Feedback voluntario. Omitirlo no cuenta como neutral ni entrega puntos.</p></article></div>
-<div class="ping-card" data-tabs><div class="tabs" role="tablist" aria-label="Detalles del evento"><button type="button" role="tab" th:id="|tab-people-${e.id}|" th:attr="aria-controls=|panel-people-${e.id}|" aria-selected="true">Participantes</button><button type="button" role="tab" th:id="|tab-matches-${e.id}|" th:attr="aria-controls=|panel-matches-${e.id}|" aria-selected="false">Encuentros</button><button type="button" role="tab" th:id="|tab-reports-${e.id}|" th:attr="aria-controls=|panel-reports-${e.id}|" aria-selected="false">Reportes</button><button type="button" role="tab" th:id="|tab-claims-${e.id}|" th:attr="aria-controls=|panel-claims-${e.id}|" aria-selected="false">Beneficios</button></div><section role="tabpanel" class="tab-panel" th:id="|panel-people-${e.id}|" th:attr="aria-labelledby=|tab-people-${e.id}|"><div class="section-heading"><h3>Participantes del evento</h3><a th:href="@{/events/{id}(id=${e.id})}">Gestionar este evento →</a></div><div th:if="${#lists.isEmpty(d.participants)}" class="ping-empty empty-compact"><div class="empty-graphic"><span></span><span></span><svg th:replace="~{fragments/layout :: icon('users')}"></svg></div><h2>Las primeras personas hacen el evento.</h2><p>Registra participantes para que empiecen a conectar.</p><a class="btn btn-primary" th:href="@{/participants/new}">Registrar participante</a></div><div role="region" aria-label="Participantes: tabla desplazable" tabindex="0" class="table-responsive" th:unless="${#lists.isEmpty(d.participants)}"><table class="table"><caption>Disponibilidad declarada, saldo y conexiones completadas</caption><thead><tr><th>Alias</th><th>Intereses</th><th>Disponibilidad</th><th>Puntos</th><th>Completadas</th></tr></thead><tbody><tr th:each="p : ${d.participants}"><td><a th:href="@{/participants/{id}(id=${p.id})}" class="d-flex align-items-center gap-2"><span class="avatar avatar-small" th:text="${#strings.toUpperCase(#strings.substring(p.alias,0,1))}"></span><strong th:text="${p.alias}"></strong></a></td><td><div class="chip-list"><span class="ping-chip" th:each="i : ${p.interests}" th:text="${i}"></span></div></td><td><span class="ping-status" th:classappend="${p.available} ? 'available' : ''" th:text="${p.available} ? 'Disponible' : 'No disponible'"></span></td><td th:text="${p.points + ' PTS'}"></td><td th:text="${p.completed}"></td></tr></tbody></table></div></section>
-<section role="tabpanel" class="tab-panel" th:id="|panel-matches-${e.id}|" th:attr="aria-labelledby=|tab-matches-${e.id}|"><h3>Conexiones</h3><div th:if="${#lists.isEmpty(d.matches)}" class="ping-empty empty-compact"><div class="empty-graphic"><span></span><span></span><svg th:replace="~{fragments/layout :: icon('link')}"></svg></div><h2>Las primeras afinidades están por llegar.</h2><p>Aún no hay propuestas. Conecta desde tu participante para empezar.</p><a class="btn btn-primary" th:href="@{/demo}">Entrar a demo</a></div><article th:each="m : ${d.matches}" class="history-row mb-3"><span class="icon-tile"><svg th:replace="~{fragments/layout :: icon('link')}"></svg></span><div class="history-content"><strong th:text="${m.first + ' + ' + m.second}"></strong><p><span th:text="${m.type}"></span> · <time th:text="${#temporals.format(m.createdAt,'dd/MM/yyyy HH:mm','America/Bogota')}"></time> · Conexión #<span th:text="${m.id}"></span></p><p th:if="${m.word != null}">Palabra: <strong th:text="${m.word}"></strong></p><p th:if="${m.activity != null}" th:text="${m.activity}"></p><small th:text="${m.result}"></small></div><span class="ping-status" th:text="${m.status}"></span></article><h3 class="mt-4">Feedback recibido</h3><th:block th:if="${#lists.isEmpty(d.feedback)}"><div th:replace="~{fragments/layout :: empty('smile','Cada conversación deja una impresión.','Las opiniones aparecerán después de las primeras conexiones. El feedback es opcional.',@{/me},'Volver a Mi Ping')}"></div></th:block><div class="report-card" th:each="f : ${d.feedback}"><span class="avatar avatar-small" th:text="${#strings.toUpperCase(#strings.substring(f.alias,0,1))}"></span><div><strong th:text="${f.alias}"></strong> · <span th:text="${f.rating}"></span><p>Conexión #<span th:text="${f.matchId}"></span></p><time th:text="${f.createdAt == null ? 'Fecha no registrada (feedback anterior)' : #temporals.format(f.createdAt,'dd/MM/yyyy HH:mm','America/Bogota') + ' · Bogotá'}"></time></div></div></section>
-<section role="tabpanel" class="tab-panel" th:id="|panel-reports-${e.id}|" th:attr="aria-labelledby=|tab-reports-${e.id}|"><h3>Reportes de interacciones</h3><p class="small text-secondary">Informes de participantes; no aplican bloqueos ni sanciones automáticas.</p><div th:if="${#lists.isEmpty(reports[e.id])}" class="ping-empty empty-compact"><div class="empty-graphic"><span></span><span></span><svg th:replace="~{fragments/layout :: icon('shield')}"></svg></div><h2>Nada que revisar por ahora.</h2><p>Sin reportes en este evento. Los informes aparecerán aquí para su revisión.</p><a class="btn btn-outline-primary" th:href="@{/events/{id}(id=${e.id})}">Ver evento</a></div><article class="report-card" th:each="r : ${reports[e.id]}"><span class="icon-tile"><svg th:replace="~{fragments/layout :: icon('shield')}"></svg></span><div><strong th:text="${r.reporter + ' → ' + r.other}"></strong><p>Conexión #<span th:text="${r.matchId}"></span> · <span th:text="${r.reason}"></span></p><p class="description" th:unless="${#strings.isEmpty(r.comment)}" th:text="${r.comment}"></p><time th:text="${#temporals.format(r.createdAt,'dd/MM/yyyy HH:mm','America/Bogota') + ' · Bogotá'}"></time></div></article></section>
-<section role="tabpanel" class="tab-panel" th:id="|panel-claims-${e.id}|" th:attr="aria-labelledby=|tab-claims-${e.id}|" th:with="s=${rewards[e.id]}"><h3>Canjes de beneficios</h3><p class="small text-secondary">Puntos emitidos: <strong th:text="${e.points}"></strong> · Solicitados: <strong th:text="${s.requested}"></strong> · Entregados: <strong th:text="${s.delivered}"></strong> · Incidencias: <strong th:text="${s.incidents}"></strong></p><div th:if="${#lists.isEmpty(s.claims)}" class="ping-empty empty-compact"><div class="empty-graphic"><span></span><span></span><svg th:replace="~{fragments/layout :: icon('gift')}"></svg></div><h2>Las conexiones traerán recompensas.</h2><p>Los canjes aparecerán aquí cuando alguien reúna suficientes puntos.</p><a class="btn btn-outline-primary" th:href="@{/participants}">Ver participantes</a></div><article class="claim-row" th:each="c : ${s.claims}" th:attr="data-claim-id=${c.id}"><span class="icon-tile gold"><svg th:replace="~{fragments/layout :: icon('snack')}"></svg></span><div class="claim-content"><strong th:text="${c.alias + ' · ' + c.benefit}"></strong><p><span th:text="${c.cost}"></span> puntos · Solicitud #<span th:text="${c.id}"></span></p><span class="ping-status" th:attr="data-status=${c.status.name()}" th:text="${c.status.label}"></span><a th:if="${c.status.name() == 'REQUESTED'}" class="btn btn-outline-primary mt-3" th:href="@{/organizer/redemptions}">Validar código para entregar</a></div></article><p class="small text-secondary mt-3 mb-0">Puntos emitidos cuenta recompensas completadas, no el saldo restante después de canjes.</p></section></div></section>
-<details class="admin-tools"><summary>Herramientas de demostración y gestión</summary><div class="action-row"><a class="btn btn-outline-primary btn-sm" th:href="@{/events/new}">Crear evento</a><a class="btn btn-outline-primary btn-sm" th:href="@{/demo/prepare}">Preparar demo rápida</a><a class="btn btn-outline-primary btn-sm" th:href="@{/demo/themes}">Comparar paletas</a></div><p class="mt-3 mb-0">Las herramientas de demo requieren una cuenta general y el modo demo habilitado.</p></details></main><footer th:replace="~{fragments/layout :: footer}"></footer></body></html>
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Resultados')}"></head>
+<body class="participant-entry-page">
+<header th:replace="~{entry/interests :: topbar}"></header>
+<!-- DEC-079 (proposal B «Informe de participación»). Every figure states what it counts and its denominator.
+     Registered in PING ≠ available now ≠ people who entered through the door. Only organisation and general administration see this page. -->
+<main id="main-content" class="container pe-page account-page og-page rs-page">
+<div th:replace="~{fragments/layout :: message}"></div>
+
+<!-- ===== One event: the report ===== -->
+<th:block th:if="${selectedEventId != null}">
+<th:block th:each="e : ${events}" th:with="d=${details[e.id]},s=${rewards[e.id]},total=${e.proposals()}">
+  <p class="og-top-links"><a class="pi-back" th:href="@{/organizer(event=${e.id})}">← Organización</a><a class="pi-back" th:if="${#lists.size(allEvents) > 1}" th:href="@{/admin}">Todos los eventos</a></p>
+  <section th:replace="~{account/org-fragments :: header(${e}, ${allEvents}, true, 'resultados')}"></section>
+
+  <section class="rs-report" th:attr="data-event-id=${e.id}" aria-labelledby="rs-title">
+    <div class="og-section-head"><h2 id="rs-title">Resultados de este evento</h2><a class="og-go" th:href="@{/admin(eventId=${e.id})}">Actualizar cifras</a></div>
+    <p class="og-help">Registros de PING para este evento hasta ahora. Las cifras cambian mientras el evento sigue en curso.</p>
+
+    <div class="rs-kpis">
+      <article class="rs-kpi"><p class="rs-num" th:text="${e.participants}" data-metric="participants"></p><h3>Personas registradas</h3><p class="rs-sub"><span>Altas en PING</span> · <span data-metric="available" th:text="${e.available}"></span> disponibles ahora</p></article>
+      <article class="rs-kpi rs-kpi-key"><p class="rs-num" th:text="${e.connectedPeople}" data-metric="connected"></p><h3>Personas con conexión completada</h3><p class="rs-sub">Al menos una; cada persona cuenta una vez</p></article>
+      <article class="rs-kpi"><p class="rs-num" th:text="${e.completed}" data-metric="completed"></p><h3>Conexiones completadas</h3><p class="rs-sub" th:text="${total == 0 ? 'Aún no hay propuestas' : 'De ' + total + (total == 1 ? ' propuesta' : ' propuestas')}"></p></article>
+      <article class="rs-kpi"><p class="rs-num" th:text="${e.claims.delivered}" data-metric="delivered"></p><h3>Canjes entregados</h3><p class="rs-sub" th:text="${e.claims.total() == 0 ? 'Aún no hay canjes' : 'De ' + e.claims.total() + (e.claims.total() == 1 ? ' canje solicitado' : ' canjes solicitados')}"></p></article>
+    </div>
+
+    <!-- Door total: optional, recorded outside PING. No percentage without it, with zero, or when it contradicts the connections. -->
+    <section id="puerta" class="rs-door" th:attr="data-door=${e.doorState().name()}" aria-labelledby="rs-door-title">
+      <div class="rs-door-text" th:switch="${e.doorState().name()}">
+        <th:block th:case="'VALID'">
+          <h3 id="rs-door-title">Participación sobre puerta: <span th:text="${e.doorPercent() + ' %'}" data-metric="door-percent"></span></h3>
+          <p th:text="${e.connectedPeople + ' personas con conexión completada de ' + e.door + ' que entraron por puerta.'}"></p>
+        </th:block>
+        <th:block th:case="'REVIEW'">
+          <h3 id="rs-door-title">El total de puerta requiere revisión</h3>
+          <p th:text="${'Hay ' + e.connectedPeople + ' personas con conexión completada y ' + e.door + ' registradas en puerta: no puede haber más personas conectadas que asistentes. No se calcula el porcentaje.'}"></p>
+        </th:block>
+        <th:block th:case="'ZERO'">
+          <h3 id="rs-door-title">Total de puerta: 0</h3>
+          <p>Sin asistentes registrados no hay denominador: no se muestra porcentaje sobre puerta.</p>
+        </th:block>
+        <th:block th:case="*">
+          <h3 id="rs-door-title">Asistencia de puerta sin registrar</h3>
+          <p>La participación sobre puerta (personas con conexión completada ÷ personas que entraron) necesita ese total. Las altas en PING no prueban el ingreso físico.</p>
+        </th:block>
+      </div>
+      <p class="ping-notice" role="status" th:if="${doorSaved}" th:text="${doorSaved}"></p>
+      <p class="ping-notice" role="alert" th:if="${doorError}" th:text="${doorError}"></p>
+      <details class="rs-door-form" th:open="${doorError != null}">
+        <summary th:text="${e.door == null ? 'Registrar total de puerta' : 'Cambiar total de puerta'}"></summary>
+        <form method="post" th:action="@{/events/{id}/attendance(id=${e.id})}">
+          <input type="hidden" name="_csrf" th:value="${csrfToken}">
+          <label class="form-label" for="door-total">Personas que entraron por puerta</label>
+          <div class="rs-door-row"><input class="form-control" id="door-total" name="doorAttendance" type="text" inputmode="numeric" pattern="[0-9. ]*" maxlength="9" autocomplete="off" th:value="${doorTyped != null ? doorTyped : e.door}" aria-describedby="door-help"><button class="btn btn-outline-primary">Guardar</button></div>
+          <p id="door-help" class="og-help">Cuéntalo fuera de PING (control de acceso o aforo) y solo para este evento. Déjalo vacío para quitarlo.</p>
+        </form>
+      </details>
+    </section>
+
+    <div class="rs-columns">
+      <section class="rs-block" aria-labelledby="rs-states-title">
+        <h3 id="rs-states-title" th:text="${total == 0 ? 'Estado de las propuestas' : 'Estado de las ' + total + (total == 1 ? ' propuesta' : ' propuestas')}"></h3>
+        <p class="og-help">Cuenta conexiones, no personas.</p>
+        <p class="og-help" th:if="${total == 0}">Aún no hay propuestas en este evento.</p>
+        <div class="rs-bar" th:unless="${total == 0}" role="img" th:attr="aria-label=${'Ofrecidas ' + e.offered + ', activas ' + e.active + ', completadas ' + e.completed + ', canceladas ' + e.cancelled}">
+          <span data-state="offered" th:style="|width:${e.share(e.offered)}%|"></span><span data-state="active" th:style="|width:${e.share(e.active)}%|"></span><span data-state="completed" th:style="|width:${e.share(e.completed)}%|"></span><span data-state="cancelled" th:style="|width:${e.share(e.cancelled)}%|"></span>
+        </div>
+        <dl class="rs-lines rs-legend">
+          <div data-state="offered"><dt>Ofrecidas</dt><dd th:text="${e.offered}" data-metric="offered"></dd></div>
+          <div data-state="active"><dt>Activas</dt><dd th:text="${e.active}" data-metric="active"></dd></div>
+          <div data-state="completed"><dt>Completadas</dt><dd th:text="${e.completed}" data-metric="completed-distribution"></dd></div>
+          <div data-state="cancelled"><dt>Canceladas</dt><dd th:text="${e.cancelled}" data-metric="cancelled"></dd></div>
+        </dl>
+        <p class="rs-foot" th:unless="${total == 0}"><strong th:text="${'Conversión de conexiones: ' + e.completionPercent() + ' %'}"></strong> <span th:text="${'(' + e.completed + ' completadas ÷ ' + total + ' propuestas)'}"></span></p>
+        <p class="og-help">Libres para conectar ahora: <strong th:text="${e.free}" data-metric="free"></strong> · requiere evento abierto, disponibilidad y ninguna conexión pendiente.</p>
+      </section>
+
+      <section class="rs-block" aria-labelledby="rs-side-title">
+        <h3 id="rs-side-title">Opiniones y canjes</h3>
+        <p class="og-help" th:text="${'Opinión voluntaria sobre la conexión · ' + e.feedbackCount() + (e.feedbackCount() == 1 ? ' respuesta' : ' respuestas')}"></p>
+        <dl class="rs-lines">
+          <div><dt>Positivas</dt><dd th:text="${e.useful}" data-metric="useful"></dd></div>
+          <div><dt>Neutrales</dt><dd th:text="${e.neutral}"></dd></div>
+          <div><dt>Negativas</dt><dd th:text="${e.notUseful}"></dd></div>
+        </dl>
+        <p class="og-help">Omitir la opinión no cuenta como neutral. Una opinión positiva no prueba que conocieron a alguien nuevo.</p>
+        <dl class="rs-lines rs-lines-strong">
+          <div><dt>Canjes sin entregar</dt><dd th:text="${e.claims.requested + (e.claims.requested == 1 ? ' pendiente · ' : ' pendientes · ') + e.claims.incidents + (e.claims.incidents == 1 ? ' incidencia' : ' incidencias')}"></dd></div>
+          <div><dt>Puntos acreditados</dt><dd class="rs-points" th:text="${e.points}" data-metric="points"></dd></div>
+        </dl>
+        <p class="og-help">Puntos entregados por conexiones completadas, antes de descontar canjes (registro de acreditaciones, no saldos).</p>
+      </section>
+    </div>
+  </section>
+
+  <section class="rs-detail" aria-labelledby="rs-detail-title">
+    <h2 id="rs-detail-title">Detalle del evento</h2>
+    <div class="ping-card" data-tabs>
+      <div class="tabs" role="tablist" aria-label="Detalles del evento">
+        <button type="button" role="tab" th:id="|tab-people-${e.id}|" th:attr="aria-controls=|panel-people-${e.id}|" aria-selected="true">Participantes</button>
+        <button type="button" role="tab" th:id="|tab-matches-${e.id}|" th:attr="aria-controls=|panel-matches-${e.id}|" aria-selected="false">Encuentros</button>
+        <button type="button" role="tab" th:id="|tab-reports-${e.id}|" th:attr="aria-controls=|panel-reports-${e.id}|" aria-selected="false">Reportes</button>
+        <button type="button" role="tab" th:id="|tab-claims-${e.id}|" th:attr="aria-controls=|panel-claims-${e.id}|" aria-selected="false">Canjes</button>
+      </div>
+      <section role="tabpanel" class="tab-panel" th:id="|panel-people-${e.id}|" th:attr="aria-labelledby=|tab-people-${e.id}|">
+        <div class="section-heading"><h3>Participantes del evento</h3><a th:href="@{/events/{id}/participants(id=${e.id})}">Buscar, retirar o readmitir →</a></div>
+        <p th:if="${#lists.isEmpty(d.participants)}" class="og-help">Aún no hay personas registradas en este evento. Entran con el código o el QR del evento.</p>
+        <div role="region" aria-label="Participantes: tabla desplazable" tabindex="0" class="table-responsive" th:unless="${#lists.isEmpty(d.participants)}"><table class="table"><caption>Disponibilidad declarada, saldo y conexiones completadas</caption><thead><tr><th>Alias</th><th>Intereses</th><th>Disponibilidad</th><th>Puntos</th><th>Completadas</th></tr></thead><tbody><tr th:each="p : ${d.participants}"><td><a th:href="@{/participants/{id}(id=${p.id})}" class="d-flex align-items-center gap-2"><span class="avatar avatar-small" th:text="${#strings.toUpperCase(#strings.substring(p.alias,0,1))}"></span><strong th:text="${p.alias}"></strong></a></td><td><div class="chip-list"><span class="ping-chip" th:each="i : ${p.interests}" th:text="${i}"></span></div></td><td><span class="ping-status" th:classappend="${p.available} ? 'available' : ''" th:text="${p.available} ? 'Disponible' : 'No disponible'"></span></td><td th:text="${p.points + ' PTS'}"></td><td th:text="${p.completed}"></td></tr></tbody></table></div>
+      </section>
+      <section role="tabpanel" class="tab-panel" th:id="|panel-matches-${e.id}|" th:attr="aria-labelledby=|tab-matches-${e.id}|">
+        <h3>Conexiones</h3>
+        <p th:if="${#lists.isEmpty(d.matches)}" class="og-help">Aún no hay propuestas en este evento.</p>
+        <article th:each="m : ${d.matches}" class="history-row mb-3"><span class="icon-tile"><svg th:replace="~{fragments/layout :: icon('link')}"></svg></span><div class="history-content"><strong th:text="${m.first + ' + ' + m.second}"></strong><p><span th:text="${m.type}"></span> · <time th:text="${#temporals.format(m.createdAt,'dd/MM/yyyy HH:mm','America/Bogota')}"></time> · Conexión #<span th:text="${m.id}"></span></p><p th:if="${m.word != null}">Palabra: <strong th:text="${m.word}"></strong></p><p th:if="${m.activity != null}" th:text="${m.activity}"></p><small th:text="${m.result}"></small></div><span class="ping-status" th:text="${m.status}"></span></article>
+        <h3 class="mt-4">Opiniones recibidas</h3>
+        <p th:if="${#lists.isEmpty(d.feedback)}" class="og-help">Las opiniones aparecerán después de las primeras conexiones. Son opcionales.</p>
+        <div class="report-card" th:each="f : ${d.feedback}"><span class="avatar avatar-small" th:text="${#strings.toUpperCase(#strings.substring(f.alias,0,1))}"></span><div><strong th:text="${f.alias}"></strong> · <span th:text="${f.rating}"></span><p>Conexión #<span th:text="${f.matchId}"></span></p><time th:text="${f.createdAt == null ? 'Fecha no registrada (feedback anterior)' : #temporals.format(f.createdAt,'dd/MM/yyyy HH:mm','America/Bogota') + ' · Bogotá'}"></time></div></div>
+      </section>
+      <section role="tabpanel" class="tab-panel" th:id="|panel-reports-${e.id}|" th:attr="aria-labelledby=|tab-reports-${e.id}|">
+        <h3>Reportes de convivencia</h3>
+        <p class="small text-secondary">Informes de participantes; no aplican bloqueos ni sanciones automáticas.</p>
+        <p th:if="${#lists.isEmpty(reports[e.id])}" class="og-help">Sin reportes en este evento.</p>
+        <article class="report-card" th:each="r : ${reports[e.id]}"><span class="icon-tile"><svg th:replace="~{fragments/layout :: icon('shield')}"></svg></span><div><strong th:text="${r.reporter + ' → ' + r.other}"></strong><p>Conexión #<span th:text="${r.matchId}"></span> · <span th:text="${r.reason}"></span></p><p class="description" th:unless="${#strings.isEmpty(r.comment)}" th:text="${r.comment}"></p><time th:text="${#temporals.format(r.createdAt,'dd/MM/yyyy HH:mm','America/Bogota') + ' · Bogotá'}"></time></div></article>
+      </section>
+      <section role="tabpanel" class="tab-panel" th:id="|panel-claims-${e.id}|" th:attr="aria-labelledby=|tab-claims-${e.id}|">
+        <h3>Canjes de recompensas</h3>
+        <p class="small text-secondary">Puntos acreditados: <strong th:text="${e.points}"></strong> · Solicitados: <strong th:text="${s.requested}"></strong> · Entregados: <strong th:text="${s.delivered}"></strong> · Incidencias: <strong th:text="${s.incidents}"></strong></p>
+        <p th:if="${#lists.isEmpty(s.claims)}" class="og-help">Los canjes aparecerán aquí cuando alguien use sus puntos.</p>
+        <article class="claim-row" th:each="c : ${s.claims}" th:attr="data-claim-id=${c.id}"><span class="icon-tile gold"><svg th:replace="~{fragments/layout :: icon('snack')}"></svg></span><div class="claim-content"><strong th:text="${c.alias + ' · ' + c.benefit}"></strong><p><span th:text="${c.cost}"></span> puntos · Solicitud #<span th:text="${c.id}"></span></p><span class="ping-status" th:attr="data-status=${c.status.name()}" th:text="${c.status.label}"></span><a th:if="${c.status.name() == 'REQUESTED'}" class="btn btn-outline-primary mt-3" th:href="@{/organizer/redemptions}">Validar código para entregar</a></div></article>
+      </section>
+    </div>
+  </section>
+</th:block>
+</th:block>
+
+<!-- ===== Several events: one line per event with its four main figures ===== -->
+<th:block th:if="${selectedEventId == null}">
+  <p class="og-top-links"><a class="pi-back" th:href="@{/organizer}">← Organización</a></p>
+  <p class="og-label">Resultados</p>
+  <h1 class="rs-title">Resultados por evento</h1>
+  <p class="og-help">Cifras principales de cada evento que organizas. Abre el informe para ver estados, opiniones, canjes y detalle.</p>
+  <p class="og-empty" th:if="${#lists.isEmpty(events)}">Aún no hay eventos con resultados para mostrar.</p>
+  <ul class="rs-overview" th:unless="${#lists.isEmpty(events)}">
+    <li th:each="e : ${events}" th:attr="data-event-id=${e.id}">
+      <div class="og-title-row"><h2 th:text="${e.name}"></h2><span class="ping-status" th:attr="data-status=${e.status.name()}" th:text="${e.status.label}"></span></div>
+      <dl class="rs-mini">
+        <div><dt>Registradas en PING</dt><dd th:text="${e.participants}"></dd></div>
+        <div><dt>Personas con conexión</dt><dd th:text="${e.connectedPeople}"></dd></div>
+        <div><dt>Conexiones completadas</dt><dd th:text="${e.completed}"></dd></div>
+        <div><dt>Canjes entregados</dt><dd th:text="${e.claims.delivered}"></dd></div>
+      </dl>
+      <a class="og-go" th:href="@{/admin(eventId=${e.id})}">Ver informe <span aria-hidden="true">→</span></a>
+    </li>
+  </ul>
+  <details class="admin-tools"><summary>Herramientas de demostración y gestión</summary><div class="action-row"><a class="btn btn-outline-primary btn-sm" th:href="@{/events/new}">Crear evento</a><a class="btn btn-outline-primary btn-sm" th:href="@{/demo/prepare}">Preparar demo rápida</a><a class="btn btn-outline-primary btn-sm" th:href="@{/demo/themes}">Comparar paletas</a></div><p class="mt-3 mb-0">Las herramientas de demo requieren una cuenta general y el modo demo habilitado.</p></details>
+</th:block>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/account.js}" defer></script>
+</body>
+</html>

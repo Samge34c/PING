@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--
+  DEC-079 (proposal A «Mesa de evento»): one header for the selected event, shared by Organización and Resultados.
+  e: event (entity or metrics record: id, name, status). events: events this account may switch to (same shape).
+  canOrganize: ORGANIZER of this event or general administration. active: operacion | participantes | resultados | configuracion.
+  Lifecycle actions are the existing POST routes; they only appear in the states where they exist.
+-->
+<section th:fragment="header(e, events, canOrganize, active)" class="og-head" aria-labelledby="og-event-title">
+  <div class="og-head-main">
+    <p class="og-label" th:text="${canOrganize ? 'Evento seleccionado' : 'Personal · evento asignado'}"></p>
+    <div class="og-title-row">
+      <h1 id="og-event-title" th:text="${e.name}"></h1>
+      <span class="ping-status" th:attr="data-status=${e.status.name()}" th:text="${e.status.label}"></span>
+    </div>
+    <details th:if="${#lists.size(events) > 1}" class="og-switch">
+      <summary>Cambiar evento</summary>
+      <ul>
+        <li th:each="x : ${events}">
+          <a th:href="${active == 'resultados'} ? @{/admin(eventId=${x.id})} : (${active == 'operacion'} ? @{/organizer(event=${x.id})} : @{/organizer(event=${x.id},tab=${active})})"
+             th:attr="aria-current=${x.id == e.id ? 'page' : null}">
+            <span th:text="${x.name}"></span> <small th:text="${x.status.label}"></small>
+          </a>
+        </li>
+      </ul>
+    </details>
+  </div>
+  <div class="og-head-actions" th:if="${canOrganize}">
+    <a class="btn btn-primary" th:href="@{/events/{id}(id=${e.id})} + '#entry-share-title'">Ver código y QR</a>
+    <form th:if="${e.status.name() == 'DRAFT'}" method="post" th:action="@{/events/{id}/open(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-outline-primary">Abrir evento</button></form>
+    <form th:if="${e.status.name() == 'OPEN'}" method="post" th:action="@{/events/{id}/pause(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-outline-primary">Pausar</button></form>
+    <form th:if="${e.status.name() == 'PAUSED'}" method="post" th:action="@{/events/{id}/resume(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-outline-primary">Reanudar</button></form>
+  </div>
+  <p class="og-state" th:if="${canOrganize}" th:text="${e.status.name() == 'OPEN' ? 'Abierto · se aceptan conexiones nuevas.' : (e.status.name() == 'PAUSED' ? 'Pausado · no hay conexiones nuevas; las activas pueden terminar.' : (e.status.name() == 'DRAFT' ? 'Borrador · aún no entra nadie.' : 'Cerrado · solo consulta.'))}"></p>
+  <nav th:if="${canOrganize}" class="og-tabs" aria-label="Secciones del evento">
+    <a th:href="@{/organizer(event=${e.id})}" th:attr="aria-current=${active == 'operacion' ? 'page' : null}">Operación</a>
+    <a th:href="@{/organizer(event=${e.id},tab='participantes')}" th:attr="aria-current=${active == 'participantes' ? 'page' : null}">Participantes</a>
+    <a th:href="@{/admin(eventId=${e.id})}" th:attr="aria-current=${active == 'resultados' ? 'page' : null}">Resultados</a>
+    <a th:href="@{/organizer(event=${e.id},tab='configuracion')}" th:attr="aria-current=${active == 'configuracion' ? 'page' : null}">Configuración</a>
+  </nav>
+</section>
+</body>
+</html>

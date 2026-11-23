@@ -41,6 +41,10 @@ public class EncounterService {
         if(points.findAllById(form.getPointIds()).size()!=form.getPointIds().size() || points.findAllById(form.getPointIds()).stream().anyMatch(p->p.getEventId()!=event))throw new BusinessRuleException("Elige puntos de este evento.");
         if(interests.findAllById(form.getInterestIds()).size()!=form.getInterestIds().size())throw new BusinessRuleException("Elige intereses del catálogo.");
         catalog.validateSelection(form.getInterestIds(),a.getInterestIds());
+        // DEC-079: checks happen before crediting («Revisión del personal»). «Comprobar al entregar» stays only on activities that already had it;
+        // it cannot be chosen for a new activity nor switched on for another one. Nothing stored is reinterpreted.
+        if(form.getVerificationMethod()==CheckMethod.AT_DELIVERY && (id==null || a.getVerificationMethod()!=CheckMethod.AT_DELIVERY))
+            throw new BusinessRuleException("«Comprobar al entregar» ya no se ofrece para actividades nuevas. Elige «Revisión del personal»: se revisa antes de acreditar los puntos y el puesto de premios solo consulta el recibo.");
         if(form.isActive() && points.findAllById(form.getPointIds()).stream().noneMatch(p->p.isActive()&&!p.isArchived()))throw new BusinessRuleException("Una actividad activa necesita un punto activo compatible.");
         a.change(form);e.enableStructuredEncounter();return activities.save(a).getId();
     }

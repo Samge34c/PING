@@ -3,12 +3,13 @@
 <head th:replace="~{fragments/layout :: head('Organización')}"></head>
 <body class="participant-entry-page">
 <header th:replace="~{entry/interests :: topbar}"></header>
-<!-- DEC-066 (Figma 189:340): one selected event, tasks first. Same routes and permissions as before; no new opening requirement. -->
+<!-- DEC-079: A «Mesa de evento» for organisation (Operación · Participantes · Resultados · Configuración) and C for STAFF (two tasks).
+     Same routes and permissions as before; Resultados lives in /admin and is limited to organisation and general administration. -->
 <main id="main-content" class="container pe-page account-page og-page">
-  <p class="og-top-links"><a class="pi-back" th:href="@{/account}">← Mi cuenta</a><a class="pi-back" th:href="@{/organizer/help}">Ayuda para organizar</a></p>
-  <p class="eyebrow">ORGANIZACIÓN</p>
+  <p class="og-top-links"><a class="pi-back" th:href="@{/account}">← Mi cuenta</a><a class="pi-back" th:if="${general}" th:href="@{/organizer/events}">Administración general</a><a class="pi-back" th:href="@{/organizer/help}">Ayuda para organizar</a></p>
   <div th:replace="~{fragments/layout :: message}"></div>
   <th:block th:if="${#lists.isEmpty(events)}">
+    <p class="eyebrow">ORGANIZACIÓN</p>
     <h1>Organización</h1>
     <p th:unless="${general}" class="og-empty">Todavía no tienes eventos asignados. Pide a administración general que te asigne uno; tener cuenta de organización no concede permisos por sí solo.</p>
     <th:block th:if="${general}">
@@ -16,67 +17,111 @@
       <a class="btn btn-primary" th:href="@{/events/new}">Crear el primer evento</a>
     </th:block>
   </th:block>
-  <th:block th:if="${board != null}" th:with="e=${board.event()}">
-    <section class="og-event" aria-labelledby="og-event-title">
-      <div>
-        <p class="og-label">Evento que administras</p>
-        <h1 id="og-event-title" th:text="${e.name}"></h1>
-        <p class="og-status"><span class="ping-status" th:attr="data-status=${e.status.name()}" th:text="${e.status.label}"></span> <span th:text="${'Código ' + e.entryCode}"></span></p>
-      </div>
-      <form th:if="${#lists.size(events) > 1}" method="get" th:action="@{/organizer}" class="og-switch">
-        <label for="og-event-select" class="form-label">Cambiar de evento</label>
-        <div class="og-switch-row"><select id="og-event-select" name="event" class="form-select"><option th:each="x : ${events}" th:value="${x.id}" th:selected="${x.id == e.id}" th:text="${x.name + ' · ' + x.status.label}"></option></select><button class="btn btn-outline-primary">Ver</button></div>
-      </form>
-    </section>
 
-    <section class="og-card og-tasks" aria-labelledby="og-tasks-title">
-      <h2 id="og-tasks-title">Validaciones y entregas</h2>
-      <a class="btn" th:classappend="${board.pendingReviews() > 0} ? 'btn-primary' : 'btn-outline-primary'" th:href="@{/events/{id}/reviews(id=${e.id})}" th:text="${board.pendingReviews() == 0 ? 'Revisar tareas · ninguna pendiente' : 'Revisar tareas · ' + board.pendingReviews() + (board.pendingReviews() == 1 ? ' pendiente' : ' pendientes')}"></a>
-      <a class="btn btn-outline-primary" th:href="@{/organizer/redemptions}" th:text="${board.pendingClaims() == 0 ? 'Entregar un canje' : 'Entregar un canje · ' + board.pendingClaims() + ' por entregar'}"></a>
-      <p class="og-help">Escanea o escribe el código del recibo. Solo puedes entregar canjes de eventos autorizados.</p>
-      <p class="og-help" th:unless="${canOrganize}" role="note">Tu permiso en este evento es de personal: revisar tareas y entregar canjes. La preparación y los participantes los gestiona la organización.</p>
-    </section>
+  <th:block th:if="${board != null}" th:with="e=${board.event()},reviewsLeft=${board.pendingReviews()},claimsLeft=${board.pendingClaims()}">
+    <section th:replace="~{account/org-fragments :: header(${e}, ${events}, ${canOrganize}, ${tab})}"></section>
 
-    <section class="og-card" aria-labelledby="og-live-title" th:if="${canOrganize}">
-      <h2 id="og-live-title">Durante el evento</h2>
-      <div class="og-row">
-        <div><strong>Entrada de participantes</strong><p th:text="${e.status.name() == 'OPEN' ? 'Comparte el código o el QR para que entren.' : 'El código funciona cuando el evento está abierto.'}"></p></div>
-        <a th:href="@{/events/{id}(id=${e.id})} + '#entry-share-title'">Código y QR</a>
-      </div>
-      <div class="og-row">
-        <div><strong>Estado</strong><p th:text="${e.status.name() == 'OPEN' ? 'Abierto · se aceptan conexiones nuevas.' : (e.status.name() == 'PAUSED' ? 'Pausado · no hay conexiones nuevas; las activas pueden terminar.' : (e.status.name() == 'DRAFT' ? 'Borrador · aún no entra nadie.' : 'Cerrado · solo consulta.'))}"></p></div>
-        <form th:if="${e.status.name() == 'DRAFT'}" method="post" th:action="@{/events/{id}/open(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-primary btn-sm">Abrir evento</button></form>
-        <form th:if="${e.status.name() == 'OPEN'}" method="post" th:action="@{/events/{id}/pause(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-outline-primary btn-sm">Pausar</button></form>
-        <form th:if="${e.status.name() == 'PAUSED'}" method="post" th:action="@{/events/{id}/resume(id=${e.id})}"><input type="hidden" name="_csrf" th:value="${csrfToken}"><input type="hidden" name="returnTo" value="organizer"><button class="btn btn-primary btn-sm">Reanudar</button></form>
-      </div>
-      <p th:if="${e.status.name() == 'DRAFT' and !board.ready()}" class="og-help" role="note">Puedes abrirlo, pero los encuentros nuevos no empezarán hasta completar lo marcado como «Falta» en Preparar evento.</p>
-      <div class="og-row" th:if="${canOrganize}"><div><strong>Participantes</strong><p>Busca por alias, retira del evento o readmite.</p></div><a th:href="@{/events/{id}/participants(id=${e.id})}">Gestionar</a></div>
-      <div class="og-row"><div><strong>Resultados</strong><p>Conexiones, puntos y canjes del evento.</p></div><a th:href="@{/admin(eventId=${e.id})}">Ver resultados</a></div>
-    </section>
+    <!-- C · Personal: only its two authorised tasks, large enough to use with one hand. -->
+    <th:block th:unless="${canOrganize}">
+      <section class="og-staff" aria-labelledby="og-work-title">
+        <h2 id="og-work-title">Tu trabajo en el evento</h2>
+        <article class="og-job" th:attr="data-pending=${reviewsLeft > 0}">
+          <h3 th:text="${reviewsLeft == 0 ? 'Ninguna tarea por revisar' : reviewsLeft + (reviewsLeft == 1 ? ' tarea por revisar' : ' tareas por revisar')}"></h3>
+          <p>Aprueba o pide corrección antes de que se acrediten los puntos.</p>
+          <a class="btn btn-primary" th:href="@{/events/{id}/reviews(id=${e.id})}">Revisar tareas</a>
+        </article>
+        <article class="og-job" th:attr="data-pending=${claimsLeft > 0}">
+          <h3 th:text="${claimsLeft == 0 ? 'Ningún canje por entregar' : claimsLeft + (claimsLeft == 1 ? ' canje por entregar' : ' canjes por entregar')}"></h3>
+          <p>Escanea o escribe el código del recibo y confirma la entrega.</p>
+          <a class="btn btn-outline-primary" th:href="@{/organizer/redemptions}">Entregar un canje</a>
+        </article>
+      </section>
+      <p class="og-staff-foot"><a th:href="@{/organizer/help}">Ayuda para organizar →</a><span>La organización se encarga de los participantes, la configuración y los resultados del evento.</span></p>
+    </th:block>
 
-    <section class="og-card" aria-labelledby="og-prepare-title" th:if="${canOrganize}">
-      <h2 id="og-prepare-title">Preparar evento</h2>
-      <p class="og-help">Lo marcado como imprescindible es lo que ya necesita un encuentro nuevo; lo opcional no bloquea nada.</p>
+    <!-- A · Operación: what has to be done today first, then what is still missing, then three figures. -->
+    <div th:if="${canOrganize and tab == 'operacion'}" class="og-ops">
+      <div class="og-ops-main">
+        <section class="og-section" aria-labelledby="og-tasks-title">
+          <h2 id="og-tasks-title">Tareas del equipo</h2>
+          <p class="og-help">Dos procesos distintos: uno antes de acreditar puntos y otro en el puesto de premios.</p>
+          <div class="og-task">
+            <div class="og-task-text"><strong>Validar actividades</strong><p>Apruebas o pides corrección antes de que se acrediten los puntos.</p></div>
+            <span class="og-count" th:attr="data-pending=${reviewsLeft > 0}" th:text="${reviewsLeft == 0 ? 'Nada por revisar' : reviewsLeft + ' por revisar'}"></span>
+            <a class="og-go" th:href="@{/events/{id}/reviews(id=${e.id})}">Revisar tareas <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="og-task">
+            <div class="og-task-text"><strong>Entregar recompensas</strong><p>Consulta el código del recibo y confirma la entrega.</p></div>
+            <span class="og-count" th:attr="data-pending=${claimsLeft > 0}" th:text="${claimsLeft == 0 ? 'Nada por entregar' : claimsLeft + ' por entregar'}"></span>
+            <a class="og-go" th:href="@{/organizer/redemptions}">Entregar un canje <span aria-hidden="true">→</span></a>
+          </div>
+        </section>
+        <section class="og-section" aria-labelledby="og-open-title">
+          <h2 id="og-open-title">Actividades abiertas</h2>
+          <div class="og-task">
+            <div class="og-task-text"><strong>Talleres y charlas del evento</strong><p>Las ve cualquier participante, aunque no tenga match. No dan puntos ni cuentan como conexiones.</p></div>
+            <span class="og-count" th:text="${openActivities == null or openActivities == 0 ? 'Ninguna publicada' : openActivities + (openActivities == 1 ? ' publicada' : ' publicadas')}"></span>
+            <a class="og-go" th:href="@{/events/{id}/agenda(id=${e.id})}">Publicar o editar <span aria-hidden="true">→</span></a>
+          </div>
+        </section>
+        <section class="og-section" aria-labelledby="og-prep-title" th:with="todo=${board.prepare().?[tone().name() == 'TODO']},ok=${board.prepare().?[tone().name() == 'OK']}">
+          <div class="og-section-head"><h2 id="og-prep-title">Preparación</h2><span class="og-help" th:text="${#lists.size(ok) + ' de ' + #lists.size(board.prepare()) + ' elementos configurados'}"></span></div>
+          <p class="og-help" th:if="${#lists.isEmpty(todo)}">Lo imprescindible para encuentros nuevos está listo. Lo demás es opcional.</p>
+          <ul class="og-list" th:unless="${#lists.isEmpty(todo)}">
+            <li th:each="r : ${todo}" class="og-row" data-tone="TODO"><div><strong th:text="${r.title()}"></strong><p><span class="og-mark" aria-hidden="true">!</span> <span class="visually-hidden">Falta:</span><span th:text="${r.state()}"></span></p></div><a th:href="${r.href()}" th:text="${r.action()}"></a></li>
+          </ul>
+          <p th:if="${e.status.name() == 'DRAFT' and !board.ready()}" class="og-help" role="note">Puedes abrirlo, pero los encuentros nuevos no empezarán hasta completar lo marcado como «Falta».</p>
+          <a class="og-go" th:href="@{/organizer(event=${e.id},tab='configuracion')}">Ver toda la configuración <span aria-hidden="true">→</span></a>
+        </section>
+      </div>
+      <aside class="og-summary" aria-labelledby="og-summary-title" th:if="${summary != null}">
+        <h2 id="og-summary-title" class="og-kicker">Resumen del evento</h2>
+        <p class="og-figure"><strong th:text="${summary.participants}"></strong><span>personas registradas en PING</span></p>
+        <p class="og-figure"><strong th:text="${summary.completed}"></strong><span>conexiones completadas</span></p>
+        <p class="og-figure"><strong th:text="${summary.claims.delivered}"></strong><span>canjes entregados</span></p>
+        <a class="btn btn-outline-primary" th:href="@{/admin(eventId=${e.id})}">Ver resultados</a>
+        <p class="og-help">«Registradas en PING» mide altas en la app. El total de personas en puerta es un dato aparte.</p>
+      </aside>
+    </div>
+
+    <!-- A · Participantes: existing capabilities only (search, withdraw, readmit; list and reports in the results detail). -->
+    <section th:if="${canOrganize and tab == 'participantes'}" class="og-section" aria-labelledby="og-people-title">
+      <h2 id="og-people-title">Participantes</h2>
+      <p class="og-help" th:if="${summary != null}" th:text="${summary.participants + (summary.participants == 1 ? ' persona registrada' : ' personas registradas') + ' en PING · ' + summary.available + ' disponibles ahora'}"></p>
       <ul class="og-list">
-        <li th:each="r : ${board.prepare()}" class="og-row" th:attr="data-tone=${r.tone().name()}">
-          <div><strong th:text="${r.title()}"></strong> <span th:if="${r.required()}" class="og-req">Imprescindible</span>
-            <p><span class="og-mark" aria-hidden="true" th:text="${r.tone().name() == 'OK' ? '✓' : (r.tone().name() == 'TODO' ? '!' : '○')}"></span> <span class="visually-hidden" th:text="${r.tone().name() == 'OK' ? 'Listo:' : (r.tone().name() == 'TODO' ? 'Falta:' : 'Opcional:')}"></span><span th:text="${r.state()}"></span></p></div>
-          <a th:href="${r.href()}" th:text="${r.action()}"></a>
-        </li>
+        <li class="og-row"><div><strong>Buscar, retirar o readmitir</strong><p>Busca por alias; retira a alguien del evento o readmítelo. Queda registro de quién y cuándo.</p></div><a th:href="@{/events/{id}/participants(id=${e.id})}">Gestionar</a></li>
+        <li class="og-row"><div><strong>Lista del evento</strong><p>Intereses, disponibilidad, saldo y conexiones completadas de cada persona.</p></div><a th:href="@{/admin(eventId=${e.id})} + '#tab-people-' + ${e.id}">Ver lista</a></li>
+        <li class="og-row"><div><strong>Reportes de convivencia</strong><p>Informes de participantes; no aplican bloqueos ni sanciones automáticas.</p></div><a th:href="@{/admin(eventId=${e.id})} + '#tab-reports-' + ${e.id}">Ver reportes</a></li>
       </ul>
     </section>
 
-    <section class="og-card" aria-labelledby="og-team-title">
-      <h2 id="og-team-title">Equipo</h2>
-      <div class="og-row" th:if="${general}"><div><strong>Permisos por evento</strong><p>Asigna o retira administradores de una cuenta ya registrada.</p></div><a th:href="@{/organizer/access}">Gestionar</a></div>
-      <p th:unless="${general}" class="og-help" th:text="${canOrganize ? 'Solo administración general asigna permisos. Organizas este evento: prepararlo, gestionar participantes, revisar tareas y entregar canjes.' : 'Solo administración general asigna permisos.'}"></p>
-    </section>
+    <!-- A · Configuración: the existing preparation list with its direct links, entry and team. -->
+    <th:block th:if="${canOrganize and tab == 'configuracion'}">
+      <section class="og-section" aria-labelledby="og-prepare-title">
+        <h2 id="og-prepare-title">Configuración del evento</h2>
+        <p class="og-help">Lo marcado como imprescindible es lo que ya necesita un encuentro nuevo; lo opcional no bloquea nada.</p>
+        <ul class="og-list">
+          <li th:each="r : ${board.prepare()}" class="og-row" th:attr="data-tone=${r.tone().name()}">
+            <div><strong th:text="${r.title()}"></strong> <span th:if="${r.required()}" class="og-req">Imprescindible</span>
+              <p><span class="og-mark" aria-hidden="true" th:text="${r.tone().name() == 'OK' ? '✓' : (r.tone().name() == 'TODO' ? '!' : '○')}"></span> <span class="visually-hidden" th:text="${r.tone().name() == 'OK' ? 'Listo:' : (r.tone().name() == 'TODO' ? 'Falta:' : 'Opcional:')}"></span><span th:text="${r.state()}"></span></p></div>
+            <a th:href="${r.href()}" th:text="${r.action()}"></a>
+          </li>
+        </ul>
+      </section>
+      <section class="og-section" aria-labelledby="og-entry-title">
+        <h2 id="og-entry-title">Entrada y asistencia</h2>
+        <ul class="og-list">
+          <li class="og-row"><div><strong>Código y QR de ingreso</strong><p th:text="${'Código ' + e.entryCode + ' · ' + (e.status.name() == 'OPEN' ? 'compártelo para que entren.' : 'funciona cuando el evento está abierto.')}"></p></div><a th:href="@{/events/{id}(id=${e.id})} + '#entry-share-title'">Ver código y QR</a></li>
+          <li class="og-row"><div><strong>Total de personas en puerta</strong><p th:text="${summary == null or summary.door == null ? 'Opcional · sin registrar. Se usa solo para la participación sobre puerta.' : 'Registrado: ' + summary.door}"></p></div><a th:href="@{/admin(eventId=${e.id})} + '#puerta'">Registrar</a></li>
+        </ul>
+      </section>
+      <section class="og-section" aria-labelledby="og-team-title">
+        <h2 id="og-team-title">Equipo</h2>
+        <ul class="og-list" th:if="${general}"><li class="og-row"><div><strong>Permisos por evento</strong><p>Asigna o retira Organización o Personal a una cuenta ya registrada.</p></div><a th:href="@{/organizer/access(event=${e.id})}">Gestionar</a></li></ul>
+        <p th:unless="${general}" class="og-help">Solo administración general asigna permisos. Organizas este evento: prepararlo, gestionar participantes, ver resultados, revisar tareas y entregar canjes.</p>
+      </section>
+    </th:block>
   </th:block>
-  <section th:if="${general}" class="og-card" aria-labelledby="og-admin-title">
-    <h2 id="og-admin-title">Administración general</h2>
-    <div class="og-row"><div><strong>Nuevo evento</strong><p>Empieza en borrador; ábrelo cuando esté listo.</p></div><a th:href="@{/events/new}">Crear evento</a></div>
-    <div class="og-row"><div><strong>Jerarquía de gustos</strong><p>Categorías e intereses de todos los eventos.</p></div><a th:href="@{/interests/taxonomy}">Editar</a></div>
-  </section>
 </main>
 <footer th:replace="~{fragments/layout :: footer}"></footer>
 <script th:src="@{/js/account.js}" defer></script>

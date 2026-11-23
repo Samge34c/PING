@@ -32,7 +32,10 @@
     const buttons = [...group.querySelectorAll('[role="tab"]')];
     const activate = btn => { buttons.forEach(b => { const selected = b === btn; b.setAttribute('aria-selected', String(selected)); b.tabIndex = selected ? 0 : -1; group.querySelector('#' + b.getAttribute('aria-controls')).hidden = !selected; }); };
     buttons.forEach((btn, i) => { btn.addEventListener('click', () => activate(btn)); btn.addEventListener('keydown', e => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); const next = buttons[(i + (e.key === 'ArrowRight' ? 1 : buttons.length - 1)) % buttons.length]; activate(next); next.focus(); } }); });
-    if (buttons.length) activate(buttons[0]);
+    // A link such as /admin?eventId=7#tab-reports-7 opens that tab (DEC-079: «Ver reportes» from Participantes).
+    const linked = location.hash && buttons.find(b => '#' + b.id === location.hash);
+    if (buttons.length) activate(linked || buttons[0]);
+    if (linked) linked.scrollIntoView({block: 'start'});
   });
   const interestData = { Videojuegos: ['game', 'Juega, comparte, conecta.'], Música: ['music', 'Tu próxima canción favorita.'], Cine: ['film', 'Historias que nos encuentran.'], Tecnología: ['code', 'Ideas para lo que viene.'], Viajes: ['plane', 'Lugares que merecen contarse.'], Fotografía: ['camera', 'Otra forma de ver el mundo.'], Anime: ['spark', 'Universos para compartir.'], Deportes: ['ball', 'La energía de estar juntos.'] };
   const decorateInterests = root => root.querySelectorAll('[data-interest-name]').forEach(tile => {

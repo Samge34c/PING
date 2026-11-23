@@ -31,9 +31,9 @@ class OrganizerBoardTests {
             assertThat(signedIn.statusCode()).isEqualTo(302);
             assertThat(signedIn.headers().firstValue("Location").orElse("")).as("organising-only account lands on its board").endsWith("/organizer");
             String page = b.get("/organizer").body();
-            assertThat(page).contains("Evento que administras", "Validaciones y entregas", "Preparar evento", "Abrir evento", "/events/" + mine + "/reviews")
-                .doesNotContain("Feria ajena", "Cambiar de evento", "/organizer/access\"", "Lista anterior");
-            assertThat(page).as("a brand-new event explains its basic catalog").contains("Básico, ya funciona");
+            assertThat(page).contains("Evento seleccionado", "Tareas del equipo", "Preparación", "Abrir evento", "/events/" + mine + "/reviews", "/admin?eventId=" + mine)
+                .doesNotContain("Feria ajena", "Cambiar evento", "/organizer/access\"", "Lista anterior");
+            assertThat(b.get("/organizer?tab=configuracion").body()).as("a brand-new event explains its basic catalog").contains("Básico, ya funciona");
             assertThat(b.get("/events/" + mine + "/encounters").body()).doesNotContain("Importar catálogo anterior").contains("de 3 lugares");
             assertThat(b.get("/organizer?event=" + foreign).statusCode()).isEqualTo(403);
             var opened = b.post("/events/" + mine + "/open", Map.of("returnTo", "organizer"));

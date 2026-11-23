@@ -132,7 +132,7 @@ class RewardTests {
             assertThat(browser.post("/me/benefits",form).statusCode()).isEqualTo(302); browser.post("/me/benefits",form);
             assertThat(participants.get(a).points()).isZero(); assertThat(participants.get(b).points()).isEqualTo(20);
             long claim=rewards.personal(a).getFirst().id();
-            assertThat(browser.get("/admin?eventId="+event).body()).contains("Snack del evento", "Validar código para entregar", "Puntos emitidos");
+            assertThat(browser.get("/admin?eventId="+event).body()).contains("Snack del evento", "Validar código para entregar", "Puntos acreditados");
             assertThat(browser.post("/admin/claims/"+claim,Map.of("status","DELIVERED")).statusCode()).isEqualTo(302);
             assertThat(browser.get("/me/benefits").body()).contains("Entregado");
             assertThat(browser.post("/admin/claims/"+claim,Map.of("status","INVALID")).statusCode()).isEqualTo(400);

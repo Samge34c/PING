@@ -10,7 +10,7 @@
 <li th:each="m : ${pastMatches}"><a class="cx3-row mp-history-row" th:href="@{/matches/{id}(id=${m.id})}">
   <span th:replace="~{entry/avatar :: portrait(${m.otherAvatar})}"></span>
   <span class="cx3-text"><strong th:text="${m.otherAlias}"></strong>
-    <span class="cx3-meta" th:text="${#temporals.format(m.createdAt,'dd/MM HH:mm','America/Bogota') + (m.status.name() == 'COMPLETED' ? ' · +' + m.rewardPoints + ' puntos' : ' · Sin puntos')}"></span>
+    <span class="cx3-meta" th:text="${#temporals.format(m.createdAt,'dd/MM HH:mm','America/Bogota') + (m.status.name() == 'COMPLETED' and m.rewardPoints > 0 ? ' · +' + m.rewardPoints + ' puntos' : ' · Sin puntos')}"></span>
     <span class="cx3-note" th:if="${m.activity != null}" th:text="${m.activity}"></span>
     <span class="cx3-note" th:if="${m.status.name() == 'COMPLETED'}" th:text="${m.feedback == null} ? 'Feedback opcional pendiente' : 'Feedback guardado'"></span>
     <span class="cx3-note" th:if="${m.status.name() == 'CANCELLED'}">Abre para ver detalles o reportar</span></span>

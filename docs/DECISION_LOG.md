@@ -752,3 +752,55 @@ Sin cambios de backend, rutas, formularios, CSRF, consultas, sondeo, matching, a
 - Coste: 0,20 → 0,63 consultas/s por pantalla de Conectar en espera, solo esos 3 minutos.
 - Comprobado: sin disponibilidad sigue a 5 s; tras 3 minutos vuelve a 5 s.
 - Suite completa sobre `e9f8e06`: 409 pruebas, 0 fallos.
+
+## DEC-079 — Organización por evento, informe de Resultados y vistas por rol; revisión antes de acreditar (aceptada por Samuel; pendiente de Julián)
+
+**Estado: aceptada por Samuel el 20 de noviembre de 2026; pendiente de aceptación de Julián.** Samuel lo dijo en la sesión de Claude Code: «acepto DEC-079: panel, permisos, total de puerta con V27 y retiro de "Comprobar al entregar" para actividades nuevas». También aprobó la regla de revisión antes de acreditar (ver abajo). No se atribuye aprobación a Julián. Encargo explícito de Samuel del 20 de noviembre de 2026 (sesión de Claude Code, «PROMPT 1» con el PDF *PING_Tres_Propuestas_Administracion*: A para Organización, B para Resultados y C para las vistas por rol). No se atribuye aprobación a Julián. Rama local `feature/organizacion-resultados` desde `b2b069f` (base de la revisión visual; se excluyen a propósito las propuestas de avatares DEC-075 a DEC-078 de `feature/avatares-naturales`). Numerada DEC-079 para no chocar con esas entradas. Sin commit, push, merge ni despliegue.
+
+**Decisiones:**
+- **Permiso de Resultados en el servidor.** Se confirmó leyendo el código que `/admin?eventId=` solo exigía `manage` (incluía a Personal). Ahora `AccessPolicy` y `AdminController` exigen `ORGANIZER` del evento o administración general; Personal recibe 403 aunque escriba la URL. Personal conserva `/organizer` (sus dos tareas), `/events/{id}/reviews` y `/organizer/redemptions`. El resumen de cifras de Organización sigue la misma regla.
+- **Organización (A).** Cabecera del evento con estado, «Cambiar evento», «Ver código y QR» y abrir/pausar/reanudar (rutas existentes). Pestañas Operación · Participantes · Resultados · Configuración. Operación: «Validar actividades» y «Entregar recompensas» como filas distintas con contador; preparación resumida; resumen de tres cifras. Configuración conserva la lista con accesos directos (datos, lugares, actividades y puntos, plano, recompensas, ayuda/agenda/reto), entrada y equipo.
+- **Vistas por rol (C).** Personal: evento y dos acciones grandes. Administración general: `/organizer/events` con la tabla de eventos, «Nuevo evento», permisos por evento (con el evento preseleccionado) y catálogo de gustos.
+- **Resultados (B).** Cuatro cifras: personas registradas en PING, personas únicas con al menos una conexión completada (ambos integrantes de encuentros `COMPLETED`, deduplicados por id, una consulta agrupada), conexiones completadas (sobre el total de propuestas) y canjes entregados (sobre los solicitados). Debajo: estados de propuestas con barra y cifras, conversión de conexiones (completadas ÷ propuestas, definición existente), opiniones voluntarias, canjes pendientes e incidencias, puntos acreditados (registro de la Saga) y el detalle existente.
+- **Total de puerta opcional.** `V27` añade `events.door_attendance` (nulo = sin registrar; no se rellenan eventos anteriores). Comprobado en MySQL 8.4.9 aislada, en una base nueva en V26 con datos ficticios: la migración tardó menos de 0,1 s. Las 44 tablas y sus 715 filas quedaron idénticas columna a columna, igual que los saldos, el registro de la Saga y el historial Flyway V1–V26. De los 705 elementos de esquema comparados (tablas, columnas con tipo completo, índices y restricciones), lo único nuevo es esa columna nula. PING arranca validando sus entidades contra V26 y contra V27. Solo Organización del evento y administración general lo guardan. Participación sobre puerta = personas únicas con conexión ÷ total de puerta. Sin dato o con 0 no hay porcentaje; si hay más personas conectadas que entradas, se marca «requiere revisión» y no se calcula (nunca se limita al 100 %).
+- **Revisión antes de acreditar.** «Comprobar al entregar el beneficio» (DEC-068) ya no puede elegirse para actividades nuevas ni activarse en otra actividad: lo que necesita comprobación usa «Revisión del personal» (DEC-066: aprobar o pedir corrección → confirmación de ambos → la Saga acredita una vez). Las actividades que ya lo tenían lo conservan, sus encuentros siguen con el método congelado y sus recibos siguen exigiendo la comprobación en el puesto de premios, ahora identificados como «Recibo con comprobación anterior». Mientras una actividad así siga activa, puede generar créditos y recibos nuevos que también exigen esa comprobación. No cambian la Saga, los saldos ni los datos guardados.
+- **Regla de puntos canjeables con revisión previa: aceptada por Samuel el 20 de noviembre de 2026; pendiente de Julián. NO implementada.** El PREDEV y el código cambian solo cuando conste aquí la aceptación de Julián.
+  - *Situación medida hoy.* Una actividad nueva con puntos y «Confirmación de ambos» se acredita sin revisión del personal. Comprobado en MySQL 8.4 aislada sobre V27: una actividad nueva de 15 puntos, al confirmar ambos, abonó 15 + 15 puntos con dos pasos `GRANT` de la Saga (`DoorAttendanceUpgradeMySqlCheck`). Todo punto es canjeable porque hay un único saldo (`participants.points`).
+  - *Regla aceptada por Samuel:*
+    - En eventos nuevos, toda actividad con puntos canjeables (1 a 100) requiere revisión previa del personal (DEC-066): el personal aprueba o pide corrección, ambos confirman y la Saga acredita una sola vez.
+    - Las actividades de 0 puntos pueden cerrarse con «Confirmación de ambos».
+    - El modo básico (eventos sin actividades estructuradas, `isStructuredEncounter()` falso) puede cerrar encuentros con «Confirmación de ambos», sin dar puntos canjeables. Hoy da 10 (`LEGACY_REWARD_POINTS`).
+  - *Precisión de Samuel, 20 de noviembre de 2026, sobre el alcance:*
+    - «Evento nuevo» es el **creado** después de activar la regla, no el abierto después.
+    - En los eventos nuevos, las conexiones que se completan por el modo básico o por actividades de 0 puntos **cuentan en Resultados**, pero no acreditan puntos.
+    - Los eventos existentes conservan su política de puntos, también para las actividades que se añadan después.
+    - En cualquier evento, «Comprobar al entregar» sigue fuera para las actividades nuevas.
+    - Se conservan los saldos, los recibos y el método de los encuentros ya iniciados.
+  - *Lo que se conserva:*
+    - Los saldos y los recibos.
+    - Las reglas de los encuentros ya iniciados: su método queda congelado, sea «Confirmación de ambos», «Revisión del personal» o «al entregar», y también sus puntos.
+    - Las actividades anteriores solo cambian de método por una acción explícita del organizador, y el cambio vale solo para encuentros futuros. Nada se convierte automáticamente ni al editar.
+    - No cambian la Saga ni los datos guardados.
+  - *Resuelto por Samuel:* el modo básico, las actividades anteriores y el alcance de «evento nuevo».
+  - *Implementación prevista:* una migración aditiva `V28` añade a cada evento una marca de política. Vale falso para los eventos existentes y verdadero al crear uno nuevo. No se rellenan datos. Abrir, pausar o reanudar un evento no cambia la marca.
+  - *Queda pendiente:*
+    1. La aceptación de Julián.
+    2. Actualizar el PREDEV, que describe el ciclo base como «confirmación bilateral → puntos» («+10, Saga y cierre controlado intactos»). El texto está preparado en el documento de entrega y se aplica al registrar la aceptación de Julián (AGENTS.md).
+    3. Verificar en local, al implementar, un evento nuevo y un evento existente al que se agrega una actividad.
+
+  *Consecuencia operativa, no es una decisión pendiente:* en los eventos nuevos, cada encuentro con puntos pasa por la cola de revisión del personal.
+
+  *Verificación del 23 de noviembre de 2026 (sigue sin la aceptación de Julián; V28 no se aplica):* `EventResultsTests.zeroPointActivityIsNotTheBasicModeAndBothCountAsConnections` comprueba la política vigente en todos los eventos. Una actividad de 0 puntos con «Confirmación de ambos» se completa, cuenta en Resultados (1 conexión, 2 personas) y no acredita puntos. El modo básico sigue acreditando +10 (`LEGACY_REWARD_POINTS`). Una actividad con 15 puntos y «Confirmación de ambos» acredita 15 a cada persona sin revisión, con dos `GRANT`. Cuando conste la aceptación de Julián, esta prueba se ajusta para los eventos nuevos y conserva los casos de los eventos existentes.
+
+**Detalle, evidencia y continuidad:** [handoffs/ORGANIZACION_RESULTADOS.md](handoffs/ORGANIZACION_RESULTADOS.md).
+
+## DEC-080 — «Actividades abiertas»: acceso visible a la agenda existente (pedido por Samuel; pendiente de Julián)
+
+**Estado: solicitado por Samuel el 23 de noviembre de 2026 en la sesión de Claude Code («haz visible el acceso como "Actividades abiertas" desde el participante y desde Organización, reutilizando la agenda»); pendiente de aceptación de Julián.** No se atribuye aprobación a Julián. Rama local `feature/organizacion-resultados`, sin commit, push, merge ni despliegue.
+
+- **Qué es:** la agenda que ya existía (`/events/{id}/agenda` para publicar, `/me/agenda` para consultar) se presenta como «Actividades abiertas»: título, descripción breve, fecha y hora, lugar y punto opcional. No es un módulo nuevo: mismas rutas, tabla `event_agenda_items`, permisos e idempotencia.
+- **Accesos:** tarjeta «Actividades abiertas» en Mi Ping (sustituye el enlace pequeño «Agenda» del pie) y fila con contador de publicadas y «Publicar o editar» en Organización › Operación (solo Organización del evento y administración general, como antes). Las páginas de ayuda, reto y preparación usan el mismo nombre.
+- **Reglas que no cambian:** cualquier participante del evento la ve sin tener match; no da puntos, no crea inscripciones y no cuenta como encuentro ni conexión completada. Un participante no puede gestionarla (403).
+- **Hora legible:** se muestra en formato de 12 horas de Colombia («3:00 p. m.») con su zona IANA. Se guarda igual que antes (instante + zona).
+- **Relacionado, sin cambio de regla:** un encuentro completado con una actividad de 0 puntos muestra «Sin puntos» en lugar de «+0 puntos».
+- **Pendiente:** aceptación de Julián.

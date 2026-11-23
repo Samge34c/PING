@@ -11,6 +11,8 @@
    event.preventDefault();form.reset();form.action=link.dataset.saveUrl;
    for(const name of ['name','directions','title','instructions','rewardPoints','checkInstructions','responsePrompt','version']){const input=form.elements.namedItem(name);if(input&&link.dataset[name]!=null)input.value=link.dataset[name];}
    form.querySelector('input[name=active]').checked=link.dataset.active==='true';
+   // DEC-079: the earlier «Comprobar al entregar» option is only shown while editing an activity that already uses it.
+   const legacy=form.querySelector('[data-legacy-delivery]');if(legacy)legacy.hidden=link.dataset.verificationMethod!=='AT_DELIVERY';
    if(link.dataset.verificationMethod){form.querySelectorAll('input[name=verificationMethod]').forEach(i=>{i.checked=i.value===link.dataset.verificationMethod;});syncCheck(form,link.dataset.verificationMethod);}
    for(const name of ['pointIds','interestIds']){const selected=(link.dataset[name]||'').split(',');form.querySelectorAll(`input[name=${name}]`).forEach(i=>i.checked=selected.includes(i.value));}
    details.querySelector('summary').hidden=false;details.querySelector('summary').textContent=link.hasAttribute('data-edit-point')?'Editar punto':'Editar actividad';details.open=true;changed(section);form.querySelector('input:not([type=hidden])').focus();

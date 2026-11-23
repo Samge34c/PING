@@ -38,10 +38,13 @@ public class EventExperienceService {
  private static void revision(Long expected,long actual){if(expected==null||expected!=actual)throw new BusinessRuleException("La información cambió. Conservamos tu borrador; recarga antes de guardar de nuevo.");}
  public record Agenda(long id,long eventId,String title,String description,Instant startsAt,Instant endsAt,String zoneId,String place,Long pointId,boolean active,long version,String requestKey){
   public String day(){return DateTimeFormatter.ofPattern("EEE d MMM yyyy",Locale.forLanguageTag("es-CO")).format(startsAt.atZone(ZoneId.of(zoneId)));}
-  public String hour(){return DateTimeFormatter.ofPattern("HH:mm").format(startsAt.atZone(ZoneId.of(zoneId)));}
+  public String hour(){return DateTimeFormatter.ofPattern("h:mm a",Locale.forLanguageTag("es-CO")).format(startsAt.atZone(ZoneId.of(zoneId)));}
   public String state(Instant now){if(now.isBefore(startsAt))return "Próxima";if(endsAt==null)return "Iniciada · sin hora final";return now.isBefore(endsAt)?"Ahora":"Terminada";}
   public String startLocal(){return local(startsAt,zoneId);} public String endLocal(){return endsAt==null?"":local(endsAt,zoneId);}
-  public String schedule(){return DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(startsAt.atZone(ZoneId.of(zoneId)))+(endsAt==null?"":" – "+DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(endsAt.atZone(ZoneId.of(zoneId))))+" · "+zoneId;}
+  public String schedule(){var co=Locale.forLanguageTag("es-CO");var f=DateTimeFormatter.ofPattern("dd/MM/yyyy h:mm a",co);var z=ZoneId.of(zoneId);var start=startsAt.atZone(z);
+   // Same day: only the end time is repeated («23/11/2026 3:00 p. m. – 4:30 p. m.»).
+   String end=endsAt==null?"":" – "+(endsAt.atZone(z).toLocalDate().equals(start.toLocalDate())?DateTimeFormatter.ofPattern("h:mm a",co):f).format(endsAt.atZone(z));
+   return f.format(start)+end+" · "+zoneId;}
  }
  private static String local(Instant time,String zone){return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm").format(time.atZone(ZoneId.of(zone)));}
  private final org.springframework.jdbc.core.RowMapper<Agenda> agendaMapper=(r,n)->new Agenda(r.getLong("id"),r.getLong("event_id"),r.getString("title"),r.getString("description"),Instant.ofEpochMilli(r.getLong("starts_at")),r.getObject("ends_at")==null?null:Instant.ofEpochMilli(r.getLong("ends_at")),r.getString("zone_id"),r.getString("place"),r.getObject("point_id",Long.class),r.getBoolean("active"),r.getLong("version"),r.getString("request_key"));
@@ -72,6 +75,6 @@ public class EventExperienceService {
   result.add(new Preparation("Plano y colocación","Opcional",e.getFloorplanId()==null?"Sin plano. Se mantienen puntos e indicaciones.":"Plano configurado · "+plans.points(id).stream().filter(FloorplanService.Point::active).filter(FloorplanService.Point::placed).count()+" puntos colocados; revisa los activos antes de la demo.",base+"/floorplan"));
   result.add(new Preparation("Beneficios y entrega","Opcional",benefits.isEmpty()?"Sin beneficios activos. No bloquea conexiones.":String.join(" · ",benefits.stream().map(b->b.getName()+" ("+b.getPointsCost()+" puntos): "+(b.isDefaultDelivery()?(e.getDeliveryName().isBlank()?"ubicación de entrega por configurar":e.getDeliveryName()):(b.getClaimLocation().isBlank()?"consulta la entrega con organización":b.getClaimLocation()))).toList()),base+"/rewards"));
   result.add(new Preparation("Ayuda y contacto oficial","Recomendación para la demostración",settings(id).staffLocation().isBlank()?"Publica dónde encontrar al personal si el evento lo ofrece. No es obligatorio.":settings(id).staffLocation(),base+"/experience-settings"));
-  result.add(new Preparation("Agenda general y reto","Opcionales",agenda(id).size()+" elementos en la agenda · reto de dos conexiones "+(settings(id).challengeEnabled()?"activado":"desactivado")+". No otorgan puntos adicionales.",base+"/agenda"));return result;
+  result.add(new Preparation("Actividades abiertas y reto","Opcionales",agenda(id).size()+" actividades abiertas publicadas · reto de dos conexiones "+(settings(id).challengeEnabled()?"activado":"desactivado")+". No otorgan puntos adicionales.",base+"/agenda"));return result;
  }
 }

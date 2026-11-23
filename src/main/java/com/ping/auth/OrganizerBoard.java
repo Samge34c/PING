@@ -28,7 +28,9 @@ public record OrganizerBoard(Event event, long pendingReviews, long pendingClaim
             String range = tasks.isEmpty() ? "" : " · " + (tasks.stream().mapToInt(EventActivity::getRewardPoints).min().getAsInt() == tasks.stream().mapToInt(EventActivity::getRewardPoints).max().getAsInt()
                     ? "+" + tasks.getFirst().getRewardPoints() + " puntos cada una" : "de +" + tasks.stream().mapToInt(EventActivity::getRewardPoints).min().getAsInt() + " a +" + tasks.stream().mapToInt(EventActivity::getRewardPoints).max().getAsInt() + " puntos");
             long reviewed = tasks.stream().filter(a -> a.getVerificationMethod() == CheckMethod.STAFF_REVIEW).count();
-            rows.add(new Row("Actividades y puntos", compatible == 0 ? "Falta una actividad activa con un lugar activo" : tasks.size() + (tasks.size() == 1 ? " activa" : " activas") + range + (reviewed > 0 ? " · " + reviewed + " con revisión del personal" : ""),
+            // DEC-079: activities that kept the earlier «Comprobar al entregar» method are named, so nobody confuses them with the new flow.
+            long atDelivery = tasks.stream().filter(a -> a.getVerificationMethod() == CheckMethod.AT_DELIVERY).count();
+            rows.add(new Row("Actividades y puntos", compatible == 0 ? "Falta una actividad activa con un lugar activo" : tasks.size() + (tasks.size() == 1 ? " activa" : " activas") + range + (reviewed > 0 ? " · " + reviewed + " con revisión del personal" : "") + (atDelivery > 0 ? " · " + atDelivery + " con comprobación al entregar (método anterior)" : ""),
                     compatible == 0 ? Tone.TODO : Tone.OK, compatible == 0 ? "Añadir actividad" : "Editar", base + "/encounters#activities", true));
         } else {
             // A new event still works with the basic place and activity; say so instead of "Lista anterior" (only events that really have old lists).
@@ -43,7 +45,7 @@ public record OrganizerBoard(Event event, long pendingReviews, long pendingClaim
         long withImage = benefits.stream().filter(Benefit::hasImage).count();
         rows.add(new Row("Recompensas", benefits.isEmpty() ? "Opcional · ninguna; los puntos aún no se pueden canjear" : deliveryMissing ? "Falta el lugar de entrega predeterminado" : benefits.size() + (benefits.size() == 1 ? " disponible" : " disponibles") + " · " + withImage + " con imagen",
                 benefits.isEmpty() ? Tone.OPTIONAL : deliveryMissing ? Tone.TODO : Tone.OK, benefits.isEmpty() ? "Crear recompensa" : "Editar", base + "/rewards", false));
-        rows.add(new Row("Ayuda, agenda y reto", "Opcional · contacto del personal y agenda general", Tone.OPTIONAL, "Revisar", base + "/preparation", false));
+        rows.add(new Row("Ayuda, actividades abiertas y reto", "Opcional · contacto del personal y actividades abiertas", Tone.OPTIONAL, "Revisar", base + "/preparation", false));
         boolean ready = rows.stream().noneMatch(r -> r.required() && r.tone() == Tone.TODO);
         return new OrganizerBoard(e, reviews.open(id), rewards.forEvent(id).requested(), List.copyOf(rows), ready);
     }

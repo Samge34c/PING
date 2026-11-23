@@ -70,6 +70,25 @@ class EventExtrasTests {
   var settings=extras.settingsForm(event);settings.setZoneId("Europe/Madrid");extras.saveSettings(event,settings);
   assertThat(extras.agendaForm(event,id).getStartsAt()).isEqualTo("2026-11-05T10:00");assertThat(extras.agendaForm(event,id).getZoneId()).isEqualTo("America/Bogota");
  }
+ /** Open activities reuse the agenda: the organizer publishes it and a participant of the event sees it without any match. */
+ @Test void organizerPublishesAnOpenActivityThatAParticipantSeesWithoutAMatch()throws Exception{
+  accounts.assign(admin,owner,event,true);
+  try(var b=login(email)){
+   assertThat(b.get("/organizer?event="+event).body()).contains("Actividades abiertas","/events/"+event+"/agenda","Ninguna publicada");
+   b.get("/events/"+event+"/agenda/new");
+   var saved=b.post("/events/"+event+"/agenda",Map.of("version","0","requestKey",UUID.randomUUID().toString(),"title","Taller de fotografía","description","Trae tu celular; practicamos encuadre.","startsAt","2026-11-28T15:00","endsAt","","zoneId","America/Bogota","place","Patio central","active","true"));
+   assertThat(saved.statusCode()).isEqualTo(302);
+   assertThat(b.get("/organizer?event="+event).body()).contains("1 publicada");
+  }
+  assertThat(sql.queryForObject("select count(*) from ping_matches where first_id=? or second_id=?",Long.class,peer,peer)).as("the participant has no match").isZero();
+  try(var p=login(otherEmail)){
+   String page=p.get("/me/agenda").body();
+   assertThat(page).contains("Actividades abiertas","Taller de fotografía","Patio central","3:00","sin tener un match").doesNotContain("15:00");
+   assertThat(p.get("/me").body()).contains("href=\"/me/agenda\"","Actividades abiertas");
+   assertThat(p.get("/events/"+event+"/agenda").statusCode()).as("seeing is not managing").isEqualTo(403);
+  }
+  assertThat(people.get(peer).points()).as("open activities never grant points").isZero();
+ }
  @Test void organizerAndParticipantRoutesEnforceEventScopeCsrfAndFreshRevocation()throws Exception{
   accounts.assign(admin,owner,event,true);
   try(var b=login(email);var anon=new TestBrowser(port)){

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Administración general')}"></head>
+<body class="participant-entry-page">
+<header th:replace="~{entry/interests :: topbar}"></header>
+<!-- DEC-079 (proposal C): general administration's workspace. Reuses existing routes: create events, open each board,
+     permissions per event and the shared interest catalogue. Event state is changed from each event's Organización. -->
+<main id="main-content" class="container pe-page account-page og-page og-admin">
+  <p class="og-top-links"><a class="pi-back" th:href="@{/organizer}">← Organización</a><a class="pi-back" th:href="@{/organizer/help}">Ayuda para organizar</a></p>
+  <p class="og-label">Administración general</p>
+  <div class="og-section-head og-admin-head">
+    <div><h1>Eventos</h1><p class="og-help">Abre un evento o gestiona los permisos de su equipo.</p></div>
+    <a class="btn btn-primary" th:href="@{/events/new}">Nuevo evento</a>
+  </div>
+  <p class="og-empty" th:if="${#lists.isEmpty(events)}">Aún no hay eventos. Crea el primero: empieza en borrador y lo abres cuando esté listo.</p>
+  <div class="og-table-wrap" role="region" aria-label="Eventos: tabla desplazable" tabindex="0" th:unless="${#lists.isEmpty(events)}">
+    <table class="og-table">
+      <caption class="visually-hidden">Eventos registrados, su estado y accesos</caption>
+      <thead><tr><th>Evento</th><th>Estado</th><th><span class="visually-hidden">Acciones</span></th></tr></thead>
+      <tbody>
+        <tr th:each="x : ${events}" th:attr="data-event-id=${x.id}">
+          <th scope="row" th:text="${x.name}"></th>
+          <td><span class="ping-status" th:attr="data-status=${x.status.name()}" th:text="${x.status.label}"></span></td>
+          <td class="og-table-actions"><a th:href="@{/organizer(event=${x.id})}">Abrir Organización</a><a th:href="@{/organizer/access(event=${x.id})}">Permisos</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <section class="og-section" aria-labelledby="og-perm-title">
+    <ul class="og-list">
+      <li class="og-row"><div><strong id="og-perm-title">Permisos por evento</strong><p>Asigna o retira permisos de una cuenta ya registrada. Elige el evento y el rol: Organización o Personal.</p></div><a th:href="@{/organizer/access}">Gestionar</a></li>
+      <li class="og-row"><div><strong>Resultados de todos los eventos</strong><p>Cifras principales de cada evento, con acceso al informe completo.</p></div><a th:href="@{/admin}">Ver resultados</a></li>
+      <li class="og-row"><div><strong>Jerarquía de gustos</strong><p>Categorías e intereses compartidos por todos los eventos.</p></div><a th:href="@{/interests/taxonomy}">Editar catálogo</a></li>
+    </ul>
+  </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script th:src="@{/js/account.js}" defer></script>
+</body>
+</html>

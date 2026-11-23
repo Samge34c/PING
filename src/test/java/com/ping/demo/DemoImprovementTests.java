@@ -118,7 +118,8 @@ class DemoImprovementTests {
             long samuel = id(s,"Samuel"); String page = browser.get("/demo?participantId="+samuel).body();
             assertThat(page).contains("selected=\"selected\"");
             browser.post("/demo",Map.of("participantId",""+samuel)); assertThat(browser.get("/me").statusCode()).isEqualTo(200);
-            assertThat(browser.get("/admin").body()).contains("SOFA 2026", "Libres para conectar", "Puntos entregados");
+            assertThat(browser.get("/admin").body()).contains("SOFA 2026", "Resultados por evento");
+            assertThat(browser.get("/admin?eventId="+s.eventId()).body()).contains("Libres para conectar", "Puntos acreditados"); // DEC-079: detail moved to the event report
         }
     }
     @Autowired com.ping.interest.InterestService interestService;

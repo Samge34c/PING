@@ -108,6 +108,23 @@ class ActivityReviewTests {
         assertThatThrownBy(() -> reviews.submit(match, a, "Cambio")).isInstanceOf(BusinessRuleException.class);
     }
 
+    /** DEC-079: a rejected task neither adds nor touches earlier points; the retry credits exactly once. */
+    @Test void correctionKeepsEarlierBalanceAndRetryCreditsOnce() {
+        sql.update("update participants set points=40 where id in (?,?)", a, b);
+        verified(); reviews.submit(match, a, "Solo una canción");
+        matches.confirm(match, a); matches.confirm(match, b);
+        as(staff(event)); assertThat(reviews.decide(event, match, false, "Falta la segunda canción")).isFalse(); SecurityContextHolder.clearContext();
+        matches.completeAfterReview(match);
+        assertThat(people.get(a).points()).isEqualTo(40); assertThat(people.get(b).points()).isEqualTo(40);
+        assertThat(matches.get(match, a).status()).isEqualTo(MatchStatus.ACTIVE);
+        reviews.submit(match, b, "Clocks y Yellow");
+        as(staff(event)); approve();
+        as(staff(event)); approve(); matches.confirm(match, a); matches.confirm(match, b);
+        assertThat(matches.get(match, a).status()).isEqualTo(MatchStatus.COMPLETED);
+        assertThat(people.get(a).points()).isEqualTo(65); assertThat(people.get(b).points()).isEqualTo(65);
+        assertThat(sql.queryForObject("select attempt from match_completion_sagas where match_id=?", Integer.class, match)).isEqualTo(1);
+    }
+
     @Test void onlyAuthorisedStaffOfTheSameEventWhoIsNotInTheEncounterCanReview() {
         verified(); reviews.submit(match, a, "Clocks y Yellow");
         var other = new EventForm(); other.setName("Otro evento " + UUID.randomUUID()); long otherEvent = events.create(other).getId();

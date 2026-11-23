@@ -82,6 +82,8 @@ public class AccountService implements UserDetailsService {
  public void assign(long actor,long target,long event,boolean grant){assign(actor,target,event,grant,EventRole.ORGANIZER);}
  /** DEC-068: per-event role. ORGANIZER (every permission before V26) manages the event and its participants; STAFF reviews tasks and delivers rewards. */
  public enum EventRole{ORGANIZER,STAFF}
+ /** DEC-079: events where this account has the ORGANIZER role (not STAFF). */
+ public List<Long> organized(long account){return jdbc.query("select event_id from event_administrators where account_id=? and admin_role='ORGANIZER'",(r,n)->r.getLong(1),account);}
  public boolean organizes(long account,long event){return jdbc.queryForObject("select count(*) from event_administrators where account_id=? and event_id=? and admin_role='ORGANIZER'",Integer.class,account,event)>0;}
  public Map<Long,String> roles(long event){var out=new LinkedHashMap<Long,String>();jdbc.query("select account_id,admin_role from event_administrators where event_id=?",(org.springframework.jdbc.core.RowCallbackHandler)r->out.put(r.getLong(1),r.getString(2)),event);return out;}
  @Transactional(isolation=Isolation.READ_COMMITTED)
