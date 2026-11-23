@@ -16,7 +16,7 @@
       try { history.replaceState(history.state, '', location.pathname + location.search); } catch (_) { }
     });
   }
-  // DEC-081: after «Completar actividad» the next thing to do is showing the activity QR, so land on it once.
+  // DEC-081: after «Completar actividad» the next step is the activity QR itself, so land on it once.
   if (location.hash === '#am-activity-qr') {
     requestAnimationFrame(() => {
       document.getElementById('am-activity-qr')?.scrollIntoView({block: 'center'});
